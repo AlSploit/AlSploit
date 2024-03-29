@@ -2362,11 +2362,12 @@ local function Nuker(NearestBed, NearestOre)
 				end				
 
 				DamageBlockRemote:InvokeServer({
-					["blockRef"] = {
-						["blockPosition"] = GetServerPosition(TargetBlock.Position)
+					blockRef = {
+						blockPosition = GetServerPosition(TargetBlock.Position)
 					},
-					["hitPosition"] = GetServerPosition(TargetBlock.Position),
-					["hitNormal"] = GetServerPosition(TargetBlock.Position)
+					
+					hitPosition = GetServerPosition(TargetBlock.Position),
+					hitNormal = GetServerPosition(TargetBlock.Position)
 				})
 			end
 
@@ -2382,11 +2383,12 @@ local function Nuker(NearestBed, NearestOre)
 		if not NearestBed and NearestOre then		
 			if Settings.Nuker.BreakOres == true then
 				DamageBlockRemote:InvokeServer({
-					["blockRef"] = {
-						["blockPosition"] = GetServerPosition(NearestOre.Position)
+					blockRef = {
+						blockPosition = GetServerPosition(NearestOre.Position)
 					},
-					["hitPosition"] = GetServerPosition(NearestOre.Position),
-					["hitNormal"] = GetServerPosition(NearestOre.Position)
+					
+					hitPosition = GetServerPosition(NearestOre.Position),
+					hitNormal = GetServerPosition(NearestOre.Position)
 				})
 			end
 		end
@@ -2453,6 +2455,7 @@ local function FlyMe()
 
 						if FlyRaycast and IsAlive(LocalPlayer) then 
 							local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}
+							
 							Args[2] = FlyRaycast.Position.Y + 1 + LocalPlayer.Character.Humanoid.HipHeight
 
 							FlyTeleportPosition = LocalPlayer.Character.PrimaryPart.Position.Y
@@ -2462,8 +2465,9 @@ local function FlyMe()
 							task.spawn(function()								
 								task.wait(0.15)
 
-								if IsAlive(LocalPlayer) then 
-									local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}									
+								if IsAlive(LocalPlayer) then 									
+									local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}	
+									
 									Args[2] = FlyTeleportPosition
 
 									LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(unpack(Args))																		
