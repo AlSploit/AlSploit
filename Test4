@@ -196,16 +196,16 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 
 	Toggle.Name = "Toggle"
 	Toggle.Parent = Parent
-	Toggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Toggle.BackgroundColor3 = Color3.new(0, 0, 0)
 	Toggle.BackgroundTransparency = 0.150
-	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Toggle.BorderColor3 = Color3.new(0, 0, 0)
 	Toggle.BorderSizePixel = 0
 	Toggle.Position = UDim2.new(2.87291044, 0, 0, 0)
 	Toggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
 	Toggle.AutoButtonColor = false
 	Toggle.Font = Enum.Font.GothamBold
 	Toggle.Text = Name
-	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Toggle.TextColor3 = Color3.new(1, 1, 1)
 	Toggle.TextScaled = true
 	Toggle.TextSize = 14
 	Toggle.TextWrapped = true
@@ -226,9 +226,9 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 
 	DropDownButton.Name = "DropDownButton"
 	DropDownButton.Parent = Toggle
-	DropDownButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	DropDownButton.BackgroundColor3 = Color3.new(1, 1, 1)
 	DropDownButton.BackgroundTransparency = 1.000
-	DropDownButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	DropDownButton.BorderColor3 = Color3.new(0, 0, 0)
 	DropDownButton.BorderSizePixel = 0
 	DropDownButton.Position = UDim2.new(0.822, 0, 0.176, 0)
 	DropDownButton.Rotation = 90.000
@@ -427,7 +427,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	Bar.BorderColor3 = Color3.new(0, 0, 0)
 	Bar.BorderSizePixel = 0
 	Bar.Position = UDim2.new(0.199, 0, -1.768, 0)
-	Bar.Size = UDim2.new(0.079, 0, 3.725, 0)
+	Bar.Size = UDim2.new(0.063, 0, 3.725, 0)
 	Bar.ZIndex = 2
 	Bar.AutoButtonColor = false
 	Bar.Font = Enum.Font.GothamBold
@@ -445,9 +445,9 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	
 	NameDisplay.Name = "NameDisplay"
 	NameDisplay.Parent = Slider
-	NameDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	NameDisplay.BackgroundColor3 = Color3.new(1, 1, 1)
 	NameDisplay.BackgroundTransparency = 1.000
-	NameDisplay.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	NameDisplay.BorderColor3 = Color3.new(0, 0, 0)
 	NameDisplay.BorderSizePixel = 0
 	NameDisplay.Position = UDim2.new(0.145293146, 0, -0.118052319, 0)
 	NameDisplay.Size = UDim2.new(0, 50, 0, 30)
@@ -462,9 +462,9 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	
 	ValueDisplay.Name = "ValueDisplay"
 	ValueDisplay.Parent = Slider
-	ValueDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ValueDisplay.BackgroundColor3 = Color3.new(1, 1, 1)
 	ValueDisplay.BackgroundTransparency = 1.000
-	ValueDisplay.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ValueDisplay.BorderColor3 = Color3.new(0, 0, 0)
 	ValueDisplay.BorderSizePixel = 0
 	ValueDisplay.Position = UDim2.new(0.634818733, 0, -0.118052319, 0)
 	ValueDisplay.Size = UDim2.new(0, 50, 0, 30)
@@ -529,7 +529,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 				local Percentage = math.clamp(Position, 0, 1)
 
 				local TweenInformation = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-				local PositionTween = TweenService:Create(Bar, TweenInformation, {Position = UDim2.new(Percentage, 0, Bar.Size.Y.Scale, Bar.Size.Y.Offset)})
+				local PositionTween = TweenService:Create(Bar, TweenInformation, {Position = UDim2.new(Percentage, 0, BarPosition.Y.Scale, BarPosition.Y.Offset)})
 
 				PositionTween:Play()
 
