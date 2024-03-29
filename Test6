@@ -411,7 +411,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	Fill.BackgroundColor3 = Color3.new(1, 1, 1)
 	Fill.BorderColor3 = Color3.new(0, 0, 0)
 	Fill.BorderSizePixel = 0
-	Fill.Position = UDim2.new(-0.006, 0, -0.329, 0)
+	Fill.Position = UDim2.new(0, 0, -0.329, 0)
 	Fill.Size = UDim2.new(1.010, 0, 1, 0)
 
 	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
