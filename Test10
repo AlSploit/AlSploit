@@ -2187,6 +2187,12 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 	local SelfPosition = LocalPlayerHumanoidRootPart.Position + (20 > 14 and Magnitude > 14.4 and (CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * (Magnitude - 14)) or Vector3.zero)
 
 	task.spawn(function()
+		if LocalPlayer.Character:FindFirstChild("Head") and Entity:FindFirstChild("Head") then
+			LocalPlayer.Character.Head.CFrame = CFrame.lookAt(LocalPlayer.Head.Position, Entity.Head.Position)
+		end	
+	end)
+	
+	task.spawn(function()
 		if Settings.KillAura.CustomAnimation == true and KillAuraAnimationCooldown == false then
 			KillAuraAnimationCooldown = true
 
