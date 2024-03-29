@@ -422,12 +422,12 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	UIGradient.Parent = Fill
 
 	Bar.Name = "Bar"
-	Bar.Parent = Slider
+	Bar.Parent = SliderFrame
 	Bar.BackgroundColor3 = Color3.new(1, 0.666667, 0)
 	Bar.BorderColor3 = Color3.new(0, 0, 0)
 	Bar.BorderSizePixel = 0
-	Bar.Position = UDim2.new(0.232962593, 0, 0.463804364, 0)
-	Bar.Size = UDim2.new(0.052, 0, 0.217, 0)
+	Bar.Position = UDim2.new(0.199, 0, -1.768, 0)
+	Bar.Size = UDim2.new(0.079, 0, 3.725, 0)
 	Bar.ZIndex = 2
 	Bar.AutoButtonColor = false
 	Bar.Font = Enum.Font.GothamBold
@@ -529,7 +529,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 				local Percentage = math.clamp(Position, 0, 1)
 
 				local TweenInformation = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-				local PositionTween = TweenService:Create(Bar, TweenInformation, {Position = UDim2.new(Percentage, 0, Bar.Size.Y.Scale, 0)})
+				local PositionTween = TweenService:Create(Bar, TweenInformation, {Position = UDim2.new(Percentage, 0, Bar.Size.Y.Scale, Bar.Size.Y.Offset)})
 
 				PositionTween:Play()
 
