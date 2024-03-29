@@ -2188,7 +2188,7 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 
 	task.spawn(function()
 		if LocalPlayer.Character:FindFirstChild("Head") and Entity:FindFirstChild("Head") then
-			LocalPlayer.Character.Head.CFrame = CFrame.lookAt(LocalPlayer.Character.Head.Position, Entity.Head.Position)
+			LocalPlayer.Character:FindFirstChild("Head").CFrame = CFrame.lookAt(LocalPlayer.Character:FindFirstChild("Head").Position, Entity:FindFirstChild("Head").Position)
 		end	
 	end)
 	
