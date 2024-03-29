@@ -264,7 +264,7 @@ local function CreateKeyBind(Parent, DefaultValue, LayoutOrder, CallBack)
 	KeyBind.BorderColor3 = Color3.new(0, 0, 0)
 	KeyBind.BorderSizePixel = 0
 	KeyBind.Position = UDim2.new(0, 0, 0.0765417367, 0)
-	KeyBind.Size = UDim2.new(1, 0, 0.03, 0)
+	KeyBind.Size = UDim2.new(1, 0, 0.025, 0)
 	KeyBind.AutoButtonColor = false
 	KeyBind.Font = Enum.Font.GothamBold
 	KeyBind.Text = "KeyBind: " .. DefaultValue
@@ -349,7 +349,7 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 	MiniToggle.BackgroundTransparency = 0.150
 	MiniToggle.BorderColor3 = Color3.new(0, 0, 0)
 	MiniToggle.BorderSizePixel = 0
-	MiniToggle.Position = UDim2.new(-0.0047, 0, 0.03, 0)
+	MiniToggle.Position = UDim2.new(-0.0047, 0, 0.025, 0)
 	MiniToggle.Size = UDim2.new(1, 0, 0.045, 0)
 	MiniToggle.AutoButtonColor = false
 	MiniToggle.Font = Enum.Font.GothamBold
@@ -388,8 +388,8 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	local NameDisplay = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local ValueDisplay = Instance.new("TextLabel")
-	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")	
-
+	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+	
 	Slider.Name = "Slider"
 	Slider.Parent = Parent
 	Slider.BackgroundColor3 = Color3.new(0, 0, 0)
@@ -418,6 +418,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	Fill.Size = UDim2.new(1.00999999, 0, 1, 0)
 
 	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+	UIGradient.Rotation = 90
 	UIGradient.Parent = Fill
 
 	Bar.Name = "Bar"
@@ -452,7 +453,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	NameDisplay.Size = UDim2.new(0, 50, 0, 30)
 	NameDisplay.Font = Enum.Font.GothamBold
 	NameDisplay.Text = Name
-	NameDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
+	NameDisplay.TextColor3 = Color3.new(1, 0.666667, 0)
 	NameDisplay.TextScaled = true
 	NameDisplay.TextSize = 10
 	
@@ -469,7 +470,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	ValueDisplay.Size = UDim2.new(0, 50, 0, 30)
 	ValueDisplay.Font = Enum.Font.GothamBold
 	ValueDisplay.Text = DefaultValue
-	ValueDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
+	ValueDisplay.TextColor3 = Color3.new(1, 0.666667, 0)
 	ValueDisplay.TextScaled = true
 	ValueDisplay.TextSize = 10
 	
@@ -522,14 +523,20 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 				local MousePosition = UserInputService:GetMouseLocation().X
 				local FramePosition = Slider.AbsolutePosition.X
 				local FrameSize = Slider.AbsoluteSize.X
-				local BarPosition = Bar.Position				
-
-				local Position = Snap((MousePosition - FramePosition) / FrameSize, 0.01)
-
-				local Percentage = math.clamp(Position, 0, 1)
+				local BarPosition = Bar.Position
 				
-				Bar.Position = UDim2.new(Percentage, 0, BarPosition.Y.Scale, BarPosition.Y.Offset)
-				Fill.Size = UDim2.new(Percentage, 0, 1, 0)
+				local Position = Snap((MousePosition - FramePosition) / FrameSize, 0.01)
+				local Percentage = math.clamp(Position, 0, 1)
+
+				local TweenInformation = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+				local PositionTween = TweenService:Create(Bar, TweenInformation, {Position = UDim2.new(Percentage, 0, BarPosition.Y.Scale, BarPosition.Y.Offset)})
+
+				PositionTween:Play()
+
+				local TweenInformation = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+				local SizeTween = TweenService:Create(Fill, TweenInformation, {Size = UDim2.new(Percentage, 0, 1, 0)})
+
+				SizeTween:Play()
 
 				ValueDisplay.Text = math.round(Percentage * MaximumValue)
 
