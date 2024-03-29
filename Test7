@@ -34,7 +34,7 @@ task.spawn(function()
 
 	ContainerFrame.Name = "ContainerFrame"
 	ContainerFrame.Parent = GodSploit
-	ContainerFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+	ContainerFrame.BackgroundColor3 = Color3.new(255, 255, 255)
 	ContainerFrame.BackgroundTransparency = 1.000
 	ContainerFrame.BorderColor3 = Color3.new(0, 0, 0)
 	ContainerFrame.BorderSizePixel = 0
@@ -50,7 +50,7 @@ task.spawn(function()
 
 	NotificationContainer.Name = "NotificationContainer"
 	NotificationContainer.Parent = GodSploit
-	NotificationContainer.BackgroundColor3 = Color3.new(1, 1, 1)
+	NotificationContainer.BackgroundColor3 = Color3.new(255, 255, 255)
 	NotificationContainer.BackgroundTransparency = 1.000
 	NotificationContainer.BorderColor3 = Color3.new(0, 0, 0)
 	NotificationContainer.BorderSizePixel = 0
@@ -70,11 +70,11 @@ task.spawn(function()
 
 	Open.Name = "Open"
 	Open.Parent = GodSploit
-	Open.BackgroundColor3 = Color3.new(1, 1, 1)
+	Open.BackgroundColor3 = Color3.new(255, 255, 255)
 	Open.BorderColor3 = Color3.new(0, 0, 0)
 	Open.BorderSizePixel = 0
-	Open.Position = UDim2.new(0.963, 0, 0.352, 0)
-	Open.Size = UDim2.new(0.0330, 0, 0.0838, 0)
+	Open.Position = UDim2.new(0.963096738, 0, 0.351765305, 0)
+	Open.Size = UDim2.new(0.0329854637, 0, 0.0837961882, 0)
 	Open.Image = "rbxassetid://16296032484"
 
 	UICorner.CornerRadius = UDim.new(0, 6)
@@ -110,8 +110,8 @@ local function CreateTab(Name)
 	Tab.BackgroundColor3 = Color3.new(0, 0, 0)
 	Tab.BorderColor3 = Color3.new(0, 0, 0)
 	Tab.BorderSizePixel = 0
-	Tab.Position = UDim2.new(0.434, 0, 0, 0)
-	Tab.Size = UDim2.new(0.142, 0, 0.0490, 0)
+	Tab.Position = UDim2.new(0.434123844, 0, 0, 0)
+	Tab.Size = UDim2.new(0.142, 0, 0.049, 0)
 
 	UICorner.CornerRadius = UDim.new(0, 7)
 	UICorner.Parent = Tab
@@ -126,12 +126,12 @@ local function CreateTab(Name)
 
 	ModulesContainer.Name = "ModulesContainer"
 	ModulesContainer.Parent = Tab
-	ModulesContainer.BackgroundColor3 = Color3.new(1, 1, 1)
+	ModulesContainer.BackgroundColor3 = Color3.new(255, 255, 255)
 	ModulesContainer.BackgroundTransparency = 1.000
 	ModulesContainer.BorderColor3 = Color3.new(0, 0, 0)
 	ModulesContainer.BorderSizePixel = 0
 	ModulesContainer.Position = UDim2.new(0, 0, 1, 0)
-	ModulesContainer.Size = UDim2.new(1, 0, 21.429, 0)
+	ModulesContainer.Size = UDim2.new(1, 0, 21.4285717, 0)
 
 	UIListLayout.Parent = ModulesContainer
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -140,12 +140,12 @@ local function CreateTab(Name)
 
 	Title.Name = "Title"
 	Title.Parent = Tab
-	Title.BackgroundColor3 = Color3.new(1, 1, 1)
+	Title.BackgroundColor3 = Color3.new(255, 255, 255)
 	Title.BackgroundTransparency = 1.000
 	Title.BorderColor3 = Color3.new(0, 0, 0)
 	Title.BorderSizePixel = 0
-	Title.Position = UDim2.new(0, 0, 0.124, 0)
-	Title.Size = UDim2.new(1, 0, 0.743, 0)
+	Title.Position = UDim2.new(0, 0, 0.123508625, 0)
+	Title.Size = UDim2.new(0.99999994, 0, 0.742857158, 0)
 	Title.Font = Enum.Font.GothamBold
 	Title.Text = Name
 	Title.TextColor3 = Color3.new(255, 255, 255)
@@ -196,16 +196,16 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 
 	Toggle.Name = "Toggle"
 	Toggle.Parent = Parent
-	Toggle.BackgroundColor3 = Color3.new(0, 0, 0)
+	Toggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	Toggle.BackgroundTransparency = 0.150
-	Toggle.BorderColor3 = Color3.new(0, 0, 0)
+	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Toggle.BorderSizePixel = 0
-	Toggle.Position = UDim2.new(2.873, 0, 0, 0)
-	Toggle.Size = UDim2.new(1, 0, 0.041, 0)
+	Toggle.Position = UDim2.new(2.87291044, 0, 0, 0)
+	Toggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
 	Toggle.AutoButtonColor = false
 	Toggle.Font = Enum.Font.GothamBold
 	Toggle.Text = Name
-	Toggle.TextColor3 = Color3.new(1, 1, 1)
+	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Toggle.TextScaled = true
 	Toggle.TextSize = 14
 	Toggle.TextWrapped = true
@@ -226,9 +226,9 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 
 	DropDownButton.Name = "DropDownButton"
 	DropDownButton.Parent = Toggle
-	DropDownButton.BackgroundColor3 = Color3.new(1, 1, 1)
+	DropDownButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	DropDownButton.BackgroundTransparency = 1.000
-	DropDownButton.BorderColor3 = Color3.new(0, 0, 0)
+	DropDownButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	DropDownButton.BorderSizePixel = 0
 	DropDownButton.Position = UDim2.new(0.822, 0, 0.176, 0)
 	DropDownButton.Rotation = 90.000
@@ -263,12 +263,12 @@ local function CreateKeyBind(Parent, DefaultValue, LayoutOrder, CallBack)
 	KeyBind.BackgroundTransparency = 0.150
 	KeyBind.BorderColor3 = Color3.new(0, 0, 0)
 	KeyBind.BorderSizePixel = 0
-	KeyBind.Position = UDim2.new(0, 0, 0.0765, 0)
+	KeyBind.Position = UDim2.new(0, 0, 0.0765417367, 0)
 	KeyBind.Size = UDim2.new(1, 0, 0.025, 0)
 	KeyBind.AutoButtonColor = false
 	KeyBind.Font = Enum.Font.GothamBold
 	KeyBind.Text = "KeyBind: " .. DefaultValue
-	KeyBind.TextColor3 = Color3.new(1, 1, 1)
+	KeyBind.TextColor3 = Color3.new(255, 255, 255)
 	KeyBind.TextScaled = true
 	KeyBind.TextSize = 11
 	KeyBind.LayoutOrder = LayoutOrder
@@ -319,6 +319,7 @@ end
 local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBack)
 	local MiniToggle = Instance.new("TextButton")
 	local UIGradient = Instance.new("UIGradient")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 
 	local CallBackValue = DefaultValue
 
@@ -348,12 +349,13 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 	MiniToggle.BackgroundTransparency = 0.150
 	MiniToggle.BorderColor3 = Color3.new(0, 0, 0)
 	MiniToggle.BorderSizePixel = 0
-	MiniToggle.Position = UDim2.new(0, 0, 0.0765, 0)
-	MiniToggle.Size = UDim2.new(1, 0, 0.0354, 0)
+	MiniToggle.Position = UDim2.new(-0.0047, 0, 0.025, 0)
+	MiniToggle.Size = UDim2.new(1, 0, 0.045, 0)
 	MiniToggle.AutoButtonColor = false
 	MiniToggle.Font = Enum.Font.GothamBold
 	MiniToggle.Text = Name
-	MiniToggle.TextColor3 = Color3.new(1, 1, 1)
+	MiniToggle.TextColor3 = Color3.new(255, 255, 255)
+	MiniToggle.TextScaled = true
 	MiniToggle.TextSize = 11
 	MiniToggle.LayoutOrder = LayoutOrder
 
@@ -361,10 +363,11 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 	UIGradient.Rotation = 90
 	UIGradient.Parent = MiniToggle
 
-	task.spawn(function()
-		CallBackToggle(CallBackValue)		
-	end)
-	
+	UITextSizeConstraint.Parent = MiniToggle
+	UITextSizeConstraint.MaxTextSize = 11
+
+	CallBackToggle(CallBackValue)
+
 	task.spawn(function()
 		MiniToggle.Activated:Connect(function()
 			CallBackToggle(not CallBackValue)
@@ -403,16 +406,16 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	SliderFrame.BackgroundTransparency = 1.000
 	SliderFrame.BorderColor3 = Color3.new(0, 0, 0)
 	SliderFrame.BorderSizePixel = 0
-	SliderFrame.Position = UDim2.new(0.150, 0, 0.582, 0)
-	SliderFrame.Size = UDim2.new(1, 0, 0.060, 0)
+	SliderFrame.Position = UDim2.new(0.150000125, 0, 0.581817925, 0)
+	SliderFrame.Size = UDim2.new(0.699999988, 0, 0.0599999987, 0)
 	
 	Fill.Name = "Fill"
 	Fill.Parent = SliderFrame
 	Fill.BackgroundColor3 = Color3.new(1, 1, 1)
 	Fill.BorderColor3 = Color3.new(0, 0, 0)
 	Fill.BorderSizePixel = 0
-	Fill.Position = UDim2.new(0, 0, -0.329, 0)
-	Fill.Size = UDim2.new(1.010, 0, 1, 0)
+	Fill.Position = UDim2.new(-0.00672425283, 0, -0.328574896, 0)
+	Fill.Size = UDim2.new(1.00999999, 0, 1, 0)
 
 	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
 	UIGradient.Rotation = 90
@@ -446,7 +449,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	NameDisplay.BackgroundTransparency = 1.000
 	NameDisplay.BorderColor3 = Color3.new(0, 0, 0)
 	NameDisplay.BorderSizePixel = 0
-	NameDisplay.Position = UDim2.new(0.145, 0, -0.118, 0)
+	NameDisplay.Position = UDim2.new(0.145293146, 0, -0.118052319, 0)
 	NameDisplay.Size = UDim2.new(0, 50, 0, 30)
 	NameDisplay.Font = Enum.Font.GothamBold
 	NameDisplay.Text = Name
@@ -463,7 +466,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	ValueDisplay.BackgroundTransparency = 1.000
 	ValueDisplay.BorderColor3 = Color3.new(0, 0, 0)
 	ValueDisplay.BorderSizePixel = 0
-	ValueDisplay.Position = UDim2.new(0.635, 0, -0.118, 0)
+	ValueDisplay.Position = UDim2.new(0.634818733, 0, -0.118052319, 0)
 	ValueDisplay.Size = UDim2.new(0, 50, 0, 30)
 	ValueDisplay.Font = Enum.Font.GothamBold
 	ValueDisplay.Text = DefaultValue
@@ -559,7 +562,7 @@ local function CreateNotification(Duration, Message)
 	Notification.BackgroundTransparency = 0.150
 	Notification.BorderColor3 = Color3.new(0, 0, 0)
 	Notification.BorderSizePixel = 0
-	Notification.Position = UDim2.new(0.226, 0, 0, 0)
+	Notification.Position = UDim2.new(0.226286799, 0, 0, 0)
 	Notification.Size = UDim2.new(0, 0, 0, 0)
 
 	UIStroke.Parent = Notification
@@ -575,11 +578,11 @@ local function CreateNotification(Duration, Message)
 
 	Text.Name = "Text"
 	Text.Parent = Notification
-	Text.BackgroundColor3 = Color3.new(1, 1, 1)
+	Text.BackgroundColor3 = Color3.new(255, 255, 255)
 	Text.BackgroundTransparency = 1.000
 	Text.BorderColor3 = Color3.new(0, 0, 0)
 	Text.BorderSizePixel = 0
-	Text.Position = UDim2.new(-0.00264, 0, 0, 0)
+	Text.Position = UDim2.new(-0.00263573672, 0, 0, 0)
 	Text.Size = UDim2.new(1, 0, 1, 0)
 	Text.Font = Enum.Font.GothamBold
 	Text.Text = Message
@@ -655,8 +658,8 @@ local function CreateFlyHud()
 	Text.BackgroundTransparency = 1.000
 	Text.BorderColor3 = Color3.new(0, 0, 0)
 	Text.BorderSizePixel = 0
-	Text.Position = UDim2.new(-0.00333, 0, 0.511, 0)
-	Text.Size = UDim2.new(1, 0, 0.489, 0)
+	Text.Position = UDim2.new(-0.00332811219, 0, 0.510591209, 0)
+	Text.Size = UDim2.new(0.999999762, 0, 0.489407092, 0)
 	Text.Font = Enum.Font.GothamBold
 	Text.Text = "1"
 	Text.TextColor3 = Color3.new(1, 0.666667, 0)
@@ -672,8 +675,8 @@ local function CreateFlyHud()
 	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
 	DisplayBackground.BorderColor3 = Color3.new(0, 0, 0)
 	DisplayBackground.BorderSizePixel = 0
-	DisplayBackground.Position = UDim2.new(0.229, 0, 0.267, 0)
-	DisplayBackground.Size = UDim2.new(0.545, 0, 0.150, 0)
+	DisplayBackground.Position = UDim2.new(0.228761196, 0, 0.266666889, 0)
+	DisplayBackground.Size = UDim2.new(0.544929683, 0, 0.149570271, 0)
 
 	UICorner_2.CornerRadius = UDim.new(0, 6)
 	UICorner_2.Parent = DisplayBackground
@@ -696,27 +699,31 @@ end
 function CreateOutline(Player)
 	if IsAlive(Player) then
 		local BillBoard = Instance.new("BillboardGui")
-		local Frame = Instance.new("Frame")
-		local UIStroke = Instance.new("UIStroke")
-		local UICorner = Instance.new("UICorner")
 
 		BillBoard.Size = UDim2.new(4, 0, 4, 0)
 		BillBoard.AlwaysOnTop = true
-		BillBoard.Name = "Esp"	
-		BillBoard.Parent = Player.Character.PrimaryPart
+		BillBoard.Name = "Esp"
+
+		local Frame = Instance.new("Frame")
 
 		Frame.Size = UDim2.new(1, 0, 1.5, 0)
 		Frame.Position = UDim2.new(0, 0, -Player.Character.LowerTorso.Size.Y / 2 or -Player.PrimaryPart.Size.Y / 2, 0)
-		Frame.BackgroundTransparency = 1	
-		Frame.Parent = BillBoard
+		Frame.BackgroundTransparency = 1
 
-		UIStroke.Thickness = 1.5
-		UIStroke.Color = Color3.new(1, 0.666667, 0)
-		UIStroke.Transparency = 0
-		UIStroke.Parent = Frame
-		
+		local Stroke = Instance.new("UIStroke")
+
+		Stroke.Thickness = 1.5
+		Stroke.Color = Color3.new(1, 0.666667, 0)
+		Stroke.Transparency = 0
+
+		local UICorner = Instance.new("UICorner")
+
 		UICorner.Parent = Frame
 		UICorner.CornerRadius = UDim.new(0, 3)
+
+		Stroke.Parent = Frame
+		Frame.Parent = BillBoard
+		BillBoard.Parent = Player.Character.PrimaryPart
 	end
 end
 
