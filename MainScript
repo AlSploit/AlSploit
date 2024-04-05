@@ -1,4 +1,4 @@
-local Owner = "342v624623463"
+local Owner = "AlSploitIsFunni"
 
 local LocalPlayer = game.Players.LocalPlayer
 
@@ -723,7 +723,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitRebornSaving.lua"
+local SaveFileName = "AlSploitRebornSavingDisabler.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -1290,7 +1290,7 @@ function FindNearestBed(MaxDistance)
 	local NearestBed = nil
 
 	for i, v in next, CollectionService:GetTagged("bed")do
-		if v:FindFirstChild("Covers").BrickColor ~= LocalPlayer.Team.TeamColor then			
+		if v:FindFirstChild("Blanket").BrickColor ~= LocalPlayer.Team.TeamColor then			
 			if v:GetAttribute("BedShieldEndTime") then 				
 				if v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() then
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
@@ -1778,6 +1778,10 @@ function GetSpeed()
 
 		if DamageBoost == true then
 			Speed = Speed + 18
+		end
+		
+		if AnticheatBypassed == true then
+			Speed = Speed + 23
 		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
@@ -3589,6 +3593,65 @@ task.spawn(function()
 					end
 
 					if Settings.Sprint.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AnticheatBypass, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AnticheatBypass", Settings.AnticheatBypass.Value, function(CallBack)
+		Settings.AnticheatBypass.Value = CallBack
+		
+		task.spawn(function()
+			repeat
+				local Args = {
+					[1] = {
+						["velocity"] = Vector3.new(9e9, 9e9, 9e9)
+					}
+				}
+
+				game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RocketImpulse"):InvokeServer(unpack(Args))
+				
+				AnticheatBypassed = true
+			until Settings.AnticheatBypass.Value == false
+			
+			AnticheatBypassed = false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AnticheatBypass.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AnticheatBypass.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AnticheatBypass.KeyBind then
+					Settings.AnticheatBypass.Value = not Settings.AnticheatBypass.Value
+
+					if Settings.AnticheatBypass.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AnticheatBypass.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
