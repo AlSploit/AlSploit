@@ -3387,9 +3387,11 @@ task.spawn(function()
 
 				game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RocketImpulse"):InvokeServer(unpack(Args))
 
+				AnticheatBypassedSpeed = Settings.AnticheatBypass.Speed
 				AnticheatBypassed = true
 			until Settings.AnticheatBypass.Value == false
 
+			AnticheatBypassedSpeed = 0
 			AnticheatBypassed = false
 		end)
 	end)
