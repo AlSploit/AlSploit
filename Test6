@@ -1809,7 +1809,7 @@ function GetSpeed()
 		end
 		
 		if AnticheatBypassed == true then
-			Speed = Speed + 80
+			Speed = Speed + AnticheatBypassedSpeed
 		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
@@ -3421,7 +3421,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.AnticheatBypass.Speed, 120, LayoutOrder + 2, function(CallBack)
+				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.AnticheatBypass.Speed, 200, LayoutOrder + 2, function(CallBack)
 					Settings.AnticheatBypass.Speed = CallBack
 				end)
 			end
