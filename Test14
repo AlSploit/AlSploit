@@ -6406,3 +6406,21 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+task.spawn(function()
+	repeat
+		task.wait(0.1)
+		
+		if IsAlive(LocalPlayer) then
+			for i, v in next, PlayerService:GetPlayers() do
+				if AntiVoidPart then
+					if LocalPlayer.Character.PrimaryPart.Position.Y > AntiVoidPart.Position.Y then
+						if IsAlive(v) and v.TeamColor ~= LocalPlayer.TeamColor then
+							LocalPlayer.Character.PrimaryPart.Position = v.Character.PrimaryPart.Position
+						end
+					end
+				end
+			end
+		end		
+	until not game
+end)
