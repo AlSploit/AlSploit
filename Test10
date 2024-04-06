@@ -3379,6 +3379,8 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
+				task.wait()
+				
 				local Args = {
 					[1] = {
 						["velocity"] = Vector3.new(math.huge, math.huge, math.huge)
@@ -3423,7 +3425,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.AnticheatBypass.Speed, 200, LayoutOrder + 2, function(CallBack)
+				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.AnticheatBypass.Speed, 250, LayoutOrder + 2, function(CallBack)
 					Settings.AnticheatBypass.Speed = CallBack
 				end)
 			end
@@ -3459,7 +3461,7 @@ task.spawn(function()
 		
 		task.spawn(function()	
 			repeat
-				task.wait()
+				task.wait(0.1)
 
 				task.spawn(function()
 					if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
@@ -4755,7 +4757,7 @@ task.spawn(function()
 		
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(0.1)
 				
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					AutoBuy()
@@ -6088,7 +6090,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(0.1)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestBed = FindNearestBed(Settings.Nuker.Range) or nil
