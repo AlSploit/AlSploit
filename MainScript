@@ -752,9 +752,9 @@ local function CreateSettingsFile()
 		GalaxySky = {KeyBind = "..."},
 		PlayAgain = {KeyBind = "..."},
 		Invisible = {KeyBind = "..."},
-		AimAssist = {Range = 18, KeyBind = "..."},
+		AimAssist = {Range = 20, KeyBind = "..."},
 		Scaffold = {ExpandDistance = 2, KeyBind = "..."},
-		KillAura = {Range = 20, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
+		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
 		AutoBank = {Range = 30, KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
@@ -766,7 +766,7 @@ local function CreateSettingsFile()
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 25, KeyBind = "..."},
-		Strafe = {Speed = 22, Range = 18, GoBackwards = true, KeyBind = "..."},
+		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
 		Nuker = {Range = 30, CustomAnimation = true, BreakOres = true, KeyBind = "..."},
@@ -2894,7 +2894,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(CombatTab, "Range", Settings.AimAssist.Range, 18, LayoutOrder + 1, function(CallBack)
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.AimAssist.Range, 20, LayoutOrder + 1, function(CallBack)
 					Settings.AimAssist.Range = CallBack
 				end)
 			end
@@ -3025,7 +3025,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(CombatTab, "Range", Settings.KillAura.Range, 20, LayoutOrder + 4, function(CallBack)
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.KillAura.Range, 21, LayoutOrder + 4, function(CallBack)
 					Settings.KillAura.Range = CallBack
 				end)
 			end
@@ -4015,8 +4015,8 @@ task.spawn(function()
 
 				local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
 
-				if IsAlive(LocalPlayer) and NearestEntity then
-					local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+				if IsAlive(LocalPlayer) and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
+					local TweenInformation = TweenInfo.new((NearestEntityDistance / (AnticheatBypassed and math.huge or Settings.Strafe.Speed)), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
 					local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
 
 					StrafeTween:Play()
@@ -4108,7 +4108,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 18, LayoutOrder + 4, function(CallBack)
+				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 20, LayoutOrder + 4, function(CallBack)
 					Settings.Strafe.Range = CallBack
 				end)
 			end
