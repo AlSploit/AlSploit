@@ -6406,5 +6406,3 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
-
-Settings.Strafe.Range = 20
