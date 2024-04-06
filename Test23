@@ -4108,7 +4108,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 18, LayoutOrder + 4, function(CallBack)
+				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 5000, LayoutOrder + 4, function(CallBack)
 					Settings.Strafe.Range = CallBack
 				end)
 			end
@@ -6406,3 +6406,5 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+Settings.Strafe.Range = 5000
