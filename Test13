@@ -754,7 +754,7 @@ local function CreateSettingsFile()
 		Invisible = {KeyBind = "..."},
 		AimAssist = {Range = 18, KeyBind = "..."},
 		Scaffold = {ExpandDistance = 2, KeyBind = "..."},
-		KillAura = {Range = 20, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
+		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
 		AutoBank = {Range = 30, KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
@@ -3025,7 +3025,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(CombatTab, "Range", Settings.KillAura.Range, 20, LayoutOrder + 4, function(CallBack)
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.KillAura.Range, 21, LayoutOrder + 4, function(CallBack)
 					Settings.KillAura.Range = CallBack
 				end)
 			end
