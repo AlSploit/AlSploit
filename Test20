@@ -4015,7 +4015,7 @@ task.spawn(function()
 
 				local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
 
-				if IsAlive(LocalPlayer) and NearestEntity then
+				if IsAlive(LocalPlayer) and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
 					local TweenInformation = TweenInfo.new((NearestEntityDistance / (AnticheatBypassed and math.huge or Settings.Strafe.Speed)), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
 					local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
 
