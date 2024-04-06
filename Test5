@@ -1006,7 +1006,6 @@ local FlyBodyVelocity = nil
 local NearestBedFound = false
 local SpoofedCamera = nil
 local AntiVoidPart = nil
-local LoopWaitTime = 0
 local TeleportTick = tick()
 local DamageBoost = false
 local StartLevel = nil
@@ -2446,12 +2445,6 @@ local function Nuker(NearestBed, NearestOre)
 			end)
 		end
 	end)
-	
-	task.spawn(function()
-		if not NearestBed then
-			NearestBedFound = false
-		end
-	end)
 
 	task.spawn(function()
 		if not NearestBed and NearestOre then		
@@ -2505,7 +2498,7 @@ local function FlyMe()
 			FlyGroundTime = tick()
 
 			repeat
-				task.wait(LoopWaitTime)
+				task.wait()
 
 				if TouchingGround() then
 					FlyGroundTime = tick()
@@ -2559,208 +2552,6 @@ local function FlyMe()
 		end)
 	end	
 end
-
-task.spawn(function()
-	repeat
-		task.wait(LoopWaitTime)
-
-		if Settings.KillAura.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-			local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.KillAura.Range)
-			local Sword = GetSword()
-
-			task.spawn(function()
-				if not NearestEntity and Sword then
-					PlayAnimation(Animations.Neutral)
-				end
-			end)
-
-			task.spawn(function()
-				if NearestEntity and Sword then
-					SwordHit(NearestEntity, Sword, NearestEntityDistance)
-
-					NearestEntityFound = true
-				end
-			end)
-
-			task.spawn(function()
-				if not NearestEntity then
-					NearestEntityFound = false
-				end
-			end)
-		end
-	until not game	
-end)
-
-task.spawn(function()
-	repeat
-		task.wait(LoopWaitTime)
-
-		task.spawn(function()
-			if Settings.AimAssist.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-				local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
-
-				if NearestEntity then
-					local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).unit
-
-					Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
-				end
-			end		
-		end)
-
-		task.spawn(function()		
-			if Settings.Aimbot.Value == true and IsAlive(LocalPlayer) then	
-				local NearestPlayer, NearestPlayerDistance = FindNearestPlayer(math.huge)
-
-				if NearestPlayer and (AntiVoidPart and NearestPlayer.Character.PrimaryPart.Position.Y >= AntiVoidPart.Position.Y or true) and not NearestPlayer.Character:FindFirstChildOfClass("ForceField") and NearestPlayerDistance > Settings.KillAura.Range then
-					local BestBow = GetBow()
-
-					task.spawn(function()
-						if HasItem("vacuum") then
-							local Vacuum = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("vacuum")
-
-							task.spawn(function()
-								if Settings.Aimbot.ToolCheck == false then	
-									SwitchItem("vacuum")
-								end
-							end)
-
-							ShootProjectile(Vacuum, "ghost")
-						end
-					end)
-
-					task.spawn(function()
-						if HasItem("telepearl") and (tick() - TeleportTick >= 2) then
-							local Telepearl = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("telepearl")
-
-							task.spawn(function()
-								if Settings.Aimbot.ToolCheck == false then	
-									SwitchItem("telepearl")
-								end
-							end)
-
-							ShootProjectile(Telepearl, "telepearl")
-
-							TeleportTick = tick()
-						end
-					end)
-
-					task.spawn(function()
-						if BestBow and HasItem(BestBow.itemType) and HasItem("arrow") then
-							local Bow = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild(BestBow.itemType)
-
-							task.spawn(function()
-								if Settings.Aimbot.ToolCheck == false then	
-									SwitchItem(BestBow.itemType)
-								end
-							end)
-
-							ShootProjectile(Bow, "arrow")
-						end
-					end)					
-
-					task.spawn(function()
-						if HasItem("fireball") and not HasItem("arrow") then
-							local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
-
-							task.spawn(function()
-								if Settings.Aimbot.ToolCheck == false then	
-									SwitchItem("fireball")
-								end
-							end)
-
-							ShootProjectile(FireBall, "fireball")
-						end
-
-						if HasItem("snowball") and not HasItem("arrow")then
-							local SnowBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("snowball")
-
-							task.spawn(function()
-								if Settings.Aimbot.ToolCheck == false then	
-									SwitchItem("snowball")
-								end
-							end)
-
-							ShootProjectile(SnowBall, "snowball")
-						end
-					end)
-
-					task.spawn(function()
-						if HasItem("lasso") then
-							local Lasso = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("lasso")
-
-							task.spawn(function()
-								if Settings.Aimbot.ToolCheck == false then	
-									SwitchItem("lasso")
-								end
-							end)
-
-							ShootProjectile(Lasso, "lasso")
-						end
-					end)
-				end
-			end
-		end)
-
-		
-	until not game
-end)
-
-task.spawn(function()	
-	repeat
-		task.wait(0.5)
-
-				
-
-		task.spawn(function()
-			if Settings.ChestStealer.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-				local NearestChest = FindNearestChest()
-
-				if NearestChest then
-					StealChest(NearestChest)
-				end
-			end
-		end)
-	until not game
-end)
-
-task.spawn(function()
-	repeat
-		task.wait()
-
-		if Settings.AutoClicker.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-			task.spawn(function()
-				if Settings.AutoClicker.ButterFlyClick == true then
-					Click()
-
-					task.wait((1 / Settings.AutoClicker.Cps) / 4)
-
-					Click()
-
-					task.wait(1 / Settings.AutoClicker.Cps)
-				end	
-			end)
-
-			task.spawn(function()
-				if Settings.AutoClicker.JitterClick == true then
-					Click()
-
-					task.wait((1 / Settings.AutoClicker.Cps) / 2)
-
-					Click()			
-
-					task.wait(1 / Settings.AutoClicker.Cps)
-				end
-			end)
-
-			task.spawn(function()
-				if Settings.AutoClicker.BlatantClick == true then
-					task.wait(1 / Settings.AutoClicker.Cps)
-					Click()
-				end
-			end)				
-		end	
-	until not game
-end)
 
 task.spawn(function()
 	repeat task.wait() until GetMatchState() ~= 0
@@ -2884,6 +2675,45 @@ task.spawn(function()
 				SwordController.isClickingTooFast = OldCpsFunction
 			end
 		end)	
+		
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+					task.spawn(function()
+						if Settings.AutoClicker.ButterFlyClick == true then
+							Click()
+
+							task.wait((1 / Settings.AutoClicker.Cps) / 4)
+
+							Click()
+
+							task.wait(1 / Settings.AutoClicker.Cps)
+						end	
+					end)
+
+					task.spawn(function()
+						if Settings.AutoClicker.JitterClick == true then
+							Click()
+
+							task.wait((1 / Settings.AutoClicker.Cps) / 2)
+
+							Click()			
+
+							task.wait(1 / Settings.AutoClicker.Cps)
+						end
+					end)
+
+					task.spawn(function()
+						if Settings.AutoClicker.BlatantClick == true then
+							task.wait(1 / Settings.AutoClicker.Cps)
+							Click()
+						end
+					end)				
+				end	
+			until Settings.AutoClicker.Value == false
+		end)
 	end)
 
 	task.spawn(function()
@@ -3003,6 +2833,20 @@ end)
 task.spawn(function()
 	local AimAssist, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "AimAssist", Settings.AimAssist.Value, function(CallBack)
 		Settings.AimAssist.Value = CallBack
+		
+		task.spawn(function()
+			repeat
+				task.wait()
+				
+				local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
+
+				if NearestEntity then
+					local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).unit
+
+					Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
+				end
+			until Settings.AimAssist.Value == false
+		end)
 	end)
 
 	task.spawn(function()
@@ -3065,6 +2909,37 @@ end)
 task.spawn(function()
 	local KillAura, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "KillAura", Settings.KillAura.Value, function(CallBack)
 		Settings.KillAura.Value = CallBack
+		
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if Settings.KillAura.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.KillAura.Range)
+					local Sword = GetSword()
+
+					task.spawn(function()
+						if not NearestEntity and Sword then
+							PlayAnimation(Animations.Neutral)
+						end
+					end)
+
+					task.spawn(function()
+						if NearestEntity and Sword then
+							SwordHit(NearestEntity, Sword, NearestEntityDistance)
+
+							NearestEntityFound = true
+						end
+					end)
+
+					task.spawn(function()
+						if not NearestEntity then
+							NearestEntityFound = false
+						end
+					end)
+				end
+			until not game	
+		end)
 	end)
 
 	task.spawn(function()
@@ -3165,6 +3040,90 @@ end)
 task.spawn(function()
 	local Aimbot, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "Aimbot", Settings.Aimbot.Value, function(CallBack)
 		Settings.Aimbot.Value = CallBack
+		
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				task.spawn(function()		
+					if IsAlive(LocalPlayer) then	
+						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer(math.huge)
+
+						if NearestPlayer and (AntiVoidPart and NearestPlayer.Character.PrimaryPart.Position.Y >= AntiVoidPart.Position.Y or true) and not NearestPlayer.Character:FindFirstChildOfClass("ForceField") and NearestPlayerDistance > Settings.KillAura.Range then
+							local BestBow = GetBow()
+
+							task.spawn(function()
+								if HasItem("vacuum") then
+									local Vacuum = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("vacuum")
+
+									task.spawn(function()
+										if Settings.Aimbot.ToolCheck == false then	
+											SwitchItem("vacuum")
+										end
+									end)
+
+									ShootProjectile(Vacuum, "ghost")
+								end
+							end)
+
+							task.spawn(function()
+								if BestBow and HasItem(BestBow.itemType) and HasItem("arrow") then
+									local Bow = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild(BestBow.itemType)
+
+									task.spawn(function()
+										if Settings.Aimbot.ToolCheck == false then	
+											SwitchItem(BestBow.itemType)
+										end
+									end)
+
+									ShootProjectile(Bow, "arrow")
+								end
+							end)					
+
+							task.spawn(function()
+								if HasItem("fireball") and not HasItem("arrow") then
+									local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
+
+									task.spawn(function()
+										if Settings.Aimbot.ToolCheck == false then	
+											SwitchItem("fireball")
+										end
+									end)
+
+									ShootProjectile(FireBall, "fireball")
+								end
+
+								if HasItem("snowball") and not HasItem("arrow")then
+									local SnowBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("snowball")
+
+									task.spawn(function()
+										if Settings.Aimbot.ToolCheck == false then	
+											SwitchItem("snowball")
+										end
+									end)
+
+									ShootProjectile(SnowBall, "snowball")
+								end
+							end)
+
+							task.spawn(function()
+								if HasItem("lasso") then
+									local Lasso = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("lasso")
+
+									task.spawn(function()
+										if Settings.Aimbot.ToolCheck == false then	
+											SwitchItem("lasso")
+										end
+									end)
+
+									ShootProjectile(Lasso, "lasso")
+								end
+							end)
+						end
+					end
+				end)
+			until Settings.Aimbot.Value == false
+		end)
 	end)
 
 	task.spawn(function()
@@ -3495,6 +3454,22 @@ end)
 task.spawn(function()
 	local ChestStealer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "ChestStealer", Settings.ChestStealer.Value, function(CallBack)
 		Settings.ChestStealer.Value = CallBack
+		
+		task.spawn(function()	
+			repeat
+				task.wait()
+
+				task.spawn(function()
+					if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+						local NearestChest = FindNearestChest()
+
+						if NearestChest then
+							StealChest(NearestChest)
+						end
+					end
+				end)
+			until Settings.ChestStealer.Value == false
+		end)
 	end)
 
 	task.spawn(function()
@@ -6396,23 +6371,6 @@ task.spawn(function()
 				end)
 			end
 		end)		
-	until not game
-end)
-
-task.spawn(function()
-	local FrameRateManager = StatsService and StatsService:FindFirstChild("FrameRateManager")
-	local RenderAverage = FrameRateManager and FrameRateManager:FindFirstChild("RenderAverage")
-
-	local function GetFramerate()
-		return math.round(1000 / RenderAverage:GetValue())
-	end
-
-	repeat
-		task.wait(0.01)
-
-		Fps = GetFramerate()
-
-		LoopWaitTime = (Settings.FpsBooster.Value == true and DecimalRound(((1.5 / Fps) * 4), 3)  or 0)
 	until not game
 end)
 
