@@ -6162,14 +6162,12 @@ task.spawn(function()
 					
 					task.spawn(function()
 						repeat
-							print(NearestBedFound, CanSeeNearestBed, NearestEntityFound)
-							
 							if IsAlive(LocalPlayer) and NearestBedFound and CanSeeNearestBed and not NearestEntityFound then
 								task.wait(0.25)
 
 								ViewmodelController:playAnimation(15)
 							end
-						until Settings.Nuker.CustomAnimation.Value == false				
+						until Settings.Nuker.CustomAnimation == false				
 					end)
 				end)
 			end
@@ -6404,3 +6402,5 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+AbilityController:useAbility('tinker_summon')
