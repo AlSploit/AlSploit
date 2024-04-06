@@ -2777,40 +2777,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	repeat task.wait() until GetMatchState() ~= 0
-
-	task.spawn(function()
-		for i, v in next, PlayerService:GetPlayers() do
-			task.spawn(function()
-				if IsAlive(v) then
-					v.Character.Humanoid.HealthChanged:Connect(function(Health)
-						if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
-							AutoToxic(v)
-						end
-					end)
-				end	
-			end)			
-
-			task.spawn(function()
-				v.CharacterAdded:Connect(function(Character)
-					task.wait(0.3)
-
-					local v = game.Players:FindFirstChild(Character.Name) or v
-
-					if IsAlive(v) then
-						v.Character.Humanoid.HealthChanged:Connect(function(Health)
-							if Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer and Settings.AutoToxic.Value == true then
-								AutoToxic(v)
-							end
-						end)
-					end
-				end)
-			end)
-		end
-	end)	
-end)
-
-task.spawn(function()
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
@@ -4307,7 +4273,7 @@ task.spawn(function()
 				task.wait(100 / Settings.ChatSpammer.Speed)
 
 				task.spawn(function()
-					if Settings.ChatSpammer.Value == true and GetMatchState() ~= 0 then
+					if GetMatchState() ~= 0 then
 						ChatSpam()
 					end
 				end)
@@ -4555,6 +4521,40 @@ end)
 task.spawn(function()
 	local AutoToxic, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AutoToxic", Settings.AutoToxic.Value, function(CallBack)
 		Settings.AutoToxic.Value = CallBack
+		
+		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+
+			task.spawn(function()
+				for i, v in next, PlayerService:GetPlayers() do
+					task.spawn(function()
+						if IsAlive(v) then
+							v.Character.Humanoid.HealthChanged:Connect(function(Health)
+								if Settings.AutoToxic.Value == true and Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer then
+									AutoToxic(v)
+								end
+							end)
+						end	
+					end)			
+
+					task.spawn(function()
+						v.CharacterAdded:Connect(function(Character)
+							task.wait(0.3)
+
+							local v = game.Players:FindFirstChild(Character.Name) or v
+
+							if IsAlive(v) then
+								v.Character.Humanoid.HealthChanged:Connect(function(Health)
+									if Settings.AutoToxic.Value == true and Health <= 0 and v.Team ~= LocalPlayer.Team and v ~= LocalPlayer then
+										AutoToxic(v)
+									end
+								end)
+							end
+						end)
+					end)
+				end
+			end)	
+		end)
 	end)
 
 	task.spawn(function()
@@ -4601,6 +4601,8 @@ task.spawn(function()
 		
 		task.spawn(function()
 			repeat
+				task.wait()
+				
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					AutoBank()
 				end
