@@ -752,7 +752,7 @@ local function CreateSettingsFile()
 		GalaxySky = {KeyBind = "..."},
 		PlayAgain = {KeyBind = "..."},
 		Invisible = {KeyBind = "..."},
-		AimAssist = {Range = 18, KeyBind = "..."},
+		AimAssist = {Range = 20, KeyBind = "..."},
 		Scaffold = {ExpandDistance = 2, KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
@@ -766,7 +766,7 @@ local function CreateSettingsFile()
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 25, KeyBind = "..."},
-		Strafe = {Speed = 22, Range = 18, GoBackwards = true, KeyBind = "..."},
+		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
 		Nuker = {Range = 30, CustomAnimation = true, BreakOres = true, KeyBind = "..."},
@@ -2894,7 +2894,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(CombatTab, "Range", Settings.AimAssist.Range, 18, LayoutOrder + 1, function(CallBack)
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.AimAssist.Range, 20, LayoutOrder + 1, function(CallBack)
 					Settings.AimAssist.Range = CallBack
 				end)
 			end
@@ -4108,7 +4108,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 5000, LayoutOrder + 4, function(CallBack)
+				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 20, LayoutOrder + 4, function(CallBack)
 					Settings.Strafe.Range = CallBack
 				end)
 			end
@@ -6407,4 +6407,4 @@ task.spawn(function()
 	end)
 end)
 
-Settings.Strafe.Range = 5000
+Settings.Strafe.Range = 20
