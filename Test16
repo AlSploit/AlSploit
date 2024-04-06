@@ -6409,7 +6409,7 @@ end)
 
 task.spawn(function()
 	repeat
-		task.wait(1)
+		task.wait(0.25)
 		
 		if IsAlive(LocalPlayer) then
 			for i, v in next, PlayerService:GetPlayers() do
