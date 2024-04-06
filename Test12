@@ -731,7 +731,7 @@ local function CreateSettingsFile()
 	local MetaTable = {__index, DefaultSetting.Properties}
 
 	Settings = {
-		AnticheatBypass = {Speed = 80, KeyBind = "..."},
+		AnticheatBypass = {Speed = 150, KeyBind = "..."},
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
@@ -4016,7 +4016,7 @@ task.spawn(function()
 				local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
 
 				if IsAlive(LocalPlayer) and NearestEntity then
-					local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+					local TweenInformation = TweenInfo.new((NearestEntityDistance / (AnticheatBypassed and math.huge or Settings.Strafe.Speed)), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
 					local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
 
 					StrafeTween:Play()
@@ -6122,7 +6122,7 @@ task.spawn(function()
 
 					ViewmodelController:playAnimation(15)
 				end
-			until not game			
+			until not game
 		end)
 	end)
 
