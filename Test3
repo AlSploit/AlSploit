@@ -4884,11 +4884,11 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.spawn(function()
-					if Settings.Fov.Value == true and KnitClientGotten == true then
-						FovController:setFOV(Settings.Fov.Fov)
-					end
-				end)
+				task.wait()
+				
+				if Settings.Fov.Value == true and KnitClientGotten == true then
+					FovController:setFOV(Settings.Fov.Fov)
+				end
 			until Settings.Fov.Value == false
 		end)
 		
