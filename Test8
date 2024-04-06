@@ -2505,7 +2505,7 @@ local function FlyMe()
 				end
 
 				if FlyValue == true and IsAlive(LocalPlayer) then
-					FlyBodyVelocity.Velocity = Vector3.new(0, (FlyUp and 40 or 0) + (FlyDown and -40 or 0), 0)
+					FlyBodyVelocity.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, (FlyUp and 40 or 0) + (FlyDown and -40 or 0),LocalPlayer.Character.PrimaryPart.Velocity.Z)
 				end
 
 				task.spawn(function()
@@ -6162,6 +6162,8 @@ task.spawn(function()
 					
 					task.spawn(function()
 						repeat
+							print(NearestBedFound, CanSeeNearestBed, NearestEntityFound)
+							
 							if IsAlive(LocalPlayer) and NearestBedFound and CanSeeNearestBed and not NearestEntityFound then
 								task.wait(0.25)
 
