@@ -18,6 +18,7 @@ local IsPlayerLagbacked = false
 local IsMatchStarted = false
 local IsPlayerAlive = false
 
+local MaxPercentage = 0
 local AutowinValue = true
 
 local function InitMainGui()
@@ -104,7 +105,7 @@ local function InitMainGui()
 	TimeRemaining.Position = UDim2.new(0, 0, 0.36222145, 0)
 	TimeRemaining.Size = UDim2.new(0.997, 0, 0.273, 0)
 	TimeRemaining.Font = Enum.Font.GothamBold
-	TimeRemaining.Text = "Time Remaining  Estimate: 1:00"
+	TimeRemaining.Text = "Time Remaining  Estimate: 100%"
 	TimeRemaining.TextColor3 = Color3.new(1, 1, 1)
 	TimeRemaining.TextScaled = true
 	TimeRemaining.TextSize = 16.000
@@ -155,24 +156,25 @@ local function InitMainGui()
 					for i, v in next, game.Players:GetPlayers() do
 						task.spawn(function()
 							if v.Team ~= LocalPlayer.Team and IsAlive(v) then
-								AmountOfPlayers = ((AmountOfPlayers + 1) * 50)
+								AmountOfPlayers = (AmountOfPlayers + 1)
 							end
 						end)				
 						
 						task.spawn(function()
 							if v.Team ~= LocalPlayer.Team then
 								if v.leaderstats.Bed.Value == "✅" then
-									AmountOfBeds = ((AmountOfBeds + 1) * 50)
+									AmountOfBeds = (AmountOfBeds + 1)
 								end
 							end
 						end)					
 					end
 				end)
 				
-				
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
 				
-				TimeRemaining.Text = "Time Remaining  Estimate: " .. TimeRemainingValue
+				local Percentage = ((MaxPercentage / TimeRemainingValue) * 100)
+				
+				TimeRemaining.Text = "Time Remaining  Estimate: " .. Percentage .. "%"
 			end)
 			
 			task.spawn(function()
@@ -246,5 +248,23 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	InitMainGui()
+	task.spawn(function()
+		for i, v in next, game.Players:GetPlayers() do
+			task.spawn(function()
+				if v.Team ~= LocalPlayer.Team  then
+					MaxPercentage = (MaxPercentage + 1)
+				end
+			end)				
+
+			task.spawn(function()
+				if v.Team ~= LocalPlayer.Team then
+					MaxPercentage = (MaxPercentage + 1)
+				end
+			end)					
+		end
+	end)
+	
+	task.spawn(function()
+		InitMainGui()
+	end)
 end)
