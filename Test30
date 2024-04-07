@@ -1292,7 +1292,7 @@ function FindNearestBed(MaxDistance)
 	local NearestBed = nil
 
 	for i, v in next, CollectionService:GetTagged("bed")do
-		if v:GetAttribute("Team") ~= LocalPlayer.Team.Name then			
+		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.Name then			
 			if v:GetAttribute("BedShieldEndTime") then 				
 				if v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() then
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
