@@ -43,11 +43,11 @@ local function InitMainGui()
 
 	MainFrame.Name = "MainFrame"
 	MainFrame.Parent = Autowin
-	MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	MainFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	MainFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+	MainFrame.BorderColor3 = Color3.new(0, 0, 0)
 	MainFrame.BorderSizePixel = 0
 	MainFrame.Position = UDim2.new(0.38, 0, 0.780, 0)
-	MainFrame.Size = UDim2.new(0.239840105, 0, 0.134146348, 0)
+	MainFrame.Size = UDim2.new(0.240, 0, 0.134, 0)
 
 	UICorner.Parent = MainFrame
 	
@@ -56,21 +56,21 @@ local function InitMainGui()
 	UIStroke.Thickness = 2
 	UIStroke.Color = Color3.new(1, 1, 1)
 
-	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(118, 49, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(135, 75, 255))}
+	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.462745, 0.192157, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.529412, 0.294118, 1))}
 	UIGradient.Rotation = 90
 	UIGradient.Parent = MainFrame
 
 	Health.Name = "Health"
 	Health.Parent = MainFrame
-	Health.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Health.BackgroundColor3 = Color3.new(1, 1, 1)
 	Health.BackgroundTransparency = 1.000
-	Health.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Health.BorderColor3 = Color3.new(0, 0, 0)
 	Health.BorderSizePixel = 0
-	Health.Position = UDim2.new(0, 0, 0.725857794, 0)
-	Health.Size = UDim2.new(0.497222215, 0, 0.272727251, 0)
+	Health.Position = UDim2.new(0, 0, 0.726, 0)
+	Health.Size = UDim2.new(0.4975, 0, 0.273, 0)
 	Health.Font = Enum.Font.GothamBold
 	Health.Text = "Health: 100"
-	Health.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Health.TextColor3 = Color3.new(1, 1, 1)
 	Health.TextScaled = true
 	Health.TextSize = 16.000
 	Health.TextWrapped = true
@@ -80,15 +80,15 @@ local function InitMainGui()
 
 	Bed.Name = "Bed"
 	Bed.Parent = MainFrame
-	Bed.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Bed.BackgroundColor3 = Color3.new(1, 1, 1)
 	Bed.BackgroundTransparency = 1.000
-	Bed.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Bed.BorderColor3 = Color3.new(0, 0, 0)
 	Bed.BorderSizePixel = 0
-	Bed.Position = UDim2.new(0.499485105, 0, 0.725857794, 0)
-	Bed.Size = UDim2.new(0.5, 0, 0.272727281, 0)
+	Bed.Position = UDim2.new(0.500, 0, 0.726, 0)
+	Bed.Size = UDim2.new(0.5, 0, 0.273, 0)
 	Bed.Font = Enum.Font.GothamBold
 	Bed.Text = "Bed: ✅"
-	Bed.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Bed.TextColor3 = Color3.new(1, 1, 1)
 	Bed.TextScaled = true
 	Bed.TextSize = 16.000
 	Bed.TextWrapped = true
@@ -98,15 +98,15 @@ local function InitMainGui()
 
 	TimeRemaining.Name = "TimeRemaining"
 	TimeRemaining.Parent = MainFrame
-	TimeRemaining.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TimeRemaining.BackgroundColor3 = Color3.new(1, 1, 1)
 	TimeRemaining.BackgroundTransparency = 1.000
-	TimeRemaining.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TimeRemaining.BorderColor3 = Color3.new(0, 0, 0)
 	TimeRemaining.BorderSizePixel = 0
 	TimeRemaining.Position = UDim2.new(0, 0, 0.36222145, 0)
-	TimeRemaining.Size = UDim2.new(0.997222245, 0, 0.272727281, 0)
+	TimeRemaining.Size = UDim2.new(0.997, 0, 0.273, 0)
 	TimeRemaining.Font = Enum.Font.GothamBold
 	TimeRemaining.Text = "Time Remaining  Estimate: 1:00"
-	TimeRemaining.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TimeRemaining.TextColor3 = Color3.new(1, 1, 1)
 	TimeRemaining.TextScaled = true
 	TimeRemaining.TextSize = 16.000
 	TimeRemaining.TextWrapped = true
@@ -115,14 +115,14 @@ local function InitMainGui()
 	UITextSizeConstraint_3.MaxTextSize = 16
 
 	Title.Parent = MainFrame
-	Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Title.BackgroundColor3 = Color3.new(1, 1, 1)
 	Title.BackgroundTransparency = 1.000
-	Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Title.BorderColor3 = Color3.new(0, 0, 0)
 	Title.BorderSizePixel = 0
-	Title.Size = UDim2.new(0.997222245, 0, 0.272727281, 0)
+	Title.Size = UDim2.new(0.997, 0, 0.273, 0)
 	Title.Font = Enum.Font.GothamBold
 	Title.Text = "Autowin"
-	Title.TextColor3 = Color3.fromRGB(85, 255, 0)
+	Title.TextColor3 = Color3.new(0.333333, 1, 0)
 	Title.TextScaled = true
 	Title.TextSize = 25.000
 	Title.TextWrapped = true
@@ -178,7 +178,7 @@ local function InitMainGui()
 			
 			task.spawn(function()
 				if IsPlayerAlive then
-					Health.Text = "Health: " .. LocalPlayer.Character:GetAttribute("Health")
+					Health.Text = "Health: " .. math.round(LocalPlayer.Character:GetAttribute("Health"))
 				end
 			end)	
 			
@@ -249,5 +249,3 @@ end)
 task.spawn(function()
 	InitMainGui()
 end)
-
-game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 1000
