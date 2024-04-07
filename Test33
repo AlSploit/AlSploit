@@ -170,10 +170,10 @@ local function InitMainGui()
 				end)
 				
 				
-				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
+				local TimeRemainingValue = ((AmountOfPlayers + AmountOfBeds) / 60)
 				
-				local Minutes = math.round(TimeRemainingValue / 60)
-				local Seconds = math.round((TimeRemainingValue - (Minutes * 60)))
+				local Minutes = math.round(TimeRemainingValue * 60)
+				local Seconds = math.round((TimeRemainingValue - (Minutes)))
 				
 				TimeRemaining.Text = "Time Remaining  Estimate: " .. Minutes .. ":" .. Seconds
 			end)
