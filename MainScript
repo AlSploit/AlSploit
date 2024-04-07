@@ -1292,7 +1292,7 @@ function FindNearestBed(MaxDistance)
 	local NearestBed = nil
 
 	for i, v in next, CollectionService:GetTagged("bed")do
-		if v:FindFirstChild("Blanket").BrickColor ~= LocalPlayer.Team.TeamColor then			
+		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
 			if v:GetAttribute("BedShieldEndTime") then 				
 				if v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() then
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
@@ -2824,13 +2824,15 @@ task.spawn(function()
 			repeat
 				task.wait()
 				
-				local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
+				if IsAlive(LocalPlayer) then
+					local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
 
-				if NearestEntity then
-					local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).unit
+					if NearestEntity then
+						local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).unit
 
-					Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
-				end
+						Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
+					end
+				end				
 			until Settings.AimAssist.Value == false
 		end)
 	end)
@@ -3893,21 +3895,19 @@ task.spawn(function()
 		Settings.Strafe.Value = CallBack
 
 		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
-			
-			task.wait(1)
-			
 			repeat
 				task.wait()
 
-				local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
+				if IsAlive(LocalPlayer) then
+					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
 
-				if IsAlive(LocalPlayer) and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
-					local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-					local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
+					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
+						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+						local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
 
-					StrafeTween:Play()
-				end
+						StrafeTween:Play()
+					end
+				end				
 			until Settings.Strafe.Value == false
 		end)
 	end)
