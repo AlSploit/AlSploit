@@ -171,9 +171,6 @@ local function InitMainGui()
 				end)
 				
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
-				local Multiplier = (MaxTimeRemainingValue * 100 / MaxTimeRemainingValue)
-				
-				print(Multiplier)
 				
 				TimeRemaining.Text = "Time Remaining Estimate: " .. TimeRemainingValue .. "/" .. MaxTimeRemainingValue
 			end)
