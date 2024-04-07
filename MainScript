@@ -731,7 +731,6 @@ local function CreateSettingsFile()
 	local MetaTable = {__index, DefaultSetting.Properties}
 
 	Settings = {
-		AnticheatBypass = {Speed = 150, KeyBind = "..."},
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
@@ -761,7 +760,6 @@ local function CreateSettingsFile()
 		PlayerTp = {KeyBind = "..."},
 		AutoKit = {KeyBind = "..."},
 		AutoBuy = {KeyBind = "..."},
-		Tinker = {KeyBind = "..."},
 		Sprint = {KeyBind = "..."},
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
@@ -890,24 +888,6 @@ task.spawn(function()
 	end
 end)
 
-local Flamework, FlameworkGotten = nil, false
-
-task.spawn(function()
-	Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
-end)
-
-task.spawn(function()
-	if Flamework then
-		FlameworkGotten = true
-	end
-end)
-
-task.spawn(function()
-	if FlameworkGotten == false then
-		CreateNotification(10, "Your executor will not support alot features.")
-	end
-end)
-
 local Camera = WorkSpace.CurrentCamera
 local OrigC0 = ReplicatedStorage.Assets.Viewmodel.RightHand.RightWrist.C0
 
@@ -966,14 +946,6 @@ local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"
 
 local BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
 
-local AbilityController
-
-task.spawn(function()
-	if FlameworkGotten then
-		AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
-	end
-end)
-
 local BlockPlacementController
 local ViewmodelController
 local ZephyrController
@@ -994,9 +966,6 @@ end)
 
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
-
-local AnticheatBypassedSpeed = 0
-local AnticheatBypassed = false
 
 local KillAuraAnimationCooldown = false
 local NearestEntityFound = false
@@ -1807,10 +1776,6 @@ function GetSpeed()
 		if DamageBoost == true then
 			Speed = Speed + 18
 		end
-		
-		if AnticheatBypassed == true then
-			Speed = Speed + AnticheatBypassedSpeed
-		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
 	end
@@ -2568,6 +2533,27 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	RunService.Heartbeat:Connect(function(Delta)
+		local SpeedRaycastParameters = RaycastParams.new()
+
+		SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
+
+		task.spawn(function()
+			if Settings.Speed.Value == true and IsAlive(LocalPlayer) then			
+				local SpeedValue = GetSpeed()
+				local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
+
+				local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedCFrame, SpeedRaycastParameters)
+
+				if not Raycast then
+					LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + SpeedCFrame
+				end
+			end
+		end)			
+	end)
+end)
+
+task.spawn(function()
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
@@ -3081,7 +3067,7 @@ task.spawn(function()
 							end)					
 
 							task.spawn(function()
-								if HasItem("fireball") and not HasItem("arrow") then
+								if HasItem("fireball") and not (HasItem("arrow") and (BestBow and HasItem(BestBow.itemType) or true)) then
 									local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
 
 									task.spawn(function()
@@ -3093,7 +3079,7 @@ task.spawn(function()
 									ShootProjectile(FireBall, "fireball")
 								end
 
-								if HasItem("snowball") and not HasItem("arrow")then
+								if HasItem("snowball") and not (HasItem("arrow") and (BestBow and HasItem(BestBow.itemType) or true))  then
 									local SnowBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("snowball")
 
 									task.spawn(function()
@@ -3365,88 +3351,6 @@ task.spawn(function()
 					end
 
 					if Settings.NoPlacementCps.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local AnticheatBypass, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AnticheatBypass", Settings.AnticheatBypass.Value, function(CallBack)
-		Settings.AnticheatBypass.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-				
-				local Args = {
-					[1] = {
-						["velocity"] = Vector3.new(math.huge, math.huge, math.huge)
-					}
-				}
-
-				game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RocketImpulse"):InvokeServer(unpack(Args))
-
-				AnticheatBypassedSpeed = Settings.AnticheatBypass.Speed
-				AnticheatBypassed = true
-			until Settings.AnticheatBypass.Value == false
-
-			AnticheatBypassedSpeed = 0
-			AnticheatBypassed = false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.AnticheatBypass.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.AnticheatBypass.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-	
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.AnticheatBypass.Speed, 250, LayoutOrder + 2, function(CallBack)
-					Settings.AnticheatBypass.Speed = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.AnticheatBypass.KeyBind then
-					Settings.AnticheatBypass.Value = not Settings.AnticheatBypass.Value
-
-					if Settings.AnticheatBypass.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.AnticheatBypass.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -3926,27 +3830,6 @@ task.spawn(function()
 	local Speed, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Speed", Settings.Speed.Value, function(CallBack)
 		Settings.Speed.Value = CallBack
 	end)
-	
-	task.spawn(function()
-		RunService.Heartbeat:Connect(function(Delta)
-			local SpeedRaycastParameters = RaycastParams.new()
-
-			SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
-
-			task.spawn(function()
-				if Settings.Speed.Value == true and IsAlive(LocalPlayer) then			
-					local SpeedValue = GetSpeed()
-					local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
-
-					local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedCFrame, SpeedRaycastParameters)
-
-					if not Raycast then
-						LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + SpeedCFrame
-					end
-				end
-			end)			
-		end)
-	end)
 
 	task.spawn(function()
 		local InstanceUI
@@ -4010,13 +3893,17 @@ task.spawn(function()
 		Settings.Strafe.Value = CallBack
 
 		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+			
+			task.wait(1)
+			
 			repeat
 				task.wait()
 
 				local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
 
 				if IsAlive(LocalPlayer) and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
-					local TweenInformation = TweenInfo.new((NearestEntityDistance / (AnticheatBypassed and math.huge or Settings.Strafe.Speed)), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+					local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
 					local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
 
 					StrafeTween:Play()
@@ -4252,7 +4139,7 @@ task.spawn(function()
 				task.wait(100 / Settings.ChatSpammer.Speed)
 
 				task.spawn(function()
-					if GetMatchState() ~= 0 then
+					if GetMatchState() ~= 0 and Settings.ChatSpammer.Value == true then
 						ChatSpam()
 					end
 				end)
