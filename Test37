@@ -172,9 +172,7 @@ local function InitMainGui()
 				
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
 				
-				local Percentage = ((MaxPercentage / TimeRemainingValue) * 100)
-				
-				TimeRemaining.Text = "Time Remaining  Estimate: " .. Percentage .. "%"
+				TimeRemaining.Text = "Time Remaining  Estimate: " .. MaxPercentage .. "/" .. TimeRemainingValue
 			end)
 			
 			task.spawn(function()
