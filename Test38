@@ -18,7 +18,7 @@ local IsPlayerLagbacked = false
 local IsMatchStarted = false
 local IsPlayerAlive = false
 
-local MaxPercentage = 0
+local MaxTimeRemainingValue = 0
 local AutowinValue = true
 
 local function InitMainGui()
@@ -172,7 +172,7 @@ local function InitMainGui()
 				
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
 				
-				TimeRemaining.Text = "Time Remaining  Estimate: " .. MaxPercentage .. "/" .. TimeRemainingValue
+				TimeRemaining.Text = "Time Remaining  Estimate: " .. (TimeRemainingValue * (100 / TimeRemainingValue) .. "/" .. (MaxTimeRemainingValue * (100 / MaxTimeRemainingValue))
 			end)
 			
 			task.spawn(function()
@@ -250,13 +250,13 @@ task.spawn(function()
 		for i, v in next, game.Players:GetPlayers() do
 			task.spawn(function()
 				if v.Team ~= LocalPlayer.Team  then
-					MaxPercentage = (MaxPercentage + 1)
+					MaxTimeRemainingValue = (MaxTimeRemainingValue + 1)
 				end
 			end)				
 
 			task.spawn(function()
 				if v.Team ~= LocalPlayer.Team then
-					MaxPercentage = (MaxPercentage + 1)
+					MaxTimeRemainingValue = (MaxTimeRemainingValue + 1)
 				end
 			end)					
 		end
