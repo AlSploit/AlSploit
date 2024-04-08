@@ -382,6 +382,8 @@ task.spawn(function()
 				task.wait(0.15)
 
 				local NearestBed = FindNearestBed()
+				
+				print(DoesPlayerHaveBed)
 
 				task.spawn(function()					
 					if IsPlayerAlive == true and DoesPlayerHaveBed == true and NearestBed then
