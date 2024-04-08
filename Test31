@@ -318,6 +318,9 @@ local function HasBed(Player)
 			if Player.Team.TeamColor == v.Bed.BrickColor then
 				return true
 			end
+			
+			print(Player.Team.TeamColor)
+			print(v.Bed.BrickColor)
 		end
 	end)
 end
@@ -329,17 +332,7 @@ task.spawn(function()
 		task.spawn(function()
 			local HasBedValue = HasBed(LocalPlayer)
 
-			task.spawn(function()
-				if HasBedValue == true then
-					DoesPlayerHaveBed = true
-				end
-			end)
-			
-			task.spawn(function()
-				if HasBedValue == nil then
-					DoesPlayerHaveBed = false
-				end
-			end)
+			DoesPlayerHaveBed = HasBedValue
 			
 			print(HasBedValue)
 		end)
