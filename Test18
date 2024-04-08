@@ -17,6 +17,7 @@ local ClientHandlerStore = require(LocalPlayer.PlayerScripts.TS.ui.store).Client
 
 local ResetCharacterRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter")
 
+local DoesPlayerHaveBed = false
 local IsPlayerLagbacked = false
 local IsMatchStarted = false
 local IsPlayerAlive = false
@@ -233,6 +234,14 @@ function FindNearestPlayer(MaxDistance)
 	return NearestPlayer, NearestPlayerDistance
 end
 
+local function FindPlayerOfBedTeam(Color)
+	for i, v in next, PlayerService:GetPlayers() do
+		if v.Team.TeamColor == Color then
+			return v
+		end
+	end
+end
+
 local function TweenToNearestBed()
 	if IsAlive(LocalPlayer) then
 		local NearestBed = FindNearestBed()
@@ -242,25 +251,37 @@ local function TweenToNearestBed()
 			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
 
 			BedTpTween:Play()
+
+			task.spawn(function()
+				repeat
+					task.wait()
+
+					if BedTpTween.Completed == false then
+						ResetCharacter()
+					end			
+				until BedTpTween.Completed == true or IsPlayerAlive == false
+			end)
 		end
 	end
 end
 
 function FindNearestBed(MaxDistance)
-	local BedShieldTime = false
 	local MaxDistance = MaxDistance or math.huge
 	local NearestBed = nil
+	local BedShield = false
 
-	for i, v in next, CollectionService:GetTagged("bed")do
-		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
+	for i, v in next, CollectionService:GetTagged("bed") do
+		local PlayerOfBedTeam = FindPlayerOfBedTeam(v.Bed.BrickColor)
+		
+		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor and PlayerOfBedTeam then			
 			if v:GetAttribute("BedShieldEndTime") then 				
 				if v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow() then
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-					if Distance < MaxDistance then
-						BedShieldTime = true
+					if Distance < MaxDistance then					
 						MaxDistance = Distance
 						NearestBed = v
+						BedShield = true
 					end
 				end
 			end
@@ -268,19 +289,19 @@ function FindNearestBed(MaxDistance)
 			if not v:GetAttribute("BedShieldEndTime") then
 				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-				if Distance < MaxDistance then
-					BedShieldTime = false
+				if Distance < MaxDistance then		
 					MaxDistance = Distance
 					NearestBed = v
+					BedShield = false
 				end
 			end
 		end
 	end
 
-	return NearestBed, BedShieldTime
+	return NearestBed, BedShield
 end
 
-local function ResetCharacter()
+function ResetCharacter()
 	ResetCharacterRemote:FireServer()
 end
 
@@ -299,9 +320,39 @@ function IsAlive(Player)
 	return true
 end	
 
+local function HasBed(Player)
+	Player = Player or LocalPlayer
+	
+	task.spawn(function()
+		if Player.leaderstats.Bed.Value == "✅" then
+			return true
+		end
+		
+		if Player.leaderstats.Bed.Value == "❌" then
+			return false
+		end
+	end)
+end
+
 task.spawn(function()
 	repeat
 		task.wait()
+		
+		task.spawn(function()
+			local HasBedValue = HasBed(LocalPlayer)
+
+			task.spawn(function()
+				if HasBedValue == true then
+					DoesPlayerHaveBed = true
+				end
+			end)
+			
+			task.spawn(function()
+				if HasBedValue == false then
+					DoesPlayerHaveBed = false
+				end
+			end)
+		end)
 		
 		task.spawn(function()
 			if IsPlayerAlive then
@@ -314,13 +365,17 @@ task.spawn(function()
 		task.spawn(function()
 			local MatchState = GetMatchState()
 			
-			if MatchState == 0 then
-				IsMatchStarted = false
-			end
+			task.spawn(function()
+				if MatchState == 0 then
+					IsMatchStarted = false
+				end
+			end)	
 			
-			if MatchState ~= 0 then
-				IsMatchStarted = true
-			end
+			task.spawn(function()
+				if MatchState ~= 0 then
+					IsMatchStarted = true
+				end
+			end)
 		end)
 		
 		task.spawn(function()
@@ -331,32 +386,42 @@ end)
 
 task.spawn(function()
 	LocalPlayer.CharacterAdded:Connect(function()
-		repeat task.wait() until IsPlayerAlive == true
-		
-		task.wait(0.15)
-		
-		local NearestPlayer = FindNearestPlayer()
-		local NearestBed, BedShieldTime = FindNearestBed()
-		
 		task.spawn(function()
-			if NearestBed then
-				TweenToNearestBed()
+			if AutowinValue == true then
+				repeat task.wait() until IsPlayerAlive == true
+
+				task.wait(0.15)
+
+				local NearestBed, BedShield = FindNearestBed()
+
+				task.spawn(function()
+					if IsPlayerAlive == true and DoesPlayerHaveBed == true and NearestBed then
+						TweenToNearestBed()
+						
+						task.spawn(function()
+							local TeamColorOfBed = NearestBed.Bed.BrickColor
+							local PlayerOfBedTeam = FindPlayerOfBedTeam(TeamColorOfBed)
+							local PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam)
+							
+							task.spawn(function()
+								repeat 
+									task.wait() 
+									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position + 10
+									
+									task.wait(0.1)
+									
+									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 10
+								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
+							end)
+							
+							repeat task.wait() PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam) until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
+
+							ResetCharacter()
+						end)
+					end
+				end)
 			end
-		end)	
-		
-		task.spawn(function()
-			repeat task.wait() NearestBed = FindNearestBed() until not NearestBed or IsPlayerAlive == false
-			
-			if NearestPlayer and not BedShieldTime then
-				TweenToNearestPlayer(true)
-			end
-		end)
-		
-		task.spawn(function()
-			if NearestPlayer and not NearestBed then
-				TweenToNearestPlayer(false)
-			end
-		end)
+		end)			
 	end)
 end)
 
