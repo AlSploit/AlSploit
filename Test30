@@ -319,8 +319,6 @@ local function HasBed(Player)
 				return true
 			end
 		end
-		
-		return false
 	end)
 end
 
@@ -331,7 +329,19 @@ task.spawn(function()
 		task.spawn(function()
 			local HasBedValue = HasBed(LocalPlayer)
 
-			DoesPlayerHaveBed = HasBedValue
+			task.spawn(function()
+				if HasBedValue == true then
+					DoesPlayerHaveBed = true
+				end
+			end)
+			
+			task.spawn(function()
+				if HasBedValue == nil then
+					DoesPlayerHaveBed = false
+				end
+			end)
+			
+			print(HasBedValue)
 		end)
 		
 		task.spawn(function()
