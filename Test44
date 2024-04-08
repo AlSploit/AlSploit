@@ -406,9 +406,9 @@ task.spawn(function()
 								repeat 
 									task.wait() 
 									
-									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 20, 0))
+									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 10, 0))
 									
-									task.wait(1)
+									task.wait(0.4)
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 							end)
 							
