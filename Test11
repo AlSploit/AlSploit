@@ -173,8 +173,8 @@ local function InitMainGui()
 					end
 				end)
 				
-				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
-				local Percentage = ((math.round((TimeRemainingValue == 0 and 100) or MaxTimeRemainingValue / TimeRemainingValue) / 4) * 100)
+				local TimeRemainingValue = math.round((AmountOfPlayers + AmountOfBeds))
+				local Percentage = ((MaxTimeRemainingValue / TimeRemainingValue) * 100)
 				
 				TimeRemaining.Text = "Time Remaining: " .. Percentage .. " Percent"
 			end)
