@@ -242,18 +242,11 @@ local function FindPlayerOfBedTeam(Color)
 	end
 end
 
-local function TweenToNearestBed()
-	print("1")
-	
+local function TweenToNearestBed()	
 	if IsAlive(LocalPlayer) then
-		
-		print("2")
-		
 		local NearestBed = FindNearestBed()
 
-		if NearestBed then
-			print("3")
-			
+		if NearestBed then			
 			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
 			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
 
@@ -321,15 +314,13 @@ local function HasBed(Player)
 	Player = Player or LocalPlayer
 	
 	task.spawn(function()
-		if Player.leaderstats.Bed.Value == "✅" then
-			
-			return true
+		for i, v in next, CollectionService:GetTagged("bed") do
+			if Player.Team.TeamColor == v.Bed.BrickColor then
+				return true
+			end
 		end
 		
-		if Player.leaderstats.Bed.Value == "❌" then
-			
-			return false
-		end
+		return false
 	end)
 end
 
@@ -341,8 +332,6 @@ task.spawn(function()
 			local HasBedValue = HasBed(LocalPlayer)
 
 			DoesPlayerHaveBed = HasBedValue
-			
-			print(DoesPlayerHaveBed)
 		end)
 		
 		task.spawn(function()
@@ -406,6 +395,8 @@ task.spawn(function()
 							end)
 							
 							repeat task.wait() PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam) until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
+
+							ResetCharacter()
 						end)
 					end
 				end)
