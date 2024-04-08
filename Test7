@@ -162,7 +162,7 @@ local function InitMainGui()
 						
 						task.spawn(function()
 							if v.Team ~= LocalPlayer.Team then
-								if v.leaderstats.Bed.Value == "✅" then
+								if v.leaderstats.Bed.Value == "✅" and v.Team ~= LocalPlayer.Team then
 									AmountOfBeds = (AmountOfBeds + 1)
 								end
 							end
@@ -173,7 +173,7 @@ local function InitMainGui()
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
 				local Percentage = (math.round(100 / MaxTimeRemainingValue) * TimeRemainingValue)
 				
-				TimeRemaining.Text = "Finished Percentage: " .. Percentage .. "%"
+				TimeRemaining.Text = "Finished Percentage: " .. Percentage .. "Seconds"
 			end)
 			
 			task.spawn(function()
