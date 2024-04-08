@@ -392,9 +392,11 @@ task.spawn(function()
 
 				task.wait(0.15)
 
-				local NearestBed, BedShield = FindNearestBed()
+				local NearestBed = FindNearestBed()
 
 				task.spawn(function()
+					print(IsPlayerAlive, DoesPlayerHaveBed, NearestBed)
+					
 					if IsPlayerAlive == true and DoesPlayerHaveBed == true and NearestBed then
 						TweenToNearestBed()
 						
