@@ -333,8 +333,8 @@ local function HasBed(Player)
 	Player = Player or LocalPlayer
 	
 	for i, v in next, CollectionService:GetTagged("bed") do
-		if Player.Team.TeamColor == v.Bed.BrickColor then
-			Value = true
+		if Player.Team.TeamColor == v.Bed.BrickColor and (Player == LocalPlayer and true or v:GetAttribute("BedShieldEndTime")) then
+			return true
 		end
 	end
 	
@@ -406,7 +406,7 @@ task.spawn(function()
 								repeat 
 									task.wait() 
 									
-									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 10, 0))
+									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 15, 0))
 									
 									task.wait(0.35)
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
