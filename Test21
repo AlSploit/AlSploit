@@ -251,16 +251,6 @@ local function TweenToNearestBed()
 			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
 
 			BedTpTween:Play()
-
-			task.spawn(function()
-				repeat
-					task.wait()
-
-					if BedTpTween.Completed == false then
-						ResetCharacter()
-					end			
-				until BedTpTween.Completed == true or IsPlayerAlive == false
-			end)
 		end
 	end
 end
@@ -325,13 +315,11 @@ local function HasBed(Player)
 	
 	task.spawn(function()
 		if Player.leaderstats.Bed.Value == "✅" then
-			print("true")
 			
 			return true
 		end
 		
 		if Player.leaderstats.Bed.Value == "❌" then
-			print("false")
 			
 			return false
 		end
