@@ -376,28 +376,25 @@ task.spawn(function()
 						
 						task.spawn(function()
 							local TeamColorOfBed = NearestBed.Bed.BrickColor
-							local PlayerOfBedTeam = FindPlayerOfBedTeam(TeamColorOfBed)
-							
-							print(PlayerOfBedTeam)
-							
+							local PlayerOfBedTeam = FindPlayerOfBedTeam(TeamColorOfBed)						
 							local PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam)
-							
-							print(PlayerOfBedTeamHasBed)
 							
 							task.spawn(function()
 								repeat 
 									task.wait() 
-									NearestBed.Position = NearestBed.Position + 10
+									NearestBed.Position.Y = NearestBed.Position.Y + 10
 									
 									task.wait(0.1)
 									
-									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 10
+									LocalPlayer.Character.HumanoidRootPart.Position.Y = LocalPlayer.Character.HumanoidRootPart.Position.Y - 10
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 							end)
 							
 							repeat task.wait() PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam) until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 
 							ResetCharacter()
+							
+							print("reset " .. PlayerOfBedTeamHasBed, IsPlayerAlive)
 						end)
 					end
 				end)
