@@ -243,10 +243,17 @@ local function FindPlayerOfBedTeam(Color)
 end
 
 local function TweenToNearestBed()
+	print("1")
+	
 	if IsAlive(LocalPlayer) then
+		
+		print("2")
+		
 		local NearestBed = FindNearestBed()
 
 		if NearestBed then
+			print("3")
+			
 			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
 			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
 
