@@ -209,12 +209,12 @@ local function TweenToNearestPlayer(SlowDown)
 			if NearestPlayer and SlowDown == true and NearestPlayerDistance <= 50 then
 				local Magnitude = (LocalPlayer.Character.HumanoidRootPart.Position - NearestPlayer.Character.HumanoidRootPart.Position).Magnitude
 
-				local TweenInformation = TweenInfo.new((SlowDown and Magnitude / 22.5), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
-				local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
+				local TweenInformation = TweenInfo.new((SlowDown and Magnitude / 22), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, (math.random(0, 1) == 1 and 10 or 2), 0)})
 
 				PlayerTpTween:Play()
 			end
-			
+
 			task.spawn(function()
 				if NearestPlayer and SlowDown == true and NearestPlayerDistance > 50 then
 					ResetCharacter()
@@ -406,7 +406,7 @@ task.spawn(function()
 								repeat 
 									task.wait() 
 									
-									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 15, 0))
+									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 17.5, 0))
 									
 									task.wait(0.35)
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
