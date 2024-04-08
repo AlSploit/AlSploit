@@ -398,11 +398,11 @@ task.spawn(function()
 							task.spawn(function()
 								repeat 
 									task.wait() 
-									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position + 10
+									NearestBed.Position = NearestBed.Position + 10
 									
 									task.wait(0.1)
 									
-									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 10
+									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 8
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 							end)
 							
