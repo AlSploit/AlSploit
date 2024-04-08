@@ -2694,6 +2694,7 @@ task.spawn(function()
 					task.spawn(function()
 						if Settings.AutoClicker.BlatantClick == true then
 							task.wait(1 / Settings.AutoClicker.Cps)
+							
 							Click()
 						end
 					end)				
@@ -6191,18 +6192,20 @@ task.spawn(function()
 			if Settings.Cape.Value == true then
 				local DecalId = (Settings.Cape.Sigma and 13528140280 or 16331277884)
 
-				CreateCape("rbxassetid://" .. DecalId)
-
-				task.spawn(function()
-					LocalPlayer.CharacterAdded:Connect(function()
-						if CallBack == true then
-							if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") then
-								CreateCape("rbxassetid://" .. DecalId)
-							end
-						end						
-					end)
-				end)			
+				CreateCape("rbxassetid://" .. DecalId)	
 			end
+		end)	
+		
+		task.spawn(function()
+			LocalPlayer.CharacterAdded:Connect(function()
+				if Settings.Cape.Value == true then
+					local DecalId = (Settings.Cape.Sigma and 13528140280 or 16331277884)
+					
+					if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") then
+						CreateCape("rbxassetid://" .. DecalId)
+					end
+				end						
+			end)
 		end)		
 		
 		task.spawn(function()
