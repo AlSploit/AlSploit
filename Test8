@@ -1,0 +1,266 @@
+repeat task.wait() until game:IsLoaded()
+
+local LocalPlayer = game.Players.LocalPlayer
+
+local Camera = game:GetService("Workspace").CurrentCamera
+
+local StatisticsService = game:GetService("Stats")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+local AutowinValue = true
+
+local KnitGotten, KnitClient
+
+repeat
+	task.wait()
+
+	KnitGotten, KnitClient = pcall(function()
+		return debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
+	end)
+
+	if KnitGotten then break end
+
+until KnitGotten
+
+local Client = require(game:GetService("ReplicatedStorage").TS.remotes).default.Client
+
+local IsNetworkOwner = isnetworkowner or (gethiddenproperty and function(part)
+	if gethiddenproperty(part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
+		return false
+	end
+	return true
+end) or function() return true end
+
+local function DumpRemote(Tab)
+	for i, v in pairs(Tab) do
+		if v == "Client" then
+			return Tab[i + 1]
+		end
+	end
+	return ""
+end
+
+function KillHumanoid(Time)
+	task.wait(Time)
+	
+	if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") then
+		if LocalPlayer.leaderstats.Bed.Value == "✅" then
+			LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+			game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"):FireServer()
+		end
+	end
+end
+
+function IsAlive(Player)
+	Player = Player or LocalPlayer
+	if not Player.Character then return false end
+	if not Player.Character:FindFirstChild("Head") then return false end
+	if not Player.Character:FindFirstChild("Humanoid") then return false end
+	if Player.Character:FindFirstChild("Humanoid").Health < 0.11 then return false end
+	
+	return true
+end
+
+function GetPlayerOfBedColor(Bed)
+	local Value = false
+
+	local Color = Bed:FindFirstChild("Covers").BrickColor
+
+	for i, v in pairs(game.Players:GetPlayers()) do
+		if v.TeamColor == Color then
+			Value = true
+		end
+	end
+
+	return Value
+end
+
+function GetPlayerOfBedTeam(Bed)
+	local Player = nil
+
+	local Color = Bed:FindFirstChild("Covers").BrickColor
+
+	for i, v in pairs(game.Players:GetPlayers()) do
+		if v.TeamColor == Color then
+			Player = v
+		end
+	end
+
+	return Player
+end
+
+function FindNearestBed()
+	local NearestBed = nil
+	local MinDistance = math.huge
+	
+	for _,v in pairs(game.Workspace:GetDescendants()) do
+		if v.Name:lower() == "bed" and v:FindFirstChild("Covers") and v:FindFirstChild("Covers").BrickColor ~= LocalPlayer.Team.TeamColor and GetPlayerOfBedColor(v) then
+			local Distance = (v.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+			if Distance < MinDistance then
+				NearestBed = v
+				MinDistance = Distance
+			end
+		end
+	end
+	
+	return NearestBed
+end
+
+function FindNearestPlayer()
+	local NearestPlayer
+	local NearestDistance = math.huge
+	
+	for i, v in pairs(game.Players:GetChildren()) do
+		if IsAlive(v) and v ~= LocalPlayer and v.Team ~= LocalPlayer.Team and not v.Character:GetAttribute("PetrifyId") then
+			local Distance = (v.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+			if Distance < NearestDistance then
+				NearestPlayer = v
+				NearestDistance = Distance
+			end
+		end
+	end
+	
+	return NearestPlayer, NearestDistance
+end
+
+local Bedwars = {
+	ClientHandlerStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore,
+}
+
+local TweenSpeed = 0.65
+local AcDisabled = false
+
+function GetMatchState()
+	return Bedwars.ClientHandlerStore:getState().Game.matchState
+end
+
+function TweenToNearestBed(Bed)
+	local Bed = Bed or FindNearestBed()
+
+	if Bed then		
+		local TweenInformation = TweenInfo.new(TweenSpeed, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+		local BedTween = TweenService:Create(LocalPlayer.Character.HumanoidRootPart, TweenInformation, {CFrame = Bed.CFrame + Vector3.new(0, 15, 0)})
+
+		BedTween:Play()
+	end	
+end
+
+function TweenToNearestPlayer()
+	local Player, Distance = FindNearestPlayer()
+
+	if Player then		
+		local TweenInformation = TweenInfo.new(TweenSpeed, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+		local PlayerTween = TweenService:Create(LocalPlayer.Character.HumanoidRootPart, TweenInformation, {CFrame = Player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 15, 0)})
+
+		PlayerTween:Play()
+	end
+end
+
+function TweenToNearestPlayerSlow(NearestPlayer)
+	local NearestPlayer = NearestPlayer or FindNearestPlayer()
+
+	if NearestPlayer then
+		local TweenTime = (LocalPlayer.Character.HumanoidRootPart.Position - NearestPlayer.Character.HumanoidRootPart.Position).Magnitude / 23
+
+		local TweenInformation = TweenInfo.new(TweenTime, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+		local PlayerTween = TweenService:Create(LocalPlayer.Character.HumanoidRootPart, TweenInformation, {CFrame = NearestPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)})
+
+		LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+
+		PlayerTween:Play()
+	end
+end
+
+function TweenUp()
+	local TweenInformation = TweenInfo.new(0.05, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+	local DownTween = TweenService:Create(LocalPlayer.Character.HumanoidRootPart, TweenInformation, {CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 10, 0)})
+	DownTween:Play()
+end
+
+function AutowinDecision()	
+	--Decide whether to BedTp or PlayerTp
+
+	task.spawn(function() --BedTp
+		local Magnitude = 0
+		local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+		local Bed = FindNearestBed()
+
+		if Bed then
+			TweenToNearestBed(Bed)
+			local PlayerOfBedColor = GetPlayerOfBedTeam(Bed)
+			local Magnitude = 0
+
+			task.spawn(function()
+
+				task.wait(TweenSpeed)
+				repeat 
+					task.wait(0.25) 
+
+					if Bed and IsAlive(LocalPlayer) then
+						Magnitude = (LocalPlayer.Character.HumanoidRootPart.Position - Bed.Position).Magnitude TweenUp() 
+					end
+
+				until not IsAlive(LocalPlayer) or PlayerOfBedColor.leaderstats.Bed.Value ~= "✅" or not Bed or Magnitude > 40
+
+				repeat
+					task.wait()
+					NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+
+					Magnitude = (LocalPlayer.Character.HumanoidRootPart.Position - NearestPlayer.Character.HumanoidRootPart.Position).Magnitude 
+
+					TweenToNearestPlayerSlow(NearestPlayer)
+
+					task.wait(0.3)
+
+				until not IsAlive(LocalPlayer) or Magnitude > 60
+
+				KillHumanoid(0)
+			end)
+		end
+	end)
+
+	task.spawn(function() --PlayerTp
+		local Magnitude = 0
+		local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+		local Bed = FindNearestBed()
+
+		if not Bed and NearestPlayer then
+			TweenToNearestPlayer()
+
+			task.spawn(function()
+				task.wait(TweenSpeed + 0.7)
+
+				repeat
+					task.wait()
+					NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+
+					Magnitude = (LocalPlayer.Character.HumanoidRootPart.Position - NearestPlayer.Character.HumanoidRootPart.Position).Magnitude 
+
+					TweenToNearestPlayerSlow(NearestPlayer)
+
+					task.wait(0.3)
+
+				until not IsAlive(LocalPlayer) or Magnitude > 60
+
+				KillHumanoid(0)
+			end)		
+		end
+	end)
+end
+
+task.spawn(function() --Start the autowin decision
+	KillHumanoid(0)
+	
+	local BedTpCooldown = false
+
+	LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until LocalPlayer.Character:FindFirstChildOfClass("ForceField")
+
+		task.wait(0.2)
+
+		if AutowinValue == true then
+			AutowinDecision()
+		end
+	end)
+end)
