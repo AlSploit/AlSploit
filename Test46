@@ -408,7 +408,7 @@ task.spawn(function()
 									
 									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 10, 0))
 									
-									task.wait(0.4)
+									task.wait(0.35)
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 							end)
 							
@@ -419,7 +419,7 @@ task.spawn(function()
 					end
 				end)
 				
-				task.spawn(function()					
+				task.spawn(function()	
 					if IsPlayerAlive == true and DoesPlayerHaveBed == true and not NearestBed then
 						TweenToNearestPlayer(false)
 						
@@ -451,13 +451,15 @@ task.spawn(function()
 		
 		task.wait(0.15)
 		
-		repeat
-			task.wait()
-			
-			if IsPlayerLagbacked == true then
-				ResetCharacter()
-			end
-		until IsPlayerAlive == false	
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if IsPlayerLagbacked == true then
+					ResetCharacter()
+				end
+			until IsPlayerAlive == false
+		end)			
 	end)
 end)
 
