@@ -325,10 +325,14 @@ local function HasBed(Player)
 	
 	task.spawn(function()
 		if Player.leaderstats.Bed.Value == "✅" then
+			print("true")
+			
 			return true
 		end
 		
 		if Player.leaderstats.Bed.Value == "❌" then
+			print("false")
+			
 			return false
 		end
 	end)
@@ -340,7 +344,7 @@ task.spawn(function()
 		
 		task.spawn(function()
 			local HasBedValue = HasBed(LocalPlayer)
-
+			
 			task.spawn(function()
 				if HasBedValue == true then
 					DoesPlayerHaveBed = true
@@ -394,9 +398,7 @@ task.spawn(function()
 
 				local NearestBed = FindNearestBed()
 
-				task.spawn(function()
-					print(IsPlayerAlive, DoesPlayerHaveBed, NearestBed)
-					
+				task.spawn(function()					
 					if IsPlayerAlive == true and DoesPlayerHaveBed == true and NearestBed then
 						TweenToNearestBed()
 						
