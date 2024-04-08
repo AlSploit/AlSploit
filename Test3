@@ -171,7 +171,7 @@ local function InitMainGui()
 				end)
 				
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
-				local Percentage = ((100 / MaxTimeRemainingValue) * TimeRemainingValue)
+				local Percentage = ((100 / TimeRemainingValue) * MaxTimeRemainingValue)
 				
 				TimeRemaining.Text = "Finished Percentage: " .. Percentage .. "%"
 			end)
