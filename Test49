@@ -1,0 +1,494 @@
+--[[
+    Best Autowin
+
+    Version: 1.0.0
+
+	Made by: Godclutcher
+]]
+
+local LocalPlayer = game.Players.LocalPlayer
+
+local CollectionService = game:GetService("CollectionService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerService = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+
+local ClientHandlerStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
+
+local ResetCharacterRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter")
+
+local DoesPlayerHaveBed = false
+local IsPlayerLagbacked = false
+local IsMatchStarted = false
+local IsPlayerAlive = false
+
+local MaxTimeRemainingValue = 0
+local AutowinValue = true
+
+local function InitMainGui()
+	local Autowin = Instance.new("ScreenGui")
+	local MainFrame = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+	local UIGradient = Instance.new("UIGradient")
+	local Health = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local Bed = Instance.new("TextLabel")
+	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+	local TimeRemaining = Instance.new("TextLabel")
+	local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+	local Title = Instance.new("TextButton")
+	local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
+
+	Autowin.Name = "Autowin"
+	Autowin.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	Autowin.ResetOnSpawn = false
+	Autowin.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+	MainFrame.Name = "MainFrame"
+	MainFrame.Parent = Autowin
+	MainFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+	MainFrame.BorderColor3 = Color3.new(0, 0, 0)
+	MainFrame.BorderSizePixel = 0
+	MainFrame.Position = UDim2.new(0.38, 0, 0.663, 0)
+	MainFrame.Size = UDim2.new(0.240, 0, 0.134, 0)
+
+	UICorner.Parent = MainFrame
+	
+	UIStroke.Parent = MainFrame
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Thickness = 2
+	UIStroke.Color = Color3.new(1, 1, 1)
+
+	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.462745, 0.192157, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.529412, 0.294118, 1))}
+	UIGradient.Rotation = 90
+	UIGradient.Parent = MainFrame
+
+	Health.Name = "Health"
+	Health.Parent = MainFrame
+	Health.BackgroundColor3 = Color3.new(1, 1, 1)
+	Health.BackgroundTransparency = 1.000
+	Health.BorderColor3 = Color3.new(0, 0, 0)
+	Health.BorderSizePixel = 0
+	Health.Position = UDim2.new(0, 0, 0.726, 0)
+	Health.Size = UDim2.new(0.4975, 0, 0.273, 0)
+	Health.Font = Enum.Font.GothamBold
+	Health.Text = "Health: 100"
+	Health.TextColor3 = Color3.new(1, 1, 1)
+	Health.TextScaled = true
+	Health.TextSize = 16.000
+	Health.TextWrapped = true
+
+	UITextSizeConstraint.Parent = Health
+	UITextSizeConstraint.MaxTextSize = 16
+
+	Bed.Name = "Bed"
+	Bed.Parent = MainFrame
+	Bed.BackgroundColor3 = Color3.new(1, 1, 1)
+	Bed.BackgroundTransparency = 1.000
+	Bed.BorderColor3 = Color3.new(0, 0, 0)
+	Bed.BorderSizePixel = 0
+	Bed.Position = UDim2.new(0.500, 0, 0.726, 0)
+	Bed.Size = UDim2.new(0.5, 0, 0.273, 0)
+	Bed.Font = Enum.Font.GothamBold
+	Bed.Text = "Bed: ✅"
+	Bed.TextColor3 = Color3.new(1, 1, 1)
+	Bed.TextScaled = true
+	Bed.TextSize = 16.000
+	Bed.TextWrapped = true
+
+	UITextSizeConstraint_2.Parent = Bed
+	UITextSizeConstraint_2.MaxTextSize = 16
+
+	TimeRemaining.Name = "TimeRemaining"
+	TimeRemaining.Parent = MainFrame
+	TimeRemaining.BackgroundColor3 = Color3.new(1, 1, 1)
+	TimeRemaining.BackgroundTransparency = 1.000
+	TimeRemaining.BorderColor3 = Color3.new(0, 0, 0)
+	TimeRemaining.BorderSizePixel = 0
+	TimeRemaining.Position = UDim2.new(0, 0, 0.36222145, 0)
+	TimeRemaining.Size = UDim2.new(0.997, 0, 0.273, 0)
+	TimeRemaining.Font = Enum.Font.GothamBold
+	TimeRemaining.Text = "Time Remaining  Estimate: 100%"
+	TimeRemaining.TextColor3 = Color3.new(1, 1, 1)
+	TimeRemaining.TextScaled = true
+	TimeRemaining.TextSize = 16.000
+	TimeRemaining.TextWrapped = true
+
+	UITextSizeConstraint_3.Parent = TimeRemaining
+	UITextSizeConstraint_3.MaxTextSize = 16
+
+	Title.Parent = MainFrame
+	Title.BackgroundColor3 = Color3.new(1, 1, 1)
+	Title.BackgroundTransparency = 1.000
+	Title.BorderColor3 = Color3.new(0, 0, 0)
+	Title.BorderSizePixel = 0
+	Title.Size = UDim2.new(0.997, 0, 0.273, 0)
+	Title.Font = Enum.Font.GothamBold
+	Title.Text = "Autowin"
+	Title.TextColor3 = Color3.new(0.333333, 1, 0)
+	Title.TextScaled = true
+	Title.TextSize = 25.000
+	Title.TextWrapped = true
+
+	UITextSizeConstraint_4.Parent = Title
+	UITextSizeConstraint_4.MaxTextSize = 25
+	
+	task.spawn(function()
+		Title.Activated:Connect(function()
+			AutowinValue = (not AutowinValue)
+			
+			if AutowinValue == true then
+				Title.TextColor3 = Color3.new(0.333333, 1, 0)
+			end
+			
+			if AutowinValue == false then
+				Title.TextColor3 = Color3.new(1, 0, 0)
+			end
+		end)
+	end)
+	
+	task.spawn(function()
+		repeat
+			task.wait()
+			
+			task.spawn(function()
+				local AmountOfPlayers = 0
+				local AmountOfBeds = 0
+				
+				task.spawn(function()
+					for i, v in next, game.Players:GetPlayers() do
+						task.spawn(function()
+							if v.Team ~= LocalPlayer.Team and IsAlive(v) then
+								AmountOfPlayers = (AmountOfPlayers + 1)
+							end
+						end)				
+						
+						task.spawn(function()
+							if v.Team ~= LocalPlayer.Team then
+								if v.leaderstats.Bed.Value == "✅" and v.Team ~= LocalPlayer.Team then
+									AmountOfBeds = (AmountOfBeds + 1)
+								end
+							end
+						end)					
+					end
+				end)
+				
+				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
+				local Percentage = (100 - ((TimeRemainingValue / MaxTimeRemainingValue) * 100))
+				
+				TimeRemaining.Text = "Finished Percentage: " .. math.round(Percentage) .. "%"
+			end)
+			
+			task.spawn(function()
+				if IsPlayerAlive then
+					Health.Text = "Health: " .. math.round(LocalPlayer.Character:GetAttribute("Health"))
+				end
+			end)	
+			
+			task.spawn(function()
+				Bed.Text = "Bed: " .. LocalPlayer.leaderstats.Bed.Value
+			end)
+		until not game
+	end)
+end
+
+local IsNetworkOwner = isnetworkowner or (gethiddenproperty and function(Part)
+	if gethiddenproperty(Part, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then 
+		return false
+	end
+	
+	return true
+end) or function() return true end
+
+local function TweenToNearestPlayer(SlowDown)
+	if IsAlive(LocalPlayer) then
+		local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+
+		task.spawn(function()
+			if NearestPlayer and SlowDown == true and NearestPlayerDistance <= 50 then
+				local Magnitude = (LocalPlayer.Character.HumanoidRootPart.Position - NearestPlayer.Character.HumanoidRootPart.Position).Magnitude
+
+				local TweenInformation = TweenInfo.new((SlowDown and Magnitude / 22.5), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
+
+				PlayerTpTween:Play()
+			end
+			
+			task.spawn(function()
+				if NearestPlayer and SlowDown == true and NearestPlayerDistance > 50 then
+					ResetCharacter()
+				end
+			end)
+		end)
+		
+		task.spawn(function()
+			if NearestPlayer and SlowDown == false then
+				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
+
+				PlayerTpTween:Play()
+			end
+		end)	
+	end
+end
+
+function FindNearestPlayer(MaxDistance)
+	local NearestPlayerDistance = MaxDistance or math.huge
+	local NearestPlayer
+
+	for i, v in next, PlayerService:GetPlayers() do
+		if IsAlive(v) and v ~= LocalPlayer and IsAlive(LocalPlayer) and v.Team ~= LocalPlayer.Team then
+			local Distance = (v.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < NearestPlayerDistance then
+				NearestPlayerDistance = Distance
+				NearestPlayer = v				
+			end
+		end
+	end
+
+	return NearestPlayer, NearestPlayerDistance
+end
+
+local function FindPlayerOfBedTeam(Color)
+	for i, v in next, PlayerService:GetPlayers() do
+		if v.Team.TeamColor == Color then
+			return v
+		end
+	end
+end
+
+local function TweenToNearestBed()	
+	if IsAlive(LocalPlayer) then
+		local NearestBed = FindNearestBed()
+
+		if NearestBed then			
+			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
+
+			BedTpTween:Play()
+		end
+	end
+end
+
+function FindNearestBed(MaxDistance)
+	local MaxDistance = MaxDistance or math.huge
+	local NearestBed = nil
+	local BedShield = false
+
+	for i, v in next, CollectionService:GetTagged("bed") do
+		local PlayerOfBedTeam = FindPlayerOfBedTeam(v.Bed.BrickColor)
+		
+		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor and PlayerOfBedTeam then			
+			if v:GetAttribute("BedShieldEndTime") then 				
+				if v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow() then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+					if Distance < MaxDistance then					
+						MaxDistance = Distance
+						NearestBed = v
+						BedShield = true
+					end
+				end
+			end
+
+			if not v:GetAttribute("BedShieldEndTime") then
+				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+				if Distance < MaxDistance then		
+					MaxDistance = Distance
+					NearestBed = v
+					BedShield = false
+				end
+			end
+		end
+	end
+
+	return NearestBed, BedShield
+end
+
+function ResetCharacter()
+	ResetCharacterRemote:FireServer()
+end
+
+local function GetMatchState()
+	return ClientHandlerStore:getState().Game.matchState
+end
+
+function IsAlive(Player)
+	Player = Player or LocalPlayer
+
+	if not Player.Character then return false end
+	if not Player.Character:FindFirstChild("Humanoid") then return false end
+	if Player.Character:GetAttribute("Health") <= 0 then return false end
+	if not Player.Character.PrimaryPart then return false end	
+
+	return true
+end	
+
+local function HasBed(Player)
+	local Value = false
+	
+	Player = Player or LocalPlayer
+	
+	for i, v in next, CollectionService:GetTagged("bed") do
+		if Player.Team.TeamColor == v.Bed.BrickColor and not v:GetAttribute("BedShieldEndTime") then
+			return true
+		end
+	end
+	
+	return Value
+end
+
+task.spawn(function()
+	repeat
+		task.wait()
+		
+		task.spawn(function()
+			local HasBedValue = HasBed(LocalPlayer)
+
+			DoesPlayerHaveBed = HasBedValue
+		end)
+		
+		task.spawn(function()
+			if IsPlayerAlive then
+				local HasNetworkOwnerOwnership = IsNetworkOwner(LocalPlayer.Character.HumanoidRootPart)
+				
+				IsPlayerLagbacked = (not HasNetworkOwnerOwnership)
+			end
+		end)
+		
+		task.spawn(function()
+			local MatchState = GetMatchState()
+			
+			task.spawn(function()
+				if MatchState == 0 then
+					IsMatchStarted = false
+				end
+			end)	
+			
+			task.spawn(function()
+				if MatchState ~= 0 then
+					IsMatchStarted = true
+				end
+			end)
+		end)
+		
+		task.spawn(function()
+			IsPlayerAlive = IsAlive(LocalPlayer)
+		end)
+	until not game
+end)
+
+task.spawn(function()
+	LocalPlayer.CharacterAdded:Connect(function()
+		task.spawn(function()
+			if AutowinValue == true then
+				repeat task.wait() until IsPlayerAlive == true
+
+				task.wait(0.15)
+
+				local NearestBed = FindNearestBed()
+
+				task.spawn(function()					
+					if IsPlayerAlive == true and DoesPlayerHaveBed == true and NearestBed then
+						TweenToNearestBed()
+						
+						task.spawn(function()
+							local TeamColorOfBed = NearestBed.Bed.BrickColor
+							local PlayerOfBedTeam = FindPlayerOfBedTeam(TeamColorOfBed)						
+							local PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam)
+							
+							task.spawn(function()
+								task.wait(0.65)
+								
+								repeat 
+									task.wait() 
+									
+									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 15, 0))
+									
+									task.wait(0.35)
+								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
+							end)
+							
+							repeat task.wait() PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam) until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
+
+							ResetCharacter()
+						end)
+					end
+				end)
+				
+				task.spawn(function()	
+					if IsPlayerAlive == true and DoesPlayerHaveBed == true and not NearestBed then
+						TweenToNearestPlayer(false)
+						
+						task.spawn(function()
+							task.wait(0.7)
+							
+							repeat 
+								task.wait() 
+
+								TweenToNearestPlayer(true)
+							until IsPlayerAlive == false
+						end)
+					end
+				end)
+				
+				task.spawn(function()					
+					if not NearestBed or FindNearestPlayer() then
+						ResetCharacter()
+					end
+				end)
+			end
+		end)			
+	end)
+end)
+
+task.spawn(function()
+	LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until IsPlayerAlive == true
+		
+		task.wait(0.15)
+		
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if IsPlayerLagbacked == true then
+					ResetCharacter()
+				end
+			until IsPlayerAlive == false
+		end)			
+	end)
+end)
+
+task.spawn(function()
+	repeat task.wait() until IsMatchStarted == true
+	
+	ResetCharacter()
+end)
+
+task.spawn(function()
+	task.spawn(function()
+		for i, v in next, game.Players:GetPlayers() do
+			task.spawn(function()
+				if v.Team ~= LocalPlayer.Team  then
+					MaxTimeRemainingValue = (MaxTimeRemainingValue + 1)
+				end
+			end)				
+
+			task.spawn(function()
+				if v.Team ~= LocalPlayer.Team then
+					MaxTimeRemainingValue = (MaxTimeRemainingValue + 1)
+				end
+			end)					
+		end
+	end)
+	
+	task.spawn(function()
+		InitMainGui()
+	end)
+end)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/MainScript",true))()
