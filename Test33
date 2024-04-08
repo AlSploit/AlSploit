@@ -317,9 +317,6 @@ local function HasBed(Player)
 		if Player.Team.TeamColor == v.Bed.BrickColor then
 			return true
 		end
-			
-		print(Player.Team.TeamColor)
-		print(v.Bed.BrickColor)
 	end
 end
 
@@ -331,8 +328,6 @@ task.spawn(function()
 			local HasBedValue = HasBed(LocalPlayer)
 
 			DoesPlayerHaveBed = HasBedValue
-			
-			print(HasBedValue)
 		end)
 		
 		task.spawn(function()
@@ -387,11 +382,11 @@ task.spawn(function()
 							task.spawn(function()
 								repeat 
 									task.wait() 
-									NearestBed.Position = NearestBed.Position + 10
+									NearestBed.Position = NearestBed.Position + 50
 									
-									task.wait(0.1)
+									task.wait(0.25)
 									
-									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 8
+									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 42
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 							end)
 							
