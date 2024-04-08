@@ -321,11 +321,13 @@ local function HasBed(Player)
 	Player = Player or LocalPlayer
 	
 	task.spawn(function()
-		if Player.leaderstats.Bed.Value == "✅" then			
+		if Player.leaderstats.Bed.Value == "✅" then
+			
 			return true
 		end
 		
-		if Player.leaderstats.Bed.Value == "❌" then		
+		if Player.leaderstats.Bed.Value == "❌" then
+			
 			return false
 		end
 	end)
@@ -337,7 +339,7 @@ task.spawn(function()
 		
 		task.spawn(function()
 			local HasBedValue = HasBed(LocalPlayer)
-			
+
 			DoesPlayerHaveBed = HasBedValue
 		end)
 		
@@ -383,6 +385,8 @@ task.spawn(function()
 
 				task.spawn(function()					
 					if IsPlayerAlive == true and DoesPlayerHaveBed == true and NearestBed then
+						TweenToNearestBed()
+						
 						task.spawn(function()
 							local TeamColorOfBed = NearestBed.Bed.BrickColor
 							local PlayerOfBedTeam = FindPlayerOfBedTeam(TeamColorOfBed)
