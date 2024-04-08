@@ -176,7 +176,7 @@ local function InitMainGui()
 				local TimeRemainingValue = math.round((AmountOfPlayers + AmountOfBeds))
 				local Percentage = (100 - ((TimeRemainingValue / MaxTimeRemainingValue) * 100))
 				
-				TimeRemaining.Text = "Time Remaining: " .. Percentage .. " %"
+				TimeRemaining.Text = "Finished Percentage: " .. Percentage .. "%"
 			end)
 			
 			task.spawn(function()
@@ -200,12 +200,14 @@ local IsNetworkOwner = isnetworkowner or (gethiddenproperty and function(Part)
 	return true
 end) or function() return true end
 
-local function TweenToNearestPlayer()
+local function TweenToNearestPlayer(SlowDown)
 	if IsAlive(LocalPlayer) then
 		local NearestPlayer = FindNearestPlayer()
 
 		if NearestPlayer then
-			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local Magnitude = (LocalPlayer.Character.HumanoidRootPart.Position - NearestPlayer.Character.HumanoidRootPart.Position).Magnitude
+			
+			local TweenInformation = TweenInfo.new((SlowDown and (Magnitude / 22.5) or 0.65), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
 			local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
 
 			PlayerTpTween:Play()
@@ -245,6 +247,7 @@ local function TweenToNearestBed()
 end
 
 function FindNearestBed(MaxDistance)
+	local BedShieldTime = false
 	local MaxDistance = MaxDistance or math.huge
 	local NearestBed = nil
 
@@ -255,6 +258,7 @@ function FindNearestBed(MaxDistance)
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 					if Distance < MaxDistance then
+						BedShieldTime = true
 						MaxDistance = Distance
 						NearestBed = v
 					end
@@ -265,6 +269,7 @@ function FindNearestBed(MaxDistance)
 				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 				if Distance < MaxDistance then
+					BedShieldTime = false
 					MaxDistance = Distance
 					NearestBed = v
 				end
@@ -272,7 +277,7 @@ function FindNearestBed(MaxDistance)
 		end
 	end
 
-	return NearestBed
+	return NearestBed, BedShieldTime
 end
 
 local function ResetCharacter()
@@ -330,11 +335,21 @@ task.spawn(function()
 		
 		task.wait(0.15)
 		
-		local NearestBed = FindNearestBed()
+		local NearestBed, BedShieldTime = FindNearestBed()
 		
-		if NearestBed then
-			TweenToNearestBed()
-		end
+		task.spawn(function()
+			if NearestBed then
+				TweenToNearestBed()
+			end
+		end)	
+		
+		task.spawn(function()
+			repeat task.wait() until not NearestBed or IsPlayerAlive == false
+			
+			if NearestBed and not BedShieldTime then
+				TweenToNearestPlayer(true)
+			end
+		end)
 	end)
 end)
 
