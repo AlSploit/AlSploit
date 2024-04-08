@@ -311,13 +311,17 @@ function IsAlive(Player)
 end	
 
 local function HasBed(Player)
+	local Value = false
+	
 	Player = Player or LocalPlayer
 	
 	for i, v in next, CollectionService:GetTagged("bed") do
 		if Player.Team.TeamColor == v.Bed.BrickColor then
-			return true
+			Value = true
 		end
 	end
+	
+	return Value
 end
 
 task.spawn(function()
