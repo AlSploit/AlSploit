@@ -238,7 +238,9 @@ function FindNearestPlayer(MaxDistance)
 	local NearestPlayer
 
 	for i, v in next, PlayerService:GetPlayers() do
-		if IsAlive(v) and v ~= LocalPlayer and IsAlive(LocalPlayer) and v.Team ~= LocalPlayer.Team then
+		local NearestPlayerHasBed = HasBed(v)
+		
+		if IsAlive(v) and v ~= LocalPlayer and IsAlive(LocalPlayer) and v.Team ~= LocalPlayer.Team and NearestPlayerHasBed == false then
 			local Distance = (v.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 			if Distance < NearestPlayerDistance then
@@ -327,7 +329,7 @@ function IsAlive(Player)
 	return true
 end	
 
-local function HasBed(Player)
+function HasBed(Player)
 	local Value = false
 	
 	Player = Player or LocalPlayer
@@ -406,7 +408,7 @@ task.spawn(function()
 								repeat 
 									task.wait() 
 									
-									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 17.5, 0))
+									LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(NearestBed.Position + Vector3.new(0, 15, 0))
 									
 									task.wait(0.35)
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
