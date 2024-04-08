@@ -8,7 +8,10 @@
 
 local LocalPlayer = game.Players.LocalPlayer
 
+local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlayerService = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
 
 local ClientHandlerStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 
@@ -171,9 +174,9 @@ local function InitMainGui()
 				end)
 				
 				local TimeRemainingValue = (AmountOfPlayers + AmountOfBeds)
-				local Percentage = (math.round(100 / MaxTimeRemainingValue) * TimeRemainingValue)
+				local Percentage = ((math.round((TimeRemainingValue == 0 and 100) or MaxTimeRemainingValue / TimeRemainingValue) / 4) * 100)
 				
-				TimeRemaining.Text = "Finished Percentage: " .. Percentage .. " Seconds"
+				TimeRemaining.Text = "Time Remaining: " .. Percentage .. " Percent"
 			end)
 			
 			task.spawn(function()
@@ -196,6 +199,81 @@ local IsNetworkOwner = isnetworkowner or (gethiddenproperty and function(Part)
 	
 	return true
 end) or function() return true end
+
+local function TweenToNearestPlayer()
+	if IsAlive(LocalPlayer) then
+		local NearestPlayer = FindNearestPlayer()
+
+		if NearestPlayer then
+			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
+
+			PlayerTpTween:Play()
+		end
+	end
+end
+
+function FindNearestPlayer(MaxDistance)
+	local NearestPlayerDistance = MaxDistance or math.huge
+	local NearestPlayer
+
+	for i, v in next, PlayerService:GetPlayers() do
+		if IsAlive(v) and v ~= LocalPlayer and IsAlive(LocalPlayer) and v.Team ~= LocalPlayer.Team then
+			local Distance = (v.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < NearestPlayerDistance then
+				NearestPlayerDistance = Distance
+				NearestPlayer = v				
+			end
+		end
+	end
+
+	return NearestPlayer, NearestPlayerDistance
+end
+
+local function TweenToNearestBed()
+	if IsAlive(LocalPlayer) then
+		local NearestBed = FindNearestBed()
+
+		if NearestBed then
+			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
+
+			BedTpTween:Play()
+		end
+	end
+end
+
+function FindNearestBed(MaxDistance)
+	local MaxDistance = MaxDistance or math.huge
+	local NearestBed = nil
+
+	for i, v in next, CollectionService:GetTagged("bed")do
+		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
+			if v:GetAttribute("BedShieldEndTime") then 				
+				if v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow() then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+					if Distance < MaxDistance then
+						MaxDistance = Distance
+						NearestBed = v
+					end
+				end
+			end
+
+			if not v:GetAttribute("BedShieldEndTime") then
+				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+				if Distance < MaxDistance then
+					MaxDistance = Distance
+					NearestBed = v
+				end
+			end
+		end
+	end
+
+	return NearestBed
+end
 
 local function ResetCharacter()
 	ResetCharacterRemote:FireServer()
@@ -243,6 +321,30 @@ task.spawn(function()
 		task.spawn(function()
 			IsPlayerAlive = IsAlive(LocalPlayer)
 		end)
+	until not game
+end)
+
+task.spawn(function()
+	LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until IsPlayerAlive == true
+		
+		task.wait(0.15)
+		
+		local NearestBed = FindNearestBed()
+		
+		if NearestBed then
+			TweenToNearestBed()
+		end
+	end)
+end)
+
+task.spawn(function()
+	repeat
+		task.wait()
+		
+		if IsPlayerLagbacked == true then
+			ResetCharacter()
+		end
 	until not game
 end)
 
