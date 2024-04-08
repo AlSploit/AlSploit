@@ -3615,6 +3615,81 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Invisible, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Invisible", Settings.Invisible.Value, function(CallBack)
+		Settings.Invisible.Value = CallBack
+
+		task.spawn(function()
+			if Settings.Invisible.Value == true then
+				Invisibility()
+			end
+
+			task.spawn(function()
+				LocalPlayer.CharacterAdded:Connect(function()
+					task.wait(0.3)
+
+					if Settings.Invisible.Value == true and IsAlive(LocalPlayer) then
+						Invisibility()
+					end
+				end)
+			end)
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.Invisible.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Invisible.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Invisible.KeyBind then
+					Settings.Invisible.Value = not Settings.Invisible.Value
+
+					task.spawn(function()
+						if Settings.Invisible.Value == true then
+							Invisibility()
+						end
+
+						task.spawn(function()
+							LocalPlayer.CharacterAdded:Connect(function()
+								task.wait(0.3)
+
+								if Settings.Invisible.Value == true and IsAlive(LocalPlayer) then
+									Invisibility()
+								end
+							end)
+						end)
+					end)
+
+					if Settings.Invisible.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 0.666667, 0)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 0.803922, 0.411765))}
+					end
+
+					if Settings.Invisible.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local Scaffold, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Scaffold", Settings.Scaffold.Value, function(CallBack)
 		Settings.Scaffold.Value = CallBack
 		
