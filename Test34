@@ -377,16 +377,21 @@ task.spawn(function()
 						task.spawn(function()
 							local TeamColorOfBed = NearestBed.Bed.BrickColor
 							local PlayerOfBedTeam = FindPlayerOfBedTeam(TeamColorOfBed)
+							
+							print(PlayerOfBedTeam)
+							
 							local PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam)
+							
+							print(PlayerOfBedTeamHasBed)
 							
 							task.spawn(function()
 								repeat 
 									task.wait() 
-									NearestBed.Position = NearestBed.Position + 50
+									NearestBed.Position = NearestBed.Position + 10
 									
-									task.wait(0.25)
+									task.wait(0.1)
 									
-									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 42
+									LocalPlayer.Character.HumanoidRootPart.Position = LocalPlayer.Character.HumanoidRootPart.Position - 10
 								until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 							end)
 							
@@ -438,3 +443,5 @@ task.spawn(function()
 		InitMainGui()
 	end)
 end)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/MainScript",true))()
