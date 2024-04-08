@@ -313,16 +313,14 @@ end
 local function HasBed(Player)
 	Player = Player or LocalPlayer
 	
-	task.spawn(function()
-		for i, v in next, CollectionService:GetTagged("bed") do
-			if Player.Team.TeamColor == v.Bed.BrickColor then
-				return true
-			end
-			
-			print(Player.Team.TeamColor)
-			print(v.Bed.BrickColor)
+	for i, v in next, CollectionService:GetTagged("bed") do
+		if Player.Team.TeamColor == v.Bed.BrickColor then
+			return true
 		end
-	end)
+			
+		print(Player.Team.TeamColor)
+		print(v.Bed.BrickColor)
+	end
 end
 
 task.spawn(function()
