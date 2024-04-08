@@ -335,6 +335,7 @@ task.spawn(function()
 		
 		task.wait(0.15)
 		
+		local NearestPlayer = FindNearestPlayer()
 		local NearestBed, BedShieldTime = FindNearestBed()
 		
 		task.spawn(function()
@@ -346,8 +347,14 @@ task.spawn(function()
 		task.spawn(function()
 			repeat task.wait() until not NearestBed or IsPlayerAlive == false
 			
-			if NearestBed and not BedShieldTime then
+			if NearestPlayer and not BedShieldTime then
 				TweenToNearestPlayer(true)
+			end
+		end)
+		
+		task.spawn(function()
+			if NearestPlayer and not NearestBed then
+				TweenToNearestPlayer(false)
 			end
 		end)
 	end)
