@@ -393,8 +393,6 @@ task.spawn(function()
 							repeat task.wait() PlayerOfBedTeamHasBed = HasBed(PlayerOfBedTeam) until PlayerOfBedTeamHasBed == false or IsPlayerAlive == false
 
 							ResetCharacter()
-							
-							print("reset " .. PlayerOfBedTeamHasBed, IsPlayerAlive)
 						end)
 					end
 				end)
@@ -404,13 +402,19 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	repeat
-		task.wait()
+	LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until IsPlayerAlive == true
 		
-		if IsPlayerLagbacked == true then
-			ResetCharacter()
-		end
-	until not game
+		task.wait(0.15)
+		
+		repeat
+			task.wait()
+			
+			if IsPlayerLagbacked == true then
+				ResetCharacter()
+			end
+		until IsPlayerAlive == false	
+	end)
 end)
 
 task.spawn(function()
