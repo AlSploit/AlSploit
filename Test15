@@ -173,7 +173,7 @@ local function CreateToggle(Name, Parent, CallBack)
 	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Toggle.Position = UDim2.new(2.87291044e-07, 0, 0, 0)
 	Toggle.BorderSizePixel = 0
-	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0.235294, 0.235294, 0.235294))
+	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0.101961, 0.0980392, 0.101961))
 	Toggle.AutoButtonColor = false
 	Toggle.TextDirection = Enum.TextDirection.LeftToRight
 	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
