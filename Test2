@@ -22,6 +22,9 @@ ContainerFrame.Parent = AlSploitPrivateGui
 
 UIListLayout.Name = "UIListLayout"
 UIListLayout.Padding = UDim.new(0, 50)
+UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 UIListLayout.Parent = ContainerFrame
 
 local LibrarySettings = {}
@@ -102,6 +105,9 @@ local function CreateTab(Name)
 	ModulesContainer.Parent = Tab
 
 	UIListLayout.Name = "UIListLayout"
+	UIListLayout.FillDirection = Enum.FillDirection.Vertical
+	UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.Parent = ModulesContainer
 	
 	Title.Name = "Title"
