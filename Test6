@@ -15,7 +15,7 @@ ContainerFrame.Name = "ContainerFrame"
 ContainerFrame.Size = UDim2.new(1, 0, 0.99, 0)
 ContainerFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ContainerFrame.BackgroundTransparency = 1
-ContainerFrame.Position = UDim2.new(0, 0, 0.015, 0)
+ContainerFrame.Position = UDim2.new(0, 0, 0.010, 0)
 ContainerFrame.BorderSizePixel = 0
 ContainerFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ContainerFrame.Parent = AlSploitPrivateGui
@@ -60,6 +60,10 @@ task.spawn(function()
 		task.wait(1)
 		
 		SaveSettings = LibrarySettings
+		
+		for i, v in next, LibrarySettings do
+			print(i, v)
+		end
 		
 		local JSONEncode = HttpService:JSONEncode(SaveSettings)
 		
@@ -146,8 +150,6 @@ local function CreateToggle(Name, Parent, CallBack)
 	
 	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
 	
-	print(CurrenToggleValue.Value)
-	
 	local function ToggleCallBack()
 		CurrenToggleValue.Value =  not CurrenToggleValue.Value
 		
@@ -219,6 +221,6 @@ local CombatTab = CreateTab("Combat")
 
 task.spawn(function()
 	local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
-		print(CallBack)
+		
 	end)
 end)
