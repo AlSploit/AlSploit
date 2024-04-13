@@ -15,7 +15,7 @@ ContainerFrame.Name = "ContainerFrame"
 ContainerFrame.Size = UDim2.new(1, 0, 0.99, 0)
 ContainerFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ContainerFrame.BackgroundTransparency = 1
-ContainerFrame.Position = UDim2.new(0, 0, 0.020, 0)
+ContainerFrame.Position = UDim2.new(0, 0, 0.015, 0)
 ContainerFrame.BorderSizePixel = 0
 ContainerFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ContainerFrame.Parent = AlSploitPrivateGui
@@ -146,6 +146,8 @@ local function CreateToggle(Name, Parent, CallBack)
 	
 	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
 	
+	print(CurrenToggleValue.Value)
+	
 	local function ToggleCallBack()
 		CurrenToggleValue.Value =  not CurrenToggleValue.Value
 		
@@ -154,12 +156,16 @@ local function CreateToggle(Name, Parent, CallBack)
 		task.spawn(function()
 			if CurrenToggleValue.Value == true then
 				Toggle.BackgroundColor3 = Color3.new(0, 0.6, 1)
+				
+				CallBack(true)
 			end
 		end)
 		
 		task.spawn(function()
 			if CurrenToggleValue.Value == false then
 				Toggle.BackgroundColor3 = Color3.new(0, 0, 0)
+				
+				CallBack(false)
 			end
 		end)
 	end
@@ -183,7 +189,7 @@ local function CreateToggle(Name, Parent, CallBack)
 	Toggle.Parent = Parent
 
 	DropDownButton.Name = "DropDownButton"
-	DropDownButton.Size = UDim2.new(0.122398697, 0, 0.64662683, 0)
+	DropDownButton.Size = UDim2.new(0.128, 0, 0.675, 0)
 	DropDownButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	DropDownButton.Rotation = 90
 	DropDownButton.BackgroundTransparency = 1
