@@ -171,7 +171,6 @@ local function CreateToggle(Name, Parent, CallBack)
 	Toggle.Name = "Toggle"
 	Toggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
 	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Toggle.BackgroundTransparency = 0.1000000596046448
 	Toggle.Position = UDim2.new(2.87291044e-07, 0, 0, 0)
 	Toggle.BorderSizePixel = 0
 	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0, 0, 0))
@@ -226,3 +225,4 @@ task.spawn(function()
 		
 	end)
 end)
+
