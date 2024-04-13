@@ -15,7 +15,7 @@ ContainerFrame.Name = "ContainerFrame"
 ContainerFrame.Size = UDim2.new(1, 0, 0.99, 0)
 ContainerFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ContainerFrame.BackgroundTransparency = 1
-ContainerFrame.Position = UDim2.new(0, 0, 0.010, 0)
+ContainerFrame.Position = UDim2.new(0, 0, 0.05, 0)
 ContainerFrame.BorderSizePixel = 0
 ContainerFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ContainerFrame.Parent = AlSploitPrivateGui
@@ -35,8 +35,6 @@ task.spawn(function()
 		if isfile("AlSploitPrivate/AlSploitTest1") then
 			local SettingsFile = readfile("AlSploitPrivate/AlSploitTest1")
 			local JSONDecode = HttpService:JSONDecode(SettingsFile)
-			
-			print(JSONDecode)
 
 			LibrarySettings = JSONDecode
 		end
@@ -222,3 +220,4 @@ task.spawn(function()
 		
 	end)
 end)
+
