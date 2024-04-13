@@ -1,0 +1,208 @@
+local LocalPlayer = game.Players.LocalPlayer
+
+local HttpService = game:GetService("HttpService")
+
+local AlSploitPrivateGui = Instance.new("ScreenGui")
+local ContainerFrame = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+
+AlSploitPrivateGui.Name = "AlSploitPrivateGui"
+AlSploitPrivateGui.ResetOnSpawn = false
+AlSploitPrivateGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+AlSploitPrivateGui.Parent = LocalPlayer.PlayerGui
+
+ContainerFrame.Name = "ContainerFrame"
+ContainerFrame.Size = UDim2.new(1, 0, 0.99, 0)
+ContainerFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ContainerFrame.BackgroundTransparency = 1
+ContainerFrame.Position = UDim2.new(0, 0, 0.020, 0)
+ContainerFrame.BorderSizePixel = 0
+ContainerFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ContainerFrame.Parent = AlSploitPrivateGui
+
+UIListLayout.Name = "UIListLayout"
+UIListLayout.Padding = UDim.new(0, 50)
+UIListLayout.Parent = ContainerFrame
+
+local LibrarySettings = {}
+local SaveSettings = {}
+
+task.spawn(function()
+	task.spawn(function()
+		if isfile("AlSploitPrivate/AlSploitTest1") then
+			local SettingsFile = readfile("AlSploitPrivate/AlSploitTest1")
+			local JSONDecode = HttpService:JSONDecode(SettingsFile)
+
+			LibrarySettings = JSONDecode
+		end
+	end)
+	
+	task.spawn(function()
+		if not isfile("AlSploitPrivate") then
+			makefolder("AlSploitPrivate")
+		end
+	end)
+	
+	task.spawn(function()
+		if not isfile("AlSploitPrivate/AlSploitTest1") then			
+			local JSONEncode = HttpService:JSONEncode(SaveSettings)
+
+			writefile("AlSploitPrivate/AlSploitTest1", JSONEncode)
+		end
+	end)
+end)
+
+task.spawn(function()
+	repeat
+		task.wait(1)
+		
+		SaveSettings = LibrarySettings
+		
+		local JSONEncode = HttpService:JSONEncode(SaveSettings)
+		
+		writefile("AlSploitPrivate/AlSploitTest1", JSONEncode)
+	until not game
+end)
+
+local function CreateTab(Name)
+	local Tab = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local CornerFix = Instance.new("Frame")
+	local ModulesContainer = Instance.new("Frame")
+	local UIListLayout = Instance.new("UIListLayout")
+	local Title = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+
+	Tab.Name = "Tab"
+	Tab.Size = UDim2.new(0.133001611, 0, 0.0494534969, 0)
+	Tab.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Tab.Position = UDim2.new(0.429183125, 0, 0, 0)
+	Tab.BorderSizePixel = 0
+	Tab.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Tab.Parent = ContainerFrame
+	
+	UICorner.Name = "UICorner"
+	UICorner.Parent = Tab
+	
+	CornerFix.Name = "CornerFix"
+	CornerFix.Size = UDim2.new(1.00000036, 0, 0.629474342, 0)
+	CornerFix.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	CornerFix.Position = UDim2.new(-3.04718043e-07, 0, 0.370526046, 0)
+	CornerFix.BorderSizePixel = 0
+	CornerFix.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	CornerFix.Parent = Tab
+
+	ModulesContainer.Name = "ModulesContainer"
+	ModulesContainer.Size = UDim2.new(1, 0, 21.4285717, 0)
+	ModulesContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ModulesContainer.BackgroundTransparency = 1
+	ModulesContainer.Position = UDim2.new(0, 0, 1, 0)
+	ModulesContainer.BorderSizePixel = 0
+	ModulesContainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ModulesContainer.Parent = Tab
+
+	UIListLayout.Name = "UIListLayout"
+	UIListLayout.Parent = ModulesContainer
+	
+	Title.Name = "Title"
+	Title.Size = UDim2.new(1.00000024, 0, 1, 0)
+	Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Title.BackgroundTransparency = 1
+	Title.Position = UDim2.new(-3.04718043e-07, 0, 0, 0)
+	Title.BorderSizePixel = 0
+	Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Title.Text = Name
+	Title.TextWrapped = true
+	Title.TextSize = 20
+	Title.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+	Title.TextScaled = true
+	Title.Parent = Tab
+	
+	UITextSizeConstraint.Name = "UITextSizeConstraint"
+	UITextSizeConstraint.MaxTextSize = 20
+	UITextSizeConstraint.Parent = Title
+end
+
+local function CreateToggle(Name, Parent, CallBack)
+	local Toggle = Instance.new("TextButton")
+	local UIPadding = Instance.new("UIPadding")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local DropDownButton = Instance.new("ImageButton")
+	
+	task.spawn(function()
+		if not LibrarySettings[Name] then
+			LibrarySettings[Name] = {Value = false, KeyBind = "None"}
+		end
+	end)
+	
+	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
+	
+	local function ToggleCallBack()
+		CurrenToggleValue.Value =  not CurrenToggleValue.Value
+		
+		LibrarySettings[Name].Value = CurrenToggleValue.Value
+		
+		task.spawn(function()
+			if CurrenToggleValue.Value == true then
+				Toggle.BackgroundColor3 = Color3.new(0, 0.6, 1)
+			end
+		end)
+		
+		task.spawn(function()
+			if CurrenToggleValue.Value == false then
+				Toggle.BackgroundColor3 = Color3.new(0, 0, 0)
+			end
+		end)
+	end
+	
+	Toggle.Name = "Toggle"
+	Toggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
+	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Toggle.BackgroundTransparency = 0.15000000596046448
+	Toggle.Position = UDim2.new(2.87291044e-07, 0, 0, 0)
+	Toggle.BorderSizePixel = 0
+	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0, 0, 0))
+	Toggle.AutoButtonColor = false
+	Toggle.TextDirection = Enum.TextDirection.LeftToRight
+	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Toggle.Text = Name
+	Toggle.TextXAlignment = Enum.TextXAlignment.Left
+	Toggle.TextWrapped = true
+	Toggle.TextSize = 14
+	Toggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+	Toggle.TextScaled = true
+	Toggle.Parent = Parent
+
+	DropDownButton.Name = "DropDownButton"
+	DropDownButton.Size = UDim2.new(0.122398697, 0, 0.64662683, 0)
+	DropDownButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	DropDownButton.Rotation = 90
+	DropDownButton.BackgroundTransparency = 1
+	DropDownButton.Position = UDim2.new(0.817077041, 0, 0.175759763, 0)
+	DropDownButton.BorderSizePixel = 0
+	DropDownButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	DropDownButton.HoverImage = "http://www.roblox.com/asset/?id=12809025337"
+	DropDownButton.Image = "http://www.roblox.com/asset/?id=12809025337"
+	DropDownButton.Parent = Toggle
+
+	UIPadding.Name = "UIPadding"
+	UIPadding.PaddingLeft = UDim.new(0, 15)
+	UIPadding.Parent = Toggle
+
+	UITextSizeConstraint.Name = "UITextSizeConstraint"
+	UITextSizeConstraint.MaxTextSize = 14
+	UITextSizeConstraint.Parent = Toggle
+	
+	task.spawn(function()
+		Toggle.Activated:Connect(function()
+			ToggleCallBack()
+		end)
+	end)
+end
+
+local CombatTab = CreateTab("Combat")
+
+local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
+	print(CallBack)
+end)
