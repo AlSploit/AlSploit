@@ -209,6 +209,8 @@ end
 
 local CombatTab = CreateTab("Combat")
 
-local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
-	print(CallBack)
+task.spawn(function()
+	local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
+		print(CallBack)
+	end)
 end)
