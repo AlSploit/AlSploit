@@ -161,7 +161,7 @@ local function CreateToggle(Name, Parent, CallBack)
 		
 		task.spawn(function()
 			if CurrenToggleValue.Value == false then
-				Toggle.BackgroundColor3 = Color3.new(0, 0, 0)
+				Toggle.BackgroundColor3 = Color3.new(0.235294, 0.235294, 0.235294)
 				
 				CallBack(false)
 			end
@@ -173,7 +173,7 @@ local function CreateToggle(Name, Parent, CallBack)
 	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Toggle.Position = UDim2.new(2.87291044e-07, 0, 0, 0)
 	Toggle.BorderSizePixel = 0
-	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0, 0, 0))
+	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0.235294, 0.235294, 0.235294))
 	Toggle.AutoButtonColor = false
 	Toggle.TextDirection = Enum.TextDirection.LeftToRight
 	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -218,11 +218,26 @@ local UtilityTab = CreateTab("Utility")
 local WorldTab = CreateTab("World")
 local GuiTab = CreateTab("Gui")
 
+task.spawn(function()
+	local ProjectileAura = CreateToggle("ProjectileAura", CombatTab, function(CallBack)
 
+	end)
+end)
+
+task.spawn(function()
+	local AutoClicker = CreateToggle("AutoClicker", CombatTab, function(CallBack)
+
+	end)
+end)
+
+task.spawn(function()
+	local AimAssist = CreateToggle("AimAssist", CombatTab, function(CallBack)
+
+	end)
+end)
 
 task.spawn(function()
 	local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
 		
 	end)
 end)
-
