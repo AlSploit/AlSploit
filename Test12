@@ -15,7 +15,7 @@ ContainerFrame.Name = "ContainerFrame"
 ContainerFrame.Size = UDim2.new(1, 0, 1, 0)
 ContainerFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ContainerFrame.BackgroundTransparency = 1
-ContainerFrame.Position = UDim2.new(0, 0, 0.005, 0)
+ContainerFrame.Position = UDim2.new(0, 0, 0.001, 0)
 ContainerFrame.BorderSizePixel = 0
 ContainerFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 ContainerFrame.Parent = AlSploitPrivateGui
@@ -214,6 +214,12 @@ local function CreateToggle(Name, Parent, CallBack)
 end
 
 local CombatTab = CreateTab("Combat")
+local BlatantTab = CreateTab("Blatant")
+local UtilityTab = CreateTab("Utility")
+local WorldTab = CreateTab("World")
+local GuiTab = CreateTab("Gui")
+
+
 
 task.spawn(function()
 	local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
