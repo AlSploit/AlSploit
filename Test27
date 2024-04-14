@@ -161,7 +161,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 		task.spawn(function()
 			if CurrenToggleValue.Value == true then
 				Toggle.BackgroundColor3 = Color3.new(0, 0.6, 1)
-				Toggle.BackgroundTransparency = 0.025
+				Toggle.BackgroundTransparency = 0.05
 				
 				CallBack(true)
 			end
@@ -169,8 +169,8 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 		
 		task.spawn(function()
 			if CurrenToggleValue.Value == false then
-				Toggle.BackgroundColor3 = Color3.new(0.101961, 0.0980392, 0.101961)
-				Toggle.BackgroundTransparency = 0
+				Toggle.BackgroundColor3 = Color3.new(0.0941176, 0.0901961, 0.0941176)
+				Toggle.BackgroundTransparency = 0.025
 				
 				CallBack(false)
 			end
@@ -182,7 +182,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Toggle.Position = UDim2.new(2.87291044e-07, 0, 0, 0)
 	Toggle.BorderSizePixel = 0
-	Toggle.BackgroundTransparency = 0.025
+	Toggle.BackgroundTransparency = (CurrenToggleValue.Value == true and 0.05 or 0.025)
 	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0.101961, 0.0980392, 0.101961))
 	Toggle.AutoButtonColor = false
 	Toggle.TextDirection = Enum.TextDirection.LeftToRight
@@ -194,7 +194,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	Toggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 	Toggle.TextScaled = true
 	Toggle.Parent = Parent
-	Toggle.LayoutOrder = DefaultLayoutOrderValue + 10
+	Toggle.LayoutOrder = DefaultLayoutOrderValue + 20
 
 	LayoutOrder = Toggle.LayoutOrder
 	DefaultLayoutOrderValue = LayoutOrder
@@ -218,6 +218,8 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	UITextSizeConstraint.Name = "UITextSizeConstraint"
 	UITextSizeConstraint.MaxTextSize = 14
 	UITextSizeConstraint.Parent = Toggle
+	
+	print(Name .. LayoutOrder)
 	
 	task.spawn(function()
 		Toggle.Activated:Connect(function()
@@ -246,7 +248,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					task.spawn(function()
 						task.wait(0.2)
 						
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder - 1, function(CallBack)
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1, function(CallBack)
 							CurrenToggleValue.KeyBind = CallBack
 							LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
 							
@@ -289,7 +291,8 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	KeyBind.Position = UDim2.new(0, 0, 0.0820000097, 0)
 	KeyBind.BorderSizePixel = 0
-	KeyBind.BackgroundColor3 = Color3.new(0.101961, 0.0980392, 0.101961)
+	KeyBind.BackgroundTransparency = 0.025
+	KeyBind.BackgroundColor3 = Color3.new(0.0941176, 0.0901961, 0.0941176)
 	KeyBind.AutoButtonColor = false
 	KeyBind.TextDirection = Enum.TextDirection.LeftToRight
 	KeyBind.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -301,6 +304,8 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.TextScaled = true
 	KeyBind.Parent = Parent
 	KeyBind.LayoutOrder = LayoutOrder
+	
+	print(Name .. " KeyBind " .. LayoutOrder)
 
 	UIPadding.Name = "UIPadding"
 	UIPadding.PaddingLeft = UDim.new(0, 15)
