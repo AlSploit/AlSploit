@@ -155,6 +155,7 @@ local function CreateToggle(Name, Parent, CallBack)
 		task.spawn(function()
 			if CurrenToggleValue.Value == true then
 				Toggle.BackgroundColor3 = Color3.new(0, 0.6, 1)
+				Toggle.BackgroundTransparency = 0.025
 				
 				CallBack(true)
 			end
@@ -163,6 +164,7 @@ local function CreateToggle(Name, Parent, CallBack)
 		task.spawn(function()
 			if CurrenToggleValue.Value == false then
 				Toggle.BackgroundColor3 = Color3.new(0.101961, 0.0980392, 0.101961)
+				Toggle.BackgroundTransparency = 0
 				
 				CallBack(false)
 			end
@@ -174,7 +176,7 @@ local function CreateToggle(Name, Parent, CallBack)
 	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Toggle.Position = UDim2.new(2.87291044e-07, 0, 0, 0)
 	Toggle.BorderSizePixel = 0
-	Toggle.BackgroundTransparency = 0.05
+	Toggle.BackgroundTransparency = 0.025
 	Toggle.BackgroundColor3 = (CurrenToggleValue.Value == true and Color3.new(0, 0.6, 1) or Color3.new(0.101961, 0.0980392, 0.101961))
 	Toggle.AutoButtonColor = false
 	Toggle.TextDirection = Enum.TextDirection.LeftToRight
@@ -217,7 +219,7 @@ local function CreateToggle(Name, Parent, CallBack)
 		DropDownButton.Activated:Connect(function()
 			task.spawn(function()
 				if DropDownButton.Rotation == 90 then
-					local TweenInformation = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+					local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 					local RotationTween = TweenService:Create(DropDownButton, TweenInformation, {Rotation = 0})
 					
 					RotationTween:Play()
@@ -226,7 +228,7 @@ local function CreateToggle(Name, Parent, CallBack)
 			
 			task.spawn(function()
 				if DropDownButton.Rotation == 0 then
-					local TweenInformation = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+					local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 					local RotationTween = TweenService:Create(DropDownButton, TweenInformation, {Rotation = 90})
 
 					RotationTween:Play()
