@@ -1,5 +1,8 @@
 local LocalPlayer = game.Players.LocalPlayer
 
+local GuiLibrary = {}
+
+local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 
@@ -68,7 +71,7 @@ task.spawn(function()
 	until not game
 end)
 
-local function CreateTab(Name)
+function GuiLibrary:CreateTab(Name)
 	local Tab = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
 	local CornerFix = Instance.new("Frame")
@@ -133,7 +136,7 @@ local function CreateTab(Name)
 	return ModulesContainer
 end
 
-local function CreateToggle(Name, Parent, CallBack)
+function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	local Toggle = Instance.new("TextButton")
 	local UIPadding = Instance.new("UIPadding")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
@@ -149,7 +152,6 @@ local function CreateToggle(Name, Parent, CallBack)
 	
 	local function ToggleCallBack()
 		CurrenToggleValue.Value =  not CurrenToggleValue.Value
-		
 		LibrarySettings[Name].Value = CurrenToggleValue.Value
 		
 		task.spawn(function()
@@ -232,38 +234,133 @@ local function CreateToggle(Name, Parent, CallBack)
 					local RotationTween = TweenService:Create(DropDownButton, TweenInformation, {Rotation = 90})
 
 					RotationTween:Play()
+					
+					task.spawn(function()
+						task.wait(0.2)
+						
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Toggle, function(CallBack)
+							CurrenToggleValue.KeyBind = CallBack
+							LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
+							
+							task.spawn(function()
+								UserInputService.InputBegan:Connect(function(Input)
+									if UserInputService:GetFocusedTextBox() == false then
+										if Input.KeyCode and Input.KeyCode == CurrenToggleValue.KeyBind and Input.UserInputType == Enum.UserInputType.Keyboard then
+											ToggleCallBack()
+										end
+									end
+								end)
+							end)
+						end)
+					end)
 				end
 			end)		
 		end)
 	end)
 end
 
-local CombatTab = CreateTab("Combat")
-local BlatantTab = CreateTab("Blatant")
-local UtilityTab = CreateTab("Utility")
-local WorldTab = CreateTab("World")
-local GuiTab = CreateTab("Gui")
+function GuiLibrary:CreateKeyBind(Name, Parent, CallBack)
+	local KeyBind = Instance.new("TextButton")
+	local UIPadding = Instance.new("UIPadding")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	
+	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
+	local KeyBindInput = ""
+	local KeyBindValue = false
+	
+	local function ToggleCallBack(Key)
+		CurrenToggleValue.KeyBind = Key
+		LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
+
+		task.spawn(function()
+			CallBack(Key)
+		end)
+	end
+	
+	KeyBind.Name = "KeyBind"
+	KeyBind.Size = UDim2.new(1, 0, 0.0350000001, 0)
+	KeyBind.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	KeyBind.BackgroundTransparency = 0.1000000596046448
+	KeyBind.Position = UDim2.new(0, 0, 0.0820000097, 0)
+	KeyBind.BorderSizePixel = 0
+	KeyBind.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	KeyBind.AutoButtonColor = false
+	KeyBind.TextDirection = Enum.TextDirection.LeftToRight
+	KeyBind.TextColor3 = Color3.fromRGB(255, 255, 255)
+	KeyBind.Text = "KeyBind: " .. CurrenToggleValue.Keybind
+	KeyBind.TextXAlignment = Enum.TextXAlignment.Left
+	KeyBind.TextWrapped = true
+	KeyBind.TextSize = 13
+	KeyBind.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+	KeyBind.TextScaled = true
+	KeyBind.Parent = Parent
+
+	UIPadding.Name = "UIPadding"
+	UIPadding.PaddingLeft = UDim.new(0, 15)
+	UIPadding.Parent = KeyBind
+
+	UITextSizeConstraint.Name = "UITextSizeConstraint"
+	UITextSizeConstraint.MaxTextSize = 13
+	UITextSizeConstraint.Parent = KeyBind
+	
+	task.spawn(function()
+		KeyBind.Activated:Connect(function()
+			KeyBindValue = not KeyBindValue
+			
+			task.spawn(function()
+				if KeyBindValue == true then
+					KeyBind.Text = "KeyBind: ..."
+				end
+			end)
+			
+			task.spawn(function()
+				if KeyBindValue == false then
+					KeyBind.Text = "KeyBind: "
+				end
+			end)		
+		end)
+	end)
+	
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if KeyBindValue == true and UserInputService:GetFocusedTextBox() == false then
+				if Input.KeyCode and Input.UserInputType == Enum.UserInputType.Keyboard then
+					KeyBind.Text = "KeyBind: " .. Input.KeyCode.Name			
+					KeyBindValue = false
+					
+					ToggleCallBack(Input.KeyCode)
+				end
+			end
+		end)
+	end)
+end
+
+local CombatTab = GuiLibrary:CreateTab("Combat")
+local BlatantTab = GuiLibrary:CreateTab("Blatant")
+local UtilityTab = GuiLibrary:CreateTab("Utility")
+local WorldTab = GuiLibrary:CreateTab("World")
+local GuiTab = GuiLibrary:CreateTab("Gui")
 
 task.spawn(function()
-	local ProjectileAura = CreateToggle("ProjectileAura", CombatTab, function(CallBack)
+	local ProjectileAura = GuiLibrary:CreateToggle("ProjectileAura", CombatTab, function(CallBack)
 
 	end)
 end)
 
 task.spawn(function()
-	local AutoClicker = CreateToggle("AutoClicker", CombatTab, function(CallBack)
+	local AutoClicker = GuiLibrary:CreateToggle("AutoClicker", CombatTab, function(CallBack)
 
 	end)
 end)
 
 task.spawn(function()
-	local AimAssist = CreateToggle("AimAssist", CombatTab, function(CallBack)
+	local AimAssist = GuiLibrary:CreateToggle("AimAssist", CombatTab, function(CallBack)
 
 	end)
 end)
 
 task.spawn(function()
-	local KillAura = CreateToggle("KillAura", CombatTab, function(CallBack)
+	local KillAura = GuiLibrary:CreateToggle("KillAura", CombatTab, function(CallBack)
 		
 	end)
 end)
@@ -277,9 +374,6 @@ local Toggle_4 = Instance.new("TextButton")
 local UICorner_2 = Instance.new("UICorner")
 local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
 local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
-local KeyBind = Instance.new("TextButton")
-local UIPadding_3 = Instance.new("UIPadding")
-local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
 local Slider = Instance.new("Frame")
 local SliderFrame = Instance.new("Frame")
 local Fill = Instance.new("Frame")
@@ -349,31 +443,7 @@ UITextSizeConstraint_3.Name = "UITextSizeConstraint"
 UITextSizeConstraint_3.MaxTextSize = 13
 UITextSizeConstraint_3.Parent = MiniToggle
 
-KeyBind.Name = "KeyBind"
-KeyBind.Size = UDim2.new(1, 0, 0.0350000001, 0)
-KeyBind.BorderColor3 = Color3.fromRGB(0, 0, 0)
-KeyBind.BackgroundTransparency = 0.1000000596046448
-KeyBind.Position = UDim2.new(0, 0, 0.0820000097, 0)
-KeyBind.BorderSizePixel = 0
-KeyBind.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-KeyBind.AutoButtonColor = false
-KeyBind.TextDirection = Enum.TextDirection.LeftToRight
-KeyBind.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyBind.Text = "KeyBind: Z"
-KeyBind.TextXAlignment = Enum.TextXAlignment.Left
-KeyBind.TextWrapped = true
-KeyBind.TextSize = 13
-KeyBind.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-KeyBind.TextScaled = true
-KeyBind.Parent = ModulesContainer
 
-UIPadding_3.Name = "UIPadding"
-UIPadding_3.PaddingLeft = UDim.new(0, 15)
-UIPadding_3.Parent = KeyBind
-
-UITextSizeConstraint_4.Name = "UITextSizeConstraint"
-UITextSizeConstraint_4.MaxTextSize = 13
-UITextSizeConstraint_4.Parent = KeyBind
 
 Slider.Name = "Slider"
 Slider.Size = UDim2.new(0.99999994, 0, 0.064184837, 0)
