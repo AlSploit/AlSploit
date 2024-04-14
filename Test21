@@ -1,7 +1,5 @@
 local LocalPlayer = game.Players.LocalPlayer
 
-local GuiLibrary = {}
-
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
@@ -31,8 +29,12 @@ UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 UIListLayout.Parent = ContainerFrame
 
+local DefaultLayoutOrderValue = 0
+
 local LibrarySettings = {}
 local SaveSettings = {}
+
+local GuiLibrary = {}
 
 task.spawn(function()
 	task.spawn(function()
@@ -142,6 +144,8 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local DropDownButton = Instance.new("ImageButton")
 	
+	local LayoutOrder = 0
+	
 	task.spawn(function()
 		if not LibrarySettings[Name] then
 			LibrarySettings[Name] = {Value = false, KeyBind = "None"}
@@ -190,6 +194,10 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	Toggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 	Toggle.TextScaled = true
 	Toggle.Parent = Parent
+	Toggle.LayoutOrder = DefaultLayoutOrderValue + 1
+
+	LayoutOrder = Toggle.LayoutOrder
+	DefaultLayoutOrderValue = LayoutOrder
 
 	DropDownButton.Name = "DropDownButton"
 	DropDownButton.Size = UDim2.new(0.074, 0, 0.366, 0)
@@ -238,7 +246,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					task.spawn(function()
 						task.wait(0.2)
 						
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Toggle, function(CallBack)
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, DefaultLayoutOrderValue + 2, function(CallBack)
 							CurrenToggleValue.KeyBind = CallBack
 							LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
 							
@@ -259,7 +267,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	end)
 end
 
-function GuiLibrary:CreateKeyBind(Name, Parent, CallBack)
+function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	local KeyBind = Instance.new("TextButton")
 	local UIPadding = Instance.new("UIPadding")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
@@ -294,6 +302,9 @@ function GuiLibrary:CreateKeyBind(Name, Parent, CallBack)
 	KeyBind.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 	KeyBind.TextScaled = true
 	KeyBind.Parent = Parent
+	KeyBind.LayoutOrder = LayoutOrder
+	
+	DefaultLayoutOrderValue = LayoutOrder + 1
 
 	UIPadding.Name = "UIPadding"
 	UIPadding.PaddingLeft = UDim.new(0, 15)
