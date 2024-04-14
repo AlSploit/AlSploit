@@ -194,10 +194,10 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	Toggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 	Toggle.TextScaled = true
 	Toggle.Parent = Parent
-	Toggle.LayoutOrder = DefaultLayoutOrderValue
+	Toggle.LayoutOrder = DefaultLayoutOrderValue + 10
 
 	LayoutOrder = Toggle.LayoutOrder
-	DefaultLayoutOrderValue = LayoutOrder + 1
+	DefaultLayoutOrderValue = LayoutOrder
 
 	DropDownButton.Name = "DropDownButton"
 	DropDownButton.Size = UDim2.new(0.074, 0, 0.366, 0)
@@ -246,7 +246,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					task.spawn(function()
 						task.wait(0.2)
 						
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 2, function(CallBack)
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1, function(CallBack)
 							CurrenToggleValue.KeyBind = CallBack
 							LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
 							
@@ -301,8 +301,6 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.TextScaled = true
 	KeyBind.Parent = Parent
 	KeyBind.LayoutOrder = LayoutOrder
-	
-	DefaultLayoutOrderValue = DefaultLayoutOrderValue + 1
 
 	UIPadding.Name = "UIPadding"
 	UIPadding.PaddingLeft = UDim.new(0, 15)
