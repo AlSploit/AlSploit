@@ -221,8 +221,6 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	UITextSizeConstraint.MaxTextSize = 14
 	UITextSizeConstraint.Parent = Toggle
 	
-	print(Name .. LayoutOrder)
-	
 	task.spawn(function()
 		Toggle.Activated:Connect(function()
 			ToggleCallBack()
@@ -306,8 +304,6 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.TextScaled = true
 	KeyBind.Parent = Parent
 	KeyBind.LayoutOrder = LayoutOrder
-	
-	print(Name .. " KeyBind " .. LayoutOrder)
 
 	UIPadding.Name = "UIPadding"
 	UIPadding.PaddingLeft = UDim.new(0, 15)
@@ -338,6 +334,7 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if KeyBindValue == true and UserInputService:GetFocusedTextBox() == false then
+				print("1")
 				if Input.KeyCode and Input.UserInputType == Enum.UserInputType.Keyboard then
 					KeyBind.Text = "KeyBind: " .. Input.KeyCode.Name			
 					KeyBindValue = false
