@@ -327,14 +327,13 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 				if KeyBindValue == false then
 					KeyBind.Text = "KeyBind: "
 				end
-			end)		
+			end)
 		end)
 	end)
 	
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
-			if KeyBindValue == true and UserInputService:GetFocusedTextBox() == false then
-				print("1")
+			if KeyBindValue == true and not UserInputService:GetFocusedTextBox() then
 				if Input.KeyCode and Input.UserInputType == Enum.UserInputType.Keyboard then
 					KeyBind.Text = "KeyBind: " .. Input.KeyCode.Name			
 					KeyBindValue = false
