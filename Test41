@@ -69,7 +69,7 @@ task.spawn(function()
 		SaveSettings = LibrarySettings
 		
 		for i, v in LibrarySettings do
-			print(i, v)
+			print(i, v.Value, v.KeyBind)
 		end
 
 		local JSONEncode = HttpService:JSONEncode(SaveSettings)
