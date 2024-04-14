@@ -112,6 +112,7 @@ function GuiLibrary:CreateTab(Name)
 	ModulesContainer.Parent = Tab
 
 	UIListLayout.Name = "UIListLayout"
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.FillDirection = Enum.FillDirection.Vertical
 	UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -195,7 +196,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	Toggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 	Toggle.TextScaled = true
 	Toggle.Parent = Parent
-	Toggle.LayoutOrder = DefaultLayoutOrderValue + 1
+	Toggle.LayoutOrder = DefaultLayoutOrderValue + 15
 
 	LayoutOrder = Toggle.LayoutOrder
 	DefaultLayoutOrderValue = LayoutOrder
