@@ -296,7 +296,7 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.AutoButtonColor = false
 	KeyBind.TextDirection = Enum.TextDirection.LeftToRight
 	KeyBind.TextColor3 = Color3.fromRGB(255, 255, 255)
-	KeyBind.Text = "KeyBind: " .. CurrenToggleValue.Keybind.Name
+	KeyBind.Text = "KeyBind: " .. CurrenToggleValue.KeyBind.Name
 	KeyBind.TextXAlignment = Enum.TextXAlignment.Left
 	KeyBind.TextWrapped = true
 	KeyBind.TextSize = 13
