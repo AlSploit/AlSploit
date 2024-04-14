@@ -46,13 +46,13 @@ task.spawn(function()
 			LibrarySettings = JSONDecode
 		end
 	end)
-	
+
 	task.spawn(function()
 		if not isfile("AlSploitPrivate") then
 			makefolder("AlSploitPrivate")
 		end
 	end)
-	
+
 	task.spawn(function()
 		if not isfile("AlSploitPrivate/AlSploitTest1") then			
 			local JSONEncode = HttpService:JSONEncode(SaveSettings)
@@ -65,11 +65,15 @@ end)
 task.spawn(function()
 	repeat
 		task.wait(1)
-		
+
 		SaveSettings = LibrarySettings
 		
+		for i, v in LibrarySettings do
+			print(i, v)
+		end
+
 		local JSONEncode = HttpService:JSONEncode(SaveSettings)
-		
+
 		writefile("AlSploitPrivate/AlSploitTest1", JSONEncode)
 	until not game
 end)
@@ -90,10 +94,10 @@ function GuiLibrary:CreateTab(Name)
 	Tab.BorderSizePixel = 0
 	Tab.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	Tab.Parent = ContainerFrame
-	
+
 	UICorner.Name = "UICorner"
 	UICorner.Parent = Tab
-	
+
 	CornerFix.Name = "CornerFix"
 	CornerFix.Size = UDim2.new(1.00000036, 0, 0.629474342, 0)
 	CornerFix.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -117,7 +121,7 @@ function GuiLibrary:CreateTab(Name)
 	UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.Parent = ModulesContainer
-	
+
 	Title.Name = "Title"
 	Title.Size = UDim2.new(1.00000024, 0, 1, 0)
 	Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -132,11 +136,11 @@ function GuiLibrary:CreateTab(Name)
 	Title.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
 	Title.TextScaled = true
 	Title.Parent = Tab
-	
+
 	UITextSizeConstraint.Name = "UITextSizeConstraint"
 	UITextSizeConstraint.MaxTextSize = 20
 	UITextSizeConstraint.Parent = Title
-	
+
 	return ModulesContainer
 end
 
@@ -145,40 +149,40 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	local UIPadding = Instance.new("UIPadding")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local DropDownButton = Instance.new("ImageButton")
-	
+
 	local LayoutOrder = 0
-	
+
 	task.spawn(function()
 		if not LibrarySettings[Name] then
 			LibrarySettings[Name] = {Value = false, KeyBind = ""}
 		end
 	end)
-	
+
 	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
-	
+
 	local function ToggleCallBack()
 		CurrenToggleValue.Value =  not CurrenToggleValue.Value
 		LibrarySettings[Name].Value = CurrenToggleValue.Value
-		
+
 		task.spawn(function()
 			if CurrenToggleValue.Value == true then
 				Toggle.BackgroundColor3 = Color3.new(0, 0.6, 1)
 				Toggle.BackgroundTransparency = 0.05
-				
+
 				CallBack(true)
 			end
 		end)
-		
+
 		task.spawn(function()
 			if CurrenToggleValue.Value == false then
 				Toggle.BackgroundColor3 = Color3.new(0.0941176, 0.0901961, 0.0941176)
 				Toggle.BackgroundTransparency = 0.025
-				
+
 				CallBack(false)
 			end
 		end)
 	end
-	
+
 	Toggle.Name = "Toggle"
 	Toggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
 	Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -220,43 +224,42 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	UITextSizeConstraint.Name = "UITextSizeConstraint"
 	UITextSizeConstraint.MaxTextSize = 14
 	UITextSizeConstraint.Parent = Toggle
-	
+
 	task.spawn(function()
 		Toggle.Activated:Connect(function()
 			ToggleCallBack()
 		end)
 	end)
-	
+
 	task.spawn(function()
 		DropDownButton.Activated:Connect(function()
 			task.spawn(function()
 				if DropDownButton.Rotation == 90 then
 					local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 					local RotationTween = TweenService:Create(DropDownButton, TweenInformation, {Rotation = 0})
-					
+
 					RotationTween:Play()
 				end
 			end)
-			
+
 			task.spawn(function()
 				if DropDownButton.Rotation == 0 then
 					local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 					local RotationTween = TweenService:Create(DropDownButton, TweenInformation, {Rotation = 90})
 
 					RotationTween:Play()
-					
+
 					task.spawn(function()
 						task.wait(0.2)
-						
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1, function(CallBack)					
-							task.spawn(function()
-								UserInputService.InputBegan:Connect(function(Input)
-									if not UserInputService:GetFocusedTextBox() then
-										if Input.KeyCode and Input.KeyCode.Name == CurrenToggleValue.KeyBind and Input.UserInputType == Enum.UserInputType.Keyboard then
-											ToggleCallBack()
-										end
+
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1)				
+						task.spawn(function()
+							UserInputService.InputBegan:Connect(function(Input)
+								if not UserInputService:GetFocusedTextBox() then
+									if Input.KeyCode and Input.KeyCode.Name == CurrenToggleValue.KeyBind and Input.UserInputType == Enum.UserInputType.Keyboard then
+										ToggleCallBack()
 									end
-								end)
+								end
 							end)
 						end)
 					end)
@@ -267,13 +270,13 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 end
 
 function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
-	local KeyBind = Instance.new("TextButton")
 	local UIPadding = Instance.new("UIPadding")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
-	
+
 	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
 	local KeyBindValue = false
-	
+	local KeyBind = Instance.new("TextButton")
+
 	KeyBind.Name = "KeyBind"
 	KeyBind.Size = UDim2.new(1, 0, 0.0350000001, 0)
 	KeyBind.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -300,17 +303,17 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
 	UITextSizeConstraint.Name = "UITextSizeConstraint"
 	UITextSizeConstraint.MaxTextSize = 13
 	UITextSizeConstraint.Parent = KeyBind
-	
+
 	task.spawn(function()
 		KeyBind.Activated:Connect(function()
 			KeyBindValue = not KeyBindValue
-			
+
 			task.spawn(function()
 				if KeyBindValue == true then
 					KeyBind.Text = "KeyBind: ..."
 				end
 			end)
-			
+
 			task.spawn(function()
 				if KeyBindValue == false then
 					KeyBind.Text = "KeyBind: "
@@ -318,14 +321,14 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
 			end)
 		end)
 	end)
-	
+
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if KeyBindValue == true and not UserInputService:GetFocusedTextBox() then
 				if Input.KeyCode and Input.UserInputType == Enum.UserInputType.Keyboard then
 					KeyBind.Text = "KeyBind: " .. Input.KeyCode.Name			
 					KeyBindValue = false
-					
+
 					CurrenToggleValue.KeyBind = Input.KeyCode.Name
 					LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
 				end
@@ -360,165 +363,165 @@ end)
 
 task.spawn(function()
 	local KillAura = GuiLibrary:CreateToggle("KillAura", CombatTab, function(CallBack)
-		
+
 	end)
 end)
 
 function stfu()
-local MiniToggle = Instance.new("TextLabel")
-local UIPadding_2 = Instance.new("UIPadding")
-local ToggleContainer = Instance.new("Frame")
-local UICorner = Instance.new("UICorner")
-local Toggle_4 = Instance.new("TextButton")
-local UICorner_2 = Instance.new("UICorner")
-local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
-local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
-local Slider = Instance.new("Frame")
-local SliderFrame = Instance.new("Frame")
-local Fill = Instance.new("Frame")
-local UICorner_3 = Instance.new("UICorner")
-local Bar = Instance.new("TextButton")
-local UICorner_4 = Instance.new("UICorner")
-local UIStroke = Instance.new("UIStroke")
-local NameDisplay = Instance.new("TextLabel")
-local ValueDisplay = Instance.new("TextLabel")
+	local MiniToggle = Instance.new("TextLabel")
+	local UIPadding_2 = Instance.new("UIPadding")
+	local ToggleContainer = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local Toggle_4 = Instance.new("TextButton")
+	local UICorner_2 = Instance.new("UICorner")
+	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+	local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+	local Slider = Instance.new("Frame")
+	local SliderFrame = Instance.new("Frame")
+	local Fill = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+	local Bar = Instance.new("TextButton")
+	local UICorner_4 = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+	local NameDisplay = Instance.new("TextLabel")
+	local ValueDisplay = Instance.new("TextLabel")
 
-MiniToggle.Name = "MiniToggle"
-MiniToggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
-MiniToggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-MiniToggle.BackgroundTransparency = 0.1000000596046448
-MiniToggle.Position = UDim2.new(-0.00499250041, 0, 0.0410000049, 0)
-MiniToggle.BorderSizePixel = 0
-MiniToggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-MiniToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-MiniToggle.Text = "CustomAnimation"
-MiniToggle.TextXAlignment = Enum.TextXAlignment.Left
-MiniToggle.TextWrapped = true
-MiniToggle.TextSize = 13
-MiniToggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-MiniToggle.TextScaled = true
-MiniToggle.Parent = ModulesContainer
+	MiniToggle.Name = "MiniToggle"
+	MiniToggle.Size = UDim2.new(1, 0, 0.0410000011, 0)
+	MiniToggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	MiniToggle.BackgroundTransparency = 0.1000000596046448
+	MiniToggle.Position = UDim2.new(-0.00499250041, 0, 0.0410000049, 0)
+	MiniToggle.BorderSizePixel = 0
+	MiniToggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	MiniToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+	MiniToggle.Text = "CustomAnimation"
+	MiniToggle.TextXAlignment = Enum.TextXAlignment.Left
+	MiniToggle.TextWrapped = true
+	MiniToggle.TextSize = 13
+	MiniToggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+	MiniToggle.TextScaled = true
+	MiniToggle.Parent = ModulesContainer
 
-UIPadding_2.Name = "UIPadding"
-UIPadding_2.PaddingLeft = UDim.new(0, 15)
-UIPadding_2.Parent = MiniToggle
+	UIPadding_2.Name = "UIPadding"
+	UIPadding_2.PaddingLeft = UDim.new(0, 15)
+	UIPadding_2.Parent = MiniToggle
 
-ToggleContainer.Name = "ToggleContainer"
-ToggleContainer.Size = UDim2.new(0.165000007, 0, 0.441000015, 0)
-ToggleContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ToggleContainer.Position = UDim2.new(0.774545193, 0, 0.259777784, 0)
-ToggleContainer.BorderSizePixel = 0
-ToggleContainer.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
-ToggleContainer.Parent = MiniToggle
+	ToggleContainer.Name = "ToggleContainer"
+	ToggleContainer.Size = UDim2.new(0.165000007, 0, 0.441000015, 0)
+	ToggleContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ToggleContainer.Position = UDim2.new(0.774545193, 0, 0.259777784, 0)
+	ToggleContainer.BorderSizePixel = 0
+	ToggleContainer.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
+	ToggleContainer.Parent = MiniToggle
 
-UICorner.Name = "UICorner"
-UICorner.CornerRadius = UDim.new(0, 30)
-UICorner.Parent = ToggleContainer
+	UICorner.Name = "UICorner"
+	UICorner.CornerRadius = UDim.new(0, 30)
+	UICorner.Parent = ToggleContainer
 
-Toggle_4.Name = "Toggle"
-Toggle_4.Size = UDim2.new(0.466837883, 0, 0.935671091, 0)
-Toggle_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Toggle_4.Position = UDim2.new(0.0500000007, 0, 0.0590000004, 0)
-Toggle_4.BorderSizePixel = 0
-Toggle_4.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Toggle_4.AutoButtonColor = false
-Toggle_4.TextColor3 = Color3.fromRGB(0, 0, 0)
-Toggle_4.Text = ""
-Toggle_4.TextWrapped = true
-Toggle_4.TextSize = 14
-Toggle_4.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-Toggle_4.TextScaled = true
-Toggle_4.Parent = ToggleContainer
+	Toggle_4.Name = "Toggle"
+	Toggle_4.Size = UDim2.new(0.466837883, 0, 0.935671091, 0)
+	Toggle_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Toggle_4.Position = UDim2.new(0.0500000007, 0, 0.0590000004, 0)
+	Toggle_4.BorderSizePixel = 0
+	Toggle_4.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Toggle_4.AutoButtonColor = false
+	Toggle_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+	Toggle_4.Text = ""
+	Toggle_4.TextWrapped = true
+	Toggle_4.TextSize = 14
+	Toggle_4.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+	Toggle_4.TextScaled = true
+	Toggle_4.Parent = ToggleContainer
 
-UICorner_2.Name = "UICorner"
-UICorner_2.CornerRadius = UDim.new(1, 0)
-UICorner_2.Parent = Toggle_4
+	UICorner_2.Name = "UICorner"
+	UICorner_2.CornerRadius = UDim.new(1, 0)
+	UICorner_2.Parent = Toggle_4
 
-UITextSizeConstraint_2.Name = "UITextSizeConstraint"
-UITextSizeConstraint_2.MaxTextSize = 14
-UITextSizeConstraint_2.Parent = Toggle_4
+	UITextSizeConstraint_2.Name = "UITextSizeConstraint"
+	UITextSizeConstraint_2.MaxTextSize = 14
+	UITextSizeConstraint_2.Parent = Toggle_4
 
-UITextSizeConstraint_3.Name = "UITextSizeConstraint"
-UITextSizeConstraint_3.MaxTextSize = 13
-UITextSizeConstraint_3.Parent = MiniToggle
+	UITextSizeConstraint_3.Name = "UITextSizeConstraint"
+	UITextSizeConstraint_3.MaxTextSize = 13
+	UITextSizeConstraint_3.Parent = MiniToggle
 
 
 
-Slider.Name = "Slider"
-Slider.Size = UDim2.new(0.99999994, 0, 0.064184837, 0)
-Slider.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Slider.BackgroundTransparency = 0.1000000596046448
-Slider.Position = UDim2.new(0, 0, 0.117000006, 0)
-Slider.BorderSizePixel = 0
-Slider.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Slider.Parent = ModulesContainer
+	Slider.Name = "Slider"
+	Slider.Size = UDim2.new(0.99999994, 0, 0.064184837, 0)
+	Slider.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Slider.BackgroundTransparency = 0.1000000596046448
+	Slider.Position = UDim2.new(0, 0, 0.117000006, 0)
+	Slider.BorderSizePixel = 0
+	Slider.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Slider.Parent = ModulesContainer
 
-SliderFrame.Name = "SliderFrame"
-SliderFrame.Size = UDim2.new(0.699999928, 0, 0.0599999987, 0)
-SliderFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-SliderFrame.BackgroundTransparency = 1
-SliderFrame.Position = UDim2.new(0.150000215, 0, 0.654259622, 0)
-SliderFrame.BorderSizePixel = 0
-SliderFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-SliderFrame.Parent = Slider
+	SliderFrame.Name = "SliderFrame"
+	SliderFrame.Size = UDim2.new(0.699999928, 0, 0.0599999987, 0)
+	SliderFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	SliderFrame.BackgroundTransparency = 1
+	SliderFrame.Position = UDim2.new(0.150000215, 0, 0.654259622, 0)
+	SliderFrame.BorderSizePixel = 0
+	SliderFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	SliderFrame.Parent = Slider
 
-Fill.Name = "Fill"
-Fill.Size = UDim2.new(1, 0, 1, 0)
-Fill.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Fill.Position = UDim2.new(0, 0, -0.328999996, 0)
-Fill.BorderSizePixel = 0
-Fill.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
-Fill.Parent = SliderFrame
+	Fill.Name = "Fill"
+	Fill.Size = UDim2.new(1, 0, 1, 0)
+	Fill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Fill.Position = UDim2.new(0, 0, -0.328999996, 0)
+	Fill.BorderSizePixel = 0
+	Fill.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
+	Fill.Parent = SliderFrame
 
-UICorner_3.Name = "UICorner"
-UICorner_3.CornerRadius = UDim.new(1, 0)
-UICorner_3.Parent = Fill
+	UICorner_3.Name = "UICorner"
+	UICorner_3.CornerRadius = UDim.new(1, 0)
+	UICorner_3.Parent = Fill
 
-Bar.Name = "Bar"
-Bar.ZIndex = 2
-Bar.Size = UDim2.new(0.0839999989, 0, 3.5, 0)
-Bar.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Bar.Position = UDim2.new(0.185000002, 0, -1.5, 0)
-Bar.BorderSizePixel = 0
-Bar.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
-Bar.AutoButtonColor = false
-Bar.TextColor3 = Color3.fromRGB(0, 0, 0)
-Bar.Text = ""
-Bar.TextSize = 14
-Bar.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
-Bar.Parent = SliderFrame
+	Bar.Name = "Bar"
+	Bar.ZIndex = 2
+	Bar.Size = UDim2.new(0.0839999989, 0, 3.5, 0)
+	Bar.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Bar.Position = UDim2.new(0.185000002, 0, -1.5, 0)
+	Bar.BorderSizePixel = 0
+	Bar.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
+	Bar.AutoButtonColor = false
+	Bar.TextColor3 = Color3.fromRGB(0, 0, 0)
+	Bar.Text = ""
+	Bar.TextSize = 14
+	Bar.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+	Bar.Parent = SliderFrame
 
-UICorner_4.Name = "UICorner"
-UICorner_4.CornerRadius = UDim.new(1, 0)
-UICorner_4.Parent = Bar
+	UICorner_4.Name = "UICorner"
+	UICorner_4.CornerRadius = UDim.new(1, 0)
+	UICorner_4.Parent = Bar
 
-UIStroke.Name = "UIStroke"
-UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-UIStroke.Parent = Bar
+	UIStroke.Name = "UIStroke"
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Parent = Bar
 
-NameDisplay.Name = "NameDisplay"
-NameDisplay.Size = UDim2.new(0.249625042, 0, 0.543312311, 0)
-NameDisplay.BorderColor3 = Color3.fromRGB(0, 0, 0)
-NameDisplay.BackgroundTransparency = 1
-NameDisplay.Position = UDim2.new(0.145293236, 0, -0.00938985683, 0)
-NameDisplay.BorderSizePixel = 0
-NameDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-NameDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
-NameDisplay.Text = "Range"
-NameDisplay.TextSize = 10
-NameDisplay.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-NameDisplay.Parent = Slider
+	NameDisplay.Name = "NameDisplay"
+	NameDisplay.Size = UDim2.new(0.249625042, 0, 0.543312311, 0)
+	NameDisplay.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	NameDisplay.BackgroundTransparency = 1
+	NameDisplay.Position = UDim2.new(0.145293236, 0, -0.00938985683, 0)
+	NameDisplay.BorderSizePixel = 0
+	NameDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	NameDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
+	NameDisplay.Text = "Range"
+	NameDisplay.TextSize = 10
+	NameDisplay.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+	NameDisplay.Parent = Slider
 
-ValueDisplay.Name = "ValueDisplay"
-ValueDisplay.Size = UDim2.new(0.249625042, 0, 0.543312311, 0)
-ValueDisplay.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ValueDisplay.BackgroundTransparency = 1
-ValueDisplay.Position = UDim2.new(0.634818852, 0, -0.00938985683, 0)
-ValueDisplay.BorderSizePixel = 0
-ValueDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ValueDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
-ValueDisplay.Text = "18"
-ValueDisplay.TextSize = 10
-ValueDisplay.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-ValueDisplay.Parent = Slider
+	ValueDisplay.Name = "ValueDisplay"
+	ValueDisplay.Size = UDim2.new(0.249625042, 0, 0.543312311, 0)
+	ValueDisplay.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ValueDisplay.BackgroundTransparency = 1
+	ValueDisplay.Position = UDim2.new(0.634818852, 0, -0.00938985683, 0)
+	ValueDisplay.BorderSizePixel = 0
+	ValueDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ValueDisplay.TextColor3 = Color3.fromRGB(255, 255, 255)
+	ValueDisplay.Text = "18"
+	ValueDisplay.TextSize = 10
+	ValueDisplay.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+	ValueDisplay.Parent = Slider
 end
