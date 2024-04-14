@@ -303,7 +303,7 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.Parent = Parent
 	KeyBind.LayoutOrder = LayoutOrder
 	
-	DefaultLayoutOrderValue = LayoutOrder + 1
+	DefaultLayoutOrderValue = DefaultLayoutOrderValue + 1
 
 	UIPadding.Name = "UIPadding"
 	UIPadding.PaddingLeft = UDim.new(0, 15)
