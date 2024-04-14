@@ -150,7 +150,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	
 	task.spawn(function()
 		if not LibrarySettings[Name] then
-			LibrarySettings[Name] = {Value = false, KeyBind = "None"}
+			LibrarySettings[Name] = {Value = false, KeyBind = ""}
 		end
 	end)
 	
@@ -248,10 +248,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					task.spawn(function()
 						task.wait(0.2)
 						
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1, function(CallBack)
-							CurrenToggleValue.KeyBind = CallBack
-							LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
-							
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1, function(CallBack)					
 							task.spawn(function()
 								UserInputService.InputBegan:Connect(function(Input)
 									if not UserInputService:GetFocusedTextBox() then
@@ -269,22 +266,13 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	end)
 end
 
-function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
+function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
 	local KeyBind = Instance.new("TextButton")
 	local UIPadding = Instance.new("UIPadding")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	
 	local CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
 	local KeyBindValue = false
-	
-	local function ToggleCallBack(Key)
-		CurrenToggleValue.KeyBind = Key
-		LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
-
-		task.spawn(function()
-			CallBack(Key)
-		end)
-	end
 	
 	KeyBind.Name = "KeyBind"
 	KeyBind.Size = UDim2.new(1, 0, 0.0350000001, 0)
@@ -296,7 +284,7 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 	KeyBind.AutoButtonColor = false
 	KeyBind.TextDirection = Enum.TextDirection.LeftToRight
 	KeyBind.TextColor3 = Color3.fromRGB(255, 255, 255)
-	KeyBind.Text = "KeyBind: " .. (CurrenToggleValue.KeyBind and CurrenToggleValue.KeyBind or "None")
+	KeyBind.Text = "KeyBind: " .. CurrenToggleValue.KeyBind
 	KeyBind.TextXAlignment = Enum.TextXAlignment.Left
 	KeyBind.TextWrapped = true
 	KeyBind.TextSize = 13
@@ -338,7 +326,8 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 					KeyBind.Text = "KeyBind: " .. Input.KeyCode.Name			
 					KeyBindValue = false
 					
-					ToggleCallBack(Input.KeyCode.Name)
+					CurrenToggleValue.KeyBind = Input.KeyCode.Name
+					LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
 				end
 			end
 		end)
