@@ -246,7 +246,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					task.spawn(function()
 						task.wait(0.2)
 						
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1, function(CallBack)
+						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder - 1, function(CallBack)
 							CurrenToggleValue.KeyBind = CallBack
 							LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
 							
