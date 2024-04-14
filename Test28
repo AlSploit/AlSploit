@@ -24,6 +24,7 @@ ContainerFrame.Parent = AlSploitPrivateGui
 
 UIListLayout.Name = "UIListLayout"
 UIListLayout.Padding = UDim.new(0, 50)
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.FillDirection = Enum.FillDirection.Horizontal
 UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Top
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -194,7 +195,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	Toggle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 	Toggle.TextScaled = true
 	Toggle.Parent = Parent
-	Toggle.LayoutOrder = DefaultLayoutOrderValue + 20
+	Toggle.LayoutOrder = DefaultLayoutOrderValue + 1
 
 	LayoutOrder = Toggle.LayoutOrder
 	DefaultLayoutOrderValue = LayoutOrder
