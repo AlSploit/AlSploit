@@ -254,7 +254,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 							
 							task.spawn(function()
 								UserInputService.InputBegan:Connect(function(Input)
-									if UserInputService:GetFocusedTextBox() == false then
+									if not UserInputService:GetFocusedTextBox() then
 										if Input.KeyCode and Input.KeyCode == CurrenToggleValue.KeyBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 											ToggleCallBack()
 										end
