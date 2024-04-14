@@ -159,6 +159,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	local function ToggleCallBack()
 		CurrenToggleValue.Value =  not CurrenToggleValue.Value
 		LibrarySettings[Name].Value = CurrenToggleValue.Value
+		LibrarySettings[Name].KeyBind = ""
 		
 		task.spawn(function()
 			if CurrenToggleValue.Value == true then
@@ -255,7 +256,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 							task.spawn(function()
 								UserInputService.InputBegan:Connect(function(Input)
 									if not UserInputService:GetFocusedTextBox() then
-										if Input.KeyCode and Input.KeyCode == CurrenToggleValue.KeyBind and Input.UserInputType == Enum.UserInputType.Keyboard then
+										if Input.KeyCode and Input.KeyCode.Name == CurrenToggleValue.KeyBind and Input.UserInputType == Enum.UserInputType.Keyboard then
 											ToggleCallBack()
 										end
 									end
@@ -285,8 +286,6 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 			CallBack(Key)
 		end)
 	end
-	
-	print(CurrenToggleValue.KeyBind)
 	
 	KeyBind.Name = "KeyBind"
 	KeyBind.Size = UDim2.new(1, 0, 0.0350000001, 0)
@@ -340,7 +339,7 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder, CallBack)
 					KeyBind.Text = "KeyBind: " .. Input.KeyCode.Name			
 					KeyBindValue = false
 					
-					ToggleCallBack(Input.KeyCode)
+					ToggleCallBack(Input.KeyCode.Name)
 				end
 			end
 		end)
