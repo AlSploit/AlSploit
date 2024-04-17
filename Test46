@@ -228,6 +228,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 				CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
 				
 				print(CurrenToggleValue.KeyBind)
+				print(LibrarySettings[Name].KeyBind)
 				
 				if Input.KeyCode.Name == CurrenToggleValue.KeyBind then
 					ToggleCallBack()
@@ -339,8 +340,6 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
 
 					CurrenToggleValue.KeyBind = Input.KeyCode.Name
 					LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
-					
-					print(LibrarySettings[Name].KeyBind)
 				end
 			end
 		end)
