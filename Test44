@@ -67,10 +67,6 @@ task.spawn(function()
 		task.wait(1)
 
 		SaveSettings = LibrarySettings
-		
-		for i, v in LibrarySettings do
-			print(i, v.Value, v.KeyBind)
-		end
 
 		local JSONEncode = HttpService:JSONEncode(SaveSettings)
 
@@ -150,6 +146,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local DropDownButton = Instance.new("ImageButton")
 
+	local KeyBindButton
 	local LayoutOrder = 0
 
 	task.spawn(function()
@@ -227,8 +224,12 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
+			print(Input.KeyCode.Name)
+			
 			if not UserInputService:GetFocusedTextBox() then
 				CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
+				
+				print(CurrenToggleValue.KeyBind)
 				
 				if Input.KeyCode.Name == CurrenToggleValue.KeyBind then
 					ToggleCallBack()
@@ -251,6 +252,8 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					local RotationTween = TweenService:Create(DropDownButton, TweenInformation, {Rotation = 0})
 
 					RotationTween:Play()
+					
+					KeyBindButton:Destroy()
 				end
 			end)
 
@@ -264,7 +267,7 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 					task.spawn(function()
 						task.wait(0.2)
 
-						local KeyBind = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1)		
+						KeyBindButton = GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder + 1)		
 					end)
 				end
 			end)		
@@ -342,6 +345,8 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
 			end
 		end)
 	end)
+	
+	return KeyBind
 end
 
 local CombatTab = GuiLibrary:CreateTab("Combat")
