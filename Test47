@@ -224,13 +224,8 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
-				
-				print(CurrenToggleValue.KeyBind)
-				print(LibrarySettings[Name].KeyBind)
-				
-				if Input.KeyCode.Name == CurrenToggleValue.KeyBind then
+			if not UserInputService:GetFocusedTextBox() then				
+				if Input.KeyCode.Name == LibrarySettings[Name].KeyBind then
 					ToggleCallBack()
 				end
 			end
