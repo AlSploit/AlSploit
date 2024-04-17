@@ -224,8 +224,6 @@ function GuiLibrary:CreateToggle(Name, Parent, CallBack)
 	
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
-			print(Input.KeyCode.Name)
-			
 			if not UserInputService:GetFocusedTextBox() then
 				CurrenToggleValue = {Value = LibrarySettings[Name].Value, Keybind = LibrarySettings[Name].KeyBind}
 				
@@ -341,6 +339,8 @@ function GuiLibrary:CreateKeyBind(Name, Parent, LayoutOrder)
 
 					CurrenToggleValue.KeyBind = Input.KeyCode.Name
 					LibrarySettings[Name].KeyBind = CurrenToggleValue.KeyBind
+					
+					print(LibrarySettings[Name].KeyBind)
 				end
 			end
 		end)
