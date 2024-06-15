@@ -698,7 +698,6 @@ function CreateOutline(Player)
 		local BillBoard = Instance.new("BillboardGui")
 		local Frame = Instance.new("Frame")
 		local UIStroke = Instance.new("UIStroke")
-		local UICorner = Instance.new("UICorner")
 
 		BillBoard.Size = UDim2.new(4, 0, 4, 0)
 		BillBoard.AlwaysOnTop = true
@@ -711,12 +710,10 @@ function CreateOutline(Player)
 		Frame.Parent = BillBoard
 
 		UIStroke.Thickness = 1.5
-		UIStroke.Color = Color3.new(0.411765, 0.215686, 1)
+		UIStroke.Color = Player.Team.TeamColor
+			
 		UIStroke.Transparency = 0
 		UIStroke.Parent = Frame
-
-		UICorner.Parent = Frame
-		UICorner.CornerRadius = UDim.new(0, 3)
 	end
 end
 
@@ -1642,27 +1639,27 @@ local function AutoToxic(Player)
 	local KillMessage = ""					
 
 	if Randomized == 0 then
-		KillMessage = "You are so bad u died. L" .. Player.Name .. " | AlSploit on top"
+		KillMessage = "You are so bad u died. L " .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized ~= 0 then
-		KillMessage = "I could probably win without cheats. L" .. Player.Name .. " | AlSploit on top"
+		KillMessage = "I could probably win without cheats. L " .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 2 then
-		KillMessage = "Clowns are the only ones we kill. L" .. Player.Name .. " | AlSploit on top"
+		KillMessage = "Clowns are the only ones we kill. L " .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 3 then
-		KillMessage = "Rats. Imagine dying in a block game. L" .. Player.Name .. " | AlSploit on top"
+		KillMessage = "Rats. Imagine dying in a block game. L " .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 4 then
-		KillMessage = "I hack for fun. Too bad your fun is ruined. L" .. Player.Name .. " | AlSploit on top"
+		KillMessage = "I hack for fun. Too bad your fun is ruined. L " .. Player.Name .. " | AlSploit on top"
 	end
 
 	if Randomized == 5 then
-		KillMessage = "I ruined a good day for a good reason. L" .. Player.Name .. " | AlSploit on top"
+		KillMessage = "I ruined a good day for a good reason. L " .. Player.Name .. " | AlSploit on top"
 	end
 
 	SendChatMessage(KillMessage)
@@ -2524,7 +2521,7 @@ local function FlyMe()
 						FlyRaycastParameters.FilterType = Enum.RaycastFilterType.Include
 						FlyRaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 
-						local FlyRaycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(0, -1000, 0), FlyRaycastParameters)
+						local FlyRaycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(0, -3000, 0), FlyRaycastParameters)
 
 						if FlyRaycast and IsAlive(LocalPlayer) then 
 							local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}
@@ -3775,13 +3772,13 @@ task.spawn(function()
 
 				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
 					for i = 1, Settings.Scaffold.ExpandDistance do
-						local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
+						local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.5)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
 						local Position = GetServerPosition(ScaffoldCFrame)
 						local Block = GetBlock()
 
 						if Block then
 							PlaceBlock(Position, Block)
-						end
+						end				
 					end
 				end
 			until Settings.Scaffold.Value == false			
