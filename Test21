@@ -1779,6 +1779,10 @@ function GetSpeed()
 		if type(ZephyrOrb) == "number" and ZephyrOrb > 0 then
 			Speed = Speed + 19
 		end
+		
+		if (tick() - JadeHammerTick) <= 1.4 then
+			Speed = Speed + 20
+		end
 
 		if DamageBoost == true then
 			Speed = Speed + 18
@@ -2137,7 +2141,7 @@ local function AutoBuy()
 
 		task.spawn(function()	
 			if not HasItem("jade_hammer") and Settings.AutoKit.Value == true then
-				PurchaseItem(GompyVacuum)
+				PurchaseItem(JadeHammer)
 			end
 
 			if not HasItem("vacuum") and Settings.Aimbot.Value == true then
@@ -2244,16 +2248,10 @@ local function AutoKit()
 	end)
 	
 	task.spawn(function()
-		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
+		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 3.9 then
 			JadeHammerTick = tick()
 			
 			AbilityController:useAbility("jade_hammer_jump")
-
-			DamageBoost = true
-
-			task.wait(1.4)
-
-			DamageBoost = false
 		end			
 	end)
 end
