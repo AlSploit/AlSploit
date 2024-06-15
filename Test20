@@ -5557,7 +5557,7 @@ task.spawn(function()
 
 				MotionBlur.Parent = LightingService
 				MotionBlur.Name = "MotionBlur"
-				MotionBlur.Size = 4
+				MotionBlur.Size = 3
 
 				local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
 
