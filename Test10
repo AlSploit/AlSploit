@@ -2136,15 +2136,15 @@ local function AutoBuy()
 		}
 
 		task.spawn(function()	
-			if HasItem("stone_sword") and not HasItem("jade_hammer") and Settings.AutoKit.Value == true then
+			if not HasItem("jade_hammer") and Settings.AutoKit.Value == true then
 				PurchaseItem(GompyVacuum)
 			end
 
-			if HasItem("stone_sword") and not HasItem("vacuum") and Settings.Aimbot.Value == true then
+			if not HasItem("vacuum") and Settings.Aimbot.Value == true then
 				PurchaseItem(GompyVacuum)
 			end
 
-			if HasItem("stone_sword") and not HasItem("lasso") and Settings.Aimbot.Value == true then
+			if not HasItem("lasso") and Settings.Aimbot.Value == true then
 				PurchaseItem(Lasso)
 			end
 		end)
@@ -2244,7 +2244,7 @@ local function AutoKit()
 	end)
 	
 	task.spawn(function()
-		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 2.75 then
+		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 3.5 then
 			JadeHammerTick = tick()
 			
 			AbilityController:useAbility("jade_hammer_jump")
