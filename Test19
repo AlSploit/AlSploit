@@ -1828,7 +1828,7 @@ local function AutoBuy()
 					},
 					["currency"] = "iron"
 				},
-				["shopId"] = "2_item_shop_1"
+				["shopId"] = NearestNpc.Name
 			}
 		}
 
