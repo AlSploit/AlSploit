@@ -720,7 +720,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitRebornSaving4532425.lua"
+local SaveFileName = "AlSploitRebornSaving45322425.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -756,6 +756,7 @@ local function CreateSettingsFile()
 		AutoBank = {Range = 30, KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
 		PlayerTp = {KeyBind = "..."},
+		Tracers = {KeyBind = "..."},
 		AutoKit = {KeyBind = "..."},
 		AntiAfk = {KeyBind = "..."},
 		AutoBuy = {KeyBind = "..."},
@@ -1445,7 +1446,7 @@ local function SetCollisions(Value)
 	end
 end
 
-function GetMatchState()
+local function GetMatchState()
 	if ClientHandlerStoreGotten == true then
 		return ClientHandlerStore:getState().Game.matchState
 	end
@@ -1457,6 +1458,33 @@ end
 
 local function HashFunction(Value)
 	return {value = Value}
+end
+
+local function CreateTracer(Player)
+	if IsAlive(Player) then
+		local CurrentCamera = WorkSpace.CurrentCamera
+		local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
+
+		local Tracer = Drawing.new("Line")
+		
+		Tracer.Visible = false
+		Tracer.Color = Player.TeamColor.Color
+		Tracer.Thickness = 2
+		Tracer.Transparency = 1
+
+		task.spawn(function()
+			repeat
+				task.wait()
+				
+				local Vector = Camera:WorldToViewportPoint(Player.Character.PrimaryPart.Position)
+
+				Tracer.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 1)
+				Tracer.To = Vector2.new(Vector.X, Vector.Y)			
+			until Settings.Esp.Value == false or not IsAlive(Player)
+			
+			Tracer:Remove()
+		end)
+	end
 end
 
 local function DecimalRound(Number, DigitsPast0)
@@ -3104,7 +3132,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(0.1)
 
 				task.spawn(function()		
 					if IsAlive(LocalPlayer) then	
@@ -3768,7 +3796,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait(0.1)
+				task.wait()
 
 				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
 					for i = 1, Settings.Scaffold.ExpandDistance do
@@ -6196,6 +6224,82 @@ task.spawn(function()
 					end
 
 					if Settings.BedTp.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local Tracers, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Tracers", Settings.Tracers.Value, function(CallBack)
+		Settings.Tracers.Value = CallBack
+		
+		task.spawn(function()
+			if Settings.Tracers.Value == true then
+				task.spawn(function()
+					for i, v in next, PlayerService:GetPlayers() do
+						if IsAlive(v) and v ~= LocalPlayer then
+							CreateTracer(v)
+						end
+
+						v.CharacterAdded:Connect(function(Character)
+							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+
+
+							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+								CreateTracer(v)
+							end
+						end)
+					end
+				end)
+
+				task.spawn(function()
+					PlayerService.PlayerAdded:Connect(function(Player)
+						Player.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(Player)
+
+							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer then
+								CreateTracer(Player)
+							end
+						end)
+					end)
+				end)
+			end
+		end)	
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Tracers.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Tracers.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Tracers.KeyBind then
+					Settings.Tracers.Value = not Settings.Tracers.Value
+
+					if Settings.Tracers.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Tracers.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
