@@ -1446,7 +1446,7 @@ local function SetCollisions(Value)
 	end
 end
 
-local function GetMatchState()
+function GetMatchState()
 	if ClientHandlerStoreGotten == true then
 		return ClientHandlerStore:getState().Game.matchState
 	end
@@ -5031,6 +5031,8 @@ task.spawn(function()
 		Settings.Esp.Value = CallBack
 
 		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+			
 			if Settings.Esp.Value == true then
 				task.spawn(function()
 					for i, v in next, PlayerService:GetPlayers() do
@@ -5064,6 +5066,8 @@ task.spawn(function()
 		end)
 
 		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+			
 			if Settings.Esp.Value == false then
 				for i, v in next, PlayerService:GetPlayers() do
 					if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
@@ -6247,6 +6251,8 @@ task.spawn(function()
 		Settings.Tracers.Value = CallBack
 		
 		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+			
 			if Settings.Tracers.Value == true then
 				task.spawn(function()
 					for i, v in next, PlayerService:GetPlayers() do
@@ -6266,6 +6272,8 @@ task.spawn(function()
 				end)
 
 				task.spawn(function()
+					repeat task.wait() until GetMatchState() ~= 0
+					
 					PlayerService.PlayerAdded:Connect(function(Player)
 						Player.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(Player)
