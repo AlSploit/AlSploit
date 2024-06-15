@@ -5808,7 +5808,7 @@ task.spawn(function()
 				LightingService.WinterSky:Destroy()
 
 				local Sky = Instance.new("Sky")
-				local ID = 17867162222
+				local ID = 17867198888
 
 				Sky.SkyboxBk = "http://www.roblox.com/asset/?id=" .. ID
 				Sky.SkyboxDn = "http://www.roblox.com/asset/?id=" .. ID
