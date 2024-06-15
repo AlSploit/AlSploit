@@ -1808,6 +1808,26 @@ local function AutoBuy()
 	local NearestNpc = FindNearestNpc(30)
 
 	if NearestNpc then	
+		local JadeHammer = {
+			[1] = {
+				["shopItem"] = {
+					["amount"] = 1,
+					["lockAfterPurchase"] = true,
+					["itemType"] = "jade_hammer",
+					["category"] = "Combat",
+					["price"] = 40,
+					["requiresKit"] = {
+						[1] = "jade"
+					},
+					["spawnWithItems"] = {
+						[1] = "jade_hammer"
+					},
+					["currency"] = "iron"
+				},
+				["shopId"] = "2_item_shop_1"
+			}
+		}
+
 		local GompyVacuum = {
 			[1] = {
 				["shopItem"] = {
@@ -2175,6 +2195,12 @@ local function AutoBuy()
 
 		task.spawn(function()
 			if HasItem("stone_sword") and not HasItem("vacuum") and Settings.Aimbot.Value == true then
+				PurchaseItem(GompyVacuum)
+			end
+		end)
+		
+		task.spawn(function()
+			if HasItem("stone_sword") and not HasItem("jade_hammer") and Settings.AutoKit.Value == true then
 				PurchaseItem(GompyVacuum)
 			end
 		end)
@@ -5508,6 +5534,65 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local MotionBlur, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "MotionBlur", Settings.MotionBlur.Value, function(CallBack)
+		Settings.MotionBlur.Value = CallBack
+
+		task.spawn(function()
+			if Settings.MotionBlur.Value == true then
+				local MotionBlur = Instance.new("BlurEffect")
+				
+				MotionBlur.Parent = LightingService
+				MotionBlur.Name = "MotionBlur"
+				MotionBlur.Size = 5
+			end
+		end)			
+
+		task.spawn(function()
+			if Settings.MotionBlur.Value == false and LightingService:FindFirstChild("MotionBlur") then
+				LightingService.MotionBlur:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.MotionBlur.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.MotionBlur.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.MotionBlur.KeyBind then
+					Settings.MotionBlur.Value = not Settings.MotionBlur.Value
+
+					if Settings.MotionBlur.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.MotionBlur.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local WinterSky, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "WinterSky", Settings.WinterSky.Value, function(CallBack)
 		Settings.WinterSky.Value = CallBack
 
@@ -6427,18 +6512,19 @@ end)
 
 task.spawn(function()
 	repeat
-		task.wait(3)
+		task.wait(2.5)
 		
-		local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
-		local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
+		if HasItem("jade_hammer") then
+			local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
+			local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
 
-		
-		AbilityController:useAbility("jade_hammer_jump")
+			AbilityController:useAbility("jade_hammer_jump")
 
-		DamageBoost = true
+			DamageBoost = true
 
-		task.wait(1.5)
+			task.wait(1.4)
 
-		DamageBoost = false
+			DamageBoost = false
+		end			
 	until not game	
 end)
