@@ -1461,6 +1461,8 @@ local function HashFunction(Value)
 end
 
 local function CreateTracer(Player)
+	print(Player.Parent)
+	
 	if IsAlive(Player) then
 		local CurrentCamera = WorkSpace.CurrentCamera
 		local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
