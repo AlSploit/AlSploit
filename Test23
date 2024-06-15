@@ -753,7 +753,7 @@ local function CreateSettingsFile()
 		PlayAgain = {KeyBind = "..."},
 		Invisible = {KeyBind = "..."},
 		AimAssist = {Range = 20, KeyBind = "..."},
-		Scaffold = {ExpandDistance = 2, KeyBind = "..."},
+		Scaffold = {ExpandDistance = 1, KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
 		AutoBank = {Range = 30, KeyBind = "..."},
@@ -5482,6 +5482,8 @@ task.spawn(function()
 					task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function(Character)
 							repeat task.wait() until IsAlive(LocalPlayer)
+							
+							task.wait(0.3)
 
 							if LocalPlayer.Character.Head:FindFirstChild("Nametag") then
 								if ReplicatedStorage:FindFirstChild("Nametag") and LocalPlayer.Character.Head:FindFirstChild("Nametag") then
