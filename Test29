@@ -924,7 +924,7 @@ end)
 local SendMessageRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
 local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")
 local ProjectileRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
-local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events")
+local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
 local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
 local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
@@ -3104,7 +3104,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait(0)
+				task.wait()
 
 				task.spawn(function()		
 					if IsAlive(LocalPlayer) then	
@@ -3768,7 +3768,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(0.1)
 
 				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
 					for i = 1, Settings.Scaffold.ExpandDistance do
@@ -4469,19 +4469,19 @@ task.spawn(function()
 
 		task.spawn(function()
 			if GetQueueType():find("Skywars") then
-				repeat task.wait(1) until not IsAlive(LocalPlayer)
+				repeat task.wait(3) until not IsAlive(LocalPlayer)
 
 				if Settings.PlayAgain.Value == true then
-					PlayAgainRemote.joinQueue:FireServer({["queueType"] = GetQueueType()})
+					PlayAgainRemote:FireServer({["queueType"] = GetQueueType()})
 				end			
 			end
 		end)
 
 		task.spawn(function()
-			repeat task.wait(1) until GetMatchState() == 2
+			repeat task.wait(3) until GetMatchState() == 2
 
 			if Settings.PlayAgain.Value == true then
-				PlayAgainRemote.joinQueue:FireServer({["queueType"] = GetQueueType()})
+				PlayAgainRemote:FireServer({["queueType"] = GetQueueType()})
 			end
 		end)
 	end)
