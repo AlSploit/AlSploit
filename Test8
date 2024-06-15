@@ -901,6 +901,8 @@ task.spawn(function()
 	end	
 end)
 
+local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamewor
+
 local CollectCollectableEntityRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("CollectCollectableEntity")
 local TrinitySetAngelTypeRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetAngelType")
 local SetObservedChestRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/SetObservedChest")
@@ -947,6 +949,7 @@ local MinerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild
 local KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
+local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
 local BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
 
 local BlockPlacementController
@@ -976,6 +979,7 @@ local InfiniteFlyValue = false
 local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
+local JadeHammerTick = tick()
 local SpoofedCamera = nil
 local AntiVoidPart = nil
 local TeleportTick = tick()
@@ -2237,6 +2241,20 @@ local function AutoKit()
 				CollectCollectableEntityRemote:FireServer({id = NearestGhost})
 			end
 		end
+	end)
+	
+	task.spawn(function()
+		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 2.75 then
+			JadeHammerTick = tick()
+			
+			AbilityController:useAbility("jade_hammer_jump")
+
+			DamageBoost = true
+
+			task.wait(1.4)
+
+			DamageBoost = false
+		end			
 	end)
 end
 
@@ -6512,23 +6530,4 @@ task.spawn(function()
 	task.spawn(function()
 		setfpscap(999)
 	end)
-end)
-
-task.spawn(function()
-	repeat
-		task.wait(2.5)
-
-		if HasItem("jade_hammer") then
-			local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
-			local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
-
-			AbilityController:useAbility("jade_hammer_jump")
-
-			DamageBoost = true
-
-			task.wait(1.4)
-
-			DamageBoost = false
-		end			
-	until not game	
 end)
