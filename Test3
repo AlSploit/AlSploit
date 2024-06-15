@@ -723,7 +723,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitRebornSaving453245.lua"
+local SaveFileName = "AlSploitRebornSaving4532425.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -744,6 +744,7 @@ local function CreateSettingsFile()
 		FpsBooster = {KeyBind = "..."},
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
+		MotionBlur = {KeyBind = "..."},
 		WinterSky = {KeyBind = "..."},
 		NoNameTag = {KeyBind = "..."},
 		AntiStaff = {Kick = false, KeyBind = "..."},
@@ -759,6 +760,7 @@ local function CreateSettingsFile()
 		HighJump = {KeyBind = "..."},
 		PlayerTp = {KeyBind = "..."},
 		AutoKit = {KeyBind = "..."},
+		AntiAfk = {KeyBind = "..."},
 		AutoBuy = {KeyBind = "..."},
 		Sprint = {KeyBind = "..."},
 		NoFall = {KeyBind = "..."},
@@ -926,6 +928,7 @@ local ProjectileRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitFor
 local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events")
 local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
+local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
 local DamageIndicator
 
 task.spawn(function()
@@ -4812,6 +4815,63 @@ task.spawn(function()
 	end)
 end)
 
+
+task.spawn(function()
+	local AntiAfk, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AntiAfk", Settings.AntiAfk.Value, function(CallBack)
+		Settings.AntiAfk.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait(30)
+
+				local Args = {
+					[1] = {
+						["afk"] = false
+					}
+				}
+
+				AfkInfoRemote:FireServer(Args)
+			until Settings.AntiAfk.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(UtilityTab, Settings.AntiAfk.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AntiAfk.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AntiAfk.KeyBind then
+					Settings.AntiAfk.Value = not Settings.AntiAfk.Value
+
+					if Settings.AntiAfk.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AntiAfk.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
 task.spawn(function()
 	local Fov, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Fov", Settings.Fov.Value, function(CallBack)
 		Settings.Fov.Value = CallBack
@@ -6366,7 +6426,7 @@ end)
 
 task.spawn(function()
 	repeat
-		task.wait(4.1)
+		task.wait(3.5)
 		
 		local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
 		local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
@@ -6376,7 +6436,7 @@ task.spawn(function()
 
 		DamageBoost = true
 
-		task.wait(1.5)
+		task.wait(1.75)
 
 		DamageBoost = false
 	until not game	
