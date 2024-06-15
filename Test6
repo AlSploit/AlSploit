@@ -2131,6 +2131,20 @@ local function AutoBuy()
 			}
 		}
 
+		task.spawn(function()	
+			if HasItem("stone_sword") and not HasItem("jade_hammer") and Settings.AutoKit.Value == true then
+				PurchaseItem(GompyVacuum)
+			end
+
+			if HasItem("stone_sword") and not HasItem("vacuum") and Settings.Aimbot.Value == true then
+				PurchaseItem(GompyVacuum)
+			end
+
+			if HasItem("stone_sword") and not HasItem("lasso") and Settings.Aimbot.Value == true then
+				PurchaseItem(Lasso)
+			end
+		end)
+
 		task.spawn(function()
 			if HasItem("diamond_sword") then
 				PurchaseItem(EmeraldSword)
@@ -2184,24 +2198,6 @@ local function AutoBuy()
 		task.spawn(function()
 			if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") and HasItem("arrow") and Settings.Scaffold.Value == true then
 				PurchaseItem(Wool)
-			end
-		end)
-
-		task.spawn(function()
-			if HasItem("stone_sword") and not HasItem("lasso") and Settings.Aimbot.Value == true then
-				PurchaseItem(Lasso)
-			end
-		end)
-
-		task.spawn(function()
-			if HasItem("stone_sword") and not HasItem("vacuum") and Settings.Aimbot.Value == true then
-				PurchaseItem(GompyVacuum)
-			end
-		end)
-		
-		task.spawn(function()
-			if HasItem("stone_sword") and not HasItem("jade_hammer") and Settings.AutoKit.Value == true then
-				PurchaseItem(GompyVacuum)
 			end
 		end)
 	end	
@@ -5540,15 +5536,24 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.MotionBlur.Value == true then
 				local MotionBlur = Instance.new("BlurEffect")
-				
+
 				MotionBlur.Parent = LightingService
 				MotionBlur.Name = "MotionBlur"
-				MotionBlur.Size = 5
+				MotionBlur.Size = 4
+
+				local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
+
+				ColorCorrectionEffect.Saturation = 0.2
+				ColorCorrectionEffect.Contrast = 0.1
+
+				ColorCorrectionEffect.Parent = LightingService
+				ColorCorrectionEffect.Name = "ColorCorrectionEffect"		
 			end
 		end)			
 
 		task.spawn(function()
-			if Settings.MotionBlur.Value == false and LightingService:FindFirstChild("MotionBlur") then
+			if Settings.MotionBlur.Value == false and LightingService:FindFirstChild("ColorCorrectionEffect") and LightingService:FindFirstChild("MotionBlur") then
+				LightingService.ColorCorrectionEffect:Destroy()
 				LightingService.MotionBlur:Destroy()
 			end
 		end)
@@ -6513,7 +6518,7 @@ end)
 task.spawn(function()
 	repeat
 		task.wait(2.5)
-		
+
 		if HasItem("jade_hammer") then
 			local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
 			local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
