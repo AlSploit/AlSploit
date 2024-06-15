@@ -1460,9 +1460,7 @@ local function HashFunction(Value)
 	return {value = Value}
 end
 
-local function CreateTracer(Player)
-	print(Player.Parent)
-	
+local function CreateTracer(Player)	
 	if IsAlive(Player) then
 		local CurrentCamera = WorkSpace.CurrentCamera
 		local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
@@ -1472,17 +1470,25 @@ local function CreateTracer(Player)
 		Tracer.Visible = false
 		Tracer.Color = Player.TeamColor.Color
 		Tracer.Thickness = 2
-		Tracer.Transparency = 1
+		Tracer.Transparency = 0
 
 		task.spawn(function()
 			repeat
 				task.wait()
 				
 				if IsAlive(Player) then
-					local Vector = Camera:WorldToViewportPoint(Player.Character.PrimaryPart.Position)
+					local Vector, OnScreen = Camera:WorldToViewportPoint(Player.Character.PrimaryPart.Position)
 
 					Tracer.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 1)
 					Tracer.To = Vector2.new(Vector.X, Vector.Y)			
+					
+					if OnScreen == true then
+						Tracer.Transparency = 0
+					end
+					
+					if OnScreen == false then
+						Tracer.Transparency = 1
+					end
 				end		
 			until Settings.Esp.Value == false or not IsAlive(Player)
 			
