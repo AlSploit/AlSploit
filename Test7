@@ -5544,7 +5544,6 @@ task.spawn(function()
 				local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
 
 				ColorCorrectionEffect.Saturation = 0.2
-				ColorCorrectionEffect.Contrast = 0.1
 
 				ColorCorrectionEffect.Parent = LightingService
 				ColorCorrectionEffect.Name = "ColorCorrectionEffect"		
