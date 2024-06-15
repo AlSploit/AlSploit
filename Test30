@@ -710,7 +710,7 @@ function CreateOutline(Player)
 		Frame.Parent = BillBoard
 
 		UIStroke.Thickness = 1.5
-		UIStroke.Color = Player.Team.TeamColor
+		UIStroke.Color = Player.TeamColor.Color
 			
 		UIStroke.Transparency = 0
 		UIStroke.Parent = Frame
