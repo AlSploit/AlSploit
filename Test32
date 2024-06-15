@@ -1476,10 +1476,12 @@ local function CreateTracer(Player)
 			repeat
 				task.wait()
 				
-				local Vector = Camera:WorldToViewportPoint(Player.Character.PrimaryPart.Position)
+				if IsAlive(Player) then
+					local Vector = Camera:WorldToViewportPoint(Player.Character.PrimaryPart.Position)
 
-				Tracer.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 1)
-				Tracer.To = Vector2.new(Vector.X, Vector.Y)			
+					Tracer.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 1)
+					Tracer.To = Vector2.new(Vector.X, Vector.Y)			
+				end		
 			until Settings.Esp.Value == false or not IsAlive(Player)
 			
 			Tracer:Remove()
