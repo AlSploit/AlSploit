@@ -2248,7 +2248,7 @@ local function AutoKit()
 	end)
 	
 	task.spawn(function()
-		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 3.9 then
+		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
 			JadeHammerTick = tick()
 			
 			AbilityController:useAbility("jade_hammer_jump")
