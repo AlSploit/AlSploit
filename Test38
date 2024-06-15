@@ -1816,7 +1816,7 @@ function GetSpeed()
 		end
 		
 		if (tick() - JadeHammerTick) <= 1.4 then
-			Speed = Speed + 24
+			Speed = Speed + 30
 		end
 
 		if DamageBoost == true then
@@ -6164,6 +6164,86 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Tracers, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Tracers", Settings.Tracers.Value, function(CallBack)
+		Settings.Tracers.Value = CallBack
+
+		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+
+			if Settings.Tracers.Value == true then
+				task.spawn(function()
+					for i, v in next, PlayerService:GetPlayers() do
+						if IsAlive(v) and v ~= LocalPlayer then
+							CreateTracer(v)
+						end
+
+						v.CharacterAdded:Connect(function(Character)
+							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+
+
+							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+								CreateTracer(v)
+							end
+						end)
+					end
+				end)
+
+				task.spawn(function()
+					repeat task.wait() until GetMatchState() ~= 0
+
+					PlayerService.PlayerAdded:Connect(function(Player)
+						Player.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(Player)
+
+							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer then
+								CreateTracer(Player)
+							end
+						end)
+					end)
+				end)
+			end
+		end)	
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Tracers.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Tracers.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Tracers.KeyBind then
+					Settings.Tracers.Value = not Settings.Tracers.Value
+
+					if Settings.Tracers.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Tracers.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local BedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "BedTp", Settings.BedTp.Value, function(CallBack)
 		Settings.BedTp.Value = CallBack
 
@@ -6238,86 +6318,6 @@ task.spawn(function()
 					end
 
 					if Settings.BedTp.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local Tracers, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Tracers", Settings.Tracers.Value, function(CallBack)
-		Settings.Tracers.Value = CallBack
-		
-		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
-			
-			if Settings.Tracers.Value == true then
-				task.spawn(function()
-					for i, v in next, PlayerService:GetPlayers() do
-						if IsAlive(v) and v ~= LocalPlayer then
-							CreateTracer(v)
-						end
-
-						v.CharacterAdded:Connect(function(Character)
-							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
-
-
-							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
-								CreateTracer(v)
-							end
-						end)
-					end
-				end)
-
-				task.spawn(function()
-					repeat task.wait() until GetMatchState() ~= 0
-					
-					PlayerService.PlayerAdded:Connect(function(Player)
-						Player.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(Player)
-
-							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer then
-								CreateTracer(Player)
-							end
-						end)
-					end)
-				end)
-			end
-		end)	
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.Tracers.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.Tracers.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.Tracers.KeyBind then
-					Settings.Tracers.Value = not Settings.Tracers.Value
-
-					if Settings.Tracers.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.Tracers.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
