@@ -1469,7 +1469,7 @@ local function CreateTracer(Player)
 		
 		Tracer.Visible = false
 		Tracer.Color = Player.TeamColor.Color
-		Tracer.Thickness = 2
+		Tracer.Thickness = 1.5
 		Tracer.Transparency = 1
 
 		task.spawn(function()
@@ -1490,7 +1490,7 @@ local function CreateTracer(Player)
 						Tracer.Visible = false
 					end
 				end		
-			until Settings.Esp.Value == false or not IsAlive(Player)
+			until Settings.Tracers.Value == false or not IsAlive(Player)
 			
 			Tracer:Remove()
 		end)
