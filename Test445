@@ -6731,7 +6731,9 @@ task.spawn(function()
 		Settings.TargetHud.Value = CallBack
 		
 		task.spawn(function()		
-			local TargetHud, PlayerName, Display, Health, Status		
+			repeat task.wait() until GetMatchState() ~= 0
+			 
+			local TargetHud, PlayerName, Display, Health, Status = nil, nil, nil, nil, nil	
 			
 			repeat
 				task.wait()
@@ -6773,14 +6775,7 @@ task.spawn(function()
 					HealthTween:Play()
 				end
 				
-				if TargetHud and not NearestPlayer or not IsAlive(LocalPlayer) then
-					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-					local Tween = TweenService:Create(TargetHud, TweenInformation, {Size = UDim2.new(0, 0, 0, 0)})
-
-					Tween:Play()
-					
-					task.wait(0.35)
-					
+				if TargetHud and not NearestPlayer or not IsAlive(LocalPlayer) then				
 					TargetHud:Destroy()
 					TargetHud = nil
 				end
