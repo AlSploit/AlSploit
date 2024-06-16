@@ -6758,7 +6758,7 @@ task.spawn(function()
 
 						local Lose = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or "Win")
 
-						Status.Text = (Lose and Lose or "Win")
+						Status.Text = (Lose and "Lose" or "Win")
 
 						if Status.Text == "Lose" then
 							Status.TextColor3 = Color3.new(1, 0, 0)
