@@ -146,7 +146,7 @@ local function CreateTab(Name)
 	Title.BorderSizePixel = 0
 	Title.Position = UDim2.new(0, 0, 0.124, 0)
 	Title.Size = UDim2.new(1, 0, 0.743, 0)
-	Title.Font = Font.new(getcustomasset("AlSploitFonts/MinecraftFont.json"))
+	Title.Font = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
 	Title.Text = Name
 	Title.TextColor3 = Color3.new(255, 255, 255)
 	Title.TextScaled = true
