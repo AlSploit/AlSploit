@@ -659,7 +659,7 @@ local function CreateFlyHud()
 	Text.Size = UDim2.new(1, 0, 0.489, 0)
 	Text.Font = Enum.Font.GothamBold
 	Text.Text = "1"
-	Text.TextColor3 = Color3.new(0.411765, 0.215686, 1)
+	Text.TextColor3 = Color3.new(0, 0.6, 1)
 	Text.TextScaled = true
 	Text.TextSize = 20
 	Text.TextWrapped = true
@@ -680,7 +680,7 @@ local function CreateFlyHud()
 
 	Display.Name = "Display"
 	Display.Parent = DisplayBackground
-	Display.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
+	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
 	Display.BorderColor3 = Color3.new(0, 0, 0)
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(0, 0, 0, 0)
