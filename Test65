@@ -175,8 +175,14 @@ local function MakeAlSploitLoadingScreen(Time)
 
 					task.spawn(function()
 						repeat
+							task.wait()
+							
 							Percentage.Text = (Fill.Size.X.Scale * 100) .. "%"
 						until Fill.Size.X.Scale == 1		
+						
+						task.wait(0.7)
+						
+						Percentage.Text = "Loaded"
 					end)
 				end)			
 			end)	
