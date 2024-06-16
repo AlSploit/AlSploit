@@ -6733,13 +6733,15 @@ task.spawn(function()
 		task.spawn(function()		 
 			local TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()
 			
+			TargetHud.Visible = false
+			
 			repeat
 				task.wait()
 				
-				if GetMatchState() ~= 0  then
+				if GetMatchState() ~= 0 and IsAlive(LocalPlayer) then
 					local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
 
-					if NearestPlayer and IsAlive(LocalPlayer) then
+					if NearestPlayer then
 						TargetHud.Visible = true
 						
 						local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
@@ -6753,8 +6755,6 @@ task.spawn(function()
 
 						PlayerName.Text = NearestPlayer.Name
 						Health = NearestPlayerHealth
-						
-						print(LocalPlayerStatus, NearestPlayerStatus)
 
 						local Lose = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or "Win")
 
@@ -6773,7 +6773,15 @@ task.spawn(function()
 
 						HealthTween:Play()
 					end
-				end				
+					
+					if not NearestPlayer then
+						TargetHud.Visible = false
+					end
+				end		
+				
+				if not IsAlive(LocalPlayer) then
+					TargetHud.Visible = false
+				end
 			until Settings.TargetHud.Value == false
 			
 			TargetHud.Visible = false
