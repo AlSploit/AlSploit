@@ -6747,8 +6747,8 @@ task.spawn(function()
 						local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
 						local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
 
-						local LocalPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
-						local LocalPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
+						local LocalPlayerMaxHealth = LocalPlayer.Character:GetAttribute("MaxHealth")
+						local LocalPlayerHealth = LocalPlayer.Character:GetAttribute("Health")
 
 						local NearestPlayerStatus = (NearestPlayerHealth / NearestPlayerMaxHealth)
 						local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
@@ -6776,7 +6776,7 @@ task.spawn(function()
 						HealthTween:Play()
 					end
 
-					if TargetHud and not NearestPlayer or not IsAlive(LocalPlayer) then				
+					if TargetHud and not NearestPlayer then				
 						TargetHud:Destroy()
 						TargetHud = nil
 					end
