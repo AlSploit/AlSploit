@@ -2917,18 +2917,18 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(1 / Settings.AutoClicker.Cps)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					task.spawn(function()
 						if Settings.AutoClicker.ButterFlyClick == true then
 							Click()
 
-							task.wait((1 / Settings.AutoClicker.Cps) / 4)
+							task.wait(0.025)
 
 							Click()
 
-							task.wait(1 / Settings.AutoClicker.Cps)
+							task.wait(0.025)
 						end	
 					end)
 
@@ -2936,18 +2936,16 @@ task.spawn(function()
 						if Settings.AutoClicker.JitterClick == true then
 							Click()
 
-							task.wait((1 / Settings.AutoClicker.Cps) / 2)
+							task.wait(0.05)
 
 							Click()			
 
-							task.wait(1 / Settings.AutoClicker.Cps)
+							task.wait(0.05)
 						end
 					end)
 
 					task.spawn(function()
 						if Settings.AutoClicker.BlatantClick == true then
-							task.wait(1 / Settings.AutoClicker.Cps)
-
 							Click()
 						end
 					end)				
