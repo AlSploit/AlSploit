@@ -211,8 +211,17 @@ local function LoadFiles()
 end
 
 task.spawn(function()	
-	LoadFolders()
-	LoadFiles()
+	task.spawn(function()
+		LoadFolders()
+		LoadFiles()
+
+		MakeAlSploitLoadingScreen()
+	end)
 	
-	MakeAlSploitLoadingScreen()
+	task.spawn(function()
+		task.wait(2)
+		task.wait(2.6 + (tick() - LoadTick))
+		
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))
+	end)
 end)
