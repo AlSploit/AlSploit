@@ -614,6 +614,128 @@ local function CreateNotification(Duration, Message)
 	end)
 end
 
+local function CreateTargetHud()
+	local Background = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local DisplayBackground = Instance.new("Frame")
+	local UICorner_2 = Instance.new("UICorner")
+	local Display = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+	local PlayerName = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local Health = Instance.new("TextLabel")
+	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+	local _100HP = Instance.new("TextLabel")
+	local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+	local Status = Instance.new("TextLabel")
+	local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
+
+	Background.Name = "Background"
+	Background.Parent = AlSploit
+	Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Background.BackgroundTransparency = 0.250
+	Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Background.BorderSizePixel = 0
+	Background.Position = UDim2.new(0.397, 0, 0.576, 0)
+	Background.Size = UDim2.new(0.216, 0, 0.134, 0)
+
+	UICorner.Parent = Background
+
+	DisplayBackground.Name = "DisplayBackground"
+	DisplayBackground.Parent = Background
+	DisplayBackground.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	DisplayBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	DisplayBackground.BorderSizePixel = 0
+	DisplayBackground.Position = UDim2.new(0.226, 0, 0.825, 0)
+	DisplayBackground.Size = UDim2.new(0.545, 0, 0.0729, 0)
+
+	UICorner_2.CornerRadius = UDim.new(0, 6)
+	UICorner_2.Parent = DisplayBackground
+
+	Display.Name = "Display"
+	Display.Parent = DisplayBackground
+	Display.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
+	Display.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Display.BorderSizePixel = 0
+	Display.Position = UDim2.new(0, 0, 0, 0)
+	Display.Size = UDim2.new(0, 0, 1, 0)
+	Display.ZIndex = 2
+
+	UICorner_3.CornerRadius = UDim.new(0, 6)
+	UICorner_3.Parent = Display
+
+	PlayerName.Name = "PlayerName"
+	PlayerName.Parent = Background
+	PlayerName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	PlayerName.BackgroundTransparency = 1.000
+	PlayerName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	PlayerName.BorderSizePixel = 0
+	PlayerName.Position = UDim2.new(0, 0, 0, 0)
+	PlayerName.Size = UDim2.new(1, 0, 0.480, 0)
+	PlayerName.Font = Enum.Font.GothamBold
+	PlayerName.Text = ""
+	PlayerName.TextColor3 = Color3.fromRGB(0, 153, 255)
+	PlayerName.TextScaled = true
+	PlayerName.TextSize = 20.000
+	PlayerName.TextWrapped = true
+
+	UITextSizeConstraint.Parent = PlayerName
+	UITextSizeConstraint.MaxTextSize = 20
+
+	Health.Name = ""
+	Health.Parent = Background
+	Health.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Health.BackgroundTransparency = 1.000
+	Health.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Health.BorderSizePixel = 0
+	Health.Position = UDim2.new(0, 0, 0.480, 0)
+	Health.Size = UDim2.new(1, 0, 0.250, 0)
+	Health.Font = Enum.Font.GothamBold
+	Health.Text = "Health: 100"
+	Health.TextColor3 = Color3.fromRGB(0, 153, 255)
+	Health.TextSize = 15.000
+	Health.TextWrapped = true
+
+	UITextSizeConstraint_2.Parent = Health
+	UITextSizeConstraint_2.MaxTextSize = 20
+
+	_100HP.Name = "100HP"
+	_100HP.Parent = Background
+	_100HP.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	_100HP.BackgroundTransparency = 1.000
+	_100HP.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	_100HP.BorderSizePixel = 0
+	_100HP.Position = UDim2.new(0.770, 0, 0.725, 0)
+	_100HP.Size = UDim2.new(0.230, 0, 0.249, 0)
+	_100HP.Font = Enum.Font.GothamBold
+	_100HP.Text = "100 HP"
+	_100HP.TextColor3 = Color3.fromRGB(0, 153, 255)
+	_100HP.TextSize = 15.000
+	_100HP.TextWrapped = true
+
+	UITextSizeConstraint_3.Parent = _100HP
+	UITextSizeConstraint_3.MaxTextSize = 20
+
+	Status.Name = "Status"
+	Status.Parent = Background
+	Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Status.BackgroundTransparency = 1.000
+	Status.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Status.BorderSizePixel = 0
+	Status.Position = UDim2.new(0, 0, 0.725, 0)
+	Status.Size = UDim2.new(0.228, 0, 0.249, 0)
+	Status.Font = Enum.Font.GothamBold
+	Status.Text = "Win"
+	Status.TextColor3 = Color3.fromRGB(0, 255, 0)
+	Status.TextSize = 15.000
+	Status.TextWrapped = true
+
+	UITextSizeConstraint_4.Parent = Status
+	UITextSizeConstraint_4.MaxTextSize = 20
+	
+	return Background, PlayerName, Display, Health, Status
+end
+
 local function CreateFlyHud()
 	local Background = Instance.new("Frame")
 	local UIStroke = Instance.new("UIStroke")
@@ -720,7 +842,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitRebornSaving45322425.lua"
+local SaveFileName = "AlSploitRebornSaving021946.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -742,6 +864,7 @@ local function CreateSettingsFile()
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
 		MotionBlur = {KeyBind = "..."},
+		TargetHud = {Range = 20, KeyBind = "..."},
 		WinterSky = {KeyBind = "..."},
 		NoNameTag = {KeyBind = "..."},
 		AntiStaff = {Kick = false, KeyBind = "..."},
@@ -6577,6 +6700,110 @@ task.spawn(function()
 							end
 						end)						
 					end)
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local TargetHud, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "TargetHud", Settings.TargetHud.Value, function(CallBack)
+		Settings.TargetHud.Value = CallBack
+		
+		task.spawn(function()		
+			local TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()			
+			
+			repeat
+				task.wait()
+
+				local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
+
+				if NearestPlayer then
+					local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
+					local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
+
+					local LocalPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
+					local LocalPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
+					
+					local NearestPlayerStatus = (NearestPlayerHealth / NearestPlayerMaxHealth)
+					local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
+
+					PlayerName.Text = NearestPlayer.Name
+					Health = NearestPlayerHealth
+					
+					local Lose = (LocalPlayerStatus <= NearestPlayerStatus)
+					local Win = (LocalPlayerStatus > NearestPlayerStatus)
+					
+					Status.Text = (Lose and "Lose" or "Win")
+
+					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+					local Tween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
+
+					Tween:Play()
+				end
+				
+				if TargetHud and not NearestPlayer then
+					TargetHud:Destroy()
+				end
+			until Settings.TargetHud.Value == false or not IsAlive(LocalPlayer)
+
+			if TargetHud then
+				TargetHud:Destroy()	
+			end			
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.TargetHud.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.TargetHud.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.TargetHud.KeyBind then
+					Settings.TargetHud.Value = not Settings.TargetHud.Value
+
+					if Settings.TargetHud.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.TargetHud.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(GuiTab, "Range", Settings.TargetHud.Range, 20, LayoutOrder + 2, function(CallBack)
+					Settings.TargetHud.Range = CallBack
 				end)
 			end
 
