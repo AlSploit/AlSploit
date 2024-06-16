@@ -171,6 +171,10 @@ local function MakeAlSploitLoadingScreen(Time)
 						local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0, 0, 0, 0)})
 
 						LoadingFrameTween:Play()
+						
+						task.wait(0.6)
+						
+						LoadingFrame:Destroy()
 					end)
 
 					task.spawn(function()
