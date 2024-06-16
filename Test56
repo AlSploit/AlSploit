@@ -6756,9 +6756,9 @@ task.spawn(function()
 						PlayerName.Text = NearestPlayer.Name
 						Health = NearestPlayerHealth
 
-						local Lose = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or "Win")
+						local Status = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or LocalPlayerStatus >= NearestPlayerStatus)
 
-						Status.Text = (Lose and "Lose" or "Win")
+						Status.Text = (Status and "Win" or "Lose")
 
 						if Status.Text == "Lose" then
 							Status.TextColor3 = Color3.new(1, 0, 0)
@@ -6778,7 +6778,7 @@ task.spawn(function()
 						TargetHud.Visible = false
 					end
 				end		
-				
+
 				if not IsAlive(LocalPlayer) then
 					TargetHud.Visible = false
 				end
