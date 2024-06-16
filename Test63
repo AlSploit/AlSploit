@@ -11,6 +11,7 @@ local function MakeAlSploitLoadingScreen(Time)
 	local AlSploit = Instance.new("ScreenGui")
 	local LoadingFrame = Instance.new("ImageLabel")
 	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
 	local Title = Instance.new("ImageLabel")
 	local LoadingBar = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
@@ -41,6 +42,11 @@ local function MakeAlSploitLoadingScreen(Time)
 	LoadingFrame.ScaleType = Enum.ScaleType.Crop
 
 	UICorner.Parent = LoadingFrame
+	
+	UIStroke.Parent = LoadingFrame
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Color = Color3.new(1, 1, 1)
+	UIStroke.Thickness = 1
 
 	Title.Name = "Title"
 	Title.Parent = LoadingFrame
@@ -142,6 +148,8 @@ local function MakeAlSploitLoadingScreen(Time)
 		
 		task.spawn(function()
 			LoadingFrameTween.Completed:Connect(function()
+				task.wait(1)
+				
 				print(tick() - LoadTick)
 
 				local TweenInformation = TweenInfo.new(tick() - LoadTick, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
@@ -151,6 +159,8 @@ local function MakeAlSploitLoadingScreen(Time)
 
 				task.spawn(function()
 					FillTween.Completed:Connect(function()
+						task.wait(1)
+						
 						local TweenInformation = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
 						local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0, 0, 0, 0)})
 
