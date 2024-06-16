@@ -15,6 +15,7 @@ local function MakeAlSploitLoadingScreen(Time)
 	local Title = Instance.new("ImageLabel")
 	local LoadingBar = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
+	local UIStroke_2 = Instance.new("UIStroke")
 	local Fill = Instance.new("Frame")
 	local UICorner_3 = Instance.new("UICorner")
 	local UIGradient = Instance.new("UIGradient")
@@ -69,6 +70,11 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	UICorner_2.CornerRadius = UDim.new(0, 3)
 	UICorner_2.Parent = LoadingBar
+	
+	UIStroke_2.Parent = LoadingBar
+	UIStroke_2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke_2.Color = Color3.new(1, 1, 1)
+	UIStroke_2.Thickness = 1
 
 	Fill.Name = "Fill"
 	Fill.Parent = LoadingBar
@@ -168,7 +174,9 @@ local function MakeAlSploitLoadingScreen(Time)
 					end)
 
 					task.spawn(function()
-						Percentage.Text = Fill.Size.X.Scale .. "%"
+						repeat
+							Percentage.Text = (Fill.Size.X.Scale * 100) .. "%"
+						until Fill.Size.X.Scale == 1		
 					end)
 				end)			
 			end)	
