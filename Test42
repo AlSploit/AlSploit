@@ -617,6 +617,7 @@ end
 local function CreateTargetHud()
 	local Background = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
 	local DisplayBackground = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
 	local Display = Instance.new("Frame")
@@ -637,9 +638,21 @@ local function CreateTargetHud()
 	Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Background.BorderSizePixel = 0
 	Background.Position = UDim2.new(0.397, 0, 0.576, 0)
-	Background.Size = UDim2.new(0.216, 0, 0.134, 0)
+	Background.Size = UDim2.new(0.2, 0, 0.116, 0)
 
 	UICorner.Parent = Background
+	
+	UIStroke.Parent = Background
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Thickness = 2
+	
+	task.spawn(function()
+		repeat
+			task.wait(0.001)
+
+			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+		until not game
+	end)
 
 	DisplayBackground.Name = "DisplayBackground"
 	DisplayBackground.Parent = Background
@@ -676,11 +689,11 @@ local function CreateTargetHud()
 	PlayerName.Text = ""
 	PlayerName.TextColor3 = Color3.fromRGB(0, 153, 255)
 	PlayerName.TextScaled = true
-	PlayerName.TextSize = 20.000
+	PlayerName.TextSize = 18.000
 	PlayerName.TextWrapped = true
 
 	UITextSizeConstraint.Parent = PlayerName
-	UITextSizeConstraint.MaxTextSize = 20
+	UITextSizeConstraint.MaxTextSize = 18
 
 	Health.Name = ""
 	Health.Parent = Background
@@ -693,11 +706,12 @@ local function CreateTargetHud()
 	Health.Font = Enum.Font.GothamBold
 	Health.Text = "Health: 100"
 	Health.TextColor3 = Color3.fromRGB(0, 153, 255)
-	Health.TextSize = 15.000
+	PlayerName.TextScaled = true
+	PlayerName.TextSize = 15.000
 	Health.TextWrapped = true
 
 	UITextSizeConstraint_2.Parent = Health
-	UITextSizeConstraint_2.MaxTextSize = 20
+	UITextSizeConstraint_2.MaxTextSize = 15
 
 	_100HP.Name = "100HP"
 	_100HP.Parent = Background
@@ -710,11 +724,12 @@ local function CreateTargetHud()
 	_100HP.Font = Enum.Font.GothamBold
 	_100HP.Text = "100 HP"
 	_100HP.TextColor3 = Color3.fromRGB(0, 153, 255)
+	_100HP.TextScaled = true
 	_100HP.TextSize = 15.000
 	_100HP.TextWrapped = true
 
 	UITextSizeConstraint_3.Parent = _100HP
-	UITextSizeConstraint_3.MaxTextSize = 20
+	UITextSizeConstraint_3.MaxTextSize = 15
 
 	Status.Name = "Status"
 	Status.Parent = Background
@@ -727,11 +742,12 @@ local function CreateTargetHud()
 	Status.Font = Enum.Font.GothamBold
 	Status.Text = "Win"
 	Status.TextColor3 = Color3.fromRGB(0, 255, 0)
+	Status.TextScaled = true
 	Status.TextSize = 15.000
 	Status.TextWrapped = true
 
 	UITextSizeConstraint_4.Parent = Status
-	UITextSizeConstraint_4.MaxTextSize = 20
+	UITextSizeConstraint_4.MaxTextSize = 15
 	
 	return Background, PlayerName, Display, Health, Status
 end
@@ -6715,12 +6731,16 @@ task.spawn(function()
 		Settings.TargetHud.Value = CallBack
 		
 		task.spawn(function()		
-			local TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()			
+			local TargetHud, PlayerName, Display, Health, Status		
 			
 			repeat
 				task.wait()
 
 				local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
+				
+				if NearestPlayer and not TargetHud then
+					TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()	
+				end
 
 				if NearestPlayer then
 					local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
