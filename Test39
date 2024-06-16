@@ -2693,6 +2693,7 @@ local CombatTab = CreateTab("Combat")
 local BlatantTab = CreateTab("Blatant")
 local UtilityTab = CreateTab("Utility")
 local WorldTab = CreateTab("World")
+local GuiTab = CreateTab("Gui")
 
 task.spawn(function()
 	local NoKnockBack, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "NoKnockBack", Settings.NoKnockBack.Value, function(CallBack)
@@ -3180,7 +3181,7 @@ task.spawn(function()
 							end)					
 
 							task.spawn(function()
-								if HasItem("fireball") and not (HasItem("arrow") and (BestBow and HasItem(BestBow.itemType) or true)) then
+								if HasItem("fireball") and not (HasItem("arrow") or BestBow) then
 									local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
 
 									task.spawn(function()
@@ -3192,7 +3193,7 @@ task.spawn(function()
 									ShootProjectile(FireBall, "fireball")
 								end
 
-								if HasItem("snowball") and not (HasItem("arrow") and (BestBow and HasItem(BestBow.itemType) or true))  then
+								if HasItem("snowball") and not (HasItem("arrow") or BestBow) then
 									local SnowBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("snowball")
 
 									task.spawn(function()
