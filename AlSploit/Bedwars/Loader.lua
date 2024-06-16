@@ -215,8 +215,8 @@ local function LoadFiles()
 	end
 	
 	if not isfile("AlSploit/Fonts/MinecraftFont.json") then		
-		writefile("AlSploit/Fonts/MinecraftFont.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 6000, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
-		writefile("AlSploit/Fonts/MinecraftFont.json", HttpService:JSONEncode({name = 'Minecraft', faces = {{name = "Regular", weight = 6000, style = "normal", AssetId = getcustomasset("Fonts/Minecraft.otf")}}}))
+		writefile("AlSploit/Fonts/MinecraftFont.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 300, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
+		writefile("AlSploit/Fonts/MinecraftFont.json", HttpService:JSONEncode({name = 'Minecraft', faces = {{name = "Regular", weight = 300, style = "normal", AssetId = getcustomasset("Fonts/Minecraft.otf")}}}))
 	end
 end
 
