@@ -855,10 +855,12 @@ function CreateOutline(Player)
 	end
 end
 
+local AlSploitFont = (Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json")) and Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json") or Enum.Font.GothamBold)
+
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitRebornSaving021946.lua"
+local SaveFileName = "AlSploitConfiguration.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -872,7 +874,7 @@ local function CreateSettingsFile()
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
 		AutoClicker = {Cps = 100, ButterFlyClick = false, BlatantClick = true, JitterClick = false, KeyBind = "..."},
-		NoKnockBack = {KeyBind = "..."},	
+		NoKnockBack = {KeyBind = "..."},
 		InfiniteFly = {KeyBind = "..."},
 		DamageBoost = {KeyBind = "..."},
 		ChatSpammer = {Speed = 50, KeyBind = "..."},
@@ -904,6 +906,7 @@ local function CreateSettingsFile()
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 25, KeyBind = "..."},
 		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
+		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
 		Nuker = {Range = 30, CustomAnimation = true, BreakOres = true, KeyBind = "..."},
@@ -932,17 +935,17 @@ local function CreateSettingsFile()
 
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-			writefile("AlSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)
+			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
 		end
 	end)	
 end
 
 local function CheckFirstTime()
-	if isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
+	if isfile("AlSploit/Bedwars" .. SaveFileName) then
 		return false
 	end
 
-	if not isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
+	if not isfile("AlSploit/Bedwars" .. SaveFileName) then
 		return true
 	end
 end
@@ -950,12 +953,12 @@ end
 local function SaveSettings()	
 	local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-	writefile("AlSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)	
+	writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)	
 end
 
 local function LoadSettings()
-	if isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
-		Settings = HttpService:JSONDecode(readfile("AlSploitBedwarsConfigSaving/" .. SaveFileName))
+	if isfile("AlSploit/Bedwars" .. SaveFileName) then
+		Settings = HttpService:JSONDecode(readfile("AlSploit/Bedwars" .. SaveFileName))
 
 		Loaded = true
 	end
@@ -6754,7 +6757,7 @@ task.spawn(function()
 						local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
 
 						PlayerName.Text = NearestPlayer.Name
-						Health.Text = "Health: " .. NearestPlayerHealth
+						Health.Text = "Health: " .. math.round(NearestPlayerHealth)
 
 						local StatusValue = (LocalPlayerStatus < NearestPlayerStatus and "Lose" or "Win")
 
@@ -6786,6 +6789,69 @@ task.spawn(function()
 
 			TargetHud.Visible = false
 		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.TargetHud.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.TargetHud.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.TargetHud.KeyBind then
+					Settings.TargetHud.Value = not Settings.TargetHud.Value
+
+					if Settings.TargetHud.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.TargetHud.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(GuiTab, "Range", Settings.TargetHud.Range, 20, LayoutOrder + 2, function(CallBack)
+					Settings.TargetHud.Range = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local TargetHud, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "TargetHud", Settings.TargetHud.Value, function(CallBack)
+		Settings.TargetHud.Value = CallBack
+		
 	end)
 
 	task.spawn(function()
@@ -6909,3 +6975,9 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+for i, v in next, game.Workspace:GetDescendants() do
+	if v:IsA("TextLabel") then
+		v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	end
+end
