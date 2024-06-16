@@ -203,7 +203,7 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 	Toggle.Position = UDim2.new(2.873, 0, 0, 0)
 	Toggle.Size = UDim2.new(1, 0, 0.041, 0)
 	Toggle.AutoButtonColor = false
-	Toggle.Font = Enum.Font.GothamBold
+	Toggle.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
 	Toggle.Text = Name
 	Toggle.TextColor3 = Color3.new(1, 1, 1)
 	Toggle.TextScaled = true
