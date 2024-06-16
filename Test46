@@ -701,17 +701,17 @@ local function CreateTargetHud()
 	Health.BackgroundTransparency = 1.000
 	Health.BorderColor3 = Color3.new(0, 0, 0)
 	Health.BorderSizePixel = 0
-	Health.Position = UDim2.new(0, 0, 0.480, 0)
-	Health.Size = UDim2.new(1, 0, 0.250, 0)
+	Health.Position = UDim2.new(0, 0, 0.471, 0)
+	Health.Size = UDim2.new(1, 0, 0.354, 0)
 	Health.Font = Enum.Font.GothamBold
 	Health.Text = "Health: 100"
 	Health.TextColor3 = Color3.new(0, 0.6, 1)
-	PlayerName.TextScaled = true
-	PlayerName.TextSize = 18.000
+	Health.TextScaled = true
+	Health.TextSize = 15.000
 	Health.TextWrapped = true
 
 	UITextSizeConstraint_2.Parent = Health
-	UITextSizeConstraint_2.MaxTextSize = 18
+	UITextSizeConstraint_2.MaxTextSize = 15
 
 	_100HP.Name = "100HP"
 	_100HP.Parent = Background
@@ -6780,6 +6780,11 @@ task.spawn(function()
 					TargetHud = nil
 				end
 			until Settings.TargetHud.Value == false
+			
+			if TargetHud then				
+				TargetHud:Destroy()
+				TargetHud = nil
+			end
 		end)
 	end)
 
