@@ -633,9 +633,9 @@ local function CreateTargetHud()
 
 	Background.Name = "Background"
 	Background.Parent = AlSploit
-	Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Background.BackgroundColor3 = Color3.new(0, 0, 0)
 	Background.BackgroundTransparency = 0.250
-	Background.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Background.BorderColor3 = Color3.new(0, 0, 0)
 	Background.BorderSizePixel = 0
 	Background.Position = UDim2.new(0.397, 0, 0.576, 0)
 	Background.Size = UDim2.new(0.2, 0, 0.116, 0)
@@ -656,8 +656,8 @@ local function CreateTargetHud()
 
 	DisplayBackground.Name = "DisplayBackground"
 	DisplayBackground.Parent = Background
-	DisplayBackground.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	DisplayBackground.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
+	DisplayBackground.BorderColor3 = Color3.new(0, 0, 0)
 	DisplayBackground.BorderSizePixel = 0
 	DisplayBackground.Position = UDim2.new(0.226, 0, 0.825, 0)
 	DisplayBackground.Size = UDim2.new(0.545, 0, 0.0729, 0)
@@ -667,8 +667,8 @@ local function CreateTargetHud()
 
 	Display.Name = "Display"
 	Display.Parent = DisplayBackground
-	Display.BackgroundColor3 = Color3.fromRGB(0, 153, 255)
-	Display.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
+	Display.BorderColor3 = Color3.new(0, 0, 0)
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(0, 0, 0, 0)
 	Display.Size = UDim2.new(0, 0, 1, 0)
@@ -679,15 +679,15 @@ local function CreateTargetHud()
 
 	PlayerName.Name = "PlayerName"
 	PlayerName.Parent = Background
-	PlayerName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	PlayerName.BackgroundColor3 = Color3.new(1, 1, 1)
 	PlayerName.BackgroundTransparency = 1.000
-	PlayerName.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	PlayerName.BorderColor3 = Color3.new(0, 0, 0)
 	PlayerName.BorderSizePixel = 0
 	PlayerName.Position = UDim2.new(0, 0, 0, 0)
 	PlayerName.Size = UDim2.new(1, 0, 0.480, 0)
 	PlayerName.Font = Enum.Font.GothamBold
 	PlayerName.Text = ""
-	PlayerName.TextColor3 = Color3.fromRGB(0, 153, 255)
+	PlayerName.TextColor3 = Color3.new(0, 0.6, 1)
 	PlayerName.TextScaled = true
 	PlayerName.TextSize = 18.000
 	PlayerName.TextWrapped = true
@@ -697,33 +697,33 @@ local function CreateTargetHud()
 
 	Health.Name = ""
 	Health.Parent = Background
-	Health.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Health.BackgroundColor3 = Color3.new(1, 1, 1)
 	Health.BackgroundTransparency = 1.000
-	Health.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Health.BorderColor3 = Color3.new(0, 0, 0)
 	Health.BorderSizePixel = 0
 	Health.Position = UDim2.new(0, 0, 0.480, 0)
 	Health.Size = UDim2.new(1, 0, 0.250, 0)
 	Health.Font = Enum.Font.GothamBold
 	Health.Text = "Health: 100"
-	Health.TextColor3 = Color3.fromRGB(0, 153, 255)
+	Health.TextColor3 = Color3.new(0, 0.6, 1)
 	PlayerName.TextScaled = true
-	PlayerName.TextSize = 15.000
+	PlayerName.TextSize = 18.000
 	Health.TextWrapped = true
 
 	UITextSizeConstraint_2.Parent = Health
-	UITextSizeConstraint_2.MaxTextSize = 15
+	UITextSizeConstraint_2.MaxTextSize = 18
 
 	_100HP.Name = "100HP"
 	_100HP.Parent = Background
-	_100HP.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	_100HP.BackgroundColor3 = Color3.new(1, 1, 1)
 	_100HP.BackgroundTransparency = 1.000
-	_100HP.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	_100HP.BorderColor3 = Color3.new(0, 0, 0)
 	_100HP.BorderSizePixel = 0
 	_100HP.Position = UDim2.new(0.770, 0, 0.725, 0)
 	_100HP.Size = UDim2.new(0.230, 0, 0.249, 0)
 	_100HP.Font = Enum.Font.GothamBold
 	_100HP.Text = "100 HP"
-	_100HP.TextColor3 = Color3.fromRGB(0, 153, 255)
+	_100HP.TextColor3 = Color3.new(0, 0.6, 1)
 	_100HP.TextScaled = true
 	_100HP.TextSize = 15.000
 	_100HP.TextWrapped = true
@@ -733,9 +733,9 @@ local function CreateTargetHud()
 
 	Status.Name = "Status"
 	Status.Parent = Background
-	Status.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Status.BackgroundColor3 = Color3.new(1, 1, 1)
 	Status.BackgroundTransparency = 1.000
-	Status.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Status.BorderColor3 = Color3.new(0, 0, 0)
 	Status.BorderSizePixel = 0
 	Status.Position = UDim2.new(0, 0, 0.725, 0)
 	Status.Size = UDim2.new(0.228, 0, 0.249, 0)
@@ -6742,7 +6742,7 @@ task.spawn(function()
 					TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()	
 				end
 
-				if NearestPlayer then
+				if NearestPlayer and TargetHud then
 					local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
 					local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
 
@@ -6759,6 +6759,14 @@ task.spawn(function()
 					local Win = (LocalPlayerStatus > NearestPlayerStatus)
 					
 					Status.Text = (Lose and "Lose" or "Win")
+					
+					if Status.Text == "Lose" then
+						Status.TextColor3 = Color3.new(1, 0, 0)
+					end
+					
+					if Status.Text == "Win" then
+						Status.TextColor3 = Color3.new(0, 1, 0)
+					end
 
 					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
 					local Tween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
@@ -6768,11 +6776,13 @@ task.spawn(function()
 				
 				if TargetHud and not NearestPlayer then
 					TargetHud:Destroy()
+					TargetHud = nil
 				end
 			until Settings.TargetHud.Value == false or not IsAlive(LocalPlayer)
 
 			if TargetHud then
 				TargetHud:Destroy()	
+				TargetHud = nil
 			end			
 		end)
 	end)
