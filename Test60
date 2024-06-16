@@ -6754,7 +6754,7 @@ task.spawn(function()
 						local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
 
 						PlayerName.Text = NearestPlayer.Name
-						Health = NearestPlayerHealth
+						Health.Text = NearestPlayerHealth
 
 						local StatusValue = (LocalPlayerStatus < NearestPlayerStatus and "Lose" or "Win")
 
