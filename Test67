@@ -154,7 +154,7 @@ local function MakeAlSploitLoadingScreen(Time)
 		
 		task.spawn(function()
 			LoadingFrameTween.Completed:Connect(function()
-				task.wait(1)
+				task.wait(0.9)
 				
 				print(tick() - LoadTick)
 
@@ -180,7 +180,7 @@ local function MakeAlSploitLoadingScreen(Time)
 							Percentage.Text = math.round(Fill.Size.X.Scale * 100) .. "%"
 						until Fill.Size.X.Scale == 1		
 						
-						task.wait(0.7)
+						task.wait(0.5)
 						
 						Percentage.Text = "Loaded"
 					end)
