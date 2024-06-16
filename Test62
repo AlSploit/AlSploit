@@ -1,3 +1,5 @@
+local LocalPlayer = game.Players.LocalPlayer 
+
 local TweenService = game:GetService("TweenService")
 
 local MinecraftFontUrl = "https://github.com/AlSploit/AlSploit/raw/main/AlSploit/Fonts/MinecraftFont"
@@ -6,6 +8,7 @@ local HttpRequest = request or http_request
 local LoadTick = tick()
 
 local function MakeAlSploitLoadingScreen(Time)
+	local AlSploit = Instance.new("ScreenGui")
 	local LoadingFrame = Instance.new("ImageLabel")
 	local UICorner = Instance.new("UICorner")
 	local Title = Instance.new("ImageLabel")
@@ -21,9 +24,14 @@ local function MakeAlSploitLoadingScreen(Time)
 	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
 	local DiscordServer = Instance.new("TextLabel")
 	local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+	
+	AlSploit.Name = "AlSploit"
+	AlSploit.Parent = LocalPlayer:WaitForChild("PlayerGui")
+	AlSploit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	AlSploit.ResetOnSpawn = false
 
 	LoadingFrame.Name = "LoadingFrame"
-	LoadingFrame.Parent = game.StarterGui.AlSploitPrivateLoad
+	LoadingFrame.Parent = AlSploit
 	LoadingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	LoadingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	LoadingFrame.BorderSizePixel = 0
