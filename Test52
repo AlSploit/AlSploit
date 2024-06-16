@@ -6776,7 +6776,12 @@ task.spawn(function()
 						HealthTween:Play()
 					end
 
-					if TargetHud and not (IsAlive(NearestPlayer) or NearestPlayer)  then
+					if TargetHud and not NearestPlayer then
+						TargetHud:Destroy()
+						TargetHud = nil
+					end
+					
+					if TargetHud and not IsAlive(NearestPlayer) then
 						TargetHud:Destroy()
 						TargetHud = nil
 					end
@@ -6911,3 +6916,17 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+repeat
+	task.wait()
+	
+	local args = {
+		[1] = {
+			["direction"] = Vector3.new(-0.9720142483711243, 2.2074318906106782e-07, 0.2349219024181366)
+		}
+	}
+
+	game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash"):FireServer(unpack(args))
+	
+	DamageBoost = true
+until not game
