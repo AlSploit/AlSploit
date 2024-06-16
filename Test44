@@ -671,7 +671,7 @@ local function CreateTargetHud()
 	Display.BorderColor3 = Color3.new(0, 0, 0)
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(0, 0, 0, 0)
-	Display.Size = UDim2.new(0, 0, 1, 0)
+	Display.Size = UDim2.new(1, 0, 1, 0)
 	Display.ZIndex = 2
 
 	UICorner_3.CornerRadius = UDim.new(0, 6)
@@ -2659,9 +2659,9 @@ local function FlyMe()
 					NumberDisplay.Text = FlyTime		
 
 					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-					local Tween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
+					local DisplayTween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
 
-					Tween:Play()				
+					DisplayTween:Play()				
 				end				
 
 			until FlyValue == false or not IsAlive(LocalPlayer)
@@ -6755,10 +6755,9 @@ task.spawn(function()
 					PlayerName.Text = NearestPlayer.Name
 					Health = NearestPlayerHealth
 					
-					local Lose = (LocalPlayerStatus <= NearestPlayerStatus)
-					local Win = (LocalPlayerStatus > NearestPlayerStatus)
+					local Lose = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or "Win")
 					
-					Status.Text = (Lose and "Lose" or "Win")
+					Status.Text = (Lose and Lose or "Win")
 					
 					if Status.Text == "Lose" then
 						Status.TextColor3 = Color3.new(1, 0, 0)
@@ -6769,21 +6768,23 @@ task.spawn(function()
 					end
 
 					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-					local Tween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
+					local HealthTween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
 
-					Tween:Play()
+					HealthTween:Play()
 				end
 				
-				if TargetHud and not NearestPlayer then
+				if TargetHud and not NearestPlayer or not IsAlive(LocalPlayer) then
+					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+					local Tween = TweenService:Create(TargetHud, TweenInformation, {Size = UDim2.new(0, 0, 0, 0)})
+
+					Tween:Play()
+					
+					task.wait(0.35)
+					
 					TargetHud:Destroy()
 					TargetHud = nil
 				end
-			until Settings.TargetHud.Value == false or not IsAlive(LocalPlayer)
-
-			if TargetHud then
-				TargetHud:Destroy()	
-				TargetHud = nil
-			end			
+			until Settings.TargetHud.Value == false
 		end)
 	end)
 
