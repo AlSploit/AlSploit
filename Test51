@@ -6776,7 +6776,7 @@ task.spawn(function()
 						HealthTween:Play()
 					end
 
-					if TargetHud and not IsAlive(NearestPlayer) then
+					if TargetHud and not (IsAlive(NearestPlayer) or NearestPlayer)  then
 						TargetHud:Destroy()
 						TargetHud = nil
 					end
