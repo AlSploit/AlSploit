@@ -6853,6 +6853,20 @@ task.spawn(function()
 		Settings.Fonts.Value = CallBack
 
 		task.spawn(function()
+			if Settings.Fonts.Value == true then
+				for i, v in next, game.Workspace:GetDescendants() do
+					if v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end
+
+				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+					if v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end
+			end
+			
 			repeat
 				task.wait(10)
 
