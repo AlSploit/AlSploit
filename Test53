@@ -6731,7 +6731,7 @@ task.spawn(function()
 		Settings.TargetHud.Value = CallBack
 		
 		task.spawn(function()		 
-			local TargetHud, PlayerName, Display, Health, Status = nil, nil, nil, nil, nil	
+			local TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()
 			
 			repeat
 				task.wait()
@@ -6739,11 +6739,9 @@ task.spawn(function()
 				if GetMatchState() ~= 0  then
 					local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
 
-					if NearestPlayer and not TargetHud then
-						TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()	
-					end
-
-					if NearestPlayer and TargetHud and IsAlive(LocalPlayer) then
+					if NearestPlayer and IsAlive(LocalPlayer) then
+						TargetHud.Visible = true
+						
 						local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
 						local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
 
@@ -6775,23 +6773,10 @@ task.spawn(function()
 
 						HealthTween:Play()
 					end
-
-					if TargetHud and not NearestPlayer then
-						TargetHud:Destroy()
-						TargetHud = nil
-					end
-					
-					if TargetHud and not IsAlive(NearestPlayer) then
-						TargetHud:Destroy()
-						TargetHud = nil
-					end
 				end				
 			until Settings.TargetHud.Value == false
 			
-			if TargetHud then				
-				TargetHud:Destroy()
-				TargetHud = nil
-			end
+			TargetHud.Visible = false
 		end)
 	end)
 
@@ -6916,17 +6901,3 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
-
-repeat
-	task.wait()
-	
-	local args = {
-		[1] = {
-			["direction"] = Vector3.new(-0.9720142483711243, 2.2074318906106782e-07, 0.2349219024181366)
-		}
-	}
-
-	game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash"):FireServer(unpack(args))
-	
-	DamageBoost = true
-until not game
