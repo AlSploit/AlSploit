@@ -6756,9 +6756,9 @@ task.spawn(function()
 						PlayerName.Text = NearestPlayer.Name
 						Health = NearestPlayerHealth
 
-						local Status = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or LocalPlayerStatus >= NearestPlayerStatus)
+						local Status = (LocalPlayerStatus < NearestPlayerStatus and "Lose" or "Win")
 
-						Status.Text = (Status and "Win" or "Lose")
+						Status.Text = Status
 
 						if Status.Text == "Lose" then
 							Status.TextColor3 = Color3.new(1, 0, 0)
