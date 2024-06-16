@@ -6730,55 +6730,57 @@ task.spawn(function()
 	local TargetHud, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "TargetHud", Settings.TargetHud.Value, function(CallBack)
 		Settings.TargetHud.Value = CallBack
 		
-		task.spawn(function()		
-			repeat task.wait() until GetMatchState() ~= 0
-			 
+		task.spawn(function()		 
 			local TargetHud, PlayerName, Display, Health, Status = nil, nil, nil, nil, nil	
 			
 			repeat
 				task.wait()
-
-				local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
 				
-				if NearestPlayer and not TargetHud then
-					TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()	
-				end
+				if GetMatchState() ~= 0  then
+					local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
 
-				if NearestPlayer and TargetHud then
-					local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
-					local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
-
-					local LocalPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
-					local LocalPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
-					
-					local NearestPlayerStatus = (NearestPlayerHealth / NearestPlayerMaxHealth)
-					local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
-
-					PlayerName.Text = NearestPlayer.Name
-					Health = NearestPlayerHealth
-					
-					local Lose = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or "Win")
-					
-					Status.Text = (Lose and Lose or "Win")
-					
-					if Status.Text == "Lose" then
-						Status.TextColor3 = Color3.new(1, 0, 0)
-					end
-					
-					if Status.Text == "Win" then
-						Status.TextColor3 = Color3.new(0, 1, 0)
+					if NearestPlayer and not TargetHud then
+						TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()	
 					end
 
-					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-					local HealthTween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
+					if NearestPlayer and TargetHud then
+						local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
+						local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
 
-					HealthTween:Play()
-				end
-				
-				if TargetHud and not NearestPlayer or not IsAlive(LocalPlayer) then				
-					TargetHud:Destroy()
-					TargetHud = nil
-				end
+						local LocalPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
+						local LocalPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
+
+						local NearestPlayerStatus = (NearestPlayerHealth / NearestPlayerMaxHealth)
+						local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
+
+						PlayerName.Text = NearestPlayer.Name
+						Health = NearestPlayerHealth
+						
+						print(LocalPlayerStatus, NearestPlayerStatus)
+
+						local Lose = (LocalPlayerStatus < NearestPlayerStatus and LocalPlayerStatus < NearestPlayerStatus or "Win")
+
+						Status.Text = (Lose and Lose or "Win")
+
+						if Status.Text == "Lose" then
+							Status.TextColor3 = Color3.new(1, 0, 0)
+						end
+
+						if Status.Text == "Win" then
+							Status.TextColor3 = Color3.new(0, 1, 0)
+						end
+
+						local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+						local HealthTween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
+
+						HealthTween:Play()
+					end
+
+					if TargetHud and not NearestPlayer or not IsAlive(LocalPlayer) then				
+						TargetHud:Destroy()
+						TargetHud = nil
+					end
+				end				
 			until Settings.TargetHud.Value == false
 			
 			if TargetHud then				
