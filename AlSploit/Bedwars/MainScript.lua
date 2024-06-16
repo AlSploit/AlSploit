@@ -26,6 +26,8 @@ local Blur = Instance.new("BlurEffect")
 
 local DefaultLayoutOrder = 0
 
+local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+
 task.spawn(function()
 	AlSploit.Name = "AlSploit"
 	AlSploit.Parent = LocalPlayer:WaitForChild("PlayerGui")
@@ -146,7 +148,7 @@ local function CreateTab(Name)
 	Title.BorderSizePixel = 0
 	Title.Position = UDim2.new(0, 0, 0.124, 0)
 	Title.Size = UDim2.new(1, 0, 0.743, 0)
-	Title.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Title.FontFace = AlSploitFont
 	Title.Text = Name
 	Title.TextColor3 = Color3.new(255, 255, 255)
 	Title.TextScaled = true
@@ -203,7 +205,7 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 	Toggle.Position = UDim2.new(2.873, 0, 0, 0)
 	Toggle.Size = UDim2.new(1, 0, 0.041, 0)
 	Toggle.AutoButtonColor = false
-	Toggle.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Toggle.FontFace = AlSploitFont
 	Toggle.Text = Name
 	Toggle.TextColor3 = Color3.new(1, 1, 1)
 	Toggle.TextScaled = true
@@ -266,7 +268,7 @@ local function CreateKeyBind(Parent, DefaultValue, LayoutOrder, CallBack)
 	KeyBind.Position = UDim2.new(0, 0, 0.0765, 0)
 	KeyBind.Size = UDim2.new(1, 0, 0.025, 0)
 	KeyBind.AutoButtonColor = false
-	KeyBind.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	KeyBind.FontFace = AlSploitFont
 	KeyBind.Text = "KeyBind: " .. DefaultValue
 	KeyBind.TextColor3 = Color3.new(1, 1, 1)
 	KeyBind.TextScaled = true
@@ -351,7 +353,7 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 	MiniToggle.Position = UDim2.new(0, 0, 0.0765, 0)
 	MiniToggle.Size = UDim2.new(1, 0, 0.0354, 0)
 	MiniToggle.AutoButtonColor = false
-	MiniToggle.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	MiniToggle.FontFace = AlSploitFont
 	MiniToggle.Text = Name
 	MiniToggle.TextColor3 = Color3.new(1, 1, 1)
 	MiniToggle.TextSize = 11
@@ -427,7 +429,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	Bar.Size = UDim2.new(0.0650, 0, 3.725, 0)
 	Bar.ZIndex = 2
 	Bar.AutoButtonColor = false
-	Bar.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Bar.FontFace = AlSploitFont
 	Bar.Text = ""
 	Bar.TextColor3 = Color3.new(1, 1, 1)
 	Bar.TextSize = 14.000
@@ -448,7 +450,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	NameDisplay.BorderSizePixel = 0
 	NameDisplay.Position = UDim2.new(0.145, 0, -0.118, 0)
 	NameDisplay.Size = UDim2.new(0, 50, 0, 30)
-	NameDisplay.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	NameDisplay.FontFace = AlSploitFont
 	NameDisplay.Text = Name
 	NameDisplay.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	NameDisplay.TextScaled = true
@@ -465,7 +467,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	ValueDisplay.BorderSizePixel = 0
 	ValueDisplay.Position = UDim2.new(0.635, 0, -0.118, 0)
 	ValueDisplay.Size = UDim2.new(0, 50, 0, 30)
-	ValueDisplay.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	ValueDisplay.FontFace = AlSploitFont
 	ValueDisplay.Text = DefaultValue
 	ValueDisplay.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	ValueDisplay.TextScaled = true
@@ -581,7 +583,7 @@ local function CreateNotification(Duration, Message)
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(-0.00264, 0, 0, 0)
 	Text.Size = UDim2.new(1, 0, 1, 0)
-	Text.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Text.FontFace = AlSploitFont
 	Text.Text = Message
 	Text.TextColor3 = Color3.new(255, 255, 255)
 	Text.TextScaled = true
@@ -685,7 +687,7 @@ local function CreateTargetHud()
 	PlayerName.BorderSizePixel = 0
 	PlayerName.Position = UDim2.new(0, 0, 0, 0)
 	PlayerName.Size = UDim2.new(1, 0, 0.480, 0)
-	PlayerName.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	PlayerName.FontFace = AlSploitFont
 	PlayerName.Text = ""
 	PlayerName.TextColor3 = Color3.new(0, 0.6, 1)
 	PlayerName.TextScaled = true
@@ -703,7 +705,7 @@ local function CreateTargetHud()
 	Health.BorderSizePixel = 0
 	Health.Position = UDim2.new(0, 0, 0.471, 0)
 	Health.Size = UDim2.new(1, 0, 0.354, 0)
-	Health.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Health.FontFace = AlSploitFont
 	Health.Text = "Health: 100"
 	Health.TextColor3 = Color3.new(0, 0.6, 1)
 	Health.TextScaled = true
@@ -721,7 +723,7 @@ local function CreateTargetHud()
 	_100HP.BorderSizePixel = 0
 	_100HP.Position = UDim2.new(0.770, 0, 0.725, 0)
 	_100HP.Size = UDim2.new(0.230, 0, 0.249, 0)
-	_100HP.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	_100HP.FontFace = AlSploitFont
 	_100HP.Text = "100 HP"
 	_100HP.TextColor3 = Color3.new(0, 0.6, 1)
 	_100HP.TextScaled = true
@@ -739,7 +741,7 @@ local function CreateTargetHud()
 	Status.BorderSizePixel = 0
 	Status.Position = UDim2.new(0, 0, 0.725, 0)
 	Status.Size = UDim2.new(0.228, 0, 0.249, 0)
-	Status.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Status.FontFace = AlSploitFont
 	Status.Text = "Win"
 	Status.TextColor3 = Color3.fromRGB(0, 255, 0)
 	Status.TextScaled = true
@@ -795,7 +797,7 @@ local function CreateFlyHud()
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(-0.00333, 0, 0.511, 0)
 	Text.Size = UDim2.new(1, 0, 0.489, 0)
-	Text.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Text.FontFace = AlSploitFont
 	Text.Text = "1"
 	Text.TextColor3 = Color3.new(0, 0.6, 1)
 	Text.TextScaled = true
@@ -854,8 +856,6 @@ function CreateOutline(Player)
 		UIStroke.Parent = Frame
 	end
 end
-
-local AlSploitFont = (Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json")) and Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json") or Enum.Font.GothamBold)
 
 local Settings = {}
 local Loaded = false
@@ -5403,7 +5403,7 @@ task.spawn(function()
 									v.BackgroundTransparency = 1
 									v.TextColor3 = Color3.new(1, 1, 1)	
 									v.Position = v.Position + UDim2.new(0, 2, 0, 2)
-									v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))									
+									v.FontFace = AlSploitFont									
 								end
 							end)
 						end					
@@ -5438,7 +5438,7 @@ task.spawn(function()
 							v.BackgroundTransparency = 1
 							v.TextColor3 = Color3.new(1, 1, 1)	
 							v.Position = v.Position + UDim2.new(0, 2, 0, 2)
-							v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))	
+							v.FontFace = AlSploitFont	
 						end
 					end)
 				end
@@ -5465,7 +5465,7 @@ task.spawn(function()
 						if v:IsA("TextLabel") then
 							v.BackgroundTransparency = 0	
 							v.Position = v.Position - UDim2.new(0, 2, 0, 2)
-							v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))	
+							v.FontFace = AlSploitFont	
 						end
 					end)
 				end
@@ -6849,9 +6849,26 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local TargetHud, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "TargetHud", Settings.TargetHud.Value, function(CallBack)
-		Settings.TargetHud.Value = CallBack
-		
+	local Fonts, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "Fonts", Settings.Fonts.Value, function(CallBack)
+		Settings.Fonts.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait(10)
+
+				for i, v in next, game.Workspace:GetDescendants() do
+					if v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end
+
+				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+					if v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end
+			until Settings.Fonts.Value == false
+		end)		
 	end)
 
 	task.spawn(function()
@@ -6862,8 +6879,8 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.TargetHud.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.TargetHud.KeyBind = CallBack
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Fonts.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Fonts.KeyBind = CallBack
 				end)
 			end
 
@@ -6876,14 +6893,14 @@ task.spawn(function()
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.TargetHud.KeyBind then
-					Settings.TargetHud.Value = not Settings.TargetHud.Value
+				if Input.KeyCode.Name == Settings.Fonts.KeyBind then
+					Settings.Fonts.Value = not Settings.Fonts.Value
 
-					if Settings.TargetHud.Value == true then
+					if Settings.Fonts.Value == true then
 						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
-					if Settings.TargetHud.Value == false then
+					if Settings.Fonts.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -6975,9 +6992,3 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
-
-for i, v in next, game.Workspace:GetDescendants() do
-	if v:IsA("TextLabel") then
-		v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
-	end
-end
