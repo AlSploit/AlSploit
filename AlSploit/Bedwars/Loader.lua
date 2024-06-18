@@ -158,8 +158,6 @@ local function MakeAlSploitLoadingScreen(Time)
 			LoadingFrameTween.Completed:Connect(function()
 				task.wait(0.9)
 				
-				print(tick() - LoadTick)
-
 				local TweenInformation = TweenInfo.new(tick() - LoadTick, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
 				local FillTween = TweenService:Create(Fill, TweenInformation, {Size = UDim2.new(1, 0, 1, 0)})
 
