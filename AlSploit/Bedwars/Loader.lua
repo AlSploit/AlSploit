@@ -223,7 +223,7 @@ end
 
 task.spawn(function()
 	if not (writefile or makefolder or isfile or isfolder) then
-		loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))()\
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))()
 		
 		Loaded = true
 	end
