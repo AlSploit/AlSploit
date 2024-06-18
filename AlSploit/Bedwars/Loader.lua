@@ -7,6 +7,7 @@ local MinecraftFontUrl = "https://github.com/AlSploit/AlSploit/raw/main/AlSploit
 local HttpRequest = request or http_request
 
 local LoadTick = tick()
+local Loaded = false
 
 local function MakeAlSploitLoadingScreen(Time)
 	local AlSploit = Instance.new("ScreenGui")
@@ -101,7 +102,7 @@ local function MakeAlSploitLoadingScreen(Time)
 	Percentage.BorderSizePixel = 0
 	Percentage.Position = UDim2.new(0.35147059, 0, 0.519444466, 0)
 	Percentage.Size = UDim2.new(0.294117659, 0, 0.138888896, 0)
-	Percentage.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Percentage.Font = Enum.Font.GothamBold
 	Percentage.Text = "0%"
 	Percentage.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Percentage.TextScaled = true
@@ -119,7 +120,7 @@ local function MakeAlSploitLoadingScreen(Time)
 	Discord.BorderSizePixel = 0
 	Discord.Position = UDim2.new(0, 0, 0.889999986, 0)
 	Discord.Size = UDim2.new(0.998529434, 0, 0.0972222239, 0)
-	Discord.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	Discord.Font = Enum.Font.GothamBold
 	Discord.Text = "Discord Username: godclutcher"
 	Discord.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Discord.TextScaled = true
@@ -137,7 +138,7 @@ local function MakeAlSploitLoadingScreen(Time)
 	DiscordServer.BorderSizePixel = 0
 	DiscordServer.Position = UDim2.new(0.00147058826, 0, 0.822222233, 0)
 	DiscordServer.Size = UDim2.new(1, 0, 0.0694444478, 0)
-	DiscordServer.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	DiscordServer.Font = Enum.Font.GothamBold
 	DiscordServer.Text = "Discord Server: discord.gg/JJryxTawZa"
 	DiscordServer.TextColor3 = Color3.fromRGB(255, 255, 255)
 	DiscordServer.TextScaled = true
@@ -220,18 +221,28 @@ local function LoadFiles()
 	end
 end
 
+task.spawn(function()
+	if not (writefile or makefolder or isfile or isfolder) then
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))()\
+		
+		Loaded = true
+	end
+end)
+
 task.spawn(function()	
-	task.spawn(function()
+	if Loaded == false then
 		LoadFolders()
 		LoadFiles()
 
 		MakeAlSploitLoadingScreen()
-	end)
-	
-	task.spawn(function()
+	end
+end)
+
+task.spawn(function()
+	if Loaded == false then
 		task.wait(2)
 		task.wait(2.6 + (tick() - LoadTick))
 		
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))()
-	end)
+	end
 end)
