@@ -26,8 +26,6 @@ local Blur = Instance.new("BlurEffect")
 
 local DefaultLayoutOrder = 0
 
-local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
-
 task.spawn(function()
 	AlSploit.Name = "AlSploit"
 	AlSploit.Parent = LocalPlayer:WaitForChild("PlayerGui")
@@ -2917,18 +2915,18 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(1 / Settings.AutoClicker.Cps)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					task.spawn(function()
 						if Settings.AutoClicker.ButterFlyClick == true then
 							Click()
 
-							task.wait((1 / Settings.AutoClicker.Cps) / 4)
+							task.wait(0.025)
 
 							Click()
 
-							task.wait(1 / Settings.AutoClicker.Cps)
+							task.wait(0.025)
 						end	
 					end)
 
@@ -2936,18 +2934,16 @@ task.spawn(function()
 						if Settings.AutoClicker.JitterClick == true then
 							Click()
 
-							task.wait((1 / Settings.AutoClicker.Cps) / 2)
+							task.wait(0.05)
 
 							Click()			
 
-							task.wait(1 / Settings.AutoClicker.Cps)
+							task.wait(0.05)
 						end
 					end)
 
 					task.spawn(function()
 						if Settings.AutoClicker.BlatantClick == true then
-							task.wait(1 / Settings.AutoClicker.Cps)
-
 							Click()
 						end
 					end)				
@@ -6854,8 +6850,10 @@ task.spawn(function()
 		Settings.Fonts.Value = CallBack
 
 		task.spawn(function()
-			if Settings.Fonts.Value == true then
-				for i, v in next, game.Workspace:GetDescendants() do
+			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
+				AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+				
+				for i, v in next, WorkSpace:GetDescendants() do
 					if v:IsA("TextLabel") then
 						v.FontFace = AlSploitFont
 					end
@@ -6868,22 +6866,24 @@ task.spawn(function()
 				end
 			end
 			
-			repeat
-				task.wait(10)
-
-				for i, v in next, game.Workspace:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
+			WorkSpace.DescendantAdded:Connect(function(v)
+				if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+					v.FontFace = AlSploitFont
 				end
-
-				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
+			end)
+			
+			LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
+				if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+					v.FontFace = AlSploitFont
 				end
-			until Settings.Fonts.Value == false
+			end)
 		end)		
+		
+		task.spawn(function()
+			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFace.json")) then
+				CreateNotification(5, "Your executor does not support custom fonts")
+			end
+		end)
 	end)
 
 	task.spawn(function()
