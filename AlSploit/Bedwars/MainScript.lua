@@ -146,7 +146,7 @@ local function CreateTab(Name)
 	Title.BorderSizePixel = 0
 	Title.Position = UDim2.new(0, 0, 0.124, 0)
 	Title.Size = UDim2.new(1, 0, 0.743, 0)
-	Title.FontFace = AlSploitFont
+	Title.Font = Enum.Font.GothamBold
 	Title.Text = Name
 	Title.TextColor3 = Color3.new(255, 255, 255)
 	Title.TextScaled = true
@@ -203,7 +203,7 @@ local function CreateToggle(Parent, Name, DefaultValue, CallBack)
 	Toggle.Position = UDim2.new(2.873, 0, 0, 0)
 	Toggle.Size = UDim2.new(1, 0, 0.041, 0)
 	Toggle.AutoButtonColor = false
-	Toggle.FontFace = AlSploitFont
+	Toggle.Font = Enum.Font.GothamBold
 	Toggle.Text = Name
 	Toggle.TextColor3 = Color3.new(1, 1, 1)
 	Toggle.TextScaled = true
@@ -266,7 +266,7 @@ local function CreateKeyBind(Parent, DefaultValue, LayoutOrder, CallBack)
 	KeyBind.Position = UDim2.new(0, 0, 0.0765, 0)
 	KeyBind.Size = UDim2.new(1, 0, 0.025, 0)
 	KeyBind.AutoButtonColor = false
-	KeyBind.FontFace = AlSploitFont
+	KeyBind.Font = Enum.Font.GothamBold
 	KeyBind.Text = "KeyBind: " .. DefaultValue
 	KeyBind.TextColor3 = Color3.new(1, 1, 1)
 	KeyBind.TextScaled = true
@@ -351,7 +351,7 @@ local function CreateMiniToggle(Parent, Name, DefaultValue, LayoutOrder, CallBac
 	MiniToggle.Position = UDim2.new(0, 0, 0.0765, 0)
 	MiniToggle.Size = UDim2.new(1, 0, 0.0354, 0)
 	MiniToggle.AutoButtonColor = false
-	MiniToggle.FontFace = AlSploitFont
+	MiniToggle.Font = Enum.Font.GothamBold
 	MiniToggle.Text = Name
 	MiniToggle.TextColor3 = Color3.new(1, 1, 1)
 	MiniToggle.TextSize = 11
@@ -427,7 +427,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	Bar.Size = UDim2.new(0.0650, 0, 3.725, 0)
 	Bar.ZIndex = 2
 	Bar.AutoButtonColor = false
-	Bar.FontFace = AlSploitFont
+	Bar.Font = Enum.Font.GothamBold
 	Bar.Text = ""
 	Bar.TextColor3 = Color3.new(1, 1, 1)
 	Bar.TextSize = 14.000
@@ -448,7 +448,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	NameDisplay.BorderSizePixel = 0
 	NameDisplay.Position = UDim2.new(0.145, 0, -0.118, 0)
 	NameDisplay.Size = UDim2.new(0, 50, 0, 30)
-	NameDisplay.FontFace = AlSploitFont
+	NameDisplay.Font = Enum.Font.GothamBold
 	NameDisplay.Text = Name
 	NameDisplay.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	NameDisplay.TextScaled = true
@@ -465,7 +465,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 	ValueDisplay.BorderSizePixel = 0
 	ValueDisplay.Position = UDim2.new(0.635, 0, -0.118, 0)
 	ValueDisplay.Size = UDim2.new(0, 50, 0, 30)
-	ValueDisplay.FontFace = AlSploitFont
+	ValueDisplay.Font = Enum.Font.GothamBold
 	ValueDisplay.Text = DefaultValue
 	ValueDisplay.TextColor3 = Color3.new(0.411765, 0.215686, 1)
 	ValueDisplay.TextScaled = true
@@ -581,7 +581,7 @@ local function CreateNotification(Duration, Message)
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(-0.00264, 0, 0, 0)
 	Text.Size = UDim2.new(1, 0, 1, 0)
-	Text.FontFace = AlSploitFont
+	Text.Font = Enum.Font.GothamBold
 	Text.Text = Message
 	Text.TextColor3 = Color3.new(255, 255, 255)
 	Text.TextScaled = true
@@ -685,7 +685,7 @@ local function CreateTargetHud()
 	PlayerName.BorderSizePixel = 0
 	PlayerName.Position = UDim2.new(0, 0, 0, 0)
 	PlayerName.Size = UDim2.new(1, 0, 0.480, 0)
-	PlayerName.FontFace = AlSploitFont
+	PlayerName.Font = Enum.Font.GothamBold
 	PlayerName.Text = ""
 	PlayerName.TextColor3 = Color3.new(0, 0.6, 1)
 	PlayerName.TextScaled = true
@@ -703,7 +703,7 @@ local function CreateTargetHud()
 	Health.BorderSizePixel = 0
 	Health.Position = UDim2.new(0, 0, 0.471, 0)
 	Health.Size = UDim2.new(1, 0, 0.354, 0)
-	Health.FontFace = AlSploitFont
+	Health.Font = Enum.Font.GothamBold
 	Health.Text = "Health: 100"
 	Health.TextColor3 = Color3.new(0, 0.6, 1)
 	Health.TextScaled = true
@@ -721,7 +721,7 @@ local function CreateTargetHud()
 	_100HP.BorderSizePixel = 0
 	_100HP.Position = UDim2.new(0.770, 0, 0.725, 0)
 	_100HP.Size = UDim2.new(0.230, 0, 0.249, 0)
-	_100HP.FontFace = AlSploitFont
+	_100HP.Font = Enum.Font.GothamBold
 	_100HP.Text = "100 HP"
 	_100HP.TextColor3 = Color3.new(0, 0.6, 1)
 	_100HP.TextScaled = true
@@ -739,7 +739,7 @@ local function CreateTargetHud()
 	Status.BorderSizePixel = 0
 	Status.Position = UDim2.new(0, 0, 0.725, 0)
 	Status.Size = UDim2.new(0.228, 0, 0.249, 0)
-	Status.FontFace = AlSploitFont
+	Status.Font = Enum.Font.GothamBold
 	Status.Text = "Win"
 	Status.TextColor3 = Color3.fromRGB(0, 255, 0)
 	Status.TextScaled = true
@@ -795,7 +795,7 @@ local function CreateFlyHud()
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(-0.00333, 0, 0.511, 0)
 	Text.Size = UDim2.new(1, 0, 0.489, 0)
-	Text.FontFace = AlSploitFont
+	Text.Font = Enum.Font.GothamBold
 	Text.Text = "1"
 	Text.TextColor3 = Color3.new(0, 0.6, 1)
 	Text.TextScaled = true
@@ -5400,7 +5400,7 @@ task.spawn(function()
 									v.BackgroundTransparency = 1
 									v.TextColor3 = Color3.new(1, 1, 1)	
 									v.Position = v.Position + UDim2.new(0, 2, 0, 2)
-									v.FontFace = AlSploitFont									
+									v.Font = Enum.Font.GothamBold									
 								end
 							end)
 						end					
@@ -5435,7 +5435,7 @@ task.spawn(function()
 							v.BackgroundTransparency = 1
 							v.TextColor3 = Color3.new(1, 1, 1)	
 							v.Position = v.Position + UDim2.new(0, 2, 0, 2)
-							v.FontFace = AlSploitFont	
+							v.Font = Enum.Font.GothamBold	
 						end
 					end)
 				end
@@ -5462,7 +5462,7 @@ task.spawn(function()
 						if v:IsA("TextLabel") then
 							v.BackgroundTransparency = 0	
 							v.Position = v.Position - UDim2.new(0, 2, 0, 2)
-							v.FontFace = AlSploitFont	
+							v.Font = Enum.Font.GothamBold	
 						end
 					end)
 				end
@@ -6851,7 +6851,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
-				AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
 				
 				for i, v in next, WorkSpace:GetDescendants() do
 					if v:IsA("TextLabel") then
@@ -6864,19 +6864,19 @@ task.spawn(function()
 						v.FontFace = AlSploitFont
 					end
 				end
-			end
-			
-			WorkSpace.DescendantAdded:Connect(function(v)
-				if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-					v.FontFace = AlSploitFont
-				end
-			end)
-			
-			LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
-				if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-					v.FontFace = AlSploitFont
-				end
-			end)
+				
+				WorkSpace.DescendantAdded:Connect(function(v)
+					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end)
+
+				LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
+					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end)
+			end						
 		end)		
 		
 		task.spawn(function()
