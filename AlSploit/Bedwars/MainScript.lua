@@ -6849,9 +6849,9 @@ task.spawn(function()
 	local Fonts, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "Fonts", Settings.Fonts.Value, function(CallBack)
 		Settings.Fonts.Value = CallBack
 
-		task.spawn(function()
-			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
-				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+		task.spawn(function()			
+			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFont.json") then
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
 				
 				for i, v in next, WorkSpace:GetDescendants() do
 					if v:IsA("TextLabel") then
@@ -6880,7 +6880,7 @@ task.spawn(function()
 		end)		
 		
 		task.spawn(function()
-			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFace.json")) then
+			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFont.json")) then
 				CreateNotification(5, "Your executor does not support custom fonts")
 			end
 		end)
