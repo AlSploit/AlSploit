@@ -6865,6 +6865,12 @@ task.spawn(function()
 					end
 				end
 				
+				for i, v in next, AlSploit:GetDescendants() do
+					if v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end
+				
 				WorkSpace.DescendantAdded:Connect(function(v)
 					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
 						v.FontFace = AlSploitFont
