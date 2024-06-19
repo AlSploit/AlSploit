@@ -6849,33 +6849,29 @@ task.spawn(function()
 	local Fonts, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "Fonts", Settings.Fonts.Value, function(CallBack)
 		Settings.Fonts.Value = CallBack
 
-		task.spawn(function()
-			print("1")
-			
-			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFont.json") then
-				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
-				
+		task.spawn(function()			
+			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFont.json") then				
 				for i, v in next, WorkSpace:GetDescendants() do
 					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+						v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
 					end
 				end
 
 				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
 					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+						v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
 					end
 				end
 				
 				WorkSpace.DescendantAdded:Connect(function(v)
 					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+						v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
 					end
 				end)
 
 				LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
 					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+						v.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
 					end
 				end)
 			end						
