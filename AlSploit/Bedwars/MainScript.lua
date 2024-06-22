@@ -6853,23 +6853,25 @@ task.spawn(function()
 			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
 				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
 				
-				for i, v in next, WorkSpace:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+				task.spawn(function()
+					for i, v in next, WorkSpace:GetDescendants() do
+						if v:IsA("TextLabel") then
+							v.FontFace = AlSploitFont
+						end
 					end
-				end
 
-				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+					for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+						if v:IsA("TextLabel") then
+							v.FontFace = AlSploitFont
+						end
 					end
-				end
-				
-				for i, v in next, AlSploit:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+
+					for i, v in next, ContainerFrame:GetDescendants() do
+						if v:IsA("TextLabel") then
+							v.FontFace = AlSploitFont
+						end
 					end
-				end
+				end)		
 				
 				WorkSpace.DescendantAdded:Connect(function(v)
 					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
@@ -6878,6 +6880,12 @@ task.spawn(function()
 				end)
 
 				LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
+					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end)
+				
+				AlSploit.DescendantAdded:Connect(function(v)
 					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
 						v.FontFace = AlSploitFont
 					end
