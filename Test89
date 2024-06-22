@@ -3332,7 +3332,7 @@ task.spawn(function()
 							end)					
 
 							task.spawn(function()
-								if HasItem("fireball") and not (HasItem("arrow") or BestBow) then
+								if HasItem("fireball") then
 									local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
 
 									task.spawn(function()
@@ -3566,66 +3566,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
-		Settings.AutoConsume.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-				
-				local SpeedPotion = HasItem("speed_potion")
-				local SpeedPie = HasItem("pie")
-				
-				if SpeedPotion then
-					ConsumeItemRemote:InvokeServer(SpeedPotion)
-				end
-				
-				if SpeedPie then
-					ConsumeItemRemote:InvokeServer(SpeedPie)
-				end
-			until Settings.AutoConsume.Value == false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.AutoConsume.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
-					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
-
-					if Settings.AutoConsume.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.AutoConsume.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "NoPlacementCps", Settings.NoPlacementCps.Value, function(CallBack)
 		Settings.NoPlacementCps.Value = CallBack
 
@@ -3676,6 +3616,66 @@ task.spawn(function()
 					end
 
 					if Settings.NoPlacementCps.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
+		Settings.AutoConsume.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				local SpeedPotion = HasItem("speed_potion")
+				local SpeedPie = HasItem("pie")
+
+				if SpeedPotion then
+					ConsumeItemRemote:InvokeServer(SpeedPotion)
+				end
+
+				if SpeedPie then
+					ConsumeItemRemote:InvokeServer(SpeedPie)
+				end
+			until Settings.AutoConsume.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AutoConsume.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
+					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
+
+					if Settings.AutoConsume.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AutoConsume.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -6923,7 +6923,7 @@ task.spawn(function()
 		Settings.Fonts.Value = CallBack
 
 		task.spawn(function()			
-			if Settings.Fonts.Value == true and AlsploitFont then				
+			if Settings.Fonts.Value == true and AlsploitFont ~= nil then				
 				task.spawn(function()
 					for i, v in next, WorkSpace:GetDescendants() do
 						if v:IsA("TextLabel") then
