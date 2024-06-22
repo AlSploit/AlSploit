@@ -25,6 +25,13 @@ local Open = Instance.new("ImageButton")
 local Blur = Instance.new("BlurEffect")
 
 local DefaultLayoutOrder = 0
+local AlSploitFont = nil
+
+task.spawn(function()
+	if getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
+		AlsploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	end
+end)
 
 task.spawn(function()
 	AlSploit.Name = "AlSploit"
@@ -868,14 +875,18 @@ local function CreateSettingsFile()
 	Settings = {
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
+		RecallPlayerTp = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
+		ScytheDisabler = {KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
+		RecallBedTp = {KeyBind = "..."},
 		AutoClicker = {Cps = 100, ButterFlyClick = false, BlatantClick = true, JitterClick = false, KeyBind = "..."},
 		NoKnockBack = {KeyBind = "..."},
 		InfiniteFly = {KeyBind = "..."},
 		DamageBoost = {KeyBind = "..."},
-		ChatSpammer = {Speed = 50, KeyBind = "..."},
+		ChatSpammer = {Speed = 50, KeyBind = "..."},		
+		AutoConsume = {KeyBind = "..."},
 		FpsBooster = {KeyBind = "..."},
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
@@ -928,9 +939,7 @@ local function CreateSettingsFile()
 			Loaded = true
 		end
 
-		if writefile and makefolder and readfile and isfile then 
-			makefolder("AlSploitBedwarsConfigSaving")
-
+		if writefile then 
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
 			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
@@ -1049,6 +1058,7 @@ local ChestGiveItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):Wai
 local ChestGetItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/ChestGetItem")
 local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem")
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
+local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
 
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
@@ -1069,6 +1079,7 @@ local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby
 local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
 local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
+
 local DamageIndicator
 
 task.spawn(function()
@@ -3544,6 +3555,66 @@ task.spawn(function()
 					end
 
 					if Settings.Sprint.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
+		Settings.AutoConsume.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+				
+				local SpeedPotion = HasItem("speed_potion")
+				local SpeedPie = HasItem("pie")
+				
+				if SpeedPotion then
+					ConsumeItemRemote:InvokeServer(SpeedPotion)
+				end
+				
+				if SpeedPie then
+					ConsumeItemRemote:InvokeServer(SpeedPie)
+				end
+			until Settings.AutoConsume.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AutoConsume.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
+					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
+
+					if Settings.AutoConsume.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AutoConsume.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -6850,26 +6921,26 @@ task.spawn(function()
 		Settings.Fonts.Value = CallBack
 
 		task.spawn(function()			
-			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFont.json") then
-				local AlSploitFont = Font.new(getcustomasset("Fonts/MinecraftFace.json"))
-				
-				for i, v in next, WorkSpace:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+			if Settings.Fonts.Value == true and AlsploitFont then				
+				task.spawn(function()
+					for i, v in next, WorkSpace:GetDescendants() do
+						if v:IsA("TextLabel") then
+							v.FontFace = AlSploitFont
+						end
 					end
-				end
 
-				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+					for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+						if v:IsA("TextLabel") then
+							v.FontFace = AlSploitFont
+						end
 					end
-				end
-				
-				for i, v in next, AlSploit:GetDescendants() do
-					if v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
+
+					for i, v in next, ContainerFrame:GetDescendants() do
+						if v:IsA("TextLabel") then
+							v.FontFace = AlSploitFont
+						end
 					end
-				end
+				end)		
 				
 				WorkSpace.DescendantAdded:Connect(function(v)
 					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
@@ -6882,11 +6953,17 @@ task.spawn(function()
 						v.FontFace = AlSploitFont
 					end
 				end)
+				
+				AlSploit.DescendantAdded:Connect(function(v)
+					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end)
 			end						
 		end)		
 		
 		task.spawn(function()
-			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFont.json")) then
+			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFace.json")) then
 				CreateNotification(5, "Your executor does not support custom fonts")
 			end
 		end)
