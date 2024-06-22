@@ -865,7 +865,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration.lua"
+local SaveFileName = "AlSploitConfiguration1.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -939,7 +939,9 @@ local function CreateSettingsFile()
 			Loaded = true
 		end
 
-		if writefile then 
+		if writefile and makefolder and readfile and isfile then 
+			makefolder("AlSploitBedwarsConfigSaving")
+
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
 			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
