@@ -213,8 +213,8 @@ local function LoadFiles()
 		writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
 	end
 	
-	if not isfile("AlSploit/Fonts/MinecraftFont.json") then		
-		writefile("AlSploit/Fonts/MinecraftFont.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 300, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
+	if not isfile("AlSploit/Fonts/MinecraftFace.json") then		
+		writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 300, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
 	end
 end
 
