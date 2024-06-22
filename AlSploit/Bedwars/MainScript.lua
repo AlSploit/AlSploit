@@ -6850,8 +6850,8 @@ task.spawn(function()
 		Settings.Fonts.Value = CallBack
 
 		task.spawn(function()			
-			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFont.json") then
-				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFont.json"))
+			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
 				
 				for i, v in next, WorkSpace:GetDescendants() do
 					if v:IsA("TextLabel") then
@@ -6860,6 +6860,12 @@ task.spawn(function()
 				end
 
 				for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+					if v:IsA("TextLabel") then
+						v.FontFace = AlSploitFont
+					end
+				end
+				
+				for i, v in next, AlSploit:GetDescendants() do
 					if v:IsA("TextLabel") then
 						v.FontFace = AlSploitFont
 					end
@@ -6880,7 +6886,7 @@ task.spawn(function()
 		end)		
 		
 		task.spawn(function()
-			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFont.json")) then
+			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFace.json")) then
 				CreateNotification(5, "Your executor does not support custom fonts")
 			end
 		end)
