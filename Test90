@@ -3636,11 +3636,11 @@ task.spawn(function()
 				local SpeedPie = HasItem("pie")
 
 				if SpeedPotion then
-					ConsumeItemRemote:InvokeServer(SpeedPotion)
+					ConsumeItemRemote:InvokeServer(SpeedPotion.tool)
 				end
 
 				if SpeedPie then
-					ConsumeItemRemote:InvokeServer(SpeedPie)
+					ConsumeItemRemote:InvokeServer(SpeedPie.tool)
 				end
 			until Settings.AutoConsume.Value == false
 		end)
