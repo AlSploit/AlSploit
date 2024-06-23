@@ -3638,11 +3638,11 @@ task.spawn(function()
 				task.spawn(function()
 					if IsAlive(LocalPlayer) then
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
-							ConsumeItemRemote:InvokeServer({SpeedPotion.tool})
+							ConsumeItemRemote:InvokeServer({SpeedPotion})
 						end
 
 						if SpeedPie then
-							ConsumeItemRemote:InvokeServer({SpeedPie.tool})
+							ConsumeItemRemote:InvokeServer({SpeedPie})
 						end
 					end
 				end)		
