@@ -1991,14 +1991,25 @@ function GetBlock()
 	end
 end
 
-local function HasItem(Name)
+
+local function GetItem(Name)
 	for i, v in next, GetInventory(LocalPlayer).items do
 		if v.itemType:find(Name) then
-			return v 
+			return v
 		end
 	end	
 
 	return nil
+end
+
+local function HasItem(Name)
+	for i, v in next, GetInventory(LocalPlayer).items do
+		if v.itemType:find(Name) then
+			return true
+		end
+	end	
+
+	return false
 end
 
 local function AutoBuy()
@@ -7100,6 +7111,4 @@ task.spawn(function()
 	end)
 end)
 
-for i, v in next, GetInventory(LocalPlayer).items do
-	print(v.itemType)
-end	
+print(GetItem("speed_potion"))
