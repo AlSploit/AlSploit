@@ -3639,7 +3639,7 @@ task.spawn(function()
 					if IsAlive(LocalPlayer) then
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
 							ConsumeItemRemote:InvokeServer({
-								workspace[LocalPlayer.Name].InventoryFolder.Value:WaitForChild("pie")
+								workspace[LocalPlayer.Name].InventoryFolder.Value:WaitForChild("speed_potion")
 							})
 						end
 
