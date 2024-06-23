@@ -1121,6 +1121,7 @@ task.spawn(function()
 	end
 end)
 
+local MainInventory = WorkSpace
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
@@ -7099,8 +7100,6 @@ task.spawn(function()
 	end)
 end)
 
-task.spawn(function()
-	for i, v in next, GetInventory(LocalPlayer) do
-		print(v.itemType)
-	end
-end)
+for i, v in next, GetInventory(LocalPlayer).items do
+	print(v.itemType)
+end	
