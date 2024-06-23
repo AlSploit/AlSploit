@@ -1121,6 +1121,7 @@ task.spawn(function()
 	end
 end)
 
+local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
@@ -3639,12 +3640,14 @@ task.spawn(function()
 					if IsAlive(LocalPlayer) then
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
 							ConsumeItemRemote:InvokeServer({
-								["item"] = SpeedPotion
+								["item"] = MainInventory:FindFirstChild("speed_potion")
 							})
 						end
 
 						if SpeedPie then
-							ConsumeItemRemote:InvokeServer({SpeedPie})
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("pie")
+							})
 						end
 					end
 				end)		
