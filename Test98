@@ -7098,3 +7098,9 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+task.spawn(function()
+	for i, v in next, GetInventory(LocalPlayer) do
+		print(v.itemType)
+	end
+end)
