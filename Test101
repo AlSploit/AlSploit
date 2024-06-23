@@ -3643,23 +3643,21 @@ task.spawn(function()
 		task.spawn(function()
 			repeat
 				task.wait()
-
-				local SpeedPotion = HasItem("speed_potion")
-				local SpeedPie = HasItem("pie")
 				
-				task.spawn(function()
-					if IsAlive(LocalPlayer) then
+				if IsAlive(LocalPlayer) then
+					local SpeedPotion = HasItem("speed_potion")
+					local SpeedPie = HasItem("pie")
+
+					task.spawn(function()
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
+							SpeedPotion = GetItem(SpeedPotion.itemType)
+
 							ConsumeItemRemote:InvokeServer({
-								["item"] = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("speed_potion")
+								["item"] = SpeedPotion
 							})
 						end
-
-						if SpeedPie then
-							ConsumeItemRemote:InvokeServer({SpeedPie})
-						end
-					end
-				end)		
+					end)
+				end						
 			until Settings.AutoConsume.Value == false
 		end)
 	end)
@@ -7110,5 +7108,3 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
-
-print(GetItem("speed_potion"))
