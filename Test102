@@ -1121,7 +1121,6 @@ task.spawn(function()
 	end
 end)
 
-local MainInventory = WorkSpace
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
@@ -1991,25 +1990,14 @@ function GetBlock()
 	end
 end
 
-
-local function GetItem(Name)
+local function HasItem(Name)
 	for i, v in next, GetInventory(LocalPlayer).items do
 		if v.itemType:find(Name) then
-			return v
+			return v 
 		end
 	end	
 
 	return nil
-end
-
-local function HasItem(Name)
-	for i, v in next, GetInventory(LocalPlayer).items do
-		if v.itemType:find(Name) then
-			return true
-		end
-	end	
-
-	return false
 end
 
 local function AutoBuy()
@@ -3643,21 +3631,23 @@ task.spawn(function()
 		task.spawn(function()
 			repeat
 				task.wait()
+
+				local SpeedPotion = HasItem("speed_potion")
+				local SpeedPie = HasItem("pie")
 				
-				if IsAlive(LocalPlayer) then
-					local SpeedPotion = HasItem("speed_potion")
-					local SpeedPie = HasItem("pie")
-
-					task.spawn(function()
+				task.spawn(function()
+					if IsAlive(LocalPlayer) then
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
-							SpeedPotion = GetItem(SpeedPotion.itemType)
-
 							ConsumeItemRemote:InvokeServer({
-								["item"] = SpeedPotion
+								workspace[LocalPlayer.Name].InventoryFolder.Value:WaitForChild("pie")
 							})
 						end
-					end)
-				end						
+
+						if SpeedPie then
+							ConsumeItemRemote:InvokeServer({SpeedPie})
+						end
+					end
+				end)		
 			until Settings.AutoConsume.Value == false
 		end)
 	end)
