@@ -1,4 +1,4 @@
-local Owner = "56345b7435"
+local Owner = "asgasdgsadg4523"
 
 local LocalPlayer = game.Players.LocalPlayer
 
@@ -614,6 +614,144 @@ local function CreateNotification(Duration, Message)
 	end)
 end
 
+local function CreateTargetHud()
+	local Background = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+	local DisplayBackground = Instance.new("Frame")
+	local UICorner_2 = Instance.new("UICorner")
+	local Display = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+	local PlayerName = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local Health = Instance.new("TextLabel")
+	local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+	local _100HP = Instance.new("TextLabel")
+	local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+	local Status = Instance.new("TextLabel")
+	local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
+
+	Background.Name = "Background"
+	Background.Parent = AlSploit
+	Background.BackgroundColor3 = Color3.new(0, 0, 0)
+	Background.BackgroundTransparency = 0.250
+	Background.BorderColor3 = Color3.new(0, 0, 0)
+	Background.BorderSizePixel = 0
+	Background.Position = UDim2.new(0.397, 0, 0.576, 0)
+	Background.Size = UDim2.new(0.2, 0, 0.116, 0)
+
+	UICorner.Parent = Background
+
+	UIStroke.Parent = Background
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Thickness = 2
+
+	task.spawn(function()
+		repeat
+			task.wait(0.001)
+
+			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+		until not game
+	end)
+
+	DisplayBackground.Name = "DisplayBackground"
+	DisplayBackground.Parent = Background
+	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
+	DisplayBackground.BorderColor3 = Color3.new(0, 0, 0)
+	DisplayBackground.BorderSizePixel = 0
+	DisplayBackground.Position = UDim2.new(0.226, 0, 0.825, 0)
+	DisplayBackground.Size = UDim2.new(0.545, 0, 0.0729, 0)
+
+	UICorner_2.CornerRadius = UDim.new(0, 6)
+	UICorner_2.Parent = DisplayBackground
+
+	Display.Name = "Display"
+	Display.Parent = DisplayBackground
+	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
+	Display.BorderColor3 = Color3.new(0, 0, 0)
+	Display.BorderSizePixel = 0
+	Display.Position = UDim2.new(0, 0, 0, 0)
+	Display.Size = UDim2.new(1, 0, 1, 0)
+	Display.ZIndex = 2
+
+	UICorner_3.CornerRadius = UDim.new(0, 6)
+	UICorner_3.Parent = Display
+
+	PlayerName.Name = "PlayerName"
+	PlayerName.Parent = Background
+	PlayerName.BackgroundColor3 = Color3.new(1, 1, 1)
+	PlayerName.BackgroundTransparency = 1.000
+	PlayerName.BorderColor3 = Color3.new(0, 0, 0)
+	PlayerName.BorderSizePixel = 0
+	PlayerName.Position = UDim2.new(0, 0, 0, 0)
+	PlayerName.Size = UDim2.new(1, 0, 0.480, 0)
+	PlayerName.Font = Enum.Font.GothamBold
+	PlayerName.Text = ""
+	PlayerName.TextColor3 = Color3.new(0, 0.6, 1)
+	PlayerName.TextScaled = true
+	PlayerName.TextSize = 18.000
+	PlayerName.TextWrapped = true
+
+	UITextSizeConstraint.Parent = PlayerName
+	UITextSizeConstraint.MaxTextSize = 18
+
+	Health.Name = ""
+	Health.Parent = Background
+	Health.BackgroundColor3 = Color3.new(1, 1, 1)
+	Health.BackgroundTransparency = 1.000
+	Health.BorderColor3 = Color3.new(0, 0, 0)
+	Health.BorderSizePixel = 0
+	Health.Position = UDim2.new(0, 0, 0.471, 0)
+	Health.Size = UDim2.new(1, 0, 0.354, 0)
+	Health.Font = Enum.Font.GothamBold
+	Health.Text = "Health: 100"
+	Health.TextColor3 = Color3.new(0, 0.6, 1)
+	Health.TextScaled = true
+	Health.TextSize = 15.000
+	Health.TextWrapped = true
+
+	UITextSizeConstraint_2.Parent = Health
+	UITextSizeConstraint_2.MaxTextSize = 15
+
+	_100HP.Name = "100HP"
+	_100HP.Parent = Background
+	_100HP.BackgroundColor3 = Color3.new(1, 1, 1)
+	_100HP.BackgroundTransparency = 1.000
+	_100HP.BorderColor3 = Color3.new(0, 0, 0)
+	_100HP.BorderSizePixel = 0
+	_100HP.Position = UDim2.new(0.770, 0, 0.725, 0)
+	_100HP.Size = UDim2.new(0.230, 0, 0.249, 0)
+	_100HP.Font = Enum.Font.GothamBold
+	_100HP.Text = "100 HP"
+	_100HP.TextColor3 = Color3.new(0, 0.6, 1)
+	_100HP.TextScaled = true
+	_100HP.TextSize = 15.000
+	_100HP.TextWrapped = true
+
+	UITextSizeConstraint_3.Parent = _100HP
+	UITextSizeConstraint_3.MaxTextSize = 15
+
+	Status.Name = "Status"
+	Status.Parent = Background
+	Status.BackgroundColor3 = Color3.new(1, 1, 1)
+	Status.BackgroundTransparency = 1.000
+	Status.BorderColor3 = Color3.new(0, 0, 0)
+	Status.BorderSizePixel = 0
+	Status.Position = UDim2.new(0, 0, 0.725, 0)
+	Status.Size = UDim2.new(0.228, 0, 0.249, 0)
+	Status.Font = Enum.Font.GothamBold
+	Status.Text = "Win"
+	Status.TextColor3 = Color3.fromRGB(0, 255, 0)
+	Status.TextScaled = true
+	Status.TextSize = 15.000
+	Status.TextWrapped = true
+
+	UITextSizeConstraint_4.Parent = Status
+	UITextSizeConstraint_4.MaxTextSize = 15
+
+	return Background, PlayerName, Display, Health, Status
+end
+
 local function CreateFlyHud()
 	local Background = Instance.new("Frame")
 	local UIStroke = Instance.new("UIStroke")
@@ -659,7 +797,7 @@ local function CreateFlyHud()
 	Text.Size = UDim2.new(1, 0, 0.489, 0)
 	Text.Font = Enum.Font.GothamBold
 	Text.Text = "1"
-	Text.TextColor3 = Color3.new(0.411765, 0.215686, 1)
+	Text.TextColor3 = Color3.new(0, 0.6, 1)
 	Text.TextScaled = true
 	Text.TextSize = 20
 	Text.TextWrapped = true
@@ -680,7 +818,7 @@ local function CreateFlyHud()
 
 	Display.Name = "Display"
 	Display.Parent = DisplayBackground
-	Display.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
+	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
 	Display.BorderColor3 = Color3.new(0, 0, 0)
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(0, 0, 0, 0)
@@ -711,7 +849,7 @@ function CreateOutline(Player)
 
 		UIStroke.Thickness = 1.5
 		UIStroke.Color = Player.TeamColor.Color
-			
+
 		UIStroke.Transparency = 0
 		UIStroke.Parent = Frame
 	end
@@ -720,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitRebornSaving45322425.lua"
+local SaveFileName = "AlSploitConfiguration1.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -730,18 +868,23 @@ local function CreateSettingsFile()
 	Settings = {
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
+		RecallPlayerTp = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
+		ScytheDisabler = {KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
+		RecallBedTp = {KeyBind = "..."},
 		AutoClicker = {Cps = 100, ButterFlyClick = false, BlatantClick = true, JitterClick = false, KeyBind = "..."},
-		NoKnockBack = {KeyBind = "..."},	
+		NoKnockBack = {KeyBind = "..."},
 		InfiniteFly = {KeyBind = "..."},
 		DamageBoost = {KeyBind = "..."},
-		ChatSpammer = {Speed = 50, KeyBind = "..."},
+		ChatSpammer = {Speed = 50, KeyBind = "..."},		
+		AutoConsume = {KeyBind = "..."},
 		FpsBooster = {KeyBind = "..."},
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
 		MotionBlur = {KeyBind = "..."},
+		TargetHud = {Range = 20, KeyBind = "..."},
 		WinterSky = {KeyBind = "..."},
 		NoNameTag = {KeyBind = "..."},
 		AntiStaff = {Kick = false, KeyBind = "..."},
@@ -765,6 +908,7 @@ local function CreateSettingsFile()
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 25, KeyBind = "..."},
 		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
+		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
 		Nuker = {Range = 30, CustomAnimation = true, BreakOres = true, KeyBind = "..."},
@@ -789,21 +933,19 @@ local function CreateSettingsFile()
 		end
 
 		if writefile and makefolder and readfile and isfile then 
-			makefolder("AlSploitBedwarsConfigSaving")
-
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-			writefile("AlSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)
+			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
 		end
 	end)	
 end
 
 local function CheckFirstTime()
-	if isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
+	if isfile("AlSploit/Bedwars" .. SaveFileName) then
 		return false
 	end
 
-	if not isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
+	if not isfile("AlSploit/Bedwars" .. SaveFileName) then
 		return true
 	end
 end
@@ -811,12 +953,12 @@ end
 local function SaveSettings()	
 	local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-	writefile("AlSploitBedwarsConfigSaving/" .. SaveFileName, JSONEncodeSettings)	
+	writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)	
 end
 
 local function LoadSettings()
-	if isfile("AlSploitBedwarsConfigSaving/" .. SaveFileName) then
-		Settings = HttpService:JSONDecode(readfile("AlSploitBedwarsConfigSaving/" .. SaveFileName))
+	if isfile("AlSploit/Bedwars" .. SaveFileName) then
+		Settings = HttpService:JSONDecode(readfile("AlSploit/Bedwars" .. SaveFileName))
 
 		Loaded = true
 	end
@@ -909,6 +1051,7 @@ local ChestGiveItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):Wai
 local ChestGetItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/ChestGetItem")
 local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem")
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
+local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
 
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
@@ -929,6 +1072,7 @@ local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby
 local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
 local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
+
 local DamageIndicator
 
 task.spawn(function()
@@ -968,6 +1112,7 @@ task.spawn(function()
 	end
 end)
 
+local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
@@ -1466,7 +1611,7 @@ local function CreateTracer(Player)
 		local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
 
 		local Tracer = Drawing.new("Line")
-		
+
 		Tracer.Visible = false
 		Tracer.Color = Player.TeamColor.Color
 		Tracer.Thickness = 1.5
@@ -1475,23 +1620,23 @@ local function CreateTracer(Player)
 		task.spawn(function()
 			repeat
 				task.wait()
-				
+
 				if IsAlive(Player) then
 					local Vector, OnScreen = Camera:WorldToViewportPoint(Player.Character.PrimaryPart.Position)
 
 					Tracer.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 1)
 					Tracer.To = Vector2.new(Vector.X, Vector.Y)			
-					
+
 					if OnScreen == true then
 						Tracer.Visible = true
 					end
-					
+
 					if OnScreen == false then
 						Tracer.Visible = false
 					end
 				end		
 			until Settings.Tracers.Value == false or not IsAlive(Player)
-			
+
 			Tracer:Remove()
 		end)
 	end
@@ -1814,7 +1959,7 @@ function GetSpeed()
 		if type(ZephyrOrb) == "number" and ZephyrOrb > 0 then
 			Speed = Speed + 19
 		end
-		
+
 		if (tick() - JadeHammerTick) <= 1.4 then
 			Speed = Speed + 30
 		end
@@ -2281,11 +2426,11 @@ local function AutoKit()
 			end
 		end
 	end)
-	
+
 	task.spawn(function()
 		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
 			JadeHammerTick = tick()
-			
+
 			AbilityController:useAbility("jade_hammer_jump")
 		end			
 	end)
@@ -2520,9 +2665,9 @@ local function FlyMe()
 					NumberDisplay.Text = FlyTime		
 
 					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-					local Tween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
+					local DisplayTween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
 
-					Tween:Play()				
+					DisplayTween:Play()				
 				end				
 
 			until FlyValue == false or not IsAlive(LocalPlayer)
@@ -2693,6 +2838,7 @@ local CombatTab = CreateTab("Combat")
 local BlatantTab = CreateTab("Blatant")
 local UtilityTab = CreateTab("Utility")
 local WorldTab = CreateTab("World")
+local GuiTab = CreateTab("Gui")
 
 task.spawn(function()
 	local NoKnockBack, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "NoKnockBack", Settings.NoKnockBack.Value, function(CallBack)
@@ -2774,18 +2920,18 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(1 / Settings.AutoClicker.Cps)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					task.spawn(function()
 						if Settings.AutoClicker.ButterFlyClick == true then
 							Click()
 
-							task.wait((1 / Settings.AutoClicker.Cps) / 4)
+							task.wait(0.025)
 
 							Click()
 
-							task.wait(1 / Settings.AutoClicker.Cps)
+							task.wait(0.025)
 						end	
 					end)
 
@@ -2793,18 +2939,16 @@ task.spawn(function()
 						if Settings.AutoClicker.JitterClick == true then
 							Click()
 
-							task.wait((1 / Settings.AutoClicker.Cps) / 2)
+							task.wait(0.05)
 
 							Click()			
 
-							task.wait(1 / Settings.AutoClicker.Cps)
+							task.wait(0.05)
 						end
 					end)
 
 					task.spawn(function()
 						if Settings.AutoClicker.BlatantClick == true then
-							task.wait(1 / Settings.AutoClicker.Cps)
-
 							Click()
 						end
 					end)				
@@ -3180,7 +3324,7 @@ task.spawn(function()
 							end)					
 
 							task.spawn(function()
-								if HasItem("fireball") and not (HasItem("arrow") and (BestBow and HasItem(BestBow.itemType) or true)) then
+								if HasItem("fireball") then
 									local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
 
 									task.spawn(function()
@@ -3192,7 +3336,7 @@ task.spawn(function()
 									ShootProjectile(FireBall, "fireball")
 								end
 
-								if HasItem("snowball") and not (HasItem("arrow") and (BestBow and HasItem(BestBow.itemType) or true))  then
+								if HasItem("snowball") and not (HasItem("arrow") or BestBow) then
 									local SnowBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("snowball")
 
 									task.spawn(function()
@@ -3464,6 +3608,74 @@ task.spawn(function()
 					end
 
 					if Settings.NoPlacementCps.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
+		Settings.AutoConsume.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				local SpeedPotion = HasItem("speed_potion")
+				local SpeedPie = HasItem("pie")
+				
+				task.spawn(function()
+					if IsAlive(LocalPlayer) then
+						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("speed_potion")
+							})
+						end
+
+						if SpeedPie then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("pie")
+							})
+						end
+					end
+				end)		
+			until Settings.AutoConsume.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AutoConsume.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
+					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
+
+					if Settings.AutoConsume.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AutoConsume.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -3879,6 +4091,124 @@ task.spawn(function()
 		end)
 	end)
 end)
+
+task.spawn(function()
+	local Strafe, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Strafe", Settings.Strafe.Value, function(CallBack)
+		Settings.Strafe.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if IsAlive(LocalPlayer) then
+					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
+
+					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
+						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+						local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
+
+						StrafeTween:Play()
+					end
+				end				
+			until Settings.Strafe.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.Strafe.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Strafe.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Strafe.KeyBind then
+					Settings.Strafe.Value = not Settings.Strafe.Value
+
+					if Settings.Strafe.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Strafe.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateMiniToggle(BlatantTab, "GoBackwards", Settings.Strafe.GoBackwards, LayoutOrder + 2, function(CallBack)
+					Settings.Strafe.GoBackwards = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Strafe.Speed, 22, LayoutOrder + 3, function(CallBack)
+					Settings.Strafe.Speed = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 20, LayoutOrder + 4, function(CallBack)
+					Settings.Strafe.Range = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
 task.spawn(function()
 	local NoFall, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "NoFall", Settings.NoFall.Value, function(CallBack)
 		Settings.NoFall.Value = CallBack
@@ -4066,123 +4396,6 @@ task.spawn(function()
 			if Value == true then
 				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Speed.Speed, 23, LayoutOrder + 2, function(CallBack)
 					Settings.Speed.Speed = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local Strafe, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Strafe", Settings.Strafe.Value, function(CallBack)
-		Settings.Strafe.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-
-				if IsAlive(LocalPlayer) then
-					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
-
-					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
-						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-						local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
-
-						StrafeTween:Play()
-					end
-				end				
-			until Settings.Strafe.Value == false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.Strafe.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.Strafe.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.Strafe.KeyBind then
-					Settings.Strafe.Value = not Settings.Strafe.Value
-
-					if Settings.Strafe.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.Strafe.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateMiniToggle(BlatantTab, "GoBackwards", Settings.Strafe.GoBackwards, LayoutOrder + 2, function(CallBack)
-					Settings.Strafe.GoBackwards = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Strafe.Speed, 22, LayoutOrder + 3, function(CallBack)
-					Settings.Strafe.Speed = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 20, LayoutOrder + 4, function(CallBack)
-					Settings.Strafe.Range = CallBack
 				end)
 			end
 
@@ -5032,7 +5245,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat task.wait() until GetMatchState() ~= 0
-			
+
 			if Settings.Esp.Value == true then
 				task.spawn(function()
 					for i, v in next, PlayerService:GetPlayers() do
@@ -5067,7 +5280,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat task.wait() until GetMatchState() ~= 0
-			
+
 			if Settings.Esp.Value == false then
 				for i, v in next, PlayerService:GetPlayers() do
 					if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
@@ -5521,7 +5734,7 @@ task.spawn(function()
 					task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function(Character)
 							repeat task.wait() until IsAlive(LocalPlayer)
-							
+
 							task.wait(0.3)
 
 							if LocalPlayer.Character.Head:FindFirstChild("Nametag") then
@@ -6576,6 +6789,241 @@ task.spawn(function()
 							end
 						end)						
 					end)
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local TargetHud, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "TargetHud", Settings.TargetHud.Value, function(CallBack)
+		Settings.TargetHud.Value = CallBack
+
+		task.spawn(function()		 
+			local TargetHud, PlayerName, Display, Health, Status = CreateTargetHud()
+
+			TargetHud.Visible = false
+
+			repeat
+				task.wait()
+
+				if GetMatchState() ~= 0 and IsAlive(LocalPlayer) then
+					local NearestPlayer = FindNearestPlayer(Settings.TargetHud.Range)
+
+					if NearestPlayer then
+						TargetHud.Visible = true
+
+						local NearestPlayerMaxHealth = NearestPlayer.Character:GetAttribute("MaxHealth")
+						local NearestPlayerHealth = NearestPlayer.Character:GetAttribute("Health")
+
+						local LocalPlayerMaxHealth = LocalPlayer.Character:GetAttribute("MaxHealth")
+						local LocalPlayerHealth = LocalPlayer.Character:GetAttribute("Health")
+
+						local NearestPlayerStatus = (NearestPlayerHealth / NearestPlayerMaxHealth)
+						local LocalPlayerStatus = (LocalPlayerHealth / LocalPlayerMaxHealth)
+
+						PlayerName.Text = NearestPlayer.Name
+						Health.Text = "Health: " .. math.round(NearestPlayerHealth)
+
+						local StatusValue = (LocalPlayerStatus < NearestPlayerStatus and "Lose" or "Win")
+
+						Status.Text = StatusValue
+
+						if Status.Text == "Lose" then
+							Status.TextColor3 = Color3.new(1, 0, 0)
+						end
+
+						if Status.Text == "Win" then
+							Status.TextColor3 = Color3.new(0, 1, 0)
+						end
+
+						local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+						local HealthTween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(NearestPlayerStatus, 0, 1, 0)})
+
+						HealthTween:Play()
+					end
+
+					if not NearestPlayer then
+						TargetHud.Visible = false
+					end
+				end		
+
+				if not IsAlive(LocalPlayer) then
+					TargetHud.Visible = false
+				end
+			until Settings.TargetHud.Value == false
+
+			TargetHud.Visible = false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.TargetHud.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.TargetHud.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.TargetHud.KeyBind then
+					Settings.TargetHud.Value = not Settings.TargetHud.Value
+
+					if Settings.TargetHud.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.TargetHud.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(GuiTab, "Range", Settings.TargetHud.Range, 20, LayoutOrder + 2, function(CallBack)
+					Settings.TargetHud.Range = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local Fonts, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "Fonts", Settings.Fonts.Value, function(CallBack)
+		Settings.Fonts.Value = CallBack
+		
+		task.spawn(function()
+			if getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+				
+				task.spawn(function()			
+					if Settings.Fonts.Value == true then				
+						task.spawn(function()
+							for i, v in next, WorkSpace:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+
+							for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+
+							for i, v in next, ContainerFrame:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+						end)		
+
+						WorkSpace.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+
+						LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+
+						AlSploit.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+					end						
+				end)		
+			end
+		end)
+		
+		task.spawn(function()
+			if not getcustomasset or not isfile or not isfile("AlSploit/Fonts/MinecraftFace.json") then
+				CreateNotification(5, "Your executor does not support custom fonts")
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Fonts.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Fonts.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Fonts.KeyBind then
+					Settings.Fonts.Value = not Settings.Fonts.Value
+
+					if Settings.Fonts.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Fonts.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(GuiTab, "Range", Settings.TargetHud.Range, 20, LayoutOrder + 2, function(CallBack)
+					Settings.TargetHud.Range = CallBack
 				end)
 			end
 
