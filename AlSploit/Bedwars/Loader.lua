@@ -209,13 +209,8 @@ local function LoadFolders()
 end
 
 local function LoadFiles()
-	if not isfile("AlSploit/Fonts/Minecraft.otf") then
-		writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
-	end
-	
-	if not isfile("AlSploit/Fonts/MinecraftFace.json") then		
-		writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 500, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
-	end
+	writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)	
+	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 500, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
 end
 
 task.spawn(function()
