@@ -210,7 +210,7 @@ end
 
 local function LoadFiles()
 	writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)	
-	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({name = "Minecraft", faces = {{name = "Regular", weight = 500, style = "normal", assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
+	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({Name = "Minecraft", faces = {{Name = "Regular", Weight = 500, Style = "Normal", AssetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
 end
 
 task.spawn(function()
