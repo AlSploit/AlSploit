@@ -25,13 +25,6 @@ local Open = Instance.new("ImageButton")
 local Blur = Instance.new("BlurEffect")
 
 local DefaultLayoutOrder = 0
-local AlSploitFont = nil
-
-task.spawn(function()
-	if getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
-		AlsploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
-	end
-end)
 
 task.spawn(function()
 	AlSploit.Name = "AlSploit"
@@ -940,8 +933,6 @@ local function CreateSettingsFile()
 		end
 
 		if writefile and makefolder and readfile and isfile then 
-			makefolder("AlSploitBedwarsConfigSaving")
-
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
 			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
@@ -6930,51 +6921,57 @@ end)
 task.spawn(function()
 	local Fonts, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "Fonts", Settings.Fonts.Value, function(CallBack)
 		Settings.Fonts.Value = CallBack
-
-		task.spawn(function()			
-			if Settings.Fonts.Value == true and AlsploitFont ~= nil then				
-				task.spawn(function()
-					for i, v in next, WorkSpace:GetDescendants() do
-						if v:IsA("TextLabel") then
-							v.FontFace = AlSploitFont
-						end
-					end
-
-					for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
-						if v:IsA("TextLabel") then
-							v.FontFace = AlSploitFont
-						end
-					end
-
-					for i, v in next, ContainerFrame:GetDescendants() do
-						if v:IsA("TextLabel") then
-							v.FontFace = AlSploitFont
-						end
-					end
-				end)		
-				
-				WorkSpace.DescendantAdded:Connect(function(v)
-					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
-				end)
-
-				LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
-					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
-				end)
-				
-				AlSploit.DescendantAdded:Connect(function(v)
-					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
-				end)
-			end						
-		end)		
 		
 		task.spawn(function()
-			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFace.json")) then
+			if getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+				
+				task.spawn(function()			
+					if Settings.Fonts.Value == true then				
+						task.spawn(function()
+							for i, v in next, WorkSpace:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+
+							for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+
+							for i, v in next, ContainerFrame:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+						end)		
+
+						WorkSpace.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+
+						LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+
+						AlSploit.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+					end						
+				end)		
+			end
+		end)
+		
+		task.spawn(function()
+			if not getcustomasset or not isfile or not isfile("AlSploit/Fonts/MinecraftFace.json") then
 				CreateNotification(5, "Your executor does not support custom fonts")
 			end
 		end)
