@@ -3457,11 +3457,13 @@ task.spawn(function()
 					
 					LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 100000, 0)
 
-					repeat
-						task.wait()
-						
-						Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
-					until not Clone
+					task.spawn(function()
+						repeat
+							task.wait()
+
+							Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
+						until not Clone
+					end)			
 
 					task.wait(0.05)
 					
