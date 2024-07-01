@@ -1115,7 +1115,7 @@ task.spawn(function()
 	end
 end)
 
-local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value or nil
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
@@ -1162,12 +1162,13 @@ end
 
 local function SecureEnderChestItems()
 	local EnderChest = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name .. "_personal")
-	local Inventory = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name)
 
-	if Inventory then
-		for i, v in next, Inventory:GetChildren() do
+	if MainInventory then
+		for i, v in next, MainInventory:GetChildren() do
+			print("e1")
 			if v:IsA("Accessory") and (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
 				ChestGiveItemRemote:InvokeServer(EnderChest, v)
+				print("e2")
 			end
 		end
 	end	
@@ -1931,8 +1932,6 @@ end
 
 local function AutoBank()
 	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
-	
-	print(NearestNpc)
 
 	if NearestNpc and (WorkSpace:GetServerTimeNow() - LocalPlayer.Character:GetAttribute("LastDamageTakenTime")) > 2  then
 		CollectEnderChestItems()
@@ -1940,6 +1939,8 @@ local function AutoBank()
 
 	if not NearestNpc or (WorkSpace:GetServerTimeNow() - LocalPlayer.Character:GetAttribute("LastDamageTakenTime")) <= 2 then
 		SecureEnderChestItems()
+		
+		print("e")
 	end
 end
 
