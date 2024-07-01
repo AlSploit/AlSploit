@@ -1342,10 +1342,26 @@ local function TweenToNearestBed()
 		local NearestBed = FindNearestBed()
 
 		if NearestBed then
-			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
-			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
+			local RaycastParameters = RaycastParams.new()
+		
+			RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+			
+			local BlockRaycast = WorkSpace:Raycast((NearestBed.CFrame + Vector3.new(0, 10000, 0)), NearestBed.CFrame, RaycastParameters)
+			
+			if BlockRaycast and BlockRaycast.Position then
+				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {BlockRaycast.Position})
 
-			BedTpTween:Play()
+				BedTpTween:Play()
+			end
+			
+			if not BlockRaycast or not BlockRaycast.Position then
+				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {NearestBed.CFrame + Vector3.new(0, 15, 0)})
+
+				BedTpTween:Play()
+			end
 		end
 	end
 end
@@ -2037,6 +2053,26 @@ local function AutoBuy()
 				["shopId"] = NearestNpc.Name
 			}
 		}
+		
+		local Guitar = {
+			[1] = {
+				["shopItem"] = {
+					["amount"] = 1,
+					["lockAfterPurchase"] = true,
+					["itemType"] = "guitar",
+					["category"] = "Combat",
+					["price"] = 16,
+					["requiresKit"] = {
+						[1] = "melody"
+					},
+					["spawnWithItems"] = {
+						[1] = "guitar"
+					},
+					["currency"] = "iron"
+				},
+				["shopId"] = "1_item_shop"
+			}
+		}
 
 		local Lasso = {
 			[1] = {
@@ -2328,6 +2364,10 @@ local function AutoBuy()
 
 			if not HasItem("vacuum") and Settings.Aimbot.Value == true then
 				PurchaseItem(GompyVacuum)
+			end
+			
+			if not HasItem("guitar") and Settings.AutoKit.Value == true then
+				PurchaseItem(Guitar)
 			end
 
 			if not HasItem("lasso") and Settings.Aimbot.Value == true then
