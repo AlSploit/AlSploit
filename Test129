@@ -4041,8 +4041,8 @@ task.spawn(function()
 				task.spawn(function()
 					for i, v in next, WorkSpace:GetDescendants() do
 						if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
-							firetouchinterest(HumanoidRootPart, v, 0)
-							firetouchinterest(HumanoidRootPart, v, 1)
+							firetouchinterest(HumanoidRootPart, v.Parent, 0)
+							firetouchinterest(HumanoidRootPart, v.Parent, 1)
 						end
 					end
 				end)	
