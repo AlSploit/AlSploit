@@ -1053,6 +1053,7 @@ local ChestGetItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):Wait
 local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem")
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
 local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
+local PlayGuitarRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar")
 
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
@@ -2397,11 +2398,35 @@ local function AutoKit()
 	local NearestPlayer = FindNearestPlayer(math.huge)
 	local NearestGhost = FindNearestGhost()
 	local EquippedKit = GetEquippedKit()
+	
+	task.spawn(function()
+		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
+			JadeHammerTick = tick()
+
+			AbilityController:useAbility("jade_hammer_jump")
+		end			
+	end)
+	
+	task.spawn(function()
+		if NearestGhost then
+			if EquippedKit == "ghost_catcher" or nil then
+				CollectCollectableEntityRemote:FireServer({id = NearestGhost})
+			end
+		end
+	end)
 
 	task.spawn(function()
 		if NearestPlayer then
 			if EquippedKit == "hannah" or nil then
 				HannahPromptTriggerRemote:CallServer({victimEntity = NearestPlayer.Character, ["user"] = LocalPlayer})
+			end
+		end
+	end)
+	
+	task.spawn(function()
+		if NearestPlayer then
+			if EquippedKit == "melody" or nil then
+				PlayGuitarRemote:FireServer({healTarget = game.Players.LocalPlayer})
 			end
 		end
 	end)
@@ -2419,22 +2444,6 @@ local function AutoKit()
 			TrinitySetAngelTypeRemote:FireServer({angel = "Void"})
 		end
 	end)
-
-	task.spawn(function()
-		if NearestGhost then
-			if EquippedKit == "ghost_catcher" or nil then
-				CollectCollectableEntityRemote:FireServer({id = NearestGhost})
-			end
-		end
-	end)
-
-	task.spawn(function()
-		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
-			JadeHammerTick = tick()
-
-			AbilityController:useAbility("jade_hammer_jump")
-		end			
-	end)
 end
 
 function IsAlive(Player)
@@ -2451,7 +2460,7 @@ end
 local function SwordHit(Entity, Weapon, NearestEntityDistance)
 	local LocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 	local EntityPrimaryPart = Entity.PrimaryPart
-	local LookVector = CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * 4
+	local LookVector = CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector
 	local Magnitude = (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude
 
 	local SelfPosition
