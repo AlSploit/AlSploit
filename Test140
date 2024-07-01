@@ -1163,13 +1163,11 @@ end
 local function SecureEnderChestItems()
 	local EnderChest = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name .. "_personal")
 
-	if MainInventory then
-		for i, v in next, EnderChest:GetChildren() do
-			if (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-				ChestGiveItemRemote:InvokeServer(EnderChest, v)
-			end
+	for i, v in next, EnderChest:GetChildren() do
+		if (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
+			ChestGiveItemRemote:InvokeServer(EnderChest, v)
 		end
-	end	
+	end
 end
 
 local function TweenToNearestPlayer()
