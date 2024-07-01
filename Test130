@@ -1931,6 +1931,8 @@ end
 
 local function AutoBank()
 	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
+	
+	print(NearestNpc)
 
 	if NearestNpc and (WorkSpace:GetServerTimeNow() - LocalPlayer.Character:GetAttribute("LastDamageTakenTime")) > 2  then
 		CollectEnderChestItems()
@@ -3504,8 +3506,10 @@ task.spawn(function()
 					task.spawn(function()
 						repeat
 							task.wait()
-
-							Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
+							
+							if Clone:FindFirstChild("HumanoidRootPart") then
+								Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
+							end
 						until not Clone
 					end)			
 
