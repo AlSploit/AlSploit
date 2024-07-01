@@ -1166,7 +1166,7 @@ local function SecureEnderChestItems()
 	if MainInventory then
 		for i, v in next, MainInventory:GetChildren() do
 			if v:IsA("Accessory") and (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-				ChestGiveItemRemote:InvokeServer(EnderChest, v)
+				ChestGiveItemRemote:InvokeServer(EnderChest, v.tool)
 			end
 		end
 	end	
@@ -1931,9 +1931,13 @@ end
 local function AutoBank()
 	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
 
-	task.spawn(function()
+	if NearestNpc then
+		CollectEnderChestItems()
+	end
+
+	if not NearestNpc then
 		SecureEnderChestItems()
-	end)
+	end
 end
 
 local function FpsBoost()
