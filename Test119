@@ -1347,7 +1347,7 @@ local function TweenToNearestBed()
 			RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 			
-			local BlockRaycast = WorkSpace:Raycast((NearestBed.CFrame + Vector3.new(0, 10000, 0)), NearestBed.CFrame, RaycastParameters)
+			local BlockRaycast = WorkSpace:Raycast((NearestBed.Position + Vector3.new(0, 10000, 0)), NearestBed.CFrame, RaycastParameters)
 			
 			if BlockRaycast and BlockRaycast.Position then
 				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
