@@ -4036,13 +4036,13 @@ task.spawn(function()
 			local QueueName = GetQueueType()
 			
 			if IsAlive(LocalPlayer) and QueueName == "bridge_duel_to2" then
-				local PrimaryPart = LocalPlayer.Character.PrimaryPart
+				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 				
 				task.spawn(function()
 					for i, v in next, WorkSpace:GetDescendants() do
-						if v:IsA("TouchTransmitter") then
-							firetouchinterest(PrimaryPart, v, 0)
-							firetouchinterest(PrimaryPart, v, 1)
+						if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
+							firetouchinterest(HumanoidRootPart, v, 0)
+							firetouchinterest(HumanoidRootPart, v, 1)
 						end
 					end
 				end)	
