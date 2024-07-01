@@ -1355,13 +1355,6 @@ local function TweenToNearestBed()
 
 				BedTpTween:Play()
 			end
-			
-			if not BlockRaycast or not BlockRaycast.Position then
-				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
-				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {NearestBed.CFrame + Vector3.new(0, 15, 0)})
-
-				BedTpTween:Play()
-			end
 		end
 	end
 end
@@ -3515,7 +3508,7 @@ task.spawn(function()
 						until not Clone
 					end)			
 
-					task.wait(0.05)
+					task.wait(0.1)
 					
 					LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 					LocalPlayer.Character.HumanoidRootPart.CFrame = Clone.HumanoidRootPart.CFrame
@@ -3523,7 +3516,7 @@ task.spawn(function()
 					Camera.CameraSubject = LocalPlayer.Character
 					Clone:Destroy()
 					
-					task.wait(0.01)
+					task.wait(0.025)
 				end
 			until Settings.AntiHit.Value == false
 		end)
