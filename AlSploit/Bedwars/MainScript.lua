@@ -1,4 +1,4 @@
-local Owner = "56345b7435"
+local Owner = "asgasdgsadg4523"
 
 local LocalPlayer = game.Players.LocalPlayer
 
@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration.lua"
+local SaveFileName = "AlSploitConfiguration2.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -868,14 +868,18 @@ local function CreateSettingsFile()
 	Settings = {
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
+		RecallPlayerTp = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
+		ScytheDisabler = {KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
+		RecallBedTp = {KeyBind = "..."},
 		AutoClicker = {Cps = 100, ButterFlyClick = false, BlatantClick = true, JitterClick = false, KeyBind = "..."},
 		NoKnockBack = {KeyBind = "..."},
 		InfiniteFly = {KeyBind = "..."},
 		DamageBoost = {KeyBind = "..."},
-		ChatSpammer = {Speed = 50, KeyBind = "..."},
+		ChatSpammer = {Speed = 50, KeyBind = "..."},		
+		AutoConsume = {KeyBind = "..."},
 		FpsBooster = {KeyBind = "..."},
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
@@ -898,11 +902,12 @@ local function CreateSettingsFile()
 		Tracers = {KeyBind = "..."},
 		AutoKit = {KeyBind = "..."},
 		AntiAfk = {KeyBind = "..."},
+		AntiHit = {Range = 20, KeyBind = "..."},
 		AutoBuy = {KeyBind = "..."},
 		Sprint = {KeyBind = "..."},
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
-		Spider = {Speed = 25, KeyBind = "..."},
+		Spider = {Speed = 40, KeyBind = "..."},
 		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
@@ -929,8 +934,6 @@ local function CreateSettingsFile()
 		end
 
 		if writefile and makefolder and readfile and isfile then 
-			makefolder("AlSploitBedwarsConfigSaving")
-
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
 			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
@@ -1049,6 +1052,8 @@ local ChestGiveItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):Wai
 local ChestGetItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/ChestGetItem")
 local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem")
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
+local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
+local PlayGuitarRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar")
 
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
@@ -1069,6 +1074,7 @@ local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby
 local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
 local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
+
 local DamageIndicator
 
 task.spawn(function()
@@ -1108,6 +1114,7 @@ task.spawn(function()
 	end
 end)
 
+local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
@@ -1117,7 +1124,7 @@ local InfiniteFlyValue = false
 local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
-local JadeHammerTick = tick()
+local JadeHammerTick = 0
 local SpoofedCamera = nil
 local AntiVoidPart = nil
 local TeleportTick = tick()
@@ -1335,10 +1342,19 @@ local function TweenToNearestBed()
 		local NearestBed = FindNearestBed()
 
 		if NearestBed then
-			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
-			local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestBed.CFrame + Vector3.new(0, 10, 0)})
+			local RaycastParameters = RaycastParams.new()
+		
+			RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+			
+			local BlockRaycast = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
+			
+			if BlockRaycast and BlockRaycast.Position then
+				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
 
-			BedTpTween:Play()
+				BedTpTween:Play()
+			end
 		end
 	end
 end
@@ -1535,13 +1551,14 @@ end
 function TouchingGround()
 	if IsAlive(LocalPlayer) then
 		local Parameters = RaycastParams.new()
-		Parameters.FilterType = Enum.RaycastFilterType.Include
+		
 		Parameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
-
+		Parameters.FilterType = Enum.RaycastFilterType.Include
+	
 		local IsTouchingFloor = false
 
-		for x = 1, 1 do
-			local Origin = LocalPlayer.Character.PrimaryPart.Position + Vector3.new(x, 0, 0)
+		for i = 1, 1 do
+			local Origin = LocalPlayer.Character.PrimaryPart.Position + Vector3.new(i, 0, 0)
 
 			local Raycast = WorkSpace:Raycast(Origin, Vector3.new(0, -2.5, 0), Parameters)
 			if Raycast and Raycast.Instance then
@@ -2030,6 +2047,26 @@ local function AutoBuy()
 				["shopId"] = NearestNpc.Name
 			}
 		}
+		
+		local Guitar = {
+			[1] = {
+				["shopItem"] = {
+					["amount"] = 1,
+					["lockAfterPurchase"] = true,
+					["itemType"] = "guitar",
+					["category"] = "Combat",
+					["price"] = 16,
+					["requiresKit"] = {
+						[1] = "melody"
+					},
+					["spawnWithItems"] = {
+						[1] = "guitar"
+					},
+					["currency"] = "iron"
+				},
+				["shopId"] = "1_item_shop"
+			}
+		}
 
 		local Lasso = {
 			[1] = {
@@ -2322,6 +2359,10 @@ local function AutoBuy()
 			if not HasItem("vacuum") and Settings.Aimbot.Value == true then
 				PurchaseItem(GompyVacuum)
 			end
+			
+			if not HasItem("guitar") and Settings.AutoKit.Value == true then
+				PurchaseItem(Guitar)
+			end
 
 			if not HasItem("lasso") and Settings.Aimbot.Value == true then
 				PurchaseItem(Lasso)
@@ -2391,11 +2432,35 @@ local function AutoKit()
 	local NearestPlayer = FindNearestPlayer(math.huge)
 	local NearestGhost = FindNearestGhost()
 	local EquippedKit = GetEquippedKit()
+	
+	task.spawn(function()
+		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
+			JadeHammerTick = tick()
+
+			AbilityController:useAbility("jade_hammer_jump")
+		end			
+	end)
+	
+	task.spawn(function()
+		if NearestGhost then
+			if EquippedKit == "ghost_catcher" or nil then
+				CollectCollectableEntityRemote:FireServer({id = NearestGhost})
+			end
+		end
+	end)
 
 	task.spawn(function()
 		if NearestPlayer then
 			if EquippedKit == "hannah" or nil then
 				HannahPromptTriggerRemote:CallServer({victimEntity = NearestPlayer.Character, ["user"] = LocalPlayer})
+			end
+		end
+	end)
+	
+	task.spawn(function()
+		if NearestPlayer then
+			if EquippedKit == "melody" or nil then
+				PlayGuitarRemote:FireServer({healTarget = game.Players.LocalPlayer})
 			end
 		end
 	end)
@@ -2412,22 +2477,6 @@ local function AutoKit()
 		if EquippedKit == "angel" or nil then
 			TrinitySetAngelTypeRemote:FireServer({angel = "Void"})
 		end
-	end)
-
-	task.spawn(function()
-		if NearestGhost then
-			if EquippedKit == "ghost_catcher" or nil then
-				CollectCollectableEntityRemote:FireServer({id = NearestGhost})
-			end
-		end
-	end)
-
-	task.spawn(function()
-		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
-			JadeHammerTick = tick()
-
-			AbilityController:useAbility("jade_hammer_jump")
-		end			
 	end)
 end
 
@@ -2548,20 +2597,12 @@ local function InfFly()
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 
 		if InfiniteFlyValue == false or not IsAlive(LocalPlayer) then
-			LocalPlayer.Character.PrimaryPart.Anchored = true
-			LocalPlayer.Character.PrimaryPart.CFrame = SpoofedCamera.CFrame + Vector3.new(0, 5, 0)	
+			LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+			LocalPlayer.Character.PrimaryPart.CFrame = SpoofedCamera.CFrame
+			
 			SetCamera(LocalPlayer.Character)
 
 			SpoofedCamera:Destroy()
-
-			task.wait(0.025)
-
-			WorkSpace.Gravity = 50
-			LocalPlayer.Character.PrimaryPart.Anchored = false
-
-			task.wait(1)
-
-			WorkSpace.Gravity = 196.2
 		end
 	end	
 end
@@ -3319,7 +3360,7 @@ task.spawn(function()
 							end)					
 
 							task.spawn(function()
-								if HasItem("fireball") and not (HasItem("arrow") or BestBow) then
+								if HasItem("fireball") then
 									local FireBall = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild("fireball")
 
 									task.spawn(function()
@@ -3416,6 +3457,122 @@ task.spawn(function()
 
 			if Value == false then
 				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AntiHit, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "AntiHit", Settings.AntiHit.Value, function(CallBack)
+		Settings.AntiHit.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+				
+				local NearestPlayer = FindNearestPlayer(Settings.AntiHit.Range)
+				
+				if IsAlive(LocalPlayer) and NearestPlayer and GetMatchState() ~= 0 then
+					LocalPlayer.Character.Archivable = true
+					
+					local Clone = LocalPlayer.Character:Clone()
+					
+					Clone.Parent = WorkSpace
+					Clone.Name = "Clone"
+					
+					Camera.CameraSubject = Clone
+					
+					task.spawn(function()
+						for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
+							v:Destroy()
+						end
+
+						for i, v in next, Clone:GetChildren() do
+							if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+								v.Transparency = 1
+							end
+							
+							if v:IsA("Accessory") then
+								v:FindFirstChild("Handle").Transparency = 1
+							end
+						end
+					end)
+					
+					LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 100000, 0)
+
+					task.spawn(function()
+						repeat
+							task.wait()
+
+							Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
+						until not Clone
+					end)			
+
+					task.wait(0.05)
+					
+					LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+					LocalPlayer.Character.HumanoidRootPart.CFrame = Clone.HumanoidRootPart.CFrame
+					
+					Camera.CameraSubject = LocalPlayer.Character
+					Clone:Destroy()
+					
+					task.wait(0.01)
+				end
+			until Settings.AntiHit.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(CombatTab, Settings.AntiHit.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AntiHit.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.AntiHit.Range, 20, LayoutOrder + 2, function(CallBack)
+					Settings.AntiHit.Range = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AntiHit.KeyBind then
+					Settings.AntiHit.Value = not Settings.AntiHit.Value
+
+					if Settings.AntiHit.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AntiHit.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
 			end
 		end)
 	end)
@@ -3603,6 +3760,74 @@ task.spawn(function()
 					end
 
 					if Settings.NoPlacementCps.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
+		Settings.AutoConsume.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				local SpeedPotion = HasItem("speed_potion")
+				local SpeedPie = HasItem("pie")
+				
+				task.spawn(function()
+					if IsAlive(LocalPlayer) then
+						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("speed_potion")
+							})
+						end
+
+						if SpeedPie then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("pie")
+							})
+						end
+					end
+				end)		
+			until Settings.AutoConsume.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AutoConsume.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
+					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
+
+					if Settings.AutoConsume.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AutoConsume.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -4259,7 +4484,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Spider.Speed, 50, LayoutOrder + 2, function(CallBack)
+				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Spider.Speed, 70, LayoutOrder + 2, function(CallBack)
 					Settings.Spider.Speed = CallBack
 				end)
 			end
@@ -6848,53 +7073,57 @@ end)
 task.spawn(function()
 	local Fonts, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "Fonts", Settings.Fonts.Value, function(CallBack)
 		Settings.Fonts.Value = CallBack
-
-		task.spawn(function()			
-			if Settings.Fonts.Value == true and getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
-				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
-				
-				task.spawn(function()
-					for i, v in next, WorkSpace:GetDescendants() do
-						if v:IsA("TextLabel") then
-							v.FontFace = AlSploitFont
-						end
-					end
-
-					for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
-						if v:IsA("TextLabel") then
-							v.FontFace = AlSploitFont
-						end
-					end
-
-					for i, v in next, ContainerFrame:GetDescendants() do
-						if v:IsA("TextLabel") then
-							v.FontFace = AlSploitFont
-						end
-					end
-				end)		
-				
-				WorkSpace.DescendantAdded:Connect(function(v)
-					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
-				end)
-
-				LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
-					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
-				end)
-				
-				AlSploit.DescendantAdded:Connect(function(v)
-					if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-						v.FontFace = AlSploitFont
-					end
-				end)
-			end						
-		end)		
 		
 		task.spawn(function()
-			if not (getcustomasset or isfile or isfile("AlSploit/Fonts/MinecraftFace.json")) then
+			if getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+				
+				task.spawn(function()			
+					if Settings.Fonts.Value == true then				
+						task.spawn(function()
+							for i, v in next, WorkSpace:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+
+							for i, v in next, LocalPlayer.PlayerGui:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+
+							for i, v in next, ContainerFrame:GetDescendants() do
+								if v:IsA("TextLabel") then
+									v.FontFace = AlSploitFont
+								end
+							end
+						end)		
+
+						WorkSpace.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+
+						LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+
+						AlSploit.DescendantAdded:Connect(function(v)
+							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
+								v.FontFace = AlSploitFont
+							end
+						end)
+					end						
+				end)		
+			end
+		end)
+		
+		task.spawn(function()
+			if not getcustomasset or not isfile or not isfile("AlSploit/Fonts/MinecraftFace.json") then
 				CreateNotification(5, "Your executor does not support custom fonts")
 			end
 		end)
