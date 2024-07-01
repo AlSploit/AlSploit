@@ -1351,7 +1351,7 @@ local function TweenToNearestBed()
 			
 			if BlockRaycast and BlockRaycast.Position then
 				local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
-				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {BlockRaycast.Position})
+				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
 
 				BedTpTween:Play()
 			end
