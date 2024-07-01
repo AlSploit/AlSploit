@@ -2451,7 +2451,7 @@ end
 local function SwordHit(Entity, Weapon, NearestEntityDistance)
 	local LocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 	local EntityPrimaryPart = Entity.PrimaryPart
-	local LookVector = CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector
+	local LookVector = CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector * 4
 	local Magnitude = (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude
 
 	local SelfPosition
@@ -2464,8 +2464,6 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 				end)
 
 				SelfPosition = LocalPlayerHumanoidRootPart.Position + LookVector * (Magnitude - 14)
-				SelfPosition = LocalPlayer.Character.HumanoidRootPart.Position + ((Magnitude > 14.3) and (CFrame.lookAt(LocalPlayer.Character.HumanoidRootPart.Position, EntityPrimaryPart.Position).LookVector * 4) or Vector3.new(0, 0, 0))
-
 
 				SwordHitRemote:FireServer({
 					weapon = Weapon.tool,
@@ -3467,13 +3465,15 @@ task.spawn(function()
 						until not Clone
 					end)			
 
-					task.wait(0.07)
+					task.wait(0.05)
 					
 					LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 					LocalPlayer.Character.HumanoidRootPart.CFrame = Clone.HumanoidRootPart.CFrame
 					
 					Camera.CameraSubject = LocalPlayer.Character
 					Clone:Destroy()
+					
+					task.wait(0.01)
 				end
 			until Settings.AntiHit.Value == false
 		end)
