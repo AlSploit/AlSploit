@@ -1165,10 +1165,8 @@ local function SecureEnderChestItems()
 
 	if MainInventory then
 		for i, v in next, MainInventory:GetChildren() do
-			print("e1")
 			if v:IsA("Accessory") and (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
 				ChestGiveItemRemote:InvokeServer(EnderChest, v)
-				print("e2")
 			end
 		end
 	end	
@@ -1933,14 +1931,12 @@ end
 local function AutoBank()
 	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
 
-	if NearestNpc and (WorkSpace:GetServerTimeNow() - LocalPlayer.Character:GetAttribute("LastDamageTakenTime")) > 2  then
+	if NearestNpc then
 		CollectEnderChestItems()
 	end
 
-	if not NearestNpc or (WorkSpace:GetServerTimeNow() - LocalPlayer.Character:GetAttribute("LastDamageTakenTime")) <= 2 then
+	if not NearestNpc then
 		SecureEnderChestItems()
-		
-		print("e")
 	end
 end
 
