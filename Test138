@@ -1166,7 +1166,7 @@ local function SecureEnderChestItems()
 	if MainInventory then
 		for i, v in next, MainInventory:GetChildren() do
 			if v:IsA("Accessory") and (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-				ChestGiveItemRemote:InvokeServer(EnderChest, v.tool)
+				ChestGiveItemRemote:InvokeServer(EnderChest, v)
 			end
 		end
 	end	
