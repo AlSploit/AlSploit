@@ -1931,13 +1931,9 @@ end
 local function AutoBank()
 	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
 
-	if NearestNpc then
-		CollectEnderChestItems()
-	end
-
-	if not NearestNpc then
+	task.spawn(function()
 		SecureEnderChestItems()
-	end
+	end)
 end
 
 local function FpsBoost()
@@ -3968,6 +3964,50 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local InstantWin, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InstantWin", Settings.InstantWin.Value, function(CallBack)
+		Settings.InstantWin.Value = CallBack
+
+		repeat
+			task.wait()
+
+			local QueueName = GetQueueType()
+
+			if IsAlive(LocalPlayer) and QueueName == "bridge_duel_to2" then
+				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+
+				task.spawn(function()
+					for i, v in next, WorkSpace:GetDescendants() do
+						if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
+							firetouchinterest(HumanoidRootPart, v.Parent, 0)
+							firetouchinterest(HumanoidRootPart, v.Parent, 1)
+						end
+					end
+				end)	
+			end					
+		until Settings.InstantWin.Value == false
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.InstantWin.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.InstantWin.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local InfiniteFly, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InfiniteFly", Settings.InfiniteFly.Value, function(CallBack)
 		Settings.InfiniteFly.Value = CallBack
 
@@ -4022,50 +4062,6 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local InstantWin, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InstantWin", Settings.InstantWin.Value, function(CallBack)
-		Settings.InstantWin.Value = CallBack
-
-		repeat
-			task.wait()
-			
-			local QueueName = GetQueueType()
-			
-			if IsAlive(LocalPlayer) and QueueName == "bridge_duel_to2" then
-				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-				
-				task.spawn(function()
-					for i, v in next, WorkSpace:GetDescendants() do
-						if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
-							firetouchinterest(HumanoidRootPart, v.Parent, 0)
-							firetouchinterest(HumanoidRootPart, v.Parent, 1)
-						end
-					end
-				end)	
-			end					
-		until Settings.InstantWin.Value == false
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.InstantWin.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.InstantWin.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
 			end
 		end)
 	end)
