@@ -1185,6 +1185,7 @@ local function CreateSpoofedCamera()
 	SpoofedCamera.Name = "SpoofedCamera"
 	
 	SpoofedCamera.Transparency = 0.5
+	SpoofedCamera.CanCollide = false
 	SpoofedCamera.Anchored = true
 	SpoofedCamera.Position = LocalPlayer.Character.PrimaryPart.Position
 	SpoofedCamera.Size = LocalPlayer.Character.PrimaryPart.Size
@@ -2536,7 +2537,7 @@ end
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
 		SpoofedCamera = CreateSpoofedCamera()
-		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y + Vector3.new(0, 2, 0)
+		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y + 2
 
 		if SpoofedCamera then
 			SetCamera(SpoofedCamera)
