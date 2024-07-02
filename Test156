@@ -1177,7 +1177,7 @@ local function SecureEnderChestItems()
 
 	for i, v in next, MainInventory do
 		if (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-			ChestGiveItemRemote:InvokeServer(EnderChest, v.itemType)
+			ChestGiveItemRemote:InvokeServer(EnderChest, MainInventory['iron'])
 		end
 	end
 end
@@ -2902,9 +2902,9 @@ task.spawn(function()
 	local ScytheDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "ScytheDisabler", Settings.ScytheDisabler.Value, function(CallBack)
 		Settings.ScytheDisabler.Value = CallBack
 
-		local Scythe = (HasItem("wooden_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
+		local Scythe = GetScythe()
 
-		if Scythe then
+		if not Scythe then
 			CreateNotification(3, "You need a scythe to use ScytheDisabler")
 		end
 
