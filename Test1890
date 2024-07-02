@@ -593,7 +593,7 @@ local function CreateNotification(Duration, Message)
 	task.spawn(function()
 		local NotificationSize = UDim2.new(1, 0, 0.087, 0)
 
-		local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
+		local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
 		local SizeTween = TweenService:Create(Notification, TweenInformation, {Size = NotificationSize})
 
 		SizeTween:Play()
@@ -1147,7 +1147,7 @@ local InfiniteFlyValue = false
 local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
-local InfiniteFltTick = 0
+local InfiniteFlyTick = 0
 local JadeHammerTick = 0
 local AntiVoidPart = nil
 local DamageBoost = false
@@ -2569,15 +2569,15 @@ local function InfFly()
 			StartLevelHead = SpoofedCamera.Position.Y	
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
-
-		if InfiniteFlyValue == false or not IsAlive(LocalPlayer) then
-			LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-			LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
+		
+		InfiniteFlyTick = tick()
+		
+		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 			
-			SetCamera(LocalPlayer.Character)
+		SetCamera(LocalPlayer.Character)
 
-			SpoofedCamera:Destroy()
-		end
+		SpoofedCamera:Destroy()
 	end	
 end
 
