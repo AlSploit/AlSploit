@@ -1055,7 +1055,6 @@ local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitF
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
 local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
 local PlayGuitarRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar")
-
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
 task.spawn(function()
@@ -1071,6 +1070,7 @@ end)
 local SendMessageRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
 local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")
 local ProjectileRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
+local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
 local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
 local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
@@ -1119,6 +1119,7 @@ local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value or nil
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
+local ScytheDisablerAnticheatDisabled = false
 local KillAuraAnimationCooldown = false
 local NearestEntityFound = false
 local InfiniteFlyValue = false
@@ -2873,6 +2874,73 @@ local BlatantTab = CreateTab("Blatant")
 local UtilityTab = CreateTab("Utility")
 local WorldTab = CreateTab("World")
 local GuiTab = CreateTab("Gui")
+
+task.spawn(function()
+	local ScytheDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "ScytheDisabler", Settings.ScytheDisabler.Value, function(CallBack)
+		Settings.ScytheDisabler.Value = CallBack
+		
+		local Scythe = HasItem("scythe")
+		
+		if not HasItem("scythe") then
+			CreateNotification(3, "You need a scythe to use ScytheDisabler")
+		end
+		
+		repeat
+			task.wait()
+			
+			Scythe = HasItem("scythe")
+			
+			if Scythe and IsAlive(LocalPlayer) then
+				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
+				
+				ScytheDashRemote:FireServer(Vector)
+				
+				ScytheDisablerAnticheatDisabled = true
+			end
+			
+			if not Scythe or not IsAlive(LocalPlayer) then
+				ScytheDisablerAnticheatDisabled = false
+			end
+		until Settings.ScytheDisabler.Value == false
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(CombatTab, Settings.ScytheDisabler.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.ScytheDisabler.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.ScytheDisabler.KeyBind then
+					Settings.ScytheDisabler.Value = not Settings.ScytheDisabler.Value
+
+					if Settings.ScytheDisabler.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.ScytheDisabler.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
 
 task.spawn(function()
 	local NoKnockBack, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "NoKnockBack", Settings.NoKnockBack.Value, function(CallBack)
@@ -6661,16 +6729,16 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) then
 					repeat task.wait() until GetMatchState() ~= 0
 
-					local NearestPlayer = FindNearestPlayer()
+					local NearestBed = FindNearestBed()
 
 					task.spawn(function()
-						if NearestPlayer then
+						if NearestBed then
 							KillHumanoid()
 
 							LocalPlayer.CharacterAdded:Connect(function()
 								repeat task.wait() until IsAlive(LocalPlayer)
 
-								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestPlayer() then
+								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() then
 									task.wait(0.15)
 
 									TweenToNearestBed()
@@ -6685,7 +6753,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer)						
 
-							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestPlayer() then
+							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() then
 								task.wait(0.25)
 
 								TweenToNearestBed()
