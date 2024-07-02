@@ -897,7 +897,6 @@ local function CreateSettingsFile()
 		Scaffold = {ExpandDistance = 1, KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
-		AutoBank = {Range = 30, KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
 		PlayerTp = {KeyBind = "..."},
 		Tracers = {KeyBind = "..."},
@@ -1049,7 +1048,6 @@ local CollectCollectableEntityRemote = ReplicatedStorage:WaitForChild("rbxts_inc
 local TrinitySetAngelTypeRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetAngelType")
 local SetObservedChestRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/SetObservedChest")
 local ResetCharacterRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter")
-local ChestGiveItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/ChestGiveItem")
 local ChestGetItemRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/ChestGetItem")
 local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem")
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
@@ -1158,26 +1156,6 @@ local Animations = {
 	}
 }
 
-local function CollectEnderChestItems()
-	local EnderChest = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name .. "_personal")
-
-	for i, v in next, EnderChest:GetChildren() do
-		if v:IsA("Accessory") and (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-			ChestGetItemRemote:InvokeServer(EnderChest, v)
-		end
-	end
-end
-
-local function SecureEnderChestItems()
-	local ItemsToSearchFor = {"gold", "iron", "emerald", "diamond", "void_crystal"}
-	local EnderChest = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name .. "_personal")
-
-	for i, v in next, ItemsToSearchFor do
-		if MainInventory:FindFirstChild(v) then
-			ChestGiveItemRemote:InvokeServer(EnderChest, v)
-		end
-	end
-end
 
 local function TweenToNearestPlayer()
 	if IsAlive(LocalPlayer) then
@@ -1283,6 +1261,19 @@ local function FindNearestEntity(MaxDistance)
 	local NearestEntityDistance = MaxDistance
 	local NearestEntity = nil
 	local IsNotAPlayer = true
+	
+	task.spawn(function()
+		for i, v in next, CollectionService:GetTagged("JellyFish") do
+			if v.PrimaryPart then
+				local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+				if Distance < NearestEntityDistance and  Distance <= MaxDistance then
+					NearestEntityDistance = Distance
+					NearestEntity = v
+				end
+			end 
+		end
+	end)
 
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("DiamondGuardian") do
@@ -1591,21 +1582,8 @@ end
 local function SetCollisions(Value)
 	if Value == true then
 		if IsAlive(LocalPlayer) then
-			for i, v in next, (LocalPlayer.Character:GetDescendants()) do
-				if v:IsA("BasePart") then
-					v.CanCollide = true
-					v.CanTouch = true
-				end			
-			end
-		end
-	end
-
-	if Value == false then
-		for i, v in next, (LocalPlayer.Character:GetDescendants()) do
-			if v:IsA("BasePart") and v ~= LocalPlayer.Character.PrimaryPart and v.CanCollide then
-				v.CanCollide = false
-				v.CanTouch = false
-			end
+			LocalPlayer.Character.LowerTorso.CollisionGroup = "Participants"
+			LocalPlayer.Character.UpperTorso.CollisionGroup = "Participants"
 		end
 	end
 end
@@ -1742,22 +1720,6 @@ local function Invisibility()
 
 				PlayerAnimation:Play(1 / 999999, 999999, 1 / 999999)
 			until Settings.Invisible.Value == false or not IsAlive(LocalPlayer)
-
-			if PlayerAnimation then
-				PlayerAnimation:Destroy()
-			end
-
-			if Animation then
-				Animation:Destroy()
-			end
-
-			if IsAlive(LocalPlayer) then
-				SetCollisions(true)
-
-				LocalPlayer.Character.PrimaryPart.Size = Vector3.new(1.9, 2, 1)
-				LocalPlayer.Character.PrimaryPart.Transparency = 1
-				LocalPlayer.Character.Humanoid.CameraOffset = Vector3.new(0, 0, 0)
-			end
 		end)
 	end
 end
@@ -1933,20 +1895,6 @@ local function ChatSpam()
 	end
 
 	SendChatMessage(KillMessage)
-end
-
-local function AutoBank()
-	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
-
-	if NearestNpc and UserInputService:IsKeyDown(Enum.KeyCode.F) then
-		CollectEnderChestItems()
-	end
-	
-	NearestNpc = FindNearestNpc(7)
-
-	if not NearestNpc then
-		SecureEnderChestItems()
-	end
 end
 
 local function FpsBoost()
@@ -5117,78 +5065,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local AutoBank, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AutoBank", Settings.AutoBank.Value, function(CallBack)
-		Settings.AutoBank.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-
-				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-					AutoBank()
-				end
-			until Settings.AutoBank.Value == false or GetQueueType():find("Skywars")
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(UtilityTab, Settings.AutoBank.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.AutoBank.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.AutoBank.KeyBind then
-					Settings.AutoBank.Value = not Settings.AutoBank.Value
-
-					if Settings.AutoBank.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.AutoBank.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(UtilityTab, "Range", Settings.AutoBank.Range, 30, LayoutOrder + 2, function(CallBack)
-					Settings.AutoBank.Range = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local AntiStaff, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AntiStaff", Settings.AntiStaff.Value, function(CallBack)
 		Settings.AntiStaff.Value = CallBack
 
@@ -7400,6 +7276,5 @@ end)
 --recall  bedtp playertp
 --bedtp and playertp revise
 --switchitem scythe
---autobank fix
 -- nuker raycast every block and whichever one is less distance raycasted to bed then pick
 --improve invis
