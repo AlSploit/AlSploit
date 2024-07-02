@@ -1681,13 +1681,9 @@ end
 function KillHumanoid(Time)
 	local Time = Time or 0
 
-	if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") then
-		if LocalPlayer.leaderstats.Bed.Value == "✅" then
-			LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-
-			ResetCharacterRemote:FireServer()
-		end
-	end
+	LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+	
+	ResetCharacterRemote:FireServer()
 end
 
 local function GetInventory(Player)
@@ -1935,7 +1931,7 @@ function GetSpeed()
 			Speed = Speed + 40
 		end
 		
-		if (tick() - InfiniteFlyTick) <= 1.2 then
+		if (tick() - InfiniteFlyTick) <= 0.8 then
 			Speed = Speed - 10
 		end
 
@@ -1944,7 +1940,7 @@ function GetSpeed()
 		end
 
 		if DamageBoost == true then
-			Speed = Speed + 18
+			Speed = Speed + 17
 		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
@@ -2578,7 +2574,7 @@ local function InfFly()
 		
 		CreateNotification(3, "Slowing down, preventing lagback")
 		
-		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 			
 		SetCamera(LocalPlayer.Character)
@@ -6361,10 +6357,8 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) then
 					repeat task.wait() until GetMatchState() ~= 0
 
-					local NearestPlayer = FindNearestPlayer()
-
 					task.spawn(function()
-						if NearestPlayer then
+						if FindNearestPlayer() and  LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
@@ -6377,6 +6371,10 @@ task.spawn(function()
 								end
 							end)
 						end	
+						
+						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
+							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+						end
 					end)					
 				end
 
@@ -6385,7 +6383,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0					
 
-							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
+							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() and  LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
 
 								TweenToNearestPlayer()
@@ -6524,10 +6522,8 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) then
 					repeat task.wait() until GetMatchState() ~= 0
 
-					local NearestBed = FindNearestBed()
-
 					task.spawn(function()
-						if NearestBed then
+						if FindNearestBed() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
 							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
@@ -6540,6 +6536,10 @@ task.spawn(function()
 								end
 							end)
 						end	
+						
+						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
+							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+						end
 					end)					
 				end
 
@@ -6548,7 +6548,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer)						
 
-							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() then
+							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
 
 								TweenToNearestBed()
