@@ -591,20 +591,21 @@ local function CreateNotification(Duration, Message)
 	UITextSizeConstraint.MaxTextSize = 13
 
 	task.spawn(function()
-		local NotificationSize = UDim2.new(1, 0, 0.087, 0)
+		repeat
+			task.wait(0.001)
+			
+			Notification.Size.Y.Scale = Notification.Size.Y.Scale + 0.001
+		until Notification.Size.Y.Scale == 1
+
+
+		task.wait(Duration)
+
+		local NotificationSize = UDim2.new(0, 0, 0.087, 0)
 
 		local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
 		local SizeTween = TweenService:Create(Notification, TweenInformation, {Size = NotificationSize})
 
 		SizeTween:Play()
-
-		task.wait(Duration)
-
-		NotificationSize = UDim2.new(0, 0, 0.087, 0)
-
-		local SizeTween2 = TweenService:Create(Notification, TweenInformation, {Size = NotificationSize})
-
-		SizeTween2:Play()
 
 		task.spawn(function()
 			task.wait(TweenInformation.Time)
