@@ -2902,7 +2902,7 @@ task.spawn(function()
 	local ScytheDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "ScytheDisabler", Settings.ScytheDisabler.Value, function(CallBack)
 		Settings.ScytheDisabler.Value = CallBack
 
-		local Scythe = GetScythe()
+		local Scythe = (HasItem("wooden_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
 
 		if Scythe then
 			CreateNotification(3, "You need a scythe to use ScytheDisabler")
@@ -7397,3 +7397,8 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+--recall  bedtp playertp
+--bedtp and playertp revise
+--switchitem scythe
+--autobank fix
