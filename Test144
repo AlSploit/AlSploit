@@ -2953,7 +2953,7 @@ task.spawn(function()
 			if Scythe and IsAlive(LocalPlayer) then
 				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
 				
-				ScytheDashRemote:FireServer(Vector)
+				ScytheDashRemote:FireServer({direction = Vector})
 				
 				ScytheDisablerAnticheatDisabled = true
 			end
