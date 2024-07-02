@@ -2574,7 +2574,7 @@ local function InfFly()
 
 		if InfiniteFlyValue == false or not IsAlive(LocalPlayer) then
 			LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-			LocalPlayer.Character.PrimaryPart.CFrame = SpoofedCamera.CFrame - CFrame.new(Vector3.new(0, 1, 0))
+			LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(SpoofedCamera.Position - Vector3.new(0, 1, 0))
 			
 			SetCamera(LocalPlayer.Character)
 
@@ -2868,7 +2868,7 @@ task.spawn(function()
 			Scythe = GetScythe()
 
 			if Scythe and IsAlive(LocalPlayer) then				
-				SwitchItem("stone_scythe")
+				SwitchItem(Scythe.itemType)
 
 				local Movedirection = LocalPlayer.Character.Humanoid.MoveDirection
 				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
