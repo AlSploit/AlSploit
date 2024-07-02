@@ -58,7 +58,7 @@ task.spawn(function()
 	NotificationContainer.Size = UDim2.new(0.2, 0, 0.980487823, 0)
 
 	NotificationContainerUIListLayout.Parent = NotificationContainer
-	NotificationContainerUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+	NotificationContainerUIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 	NotificationContainerUIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	NotificationContainerUIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
 	NotificationContainerUIListLayout.Padding = UDim.new(0, 10)
@@ -3952,7 +3952,7 @@ task.spawn(function()
 		
 		local QueueName = GetQueueType()
 		
-		if QueueName ~= "bridge_duel_to2" then
+		if QueueName ~= "bridge_duel_to2" and Settings.InstantWin.Value == true then
 			CreateNotification(3, "Instant win only works for Bridge Duel")
 		end
 
