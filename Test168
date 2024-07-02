@@ -2526,7 +2526,7 @@ local function InfFly()
 		Clone.Name = "Clone"
 		
 		for i, v in next, LocalPlayer.Character:GetDescendants() do 
-			if v:IsA("Weld") or v:IsA("Motor6D") then 
+			if v:IsA("Weld") or v:IsA("Motor6D") and v:IsA("BasePart") then 
 				v.Part0 = Clone 
 				v.Part1 = Clone 
 			end
