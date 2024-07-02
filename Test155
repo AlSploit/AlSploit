@@ -1175,9 +1175,9 @@ end
 local function SecureEnderChestItems()
 	local EnderChest = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name .. "_personal")
 
-	for i, v in next, EnderChest:GetChildren() do
+	for i, v in next, MainInventory do
 		if (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-			ChestGiveItemRemote:InvokeServer(EnderChest, v)
+			ChestGiveItemRemote:InvokeServer(EnderChest, v.itemType)
 		end
 	end
 end
@@ -7402,3 +7402,5 @@ end)
 --bedtp and playertp revise
 --switchitem scythe
 --autobank fix
+-- nuker raycast every block and whichever one is less distance raycasted to bed then pick
+--improve invis
