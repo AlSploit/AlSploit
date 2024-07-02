@@ -560,7 +560,7 @@ local function CreateNotification(Duration, Message)
 	Notification.BorderColor3 = Color3.new(0, 0, 0)
 	Notification.BorderSizePixel = 0
 	Notification.Position = UDim2.new(0.226, 0, 0, 0)
-	Notification.Size = UDim2.new(0, 0, 0, 0)
+	Notification.Size = UDim2.new(0, 0, 0.087, 0)
 
 	UIStroke.Parent = Notification
 	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
@@ -600,7 +600,7 @@ local function CreateNotification(Duration, Message)
 
 		task.wait(Duration)
 
-		NotificationSize = UDim2.new(0, 0, 0, 0)
+		NotificationSize = UDim2.new(0, 0, 0.087, 0)
 
 		local SizeTween2 = TweenService:Create(Notification, TweenInformation, {Size = NotificationSize})
 
@@ -1147,9 +1147,9 @@ local InfiniteFlyValue = false
 local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
+local InfiniteFltTick = 0
 local JadeHammerTick = 0
 local AntiVoidPart = nil
-local TeleportTick = tick()
 local DamageBoost = false
 local ZephyrOrb = 0
 
@@ -2856,7 +2856,7 @@ task.spawn(function()
 
 		local Scythe = GetScythe()
 
-		if not Scythe then
+		if not Scythe and Settings.ScytheDisabler == true then
 			CreateNotification(3, "You need a scythe to use ScytheDisabler")
 		end
 
@@ -3818,74 +3818,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
-		Settings.AutoConsume.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-
-				local SpeedPotion = HasItem("speed_potion")
-				local SpeedPie = HasItem("pie")
-				
-				task.spawn(function()
-					if IsAlive(LocalPlayer) then
-						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
-							ConsumeItemRemote:InvokeServer({
-								["item"] = MainInventory:FindFirstChild("speed_potion")
-							})
-						end
-
-						if SpeedPie then
-							ConsumeItemRemote:InvokeServer({
-								["item"] = MainInventory:FindFirstChild("pie")
-							})
-						end
-					end
-				end)		
-			until Settings.AutoConsume.Value == false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.AutoConsume.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
-					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
-
-					if Settings.AutoConsume.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.AutoConsume.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local ChestStealer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "ChestStealer", Settings.ChestStealer.Value, function(CallBack)
 		Settings.ChestStealer.Value = CallBack
 
@@ -4713,6 +4645,74 @@ task.spawn(function()
 
 					if Settings.Fly.Value == false then
 						FlyValue = false
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
+		Settings.AutoConsume.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				local SpeedPotion = HasItem("speed_potion")
+				local SpeedPie = HasItem("pie")
+
+				task.spawn(function()
+					if IsAlive(LocalPlayer) then
+						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("speed_potion")
+							})
+						end
+
+						if SpeedPie then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:FindFirstChild("pie")
+							})
+						end
+					end
+				end)		
+			until Settings.AutoConsume.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(UtilityTab, Settings.AutoConsume.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AutoConsume.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AutoConsume.KeyBind then
+					Settings.AutoConsume.Value = not Settings.AutoConsume.Value
+
+					if Settings.AutoConsume.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AutoConsume.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
