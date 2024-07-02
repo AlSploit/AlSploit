@@ -2962,15 +2962,18 @@ task.spawn(function()
 			Scythe = (HasItem("wood_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
 			
 			if Scythe and IsAlive(LocalPlayer) then
+				SwitchItem(Scythe)
+				
 				local Movedirection = LocalPlayer.Character.Humanoid.MoveDirection
 				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
+				
+				print((Movedirection - Vector).Magnitude)
 				
 				if (Movedirection - Vector).Magnitude > 1.9 then
 					Vector = Movedirection
 				end
 				
 				ScytheDashRemote:FireServer({direction = Vector})
-				
 				ScytheDisablerAnticheatDisabled = true
 			end
 			
