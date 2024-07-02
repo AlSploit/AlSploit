@@ -1177,7 +1177,8 @@ local function SecureEnderChestItems()
 
 	for i, v in next, MainInventory do
 		if (v.Name == "emerald" or v.Name == "iron" or v.Name == "diamond" or v.Name == "gold" or v.Name == "void_crystal") then
-			ChestGiveItemRemote:InvokeServer(EnderChest, MainInventory['iron'])
+			game:GetService("ReplicatedStorage").rbxts_include.node_modules:FindFirstChild("@rbxts").net.out._NetManaged:FindFirstChild("Inventory/SetObservedChest"):FireServer(EnderChest)
+			ChestGiveItemRemote:InvokeServer(EnderChest, v)
 		end
 	end
 end
