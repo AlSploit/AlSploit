@@ -2554,7 +2554,7 @@ end
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
 		local StartLevelPrimaryPart = LocalPlayer.Character.PrimaryPart.Position.Y
-		local StartLevelHead = LocalPlayer.Character.PrimaryPart.Position.Y
+		local StartLevelHead = LocalPlayer.Character.Head.Position.Y
 		
 		local SpoofedCamera = CreateSpoofedCamera()	
 		
