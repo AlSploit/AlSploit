@@ -2527,7 +2527,7 @@ function GetBow()
 end
 
 local function InfFly()
-	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
+	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
 		SpoofedCamera = CreateSpoofedCamera()
 		StartLevel = LocalPlayer.Character.Head.Position.Y
 
@@ -3506,16 +3506,16 @@ task.spawn(function()
 					
 					task.spawn(function()
 						for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
-							v:Destroy()
+							--v:Destroy()
 						end
 
 						for i, v in next, Clone:GetChildren() do
 							if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
-								v.Transparency = 1
+								--v.Transparency = 1
 							end
 							
 							if v:IsA("Accessory") then
-								v:FindFirstChild("Handle").Transparency = 1
+								--v:FindFirstChild("Handle").Transparency = 1
 							end
 						end
 					end)
@@ -7257,4 +7257,3 @@ end)
 --bedtp and playertp revise
 --switchitem scythe
 -- nuker raycast every block and whichever one is less distance raycasted to bed then pick
---improve invis
