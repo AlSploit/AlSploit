@@ -1970,6 +1970,10 @@ function GetSpeed()
 		if type(ZephyrOrb) == "number" and ZephyrOrb > 0 then
 			Speed = Speed + 19
 		end
+		
+		if ScytheDisablerAnticheatDisabled == true then
+			Speed = Speed + 50
+		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
 			Speed = Speed + 30
