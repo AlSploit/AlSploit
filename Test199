@@ -2827,7 +2827,7 @@ task.spawn(function()
 				FlyUp = true
 			end
 
-			if Input.KeyCode == Enum.KeyCode.LeftControl and not UserInputService:GetFocusedTextBox() then
+			if Input.KeyCode == Enum.KeyCode.Q and not UserInputService:GetFocusedTextBox() then
 				FlyDown = true
 			end
 		end)
@@ -2839,7 +2839,7 @@ task.spawn(function()
 				FlyUp = false
 			end
 
-			if Input.KeyCode == Enum.KeyCode.LeftControl and not UserInputService:GetFocusedTextBox() then
+			if Input.KeyCode == Enum.KeyCode.Q and not UserInputService:GetFocusedTextBox() then
 				FlyDown = false
 			end
 		end)
