@@ -1179,10 +1179,15 @@ local function FindPetrifiedPlayer()
 end
 
 local function CreateSpoofedCamera()
-	SpoofedCamera = Instance.new("Part", WorkSpace)
-	SpoofedCamera.Anchored = true
+	SpoofedCamera = Instance.new("Part")
+	
+	SpoofedCamera.Parent = WorkSpace
+	SpoofedCamera.Name = "SpoofedCamera"
+	
 	SpoofedCamera.Transparency = 0.5
-	SpoofedCamera.Position = LocalPlayer.Character.Head.Position
+	SpoofedCamera.Anchored = true
+	SpoofedCamera.Position = LocalPlayer.Character.PrimaryPart.Position
+	SpoofedCamera.Size = LocalPlayer.Character.PrimaryPart.Size
 
 	return SpoofedCamera
 end
@@ -2531,7 +2536,7 @@ end
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
 		SpoofedCamera = CreateSpoofedCamera()
-		StartLevel = LocalPlayer.Character.Head.Position.Y
+		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y
 
 		if SpoofedCamera then
 			SetCamera(SpoofedCamera)
