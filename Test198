@@ -2574,7 +2574,7 @@ local function InfFly()
 		
 		CreateNotification(3, "Slowing down, preventing lagback")
 		
-		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 			
 		SetCamera(LocalPlayer.Character)
@@ -2827,7 +2827,7 @@ task.spawn(function()
 				FlyUp = true
 			end
 
-			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+			if Input.KeyCode == Enum.KeyCode.LeftControl and not UserInputService:GetFocusedTextBox() then
 				FlyDown = true
 			end
 		end)
@@ -2839,7 +2839,7 @@ task.spawn(function()
 				FlyUp = false
 			end
 
-			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+			if Input.KeyCode == Enum.KeyCode.LeftControl and not UserInputService:GetFocusedTextBox() then
 				FlyDown = false
 			end
 		end)
