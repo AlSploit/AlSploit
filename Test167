@@ -1132,7 +1132,6 @@ local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
 local JadeHammerTick = 0
-local SpoofedCamera = nil
 local AntiVoidPart = nil
 local TeleportTick = tick()
 local DamageBoost = false
@@ -1176,15 +1175,6 @@ local function FindPetrifiedPlayer()
 			return v
 		end
 	end
-end
-
-local function CreateSpoofedCamera()
-	SpoofedCamera = Instance.new("Part", WorkSpace)
-	SpoofedCamera.Anchored = true
-	SpoofedCamera.Transparency = 1
-	SpoofedCamera.Position = LocalPlayer.Character.Head.Position
-
-	return SpoofedCamera
 end
 
 function FindNearestPlayer(MaxDistance)
@@ -2528,30 +2518,39 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
-		SpoofedCamera = CreateSpoofedCamera()
-		StartLevel = LocalPlayer.Character.Head.Position.Y
-
-		if SpoofedCamera then
-			SetCamera(SpoofedCamera)
+		LocalPlayer.Character.Archivable = true
+		
+		local Clone = LocalPlayer.Character:Clone()
+		
+		Clone.Parent = WorkSpace
+		Clone.Name = "Clone"
+		
+		for i, v in next, LocalPlayer.Character:GetDescendants() do 
+			if v:IsA("Weld") or v:IsA("Motor6D") then 
+				v.Part0 = Clone 
+				v.Part1 = Clone 
+			end
 		end
 
+		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y
+
 		LocalPlayer.Character.PrimaryPart.CFrame += Vector3.new(0, 1000000, 0)
-		SpoofedCamera.Position = Vector3.new(SpoofedCamera.Position.X, StartLevel, SpoofedCamera.Position.Z)
+		Clone.PrimaryPart.Position = Vector3.new(Clone.PrimaryPart.Position.X, StartLevel, Clone.PrimaryPart.Position.Z)
 
 		repeat 
 			task.wait()
 
-			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
-			StartLevel = SpoofedCamera.Position.Y	
+			Clone.PrimaryPart.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, Clone.PrimaryPart.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
+			StartLevel = Clone.PrimaryPart.Position.Y	
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 
 		if InfiniteFlyValue == false or not IsAlive(LocalPlayer) then
 			LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-			LocalPlayer.Character.PrimaryPart.CFrame = SpoofedCamera.CFrame
+			LocalPlayer.Character.PrimaryPart.CFrame = Clone.PrimaryPart.CFrame
 			
 			SetCamera(LocalPlayer.Character)
 
-			SpoofedCamera:Destroy()
+			Clone.PrimaryPart:Destroy()
 		end
 	end	
 end
@@ -3506,16 +3505,16 @@ task.spawn(function()
 					
 					task.spawn(function()
 						for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
-							--v:Destroy()
+							v:Destroy()
 						end
 
 						for i, v in next, Clone:GetChildren() do
 							if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
-								--v.Transparency = 1
+								v.Transparency = 1
 							end
 							
 							if v:IsA("Accessory") then
-								--v:FindFirstChild("Handle").Transparency = 1
+								v:FindFirstChild("Handle").Transparency = 1
 							end
 						end
 					end)
