@@ -1115,7 +1115,18 @@ task.spawn(function()
 	end
 end)
 
-local MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value or nil
+local MainInventory = nil
+
+task.spawn(function()
+	repeat
+		task.wait()
+		
+		task.spawn(function()
+			MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value or nil
+		end)
+	until MainInventory
+end)
+
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
