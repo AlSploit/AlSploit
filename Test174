@@ -1042,7 +1042,17 @@ task.spawn(function()
 	end	
 end)
 
-local Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
+local Flamework, FlameworkGotten = nil, false
+
+task.spawn(function()
+	Flamework = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
+end)
+
+task.spawn(function()
+	if Flamework then
+		FlameworkGotten = true
+	end
+end)
 
 local CollectCollectableEntityRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("CollectCollectableEntity")
 local TrinitySetAngelTypeRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetAngelType")
@@ -1092,7 +1102,14 @@ local MinerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild
 local KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 
-local AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
+local AbilityController = nil
+
+task.spawn(function()
+	if FlameworkGotten == true then
+		AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController")
+	end
+end)
+
 local BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
 
 local BlockPlacementController
@@ -2393,8 +2410,10 @@ local function AutoKit()
 	task.spawn(function()
 		if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
 			JadeHammerTick = tick()
-
-			AbilityController:useAbility("jade_hammer_jump")
+			
+			if FlameworkGotten == true then
+				AbilityController:useAbility("jade_hammer_jump")
+			end
 		end			
 	end)
 	
@@ -2849,7 +2868,7 @@ task.spawn(function()
 			Scythe = GetScythe()
 
 			if Scythe and IsAlive(LocalPlayer) then				
-				SwitchItem(Scythe.itemType)
+				SwitchItem("stone_scythe")
 
 				local Movedirection = LocalPlayer.Character.Humanoid.MoveDirection
 				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
