@@ -1579,15 +1579,6 @@ local function PlayAnimation(Animation)
 	end
 end
 
-local function SetCollisions(Value)
-	if Value == true then
-		if IsAlive(LocalPlayer) then
-			LocalPlayer.Character.LowerTorso.CollisionGroup = "Participants"
-			LocalPlayer.Character.UpperTorso.CollisionGroup = "Participants"
-		end
-	end
-end
-
 function GetMatchState()
 	if ClientHandlerStoreGotten == true then
 		return ClientHandlerStore:getState().Game.matchState
@@ -1699,29 +1690,18 @@ local function Invisibility()
 
 	Animation.AnimationId = "rbxassetid://".. Id
 
-	local PlayerAnimation = LocalPlayer.Character.Humanoid.Animator:LoadAnimation(Animation)
+	LocalPlayer.Character.Humanoid.Animator:LoadAnimation(Animation)
 
-	if PlayerAnimation then
-		LocalPlayer.Character.Humanoid.CameraOffset = Vector3.new(0, 3 / -2, 0)
-		LocalPlayer.Character.PrimaryPart.Size = Vector3.new(2, 3, 1.1)
+	LocalPlayer.Character.LowerTorso.CollisionGroup = "Participants"
+	LocalPlayer.Character.UpperTorso.CollisionGroup = "Participants"
 
-		PlayerAnimation.Priority = Enum.AnimationPriority.Action4
-		PlayerAnimation.Looped = false
+	LocalPlayer.Character.Humanoid.CameraOffset = Vector3.new(0, 3 / -2, 0)
+	LocalPlayer.Character.HumanoidRootPart.Size = Vector3.new(2, 3, 1.1)
 
-		LocalPlayer.Character.Humanoid.CameraOffset = Vector3.new(0, 3 / -2, 0)	
-		LocalPlayer.Character.PrimaryPart.Transparency = 0.6
-		LocalPlayer.Character.PrimaryPart.Size = Vector3.new(2, 3, 1.1)
-
-		SetCollisions(false)
-
-		task.spawn(function()
-			repeat
-				task.wait()
-
-				PlayerAnimation:Play(1 / 999999, 999999, 1 / 999999)
-			until Settings.Invisible.Value == false or not IsAlive(LocalPlayer)
-		end)
-	end
+	Animation.Priority = Enum.AnimationPriority.Action4
+	Animation.Looped = true
+	Animation:Play()
+	Animation:AdjustSpeed(0 / 10)
 end
 
 local function SwitchItem(Item)
