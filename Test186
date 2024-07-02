@@ -594,7 +594,7 @@ local function CreateNotification(Duration, Message)
 		repeat
 			task.wait(0.001)
 			
-			Notification.Size.Y.Scale = Notification.Size.Y.Scale + 0.001
+			Notification.Size = Notification.Size + UDim2.new(0.001, 0, 0, 0)
 		until Notification.Size.Y.Scale == 1
 
 
