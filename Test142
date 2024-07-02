@@ -2876,73 +2876,6 @@ local WorldTab = CreateTab("World")
 local GuiTab = CreateTab("Gui")
 
 task.spawn(function()
-	local ScytheDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "ScytheDisabler", Settings.ScytheDisabler.Value, function(CallBack)
-		Settings.ScytheDisabler.Value = CallBack
-		
-		local Scythe = HasItem("scythe")
-		
-		if not HasItem("scythe") then
-			CreateNotification(3, "You need a scythe to use ScytheDisabler")
-		end
-		
-		repeat
-			task.wait()
-			
-			Scythe = HasItem("scythe")
-			
-			if Scythe and IsAlive(LocalPlayer) then
-				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
-				
-				ScytheDashRemote:FireServer(Vector)
-				
-				ScytheDisablerAnticheatDisabled = true
-			end
-			
-			if not Scythe or not IsAlive(LocalPlayer) then
-				ScytheDisablerAnticheatDisabled = false
-			end
-		until Settings.ScytheDisabler.Value == false
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(CombatTab, Settings.ScytheDisabler.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.ScytheDisabler.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.ScytheDisabler.KeyBind then
-					Settings.ScytheDisabler.Value = not Settings.ScytheDisabler.Value
-
-					if Settings.ScytheDisabler.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.ScytheDisabler.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local NoKnockBack, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "NoKnockBack", Settings.NoKnockBack.Value, function(CallBack)
 		Settings.NoKnockBack.Value = CallBack
 
@@ -2990,6 +2923,73 @@ task.spawn(function()
 					end
 
 					if Settings.NoKnockBack.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local ScytheDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "ScytheDisabler", Settings.ScytheDisabler.Value, function(CallBack)
+		Settings.ScytheDisabler.Value = CallBack
+		
+		local Scythe = (HasItem("wood_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
+		
+		if not HasItem("scythe") then
+			CreateNotification(3, "You need a scythe to use ScytheDisabler")
+		end
+		
+		repeat
+			task.wait()
+			
+			Scythe = (HasItem("wood_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
+			
+			if Scythe and IsAlive(LocalPlayer) then
+				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
+				
+				ScytheDashRemote:FireServer(Vector)
+				
+				ScytheDisablerAnticheatDisabled = true
+			end
+			
+			if not Scythe or not IsAlive(LocalPlayer) then
+				ScytheDisablerAnticheatDisabled = false
+			end
+		until Settings.ScytheDisabler.Value == false
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(CombatTab, Settings.ScytheDisabler.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.ScytheDisabler.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.ScytheDisabler.KeyBind then
+					Settings.ScytheDisabler.Value = not Settings.ScytheDisabler.Value
+
+					if Settings.ScytheDisabler.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.ScytheDisabler.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -4036,11 +4036,17 @@ end)
 task.spawn(function()
 	local InstantWin, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InstantWin", Settings.InstantWin.Value, function(CallBack)
 		Settings.InstantWin.Value = CallBack
+		
+		local QueueName = GetQueueType()
+		
+		if QueueName ~= "bridge_duel_to2" then
+			CreateNotification(3, "Instant win only works for Bridge Duel")
+		end
 
 		repeat
 			task.wait()
 
-			local QueueName = GetQueueType()
+			QueueName = GetQueueType()
 
 			if IsAlive(LocalPlayer) and QueueName == "bridge_duel_to2" then
 				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
