@@ -1149,11 +1149,9 @@ local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
 local JadeHammerTick = 0
-local SpoofedCamera = nil
 local AntiVoidPart = nil
 local TeleportTick = tick()
 local DamageBoost = false
-local StartLevel = nil
 local ZephyrOrb = 0
 
 local FlyValue = false
@@ -1196,7 +1194,7 @@ local function FindPetrifiedPlayer()
 end
 
 local function CreateSpoofedCamera()
-	SpoofedCamera = Instance.new("Part")
+	local SpoofedCamera = Instance.new("Part")
 	
 	SpoofedCamera.Parent = WorkSpace
 	SpoofedCamera.Name = "SpoofedCamera"
@@ -2555,26 +2553,27 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
-		SpoofedCamera = CreateSpoofedCamera()
-		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y
-
+		local StartLevelPrimaryPart = LocalPlayer.Character.PrimaryPart.Position.Y
+		local StartLevelHead = LocalPlayer.Character.PrimaryPart.Position.Y
+		
+		local SpoofedCamera = CreateSpoofedCamera()	
+		
 		if SpoofedCamera then
 			SetCamera(SpoofedCamera)
 		end
 
 		LocalPlayer.Character.PrimaryPart.CFrame += Vector3.new(0, 1000000, 0)
-		SpoofedCamera.Position = Vector3.new(SpoofedCamera.Position.X, StartLevel, SpoofedCamera.Position.Z)
+		SpoofedCamera.Position = Vector3.new(SpoofedCamera.Position.X, StartLevelHead, SpoofedCamera.Position.Z)
 
 		repeat 
 			task.wait()
-
+			StartLevelHead = SpoofedCamera.Position.Y	
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
-			StartLevel = SpoofedCamera.Position.Y	
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 
 		if InfiniteFlyValue == false or not IsAlive(LocalPlayer) then
 			LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-			LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevel, SpoofedCamera.Position.Z))
+			LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 			
 			SetCamera(LocalPlayer.Character)
 
