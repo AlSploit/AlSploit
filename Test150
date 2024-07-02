@@ -2000,6 +2000,14 @@ function GetSpeed()
 	return Speed
 end
 
+local function GetScythe()
+	for i, v in next, GetInventory(LocalPlayer).items do
+		if v.itemType:find("scythe") then 
+			return v
+		end
+	end
+end
+
 function GetBlock()
 	for i, v in next, GetInventory(LocalPlayer).items do
 		if ItemTable[v.itemType].block ~= nil and v.itemType:find("wool") then
@@ -2950,24 +2958,22 @@ task.spawn(function()
 	local ScytheDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "ScytheDisabler", Settings.ScytheDisabler.Value, function(CallBack)
 		Settings.ScytheDisabler.Value = CallBack
 		
-		local Scythe = (HasItem("wood_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
+		local Scythe = GetScythe()
 		
-		if not HasItem("scythe") then
+		if Scythe then
 			CreateNotification(3, "You need a scythe to use ScytheDisabler")
 		end
 		
 		repeat
 			task.wait()
 			
-			Scythe = (HasItem("wood_scythe") or HasItem("stone_scythe") or HasItem("iron_scythe") or HasItem("diamond_scythe") or HasItem("sky_scythe"))
+			Scythe = GetScythe()
 			
-			if Scythe and IsAlive(LocalPlayer) then
-				SwitchItem(MainInventory:FindFirstChild(Scythe.itemType))
+			if Scythe and IsAlive(LocalPlayer) then				
+				SwitchItem(Scythe)
 				
 				local Movedirection = LocalPlayer.Character.Humanoid.MoveDirection
 				local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
-				
-				print((Movedirection - Vector).Magnitude)
 				
 				if (Movedirection - Vector).Magnitude > 1.8 then
 					Vector = Movedirection
