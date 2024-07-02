@@ -1174,7 +1174,6 @@ local function SecureEnderChestItems()
 
 	for i, v in next, ItemsToSearchFor do
 		if MainInventory:FindFirstChild(v) then
-			game:GetService("ReplicatedStorage").rbxts_include.node_modules:FindFirstChild("@rbxts").net.out._NetManaged:FindFirstChild("Inventory/SetObservedChest"):FireServer(EnderChest)
 			ChestGiveItemRemote:InvokeServer(EnderChest, v)
 		end
 	end
@@ -1939,9 +1938,11 @@ end
 local function AutoBank()
 	local NearestNpc = FindNearestNpc(Settings.AutoBank.Range)
 
-	if NearestNpc then
+	if NearestNpc and UserInputService:IsKeyDown(Enum.KeyCode.F) then
 		CollectEnderChestItems()
 	end
+	
+	NearestNpc = FindNearestNpc(7)
 
 	if not NearestNpc then
 		SecureEnderChestItems()
