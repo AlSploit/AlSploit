@@ -1690,7 +1690,7 @@ local function Invisibility()
 
 	Animation.AnimationId = "rbxassetid://".. Id
 
-	LocalPlayer.Character.Humanoid.Animator:LoadAnimation(Animation)
+	Animation = LocalPlayer.Character.Humanoid.Animator:LoadAnimation(Animation)
 
 	LocalPlayer.Character.LowerTorso.CollisionGroup = "Participants"
 	LocalPlayer.Character.UpperTorso.CollisionGroup = "Participants"
