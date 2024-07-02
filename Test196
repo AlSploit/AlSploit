@@ -1932,7 +1932,7 @@ function GetSpeed()
 		end
 		
 		if (tick() - InfiniteFlyTick) <= 0.8 then
-			Speed = Speed - 10
+			Speed = Speed - 7
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
