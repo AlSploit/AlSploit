@@ -1075,12 +1075,11 @@ task.spawn(function()
 	end
 end)
 
-local SendMessageRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
-local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")
-local ProjectileRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
-local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
-local PlayAgainRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
-local EquipItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
+local SayMessageRequestRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+local ProjectileFireRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
+local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
+local JoinQueueRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
+local SetInvItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
 local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
 local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
 
@@ -1092,12 +1091,12 @@ task.spawn(function()
 	end
 end)
 
+local DestroyPetrifiedPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer")
+local ReportPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
 local ProjectileMeta = require(ReplicatedStorage.TS.projectile["projectile-meta"]).ProjectileMeta
 local SwordHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
 local CombatConstant = require(ReplicatedStorage.TS.combat["combat-constant"]).CombatConstant
 local PlacementCPS = require(ReplicatedStorage.TS["shared-constants"]).CpsConstants
-local ReportRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
-local MinerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer")
 
 local KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
 local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
@@ -1448,7 +1447,7 @@ local function ShootProjectile(Item, Projectile)
 			[9] = (WorkSpace:GetServerTimeNow() - 0.11)
 		}
 
-		ProjectileRemote:InvokeServer(unpack(Args))
+		ProjectileFireRemote:InvokeServer(unpack(Args))
 	end	
 end
 
@@ -1458,7 +1457,7 @@ local function SendChatMessage(Message)
 		[2] = "All"
 	}
 
-	SendMessageRemote:FireServer(unpack(Arguments))
+	SayMessageRequestRemote:FireServer(unpack(Arguments))
 end
 
 local function FindPlacedBlock(Position)
@@ -1731,7 +1730,7 @@ local function SwitchItem(Item)
 	if LocalPlayer.Character.HandInvItem.Value ~= Item then
 		local InventoryItem = ReplicatedStorage.Inventories:FindFirstChild(LocalPlayer.Name):FindFirstChild(Item)
 
-		EquipItemRemote:InvokeServer({hand = InventoryItem})
+		SetInvItemRemote:InvokeServer({hand = InventoryItem})
 	end	
 end
 
@@ -2442,7 +2441,7 @@ local function AutoKit()
 	task.spawn(function()
 		if PetrifiedPlayer then
 			if EquippedKit == "miner" or nil then
-				MinerRemote:FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
+				DestroyPetrifiedPlayerRemote:FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 			end
 		end
 	end)
@@ -3521,16 +3520,52 @@ task.spawn(function()
 				local NearestPlayer = FindNearestPlayer(Settings.AntiHit.Range)
 				
 				if IsAlive(LocalPlayer) and NearestPlayer and GetMatchState() ~= 0 then
-					if InfiniteFlyValue == false then
-						InfiniteFlyValue = true
-						InfFly()
-					end
+					LocalPlayer.Character.Archivable = true
 					
+					local Clone = LocalPlayer.Character:Clone()
+					
+					Clone.Parent = WorkSpace
+					Clone.Name = "Clone"
+					
+					Camera.CameraSubject = Clone
+					
+					task.spawn(function()
+						for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
+							v:Destroy()
+						end
+
+						for i, v in next, Clone:GetChildren() do
+							if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+								v.Transparency = 1
+							end
+							
+							if v:IsA("Accessory") then
+								v:FindFirstChild("Handle").Transparency = 1
+							end
+						end
+					end)
+					
+					LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 100000, 0)
+
+					task.spawn(function()
+						repeat
+							task.wait()
+							
+							if Clone:FindFirstChild("HumanoidRootPart") then
+								Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
+							end
+						until not Clone
+					end)			
+
 					task.wait(0.2)
 					
-					if InfiniteFlyValue == true then
-						InfiniteFlyValue = false
-					end		
+					LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+					LocalPlayer.Character.HumanoidRootPart.CFrame = Clone.HumanoidRootPart.CFrame
+					
+					Camera.CameraSubject = LocalPlayer.Character
+					Clone:Destroy()
+					
+					task.wait(0.1)
 				end
 			until Settings.AntiHit.Value == false
 		end)
@@ -4833,7 +4868,7 @@ task.spawn(function()
 					for i, v in next, PlayerService:GetPlayers() do
 						if Settings.AutoReport.Value == true then
 							if v ~= LocalPlayer and v:GetAttribute("PlayerConnected") and ReportedList[v] == nil then
-								ReportRemote:FireServer(v.UserId)
+								ReportPlayerRemote:FireServer(v.UserId)
 								ReportedList[v] = true
 							end
 						end
@@ -4939,7 +4974,7 @@ task.spawn(function()
 				repeat task.wait(3) until not IsAlive(LocalPlayer)
 
 				if Settings.PlayAgain.Value == true then
-					PlayAgainRemote:FireServer({["queueType"] = GetQueueType()})
+					JoinQueueRemote:FireServer({queueType = GetQueueType()})
 				end			
 			end
 		end)
@@ -4948,7 +4983,7 @@ task.spawn(function()
 			repeat task.wait(3) until GetMatchState() == 2
 
 			if Settings.PlayAgain.Value == true then
-				PlayAgainRemote:FireServer({["queueType"] = GetQueueType()})
+				JoinQueueRemote:FireServer({queueType = GetQueueType()})
 			end
 		end)
 	end)
@@ -5378,132 +5413,6 @@ task.spawn(function()
 
 			if Value == false then
 				InstanceUI:Destroy()
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local Esp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Esp", Settings.Esp.Value, function(CallBack)
-		Settings.Esp.Value = CallBack
-
-		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
-
-			if Settings.Esp.Value == true then
-				task.spawn(function()
-					for i, v in next, PlayerService:GetPlayers() do
-						if IsAlive(v) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
-							CreateOutline(v)
-						end
-
-						v.CharacterAdded:Connect(function(Character)
-							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
-
-
-							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
-								CreateOutline(v)
-							end
-						end)
-					end
-				end)
-
-				task.spawn(function()
-					PlayerService.PlayerAdded:Connect(function(Player)
-						Player.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(Player)
-
-							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
-								CreateOutline(Player)
-							end
-						end)
-					end)
-				end)
-			end
-		end)
-
-		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
-
-			if Settings.Esp.Value == false then
-				for i, v in next, PlayerService:GetPlayers() do
-					if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
-						v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
-					end
-				end
-			end
-		end)		
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(UtilityTab, Settings.Esp.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.Esp.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.Esp.KeyBind then
-					Settings.Esp.Value = not Settings.Esp.Value
-
-					if Settings.Esp.Value == true then
-						task.spawn(function()
-							for i, v in next, PlayerService:GetPlayers() do
-								if IsAlive(v) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
-									CreateOutline(v)
-								end
-
-								v.CharacterAdded:Connect(function(Character)
-									repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
-
-									if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
-										CreateOutline(v)
-									end
-								end)
-							end
-						end)
-
-						task.spawn(function()
-							PlayerService.PlayerAdded:Connect(function(Player)
-								Player.CharacterAdded:Connect(function()
-									repeat task.wait() until Player
-
-									if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
-										CreateOutline(Player)
-									end
-								end)
-							end)
-						end)
-
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					task.spawn(function()
-						if Settings.Esp.Value == false then
-							for i, v in next, PlayerService:GetPlayers() do
-								if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
-									v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
-								end
-							end
-
-							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-						end
-					end)
-				end
 			end
 		end)
 	end)
@@ -6450,7 +6359,7 @@ task.spawn(function()
 
 					task.spawn(function()
 						if NearestPlayer then
-							KillHumanoid()
+							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
 								repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0
@@ -6613,7 +6522,7 @@ task.spawn(function()
 
 					task.spawn(function()
 						if NearestBed then
-							KillHumanoid()
+							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
 								repeat task.wait() until IsAlive(LocalPlayer)
@@ -6944,6 +6853,132 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Esp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Esp", Settings.Esp.Value, function(CallBack)
+		Settings.Esp.Value = CallBack
+
+		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+
+			if Settings.Esp.Value == true then
+				task.spawn(function()
+					for i, v in next, PlayerService:GetPlayers() do
+						if IsAlive(v) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+							CreateOutline(v)
+						end
+
+						v.CharacterAdded:Connect(function(Character)
+							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+
+
+							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+								CreateOutline(v)
+							end
+						end)
+					end
+				end)
+
+				task.spawn(function()
+					PlayerService.PlayerAdded:Connect(function(Player)
+						Player.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(Player)
+
+							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
+								CreateOutline(Player)
+							end
+						end)
+					end)
+				end)
+			end
+		end)
+
+		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+
+			if Settings.Esp.Value == false then
+				for i, v in next, PlayerService:GetPlayers() do
+					if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
+						v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
+					end
+				end
+			end
+		end)		
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Esp.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Esp.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Esp.KeyBind then
+					Settings.Esp.Value = not Settings.Esp.Value
+
+					if Settings.Esp.Value == true then
+						task.spawn(function()
+							for i, v in next, PlayerService:GetPlayers() do
+								if IsAlive(v) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+									CreateOutline(v)
+								end
+
+								v.CharacterAdded:Connect(function(Character)
+									repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+
+									if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
+										CreateOutline(v)
+									end
+								end)
+							end
+						end)
+
+						task.spawn(function()
+							PlayerService.PlayerAdded:Connect(function(Player)
+								Player.CharacterAdded:Connect(function()
+									repeat task.wait() until Player
+
+									if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
+										CreateOutline(Player)
+									end
+								end)
+							end)
+						end)
+
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					task.spawn(function()
+						if Settings.Esp.Value == false then
+							for i, v in next, PlayerService:GetPlayers() do
+								if IsAlive(v) and v.Character.PrimaryPart:FindFirstChild("Esp") then
+									v.Character.PrimaryPart:FindFirstChild("Esp"):Destroy()
+								end
+							end
+
+							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+						end
+					end)
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local TargetHud, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "TargetHud", Settings.TargetHud.Value, function(CallBack)
 		Settings.TargetHud.Value = CallBack
 
@@ -7244,6 +7279,8 @@ task.spawn(function()
 end)
 
 --recall  bedtp playertp
---bedtp and playertp revise
---switchitem scythe
 -- nuker raycast every block and whichever one is less distance raycasted to bed then pick
+
+--AlSploit rules
+--Remotes full name in variable
+--fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
