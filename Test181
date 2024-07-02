@@ -3521,52 +3521,16 @@ task.spawn(function()
 				local NearestPlayer = FindNearestPlayer(Settings.AntiHit.Range)
 				
 				if IsAlive(LocalPlayer) and NearestPlayer and GetMatchState() ~= 0 then
-					LocalPlayer.Character.Archivable = true
+					if InfiniteFlyValue == false then
+						InfiniteFlyValue = true
+						InfFly()
+					end
 					
-					local Clone = LocalPlayer.Character:Clone()
-					
-					Clone.Parent = WorkSpace
-					Clone.Name = "Clone"
-					
-					Camera.CameraSubject = Clone
-					
-					task.spawn(function()
-						for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
-							v:Destroy()
-						end
-
-						for i, v in next, Clone:GetChildren() do
-							if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
-								v.Transparency = 1
-							end
-							
-							if v:IsA("Accessory") then
-								v:FindFirstChild("Handle").Transparency = 1
-							end
-						end
-					end)
-					
-					LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 100000, 0)
-
-					task.spawn(function()
-						repeat
-							task.wait()
-							
-							if Clone:FindFirstChild("HumanoidRootPart") then
-								Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
-							end
-						until not Clone
-					end)			
-
 					task.wait(0.2)
 					
-					LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-					LocalPlayer.Character.HumanoidRootPart.CFrame = Clone.HumanoidRootPart.CFrame
-					
-					Camera.CameraSubject = LocalPlayer.Character
-					Clone:Destroy()
-					
-					task.wait(0.1)
+					if InfiniteFlyValue == true then
+						InfiniteFlyValue = false
+					end		
 				end
 			until Settings.AntiHit.Value == false
 		end)
