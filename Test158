@@ -1118,13 +1118,9 @@ end)
 local MainInventory = nil
 
 task.spawn(function()
-	repeat
-		task.wait()
-		
-		task.spawn(function()
-			MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value or nil
-		end)
-	until MainInventory
+	repeat task.wait() until GetMatchState() ~= 0
+	
+	MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 end)
 
 local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
