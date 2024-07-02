@@ -1936,7 +1936,7 @@ function GetSpeed()
 		end
 		
 		if (tick() - InfiniteFlyTick) <= 1.2 then
-			Speed = Speed - 12
+			Speed = Speed - 10
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
@@ -2578,7 +2578,7 @@ local function InfFly()
 		
 		CreateNotification(3, "Slowing down, preventing lagback")
 		
-		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 			
 		SetCamera(LocalPlayer.Character)
