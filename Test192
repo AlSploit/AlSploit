@@ -1934,6 +1934,10 @@ function GetSpeed()
 		if ScytheDisablerAnticheatDisabled == true then
 			Speed = Speed + 40
 		end
+		
+		if (tick() - InfiniteFlyTick) <= 1 then
+			Speed = Speed - 10
+		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
 			Speed = Speed + 30
@@ -2571,6 +2575,8 @@ local function InfFly()
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 		
 		InfiniteFlyTick = tick()
+		
+		CreateNotification(3, "Slowing down, preventing lagback")
 		
 		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
