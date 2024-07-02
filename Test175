@@ -2556,7 +2556,7 @@ end
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
 		SpoofedCamera = CreateSpoofedCamera()
-		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y + 1
+		StartLevel = LocalPlayer.Character.PrimaryPart.Position.Y
 
 		if SpoofedCamera then
 			SetCamera(SpoofedCamera)
@@ -2574,7 +2574,7 @@ local function InfFly()
 
 		if InfiniteFlyValue == false or not IsAlive(LocalPlayer) then
 			LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-			LocalPlayer.Character.PrimaryPart.CFrame = SpoofedCamera.CFrame
+			LocalPlayer.Character.PrimaryPart.CFrame = SpoofedCamera.CFrame - CFrame.new(Vector3.new(0, 1, 0))
 			
 			SetCamera(LocalPlayer.Character)
 
