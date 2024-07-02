@@ -1928,7 +1928,7 @@ function GetSpeed()
 		end
 		
 		if ScytheDisablerAnticheatDisabled == true then
-			Speed = Speed + 40
+			Speed = Speed + 35
 		end
 		
 		if (tick() - InfiniteFlyTick) <= 0.8 then
@@ -2858,16 +2858,18 @@ task.spawn(function()
 
 		local Scythe = GetScythe()
 
-		if not Scythe and Settings.ScytheDisabler == true then
+		if not Scythe and Settings.ScytheDisabler.Value == true then
 			CreateNotification(3, "You need a scythe to use ScytheDisabler")
 		end
 
 		repeat
-			task.wait()
+			task.wait(0.01)
 
+			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
+			
 			Scythe = GetScythe()
 
-			if Scythe and IsAlive(LocalPlayer) then				
+			if Scythe and IsAlive(LocalPlayer) and (Settings.KillAura.Value == true and NearestPlayer or true) then				
 				SwitchItem(Scythe.itemType)
 
 				local Movedirection = LocalPlayer.Character.Humanoid.MoveDirection
@@ -2881,7 +2883,7 @@ task.spawn(function()
 				ScytheDisablerAnticheatDisabled = true
 			end
 
-			if not Scythe or not IsAlive(LocalPlayer) then
+			if not Scythe or not IsAlive(LocalPlayer) or not (Settings.KillAura.Value == true and NearestPlayer or true) then
 				ScytheDisablerAnticheatDisabled = false
 			end
 		until Settings.ScytheDisabler.Value == false
