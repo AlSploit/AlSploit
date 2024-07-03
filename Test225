@@ -2728,9 +2728,7 @@ local function Nuker(NearestBed, NearestOre)
 			local Amount, Side = FindBestBreakSide(NearestBed.Position)
 			local Amount2, Side2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
 			
-			local TargetBlock = (Amount < Amount2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
-			
-			print(TargetBlock)
+			local TargetBlock = (Amount < Amount2 and Side or Side2)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
