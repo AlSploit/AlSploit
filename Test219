@@ -2733,12 +2733,8 @@ local function Nuker(NearestBed, NearestOre)
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
 			DamageBlockRemote:InvokeServer({
-				blockRef = {
-					blockPosition = GetServerPosition(TargetBlock)
-				},
-
-				hitPosition = GetServerPosition(TargetBlock),
-				hitNormal = GetServerPosition(TargetBlock)
+				hitPosition = TargetBlock * 3, 
+				hitNormal = Vector3.FromNormalId(Amount < Amount2 and Side or Side2)
 			})
 
 			task.spawn(function()
@@ -6739,7 +6735,7 @@ task.spawn(function()
 				task.wait()
 
 				if Settings.Nuker.CustomAnimation == true and IsAlive(LocalPlayer) and NearestBedFound and CanSeeNearestBed and not NearestEntityFound then
-					task.wait(0.25)
+					task.wait(0.2)
 
 					ViewmodelController:playAnimation(15)
 				end
