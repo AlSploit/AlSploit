@@ -2696,14 +2696,16 @@ local function Nuker(NearestBed, NearestOre)
 		if NearestBed then
 			NearestBedFound = true
 			
+			local NearestBedCovered = IsBlockCovered(NearestBed)
+			
 			local Strength, TargetBlock = FindBestBreakSide(NearestBed.Position)
 			local Strength2, TargetBlock2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
 			
-			local TargetSide = (Strength < Strength2 and TargetBlock or TargetBlock2)
-
-			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
+			local TargetBlock = (Strength < Strength2 and TargetBlock or TargetBlock2)
 			
-			print(IsBlockCovered(NearestBed.Position))
+			if NearestBedCovered then
+				TargetBlock = NearestBed
+			end		
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
