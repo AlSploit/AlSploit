@@ -2705,16 +2705,6 @@ local function Nuker(NearestBed, NearestOre)
 				TargetBlock = NearestBed
 			end		
 			
-			local Part = Instance.new("Part")
-			
-			Part.Position = TargetBlock.Position
-			Part.Size = Vector3.new(3,3,3)
-			Part.Anchored = true
-			Part.CanCollide = true
-			Part.Parent = game.Workspace
-			Part.Transparency = 0.5
-			Part.BrickColor = BrickColor.new(0, 1, 0)
-			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
 					blockPosition = GetServerPosition(TargetBlock.Position),
