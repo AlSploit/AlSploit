@@ -2727,12 +2727,7 @@ local function Nuker(NearestBed, NearestOre)
 			local TargetBlock = (Amount < Amount2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
-			local BestTool = GetBestTool(Amount < Amount2 and NearestBed or Side2)
 			
-			if not NearestPlayer and BestTool then
-				SwitchItem(BestTool.itemType)
-			end
-
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
 					blockPosition = GetServerPosition(TargetBlock)
