@@ -2695,10 +2695,12 @@ local function Nuker(NearestBed, NearestOre)
 			local Strength, TargetBlock = FindBestBreakSide(NearestBed.Position)
 			local Strength2, TargetBlock2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
 			
-			local TargetBlock = (Strength < Strength2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
+			--local TargetBlock = (Strength < Strength2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
 			--local TargetSide = (Strength < Strength2 and Side or Side2)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
+			
+			print(TargetBlock)
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
