@@ -2701,7 +2701,7 @@ local function Nuker(NearestBed, NearestOre)
 			
 			local TargetBlock = (Strength < Strength2 and TargetBlock or TargetBlock2)
 			
-			if not NearestBedCovered then
+			if NearestBedCovered == false then
 				TargetBlock = NearestBed
 			end		
 			
