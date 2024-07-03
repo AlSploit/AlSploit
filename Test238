@@ -1385,7 +1385,7 @@ local function TweenToNearestBed()
 end
 
 local function FindBestBreakSide(Position)
-	local SoftestBlock, SoftestSide = 9e9, Enum.NormalId.Top
+	local SoftestBlockStrength, SoftestBlock = 9e9, nil
 	local SideStrength = 0
 
 	for i, v in next, (Sides) do
@@ -1394,17 +1394,14 @@ local function FindBestBreakSide(Position)
 
 			SideStrength = SideStrength + (BlockMetaGame and BlockMetaGame.health or 11)
 			
-			print(v2.Name)
-			print(v2)
-			
-			if SoftestBlock <= SideStrength then
-				SoftestBlock = SideStrength
-				SoftestSide = v2
+			if SoftestBlockStrength <= SideStrength then
+				SoftestBlockStrength = SideStrength
+				SoftestBlock = v2
 			end	
 		end	
 	end
 	
-	return SoftestBlock, SoftestSide
+	return SoftestBlockStrength, SoftestBlock
 end
 
 local function GetServerPosition(Position)
@@ -2695,11 +2692,11 @@ local function Nuker(NearestBed, NearestOre)
 		if NearestBed then
 			NearestBedFound = true
 			
-			local Amount, Side = FindBestBreakSide(NearestBed.Position)
-			local Amount2, Side2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
+			local Strength, TargetBlock = FindBestBreakSide(NearestBed.Position)
+			local Strength2, TargetBlock2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
 			
-			local TargetBlock = (Amount < Amount2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
-			local TargetSide = (Amount < Amount2 and Side or Side2)
+			local TargetBlock = (Strength < Strength2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
+			--local TargetSide = (Strength < Strength2 and Side or Side2)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
@@ -2709,7 +2706,7 @@ local function Nuker(NearestBed, NearestOre)
 				},
 
 				hitPosition = GetServerPosition(TargetBlock),
-				hitNormal = Vector3.FromNormalId(TargetSide)
+				hitNormal = Vector3.FromNormalId(TargetBlock)
 			})
 
 			task.spawn(function()
