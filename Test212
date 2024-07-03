@@ -1487,7 +1487,9 @@ end
 function IsBlockBreakable(BlockPosition)
 	local IsBlockBreakableValue = false
 	
-	if BlockController:isBlockBreakable({blockPosition = BlockPosition / 3}, LocalPlayer) then
+	BlockPosition = GetServerPosition(BlockPosition)
+	
+	if BlockController:isBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) then
 		IsBlockBreakableValue = true
 	end
 	
