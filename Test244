@@ -1385,7 +1385,7 @@ local function TweenToNearestBed()
 end
 
 local function FindBestBreakSide(Position)
-	local SoftestBlockStrength, SoftestBlock = 0, nil
+	local SoftestBlockStrength, SoftestBlock = math.huge, nil
 	local BlockStrength = 0
 
 	for i, v in next, (Sides) do
@@ -1396,7 +1396,9 @@ local function FindBestBreakSide(Position)
 				BlockStrength = (BlockMetaGame.health and BlockMetaGame.health or 10)
 			end
 			
-			if SoftestBlockStrength <= BlockStrength then
+			if BlockStrength <= SoftestBlockStrength then
+				print("success", v2)
+				
 				SoftestBlockStrength = BlockStrength
 				SoftestBlock = v2
 			end	
@@ -2702,8 +2704,6 @@ local function Nuker(NearestBed, NearestOre)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
-			print(TargetBlock)
-			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
 					blockPosition = GetServerPosition(TargetBlock),
@@ -2766,7 +2766,7 @@ local function FlyMe()
 
 		task.spawn(function()
 			FlyBodyVelocity = Instance.new("BodyVelocity")
-			FlyBodyVelocity.MaxForce = Vector3.new(0, 9e9, 0)
+			FlyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
 			FlyBodyVelocity.Name = "FlyBodyVelocity"
 			FlyBodyVelocity.Parent = LocalPlayer.Character.PrimaryPart
 
