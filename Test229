@@ -2706,7 +2706,7 @@ local function Nuker(NearestBed, NearestOre)
 				},
 
 				hitPosition = GetServerPosition(TargetBlock),
-				hitNormal = Vector3.FromNormalId(TargetBlock)
+				hitNormal = GetServerPosition(TargetBlock)
 			})
 
 			task.spawn(function()
