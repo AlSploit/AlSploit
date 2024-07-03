@@ -1938,6 +1938,10 @@ function GetSpeed()
 		if (tick() - JadeHammerTick) <= 1.4 then
 			Speed = Speed + 30
 		end
+		
+		if InfiniteFlyValue == true or FlyValue == true then
+			Speed = Speed - 0.5
+		end
 
 		if DamageBoost == true then
 			Speed = Speed + 17
@@ -2566,6 +2570,7 @@ local function InfFly()
 
 		repeat 
 			task.wait()
+			
 			StartLevelHead = SpoofedCamera.Position.Y	
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
@@ -2827,7 +2832,7 @@ task.spawn(function()
 				FlyUp = true
 			end
 
-			if Input.KeyCode == Enum.KeyCode.Q and not UserInputService:GetFocusedTextBox() then
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
 				FlyDown = true
 			end
 		end)
@@ -2839,7 +2844,7 @@ task.spawn(function()
 				FlyUp = false
 			end
 
-			if Input.KeyCode == Enum.KeyCode.Q and not UserInputService:GetFocusedTextBox() then
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
 				FlyDown = false
 			end
 		end)
@@ -5428,7 +5433,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			task.spawn(function()
-				for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
+				for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
 					task.spawn(function()
 						if v:IsA("ImageButton") then
 							task.spawn(function()
@@ -5468,7 +5473,7 @@ task.spawn(function()
 				repeat task.wait() until IsAlive(LocalPlayer)
 
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
 						task.spawn(function()
 							if v:IsA("ImageButton") then
 								task.spawn(function()
@@ -5506,7 +5511,7 @@ task.spawn(function()
 
 				task.spawn(function()
 					if Settings.CustomInventory.Value == true then
-						for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
+						for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
 							task.spawn(function()
 								if v:IsA("UICorner") then
 									v.CornerRadius= UDim.new(0, 6)
@@ -5541,7 +5546,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.CustomInventory.Value == true then
-				for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
+				for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
 					task.spawn(function()
 						if v:IsA("UICorner") then
 							v.CornerRadius= UDim.new(0, 8)
@@ -5574,7 +5579,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.CustomInventory.Value == false then
-				for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
+				for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
 					task.spawn(function()
 						if v:IsA("UICorner") then
 							v:Destroy()
@@ -5649,7 +5654,7 @@ task.spawn(function()
 				task.spawn(function()
 					if Settings.CustomHealthBar.Value == true then
 						task.spawn(function()
-							for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+							for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
 								if v:IsA("Frame") then
 									local UICorner = Instance.new("UICorner")
 
@@ -5662,7 +5667,7 @@ task.spawn(function()
 						end)
 
 						task.spawn(function()
-							for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):GetDescendants() do	
+							for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
 								if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
 									local UICorner = Instance.new("UICorner")
 
@@ -5679,7 +5684,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.CustomHealthBar.Value == true then
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
 						if v:IsA("Frame") then
 							local UICorner = Instance.new("UICorner")
 
@@ -5692,7 +5697,7 @@ task.spawn(function()
 				end)
 
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
 						if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
 							local UICorner = Instance.new("UICorner")
 
@@ -5707,7 +5712,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.CustomHealthBar.Value == false then
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
 						task.spawn(function()
 							if v:IsA("Frame") then
 								v.BackgroundColor3 = Color3.new(0.796078, 0.211765, 0.141176)
@@ -5723,7 +5728,7 @@ task.spawn(function()
 				end)				
 
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
 						if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
 							if v:FindFirstChild("UICorner") then
 								v:FindFirstChild("UICorner"):Destroy()
@@ -7292,3 +7297,4 @@ end)
 --AlSploit rules
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
+--aimbot shit
