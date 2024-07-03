@@ -2703,7 +2703,7 @@ local function Nuker(NearestBed, NearestOre)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
-			print(IsBlockCovered(NearestBed))
+			print(IsBlockCovered(NearestBed.Position))
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
