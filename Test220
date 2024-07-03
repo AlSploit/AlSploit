@@ -2732,8 +2732,8 @@ local function Nuker(NearestBed, NearestOre)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
-			DamageBlockRemote:InvokeServer({
-				hitPosition = TargetBlock * 3, 
+			require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out.shared.remotes).BlockEngineRemotes.Client:Get("DamageBlock"):CallServerAsync({
+				blockPosition = TargetBlock * 3, 
 				hitNormal = Vector3.FromNormalId(Amount < Amount2 and Side or Side2)
 			})
 
