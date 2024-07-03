@@ -1435,7 +1435,7 @@ local function FindPlacedBlocks(Position, Side)
 		local BlockPosition = (Position + (Vector3.FromNormalId(Side) * (i * 3)))
 		
 		local IsBlockCovered = IsBlockCovered(BlockPosition)
-		local ExtraBlock = FindPlacedBlocks(BlockPosition)
+		local ExtraBlock = FindPlacedBlock(BlockPosition)
 		
 		if ExtraBlock then
 			if IsBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) and ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" then
@@ -1533,7 +1533,7 @@ local function SendChatMessage(Message)
 	SayMessageRequestRemote:FireServer(unpack(Arguments))
 end
 
-local function FindPlacedBlock(Position)
+function FindPlacedBlock(Position)
 	local BlockPosition = BlockController:getBlockPosition(Position)
 
 	return BlockController:getStore():getBlockAt(BlockPosition), BlockPosition
