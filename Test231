@@ -1482,6 +1482,7 @@ function IsBlockBreakable(BlockPosition)
 	
 	if BlockController:isBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) then
 		IsBlockBreakableValue = true
+		print(BlockPosition)
 	end
 	
 	return IsBlockBreakableValue
