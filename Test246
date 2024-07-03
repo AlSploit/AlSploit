@@ -2706,11 +2706,11 @@ local function Nuker(NearestBed, NearestOre)
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
-					blockPosition = GetServerPosition(TargetBlock),
+					blockPosition = GetServerPosition(TargetBlock.Position),
 				},
 
-				hitPosition = GetServerPosition(TargetBlock),
-				hitNormal = GetServerPosition(TargetBlock)
+				hitPosition = GetServerPosition(TargetBlock.Position),
+				hitNormal = GetServerPosition(TargetBlock.Position)
 			})
 
 			task.spawn(function()
