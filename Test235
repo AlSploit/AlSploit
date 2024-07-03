@@ -1386,31 +1386,22 @@ end
 
 local function FindBestBreakSide(Position)
 	local SoftestBlock, SoftestSide = 9e9, Enum.NormalId.Top
+	local SideStrength = 0
 
 	for i, v in next, (Sides) do
-		local SideStrength = 0
-
 		for i2, v2 in next, FindPlacedBlocks(Position, v) do	
 			local BlockMetaGame = ItemTable[v2].block
 
 			SideStrength = SideStrength + (BlockMetaGame and BlockMetaGame.health or 11)
-
-			if BlockMetaGame then
-				local BestTool = GetBestTool(v2)
-
-				if BestTool then
-					SideStrength = (SideStrength - ItemTable[BestTool.itemType].breakBlock[BlockMetaGame.breakType])
-					
-					print(BestTool.itemType)
-				end
-			end
-		end
-
-		if SideStrength <= SoftestBlock then
-			SoftestBlock = SideStrength
-			SoftestSide = v
+			
+			if SoftestBlock <= SideStrength then
+				SoftestBlock = SideStrength
+				SoftestSide = v2
+			end	
 		end	
 	end
+	
+	print(SoftestBlock, SoftestSide)
 
 	return SoftestBlock, SoftestSide
 end
@@ -1816,26 +1807,6 @@ local function Invisibility()
 	Animation.Looped = true
 	Animation:Play()
 	Animation:AdjustSpeed(0 / 10)
-end
-
-function GetBestTool(Block)
-	local BestTool, Best = nil, 0
-	
-	local BlockMetaGame = ItemTable[Block]
-	local BlockType = (BlockMetaGame.block and BlockMetaGame.block.breakType or nil)
-	
-	if BlockType then		
-		for i, v in next, GetInventory().items do
-			local MetaGame = ItemTable[v.itemType]
-			
-			if MetaGame.breakBlock and MetaGame.breakBlock[BlockType] and MetaGame.breakBlock[BlockType] >= Best then
-				Best = MetaGame.breakBlock[BlockType]
-				BestTool = v
-			end
-		end
-	end
-	
-	return BestTool
 end
 
 local function SwitchItem(Item)
@@ -2733,10 +2704,10 @@ local function Nuker(NearestBed, NearestOre)
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
-					blockPosition = TargetBlock,
+					blockPosition = GetServerPosition(TargetBlock),
 				},
 
-				hitPosition = TargetBlock,
+				hitPosition = GetServerPosition(TargetBlock),
 				hitNormal = Vector3.FromNormalId(TargetSide)
 			})
 
@@ -7397,3 +7368,4 @@ end)
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --aimbot shit
+--fix autoconsume
