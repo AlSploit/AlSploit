@@ -1385,17 +1385,15 @@ local function TweenToNearestBed()
 end
 
 local function FindBestBreakSide(Position)
-	local SoftestBlockStrength, SoftestBlock = 9e9, nil
+	local SoftestBlockStrength, SoftestBlock = 0, nil
 	local BlockStrength = 0
 
 	for i, v in next, (Sides) do
 		for i2, v2 in next, FindPlacedBlocks(Position, v) do			
 			local BlockMetaGame = ItemTable[v2].block
-			
-			print(BlockMetaGame.health, v2)
 
 			if BlockMetaGame then
-				BlockStrength = (BlockMetaGame and BlockMetaGame.health or 10)
+				BlockStrength = (BlockMetaGame.health and BlockMetaGame.health or 10)
 			end
 			
 			if SoftestBlockStrength <= BlockStrength then
