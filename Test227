@@ -2734,8 +2734,8 @@ local function Nuker(NearestBed, NearestOre)
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
 			DamageBlockRemote:InvokeServer({
-				hitPosition = GetServerPosition(TargetBlock),
-				hitNormal = TargetSide
+				hitPosition = (TargetBlock * 3),
+				hitNormal = Vector3.FromNormalId(TargetSide)
 			})
 
 			task.spawn(function()
