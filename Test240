@@ -1391,6 +1391,8 @@ local function FindBestBreakSide(Position)
 	for i, v in next, (Sides) do
 		for i2, v2 in next, FindPlacedBlocks(Position, v) do			
 			local BlockMetaGame = ItemTable[v2].block
+			
+			print(BlockMetaGame, v2)
 
 			if BlockMetaGame then
 				BlockStrength = (BlockMetaGame and BlockMetaGame.health or 10)
@@ -1399,8 +1401,6 @@ local function FindBestBreakSide(Position)
 			if SoftestBlockStrength <= BlockStrength then
 				SoftestBlockStrength = BlockStrength
 				SoftestBlock = v2
-				
-				print(v2.Name)
 			end	
 		end	
 	end
