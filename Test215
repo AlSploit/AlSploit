@@ -1384,6 +1384,33 @@ local function TweenToNearestBed()
 	end
 end
 
+local function FindBestBreakSide(Position)
+	local SoftestBlock, SoftestSide = 9e9, Enum.NormalId.Top
+
+	for i, v in next, (Sides) do
+		local SideStrength = 0
+
+		for i2, v2 in next, FindPlacedBlocks(Position, v) do	
+			local BlockMetaGame = ItemTable[v2].block
+
+			SideStrength = SideStrength + (BlockMetaGame and BlockMetaGame.health or 11)
+
+			if BlockMetaGame then
+				local BestTool = GetBestTool(v2)
+
+				SideStrength = (SideStrength - ItemTable[BestTool.itemType].breakBlock[BlockMetaGame.breakType])
+			end
+		end
+
+		if SideStrength <= SoftestBlock then
+			SoftestBlock = SideStrength
+			SoftestSide = v
+		end	
+	end
+
+	return SoftestBlock, SoftestSide
+end
+
 local function GetServerPosition(Position)
 	local X = math.round(Position.X / 3)
 	local Y = math.round(Position.Y / 3)
@@ -1428,7 +1455,7 @@ local function FindNearestGhost(MaxDistance)
 	return NearestGhost
 end
 
-local function FindPlacedBlocks(Position, Side)
+function FindPlacedBlocks(Position, Side)
 	local LastFound, Blocks = nil, {}
 	
 	for i = 1, 20 do
@@ -1455,33 +1482,6 @@ local function FindPlacedBlocks(Position, Side)
 	end
 	
 	return Blocks
-end
-
-local function GetBestBreakSide(Position)
-	local SoftestBlock, SoftestSide = 9e9, Enum.NormalId.Top
-	
-	for i, v in next, (Sides) do
-		local SideStrength = 0
-		
-		for i2, v2 in next, FindPlacedBlocks(Position, v) do	
-			local BlockMetaGame = ItemTable[v2].block
-			
-			SideStrength = SideStrength + (BlockMetaGame and BlockMetaGame.health or 11)
-			
-			if BlockMetaGame then
-				local BestTool = GetBestTool(v2)
-				
-				SideStrength = (SideStrength - ItemTable[BestTool.itemType].breakBlock[BlockMetaGame.breakType])
-			end
-		end
-		
-		if SideStrength <= SoftestBlock then
-			SoftestBlock = SideStrength
-			SoftestSide = v
-		end	
-	end
-	
-	return SoftestBlock, SoftestSide
 end
 
 function IsBlockBreakable(BlockPosition)
@@ -2721,10 +2721,17 @@ local function Nuker(NearestBed, NearestOre)
 		if NearestBed then
 			NearestBedFound = true
 			
-			local Amount, Side = GetBestBreakSide(NearestBed.Position)
-			local Amount2, Side2 = GetBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
+			local Amount, Side = FindBestBreakSide(NearestBed.Position)
+			local Amount2, Side2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
 			
 			local TargetBlock = (Amount < Amount2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
+
+			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
+			local BestTool = GetBestTool(Amount < Amount2 and NearestBed or Side2)
+			
+			if not NearestPlayer and BestTool then
+				SwitchItem(BestTool.itemType)
+			end
 
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
