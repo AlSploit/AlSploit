@@ -2729,16 +2729,18 @@ local function Nuker(NearestBed, NearestOre)
 			local Amount2, Side2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
 			
 			local TargetBlock = (Amount < Amount2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
+			
+			print(TargetBlock)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
-					blockPosition = TargetBlock * 3
+					blockPosition = GetServerPosition(TargetBlock)
 				},
 
-				hitPosition = TargetBlock * 3,
-				hitNormal = TargetBlock * 3
+				hitPosition = GetServerPosition(TargetBlock),
+				hitNormal = GetServerPosition(TargetBlock)
 			})
 
 			task.spawn(function()
