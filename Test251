@@ -2696,7 +2696,7 @@ local function Nuker(NearestBed, NearestOre)
 		if NearestBed then
 			NearestBedFound = true
 			
-			local NearestBedCovered = IsBlockCovered(NearestBed)
+			local NearestBedCovered = IsBlockCovered(NearestBed.Position)
 			
 			local Strength, TargetBlock = FindBestBreakSide(NearestBed.Position)
 			local Strength2, TargetBlock2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
@@ -2706,6 +2706,16 @@ local function Nuker(NearestBed, NearestOre)
 			if NearestBedCovered then
 				TargetBlock = NearestBed
 			end		
+			
+			local Part = Instance.new("Part")
+			
+			Part.Position = TargetBlock.Position
+			Part.Size = Vector3.new(3,3,3)
+			Part.Anchored = true
+			Part.CanCollide = true
+			Part.Parent = game.Workspace
+			Part.Transparency = 0.5
+			Part.BrickColor = BrickColor.new(0, 1, 0)
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
