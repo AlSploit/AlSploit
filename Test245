@@ -1462,7 +1462,7 @@ function FindPlacedBlocks(Position, Side)
 		local ExtraBlock = FindPlacedBlock(BlockPosition)
 		
 		if ExtraBlock then
-			if ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" and IsBlockBreakable(BlockPosition) then
+			if ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" and ExtraBlock.Name ~= "iron_ore" and IsBlockBreakable(BlockPosition) then
 				table.insert(Blocks, ExtraBlock.Name)
 			end
 			
