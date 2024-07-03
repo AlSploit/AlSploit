@@ -1477,7 +1477,7 @@ function FindNearestBed(MaxDistance)
 
 	for i, v in next, CollectionService:GetTagged("bed")do
 		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
-			if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or (v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
+			if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
 				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 				if Distance < MaxDistance then
