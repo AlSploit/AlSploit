@@ -1569,7 +1569,29 @@ function FindNearestOre(MaxDistance)
 	return NearestOre
 end
 
-function TouchingGround()
+local function IsBlockCovered(Block, Bed)
+	local IsBlockCoveredValue = false
+
+	local RaycastParameters = RaycastParams.new()
+
+	RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block"), Bed}
+	RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+
+	local Raycast1 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 3, 0), RaycastParameters)
+	local Raycast2 = WorkSpace:Raycast(Block.Position, Vector3.new(3, 0, 0), RaycastParameters)
+	local Raycast3 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 0, 3), RaycastParameters)
+	local Raycast4 = WorkSpace:Raycast(Block.Position, Vector3.new(0, -3, 0), RaycastParameters)
+	local Raycast5 = WorkSpace:Raycast(Block.Position, Vector3.new(-3, 0, 0), RaycastParameters)
+	local Raycast6 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 0, -3), RaycastParameters)
+
+	if Raycast1 and Raycast1.Instance and Raycast2 and Raycast2.Instance and Raycast3 and Raycast3.Instance and Raycast4 and Raycast4.Instance and Raycast5 and Raycast5.Instance and Raycast6 and Raycast6.Instance then
+		IsBlockCoveredValue = true	
+	end	
+
+	return IsBlockCoveredValue
+end
+
+local function TouchingGround()
 	if IsAlive(LocalPlayer) then
 		local Parameters = RaycastParams.new()
 		
@@ -1610,6 +1632,28 @@ function GetMatchState()
 	if ClientHandlerStoreGotten == false then
 		return 1
 	end	
+end
+
+local function IsBedCovered(Bed)
+	local IsBedCoveredValue = false
+
+	local RaycastParameters = RaycastParams.new()
+
+	RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+	RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+
+	local Raycast1 = WorkSpace:Raycast(Bed.Position, Vector3.new(0, 3, 0), RaycastParameters)
+	local Raycast2 = WorkSpace:Raycast(Bed.Position, Vector3.new(3, 0, 0), RaycastParameters)
+	local Raycast3 = WorkSpace:Raycast(Bed.Position, Vector3.new(0, 0, 3), RaycastParameters)
+	local Raycast4 = WorkSpace:Raycast(Bed.Position, Vector3.new(0, -3, 0), RaycastParameters)
+	local Raycast5 = WorkSpace:Raycast(Bed.Position, Vector3.new(-3, 0, 0), RaycastParameters)
+	local Raycast6 = WorkSpace:Raycast(Bed.Position, Vector3.new(0, 0, -3), RaycastParameters)
+
+	if Raycast1 and Raycast1.Instance and Raycast2 and Raycast2.Instance and Raycast3 and Raycast3.Instance and Raycast4 and Raycast4.Instance and Raycast5 and Raycast5.Instance and Raycast6 and Raycast6.Instance then
+		IsBedCoveredValue = true	
+	end	
+
+	return IsBedCoveredValue
 end
 
 local function HashFunction(Value)
@@ -2610,35 +2654,20 @@ local function Nuker(NearestBed, NearestOre)
 		if NearestBed then
 			NearestBedFound = true
 
-			local NukerRaycastParameters = RaycastParams.new()
-			local TargetBlock = nil
+			if IsBedCovered(NearestBed) then
+				
+			end
+			
+			if IsBedCovered(NearestBed) == false then
+				DamageBlockRemote:InvokeServer({
+					blockRef = {
+						blockPosition = GetServerPosition(NearestBed.Position)
+					},
 
-			NukerRaycastParameters.FilterType = Enum.RaycastFilterType.Exclude
-			NukerRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
-			NukerRaycastParameters.IgnoreWater = true
-
-			local RaycastResult = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 30, 0), Vector3.new(0, -35, 0), NukerRaycastParameters)
-
-			task.spawn(function()
-				if RaycastResult then
-					if RaycastResult.Instance then
-						TargetBlock = RaycastResult.Instance
-					end
-
-					if not RaycastResult.Instance then
-						TargetBlock = NearestBed
-					end				
-
-					DamageBlockRemote:InvokeServer({
-						blockRef = {
-							blockPosition = GetServerPosition(TargetBlock.Position)
-						},
-
-						hitPosition = GetServerPosition(TargetBlock.Position),
-						hitNormal = GetServerPosition(TargetBlock.Position)
-					})
-				end
-			end)			
+					hitPosition = GetServerPosition(NearestBed.Position),
+					hitNormal = GetServerPosition(NearestBed.Position)
+				})
+			end
 
 			task.spawn(function()
 				local _, Value = Camera:WorldToScreenPoint(NearestBed.Position)
@@ -7297,25 +7326,3 @@ end)
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --aimbot shit
-
-local function IsBlockCovered(Block, Bed)
-	local IsBlockCoveredValue = false
-	
-	local RaycastParameters = RaycastParams.new()
-	
-	RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block"), Bed}
-	RaycastParameters.FilterType = Enum.RaycastFilterType.Include
-	
-	local Raycast1 = WorkSpace:Raycast(Block.Position, Vector3.new(0, Block.Size.Y, 0), RaycastParameters)
-	local Raycast2 = WorkSpace:Raycast(Block.Position, Vector3.new(Block.Size.X, 0, 0), RaycastParameters)
-	local Raycast3 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 0, Block.Size.Z), RaycastParameters)
-	local Raycast4 = WorkSpace:Raycast(Block.Position, Vector3.new(0, -Block.Size.Y, 0), RaycastParameters)
-	local Raycast5 = WorkSpace:Raycast(Block.Position, Vector3.new(-Block.Size.X, 0, 0), RaycastParameters)
-	local Raycast6 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 0, -Block.Size.Z), RaycastParameters)
-	
-	if Raycast1 and Raycast1.Instance and Raycast2 and Raycast2.Instance and Raycast3 and Raycast3.Instance and Raycast4 and Raycast4.Instance and Raycast5 and Raycast5.Instance and Raycast6 and Raycast6.Instance then
-		IsBlockCoveredValue = true	
-	end	
-	
-	return IsBlockCoveredValue
-end
