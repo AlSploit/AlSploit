@@ -1491,8 +1491,6 @@ end
 function IsBlockBreakable(BlockPosition)
 	local IsBlockBreakableValue = false
 	
-	BlockPosition = GetServerPosition(BlockPosition)
-	
 	if BlockController:isBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) then
 		IsBlockBreakableValue = true
 	end
@@ -2734,7 +2732,7 @@ local function Nuker(NearestBed, NearestOre)
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 			
 			require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out.shared.remotes).BlockEngineRemotes.Client:Get("DamageBlock"):CallServerAsync({
-				hitPosition = (TargetBlock * 3),
+				hitPosition = TargetBlock,
 				hitNormal = Vector3.FromNormalId(TargetSide)
 			})
 
