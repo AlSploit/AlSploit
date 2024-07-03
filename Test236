@@ -1394,6 +1394,9 @@ local function FindBestBreakSide(Position)
 
 			SideStrength = SideStrength + (BlockMetaGame and BlockMetaGame.health or 11)
 			
+			print(v2.Name)
+			print(v2)
+			
 			if SoftestBlock <= SideStrength then
 				SoftestBlock = SideStrength
 				SoftestSide = v2
@@ -1401,8 +1404,6 @@ local function FindBestBreakSide(Position)
 		end	
 	end
 	
-	print(SoftestBlock, SoftestSide)
-
 	return SoftestBlock, SoftestSide
 end
 
