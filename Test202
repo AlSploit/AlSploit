@@ -1467,19 +1467,22 @@ local function FindPlacedBlock(Position)
 end
 
 function FindNearestBed(MaxDistance)
+	local AmountOfBeds = -1
 	local MaxDistance = MaxDistance or math.huge
 	local NearestBed = nil
+	
+	for i, v in next, CollectionService:GetTagged("bed")do
+		AmountOfBeds = AmountOfBeds + 1
+	end
 
 	for i, v in next, CollectionService:GetTagged("bed")do
 		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
-			if v:GetAttribute("BedShieldEndTime") then 				
-				if v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() then
-					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+			if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or (v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
+				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-					if Distance < MaxDistance then
-						MaxDistance = Distance
-						NearestBed = v
-					end
+				if Distance < MaxDistance then
+					MaxDistance = Distance
+					NearestBed = v
 				end
 			end
 
@@ -1940,7 +1943,7 @@ function GetSpeed()
 		end
 
 		if DamageBoost == true then
-			Speed = Speed + 17
+			Speed = Speed + 20
 		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
@@ -4737,7 +4740,7 @@ task.spawn(function()
 						task.spawn(function()
 							DamageBoost = true
 
-							task.wait(0.78)
+							task.wait(0.6)
 
 							DamageBoost = false	
 						end) 
@@ -7294,3 +7297,25 @@ end)
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --aimbot shit
+
+local function IsBlockCovered(Block, Bed)
+	local IsBlockCoveredValue = false
+	
+	local RaycastParameters = RaycastParams.new()
+	
+	RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block"), Bed}
+	RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+	
+	local Raycast1 = WorkSpace:Raycast(Block.Position, Vector3.new(0, Block.Size.Y, 0), RaycastParameters)
+	local Raycast2 = WorkSpace:Raycast(Block.Position, Vector3.new(Block.Size.X, 0, 0), RaycastParameters)
+	local Raycast3 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 0, Block.Size.Z), RaycastParameters)
+	local Raycast4 = WorkSpace:Raycast(Block.Position, Vector3.new(0, -Block.Size.Y, 0), RaycastParameters)
+	local Raycast5 = WorkSpace:Raycast(Block.Position, Vector3.new(-Block.Size.X, 0, 0), RaycastParameters)
+	local Raycast6 = WorkSpace:Raycast(Block.Position, Vector3.new(0, 0, -Block.Size.Z), RaycastParameters)
+	
+	if Raycast1 and Raycast1.Instance and Raycast2 and Raycast2.Instance and Raycast3 and Raycast3.Instance and Raycast4 and Raycast4.Instance and Raycast5 and Raycast5.Instance and Raycast6 and Raycast6.Instance then
+		IsBlockCoveredValue = true	
+	end	
+	
+	return IsBlockCoveredValue
+end
