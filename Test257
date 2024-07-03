@@ -1364,7 +1364,7 @@ end
 
 local function TweenToNearestBed()
 	if IsAlive(LocalPlayer) then
-		local NearestBed = FindNearestBed()
+		local NearestBed = FindNearestBed(false)
 
 		if NearestBed then
 			local RaycastParameters = RaycastParams.new()
@@ -1534,7 +1534,7 @@ function FindPlacedBlock(Position)
 	return BlockController:getStore():getBlockAt(BlockPosition), BlockPosition
 end
 
-function FindNearestBed(MaxDistance)
+function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 	local AmountOfBeds = -1
 	local MaxDistance = MaxDistance or math.huge
 	local NearestBed = nil
@@ -1542,19 +1542,34 @@ function FindNearestBed(MaxDistance)
 	for i, v in next, CollectionService:GetTagged("bed")do
 		AmountOfBeds = AmountOfBeds + 1
 	end
+	
+	if IgnoreBedSheildEndTime == true then
+		for i, v in next, CollectionService:GetTagged("bed")do
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
+				if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-	for i, v in next, CollectionService:GetTagged("bed")do
-		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
-			if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
-				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+					if Distance < MaxDistance then
+						MaxDistance = Distance
+						NearestBed = v
+					end
+				end
 
-				if Distance < MaxDistance then
-					MaxDistance = Distance
-					NearestBed = v
+				if not v:GetAttribute("BedShieldEndTime") then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+					if Distance < MaxDistance then
+						MaxDistance = Distance
+						NearestBed = v
+					end
 				end
 			end
-
-			if not v:GetAttribute("BedShieldEndTime") then
+		end
+	end
+	
+	if IgnoreBedSheildEndTime == false then
+		for i, v in next, CollectionService:GetTagged("bed")do
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then				
 				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 				if Distance < MaxDistance then
@@ -6603,13 +6618,13 @@ task.spawn(function()
 					repeat task.wait() until GetMatchState() ~= 0
 
 					task.spawn(function()
-						if FindNearestBed() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
+						if FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
 							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
 								repeat task.wait() until IsAlive(LocalPlayer)
 
-								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() then
+								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) then
 									task.wait(0.15)
 
 									TweenToNearestBed()
@@ -6628,7 +6643,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer)						
 
-							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
 
 								TweenToNearestBed()
@@ -6687,7 +6702,7 @@ task.spawn(function()
 				task.wait(0.1)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-					local NearestBed = FindNearestBed(Settings.Nuker.Range) or nil
+					local NearestBed = FindNearestBed(true, Settings.Nuker.Range) or nil
 					local NearestOre = FindNearestOre(Settings.Nuker.Range) or nil
 
 					task.spawn(function()
