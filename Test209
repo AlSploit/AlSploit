@@ -1170,6 +1170,13 @@ local Animations = {
 	}
 }
 
+local Sides = {}
+
+table.insert(Sides, Enum.NormalId.Top)
+table.insert(Sides, Enum.NormalId.Left)
+table.insert(Sides, Enum.NormalId.Right)
+table.insert(Sides, Enum.NormalId.Back)
+table.insert(Sides, Enum.NormalId.Front)
 
 local function TweenToNearestPlayer()
 	if IsAlive(LocalPlayer) then
@@ -1421,7 +1428,63 @@ local function FindNearestGhost(MaxDistance)
 	return NearestGhost
 end
 
-local function IsBlockBreakable(Block)
+local function FindPlacedBlocks(Position, Side)
+	local LastFound, Blocks = nil, {}
+	
+	for i = 1, 20 do
+		local BlockPosition = (Position + (Vector3.FromNormalId(Side) * (i * 3)))
+		
+		local IsBlockCovered = IsBlockCovered(BlockPosition)
+		local ExtraBlock = FindPlacedBlocks(BlockPosition)
+		
+		if ExtraBlock then
+			if IsBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) and ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" then
+				table.insert(Blocks, ExtraBlock.Name)
+			end
+			
+			LastFound = ExtraBlock
+			
+			if IsBlockCovered == false then
+				break
+			end
+		end
+		
+		if not ExtraBlock then
+			break
+		end
+	end
+	
+	return Blocks
+end
+
+local function GetBestBreakSide(Position)
+	local SoftestBlock, SoftestSide = 9e9, Enum.NormalId.Top
+	
+	for i, v in next, (Sides) do
+		local SideStrength = 0
+		
+		for i2, v2 in next, FindPlacedBlocks(Position, v) do	
+			local BlockMetaGame = ItemTable[v2].block
+			
+			SideStrength = SideStrength + (BlockMetaGame and BlockMetaGame.health or 11)
+			
+			if BlockMetaGame then
+				local BestTool = GetBestTool(v2)
+				
+				SideStrength = (SideStrength - ItemTable[BestTool.itemType].breakBlock[BlockMetaGame.breakType])
+			end
+		end
+		
+		if SideStrength <= SoftestBlock then
+			SoftestBlock = SideStrength
+			SoftestSide = v
+		end	
+	end
+	
+	return SoftestBlock, SoftestSide
+end
+
+function IsBlockBreakable(Block)
 	local IsBlockBreakableValue = false
 	
 	if BlockController:isBlockBreakable({blockPosition = Block.Position / 3}, LocalPlayer) then
@@ -1579,20 +1642,11 @@ function FindNearestOre(MaxDistance)
 	return NearestOre
 end
 
-
-local function IsBlockCovered(Block)
-	local Sides = {}
-
-	table.insert(Sides, Enum.NormalId.Top)
-	table.insert(Sides, Enum.NormalId.Left)
-	table.insert(Sides, Enum.NormalId.Right)
-	table.insert(Sides, Enum.NormalId.Back)
-	table.insert(Sides, Enum.NormalId.Front)
-	
+function IsBlockCovered(Position)
 	local CoveredSides = 0
 	
-	for i, v in next, (Sides) do
-		local BlockPosition = (Block.Position + (Vector3.FromNormalId(v) * 3))
+	for i, v in next, Sides do
+		local BlockPosition = (Position + (Vector3.FromNormalId(v) * 3))
 		local Block = FindPlacedBlock(BlockPosition)
 		
 		if Block then
@@ -1602,6 +1656,7 @@ local function IsBlockCovered(Block)
 	
 	return CoveredSides == 5
 end
+
 
 local function TouchingGround()
 	if IsAlive(LocalPlayer) then
@@ -1757,6 +1812,26 @@ local function Invisibility()
 	Animation.Looped = true
 	Animation:Play()
 	Animation:AdjustSpeed(0 / 10)
+end
+
+function GetBestTool(Block)
+	local BestTool, Best = nil, 0
+	
+	local BlockMetaGame = ItemTable[Block]
+	local BlockType = (BlockMetaGame.block and BlockMetaGame.block.breakType or nil)
+	
+	if BlockType then		
+		for i, v in next, GetInventory().items do
+			local MetaGame = ItemTable[v.itemType]
+			
+			if MetaGame.breakBlock and MetaGame.breakBlock[BlockType] and MetaGame.breakBlock[BlockType] >= Best then
+				Best = MetaGame.breakBlock[BlockType]
+				BestTool = v
+			end
+		end
+	end
+	
+	return BestTool
 end
 
 local function SwitchItem(Item)
@@ -2644,16 +2719,19 @@ local function Nuker(NearestBed, NearestOre)
 		if NearestBed then
 			NearestBedFound = true
 			
-			if IsBlockBreakable(NearestBed) == true then
-				DamageBlockRemote:InvokeServer({
-					blockRef = {
-						blockPosition = GetServerPosition(NearestBed.Position)
-					},
+			local Amount, Side = GetBestBreakSide(NearestBed.Position)
+			local Amount2, Side2 = GetBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
+			
+			local TargetBlock = (Amount < Amount2 and NearestBed.Position or NearestBed.Position + Vector3.new(0, 0, 3))
 
-					hitPosition = GetServerPosition(NearestBed.Position),
-					hitNormal = GetServerPosition(NearestBed.Position)
-				})
-			end
+			DamageBlockRemote:InvokeServer({
+				blockRef = {
+					blockPosition = GetServerPosition(TargetBlock.Position)
+				},
+
+				hitPosition = GetServerPosition(TargetBlock.Position),
+				hitNormal = GetServerPosition(TargetBlock.Position)
+			})
 
 			task.spawn(function()
 				local _, Value = Camera:WorldToScreenPoint(NearestBed.Position)
@@ -7305,8 +7383,8 @@ task.spawn(function()
 	end)
 end)
 
---recall  bedtp playertp
--- nuker raycast every block and whichever one is less distance raycasted to bed then pick
+--recall bedtp playertp
+--iscovered() no iscovered() == truew yes
 
 --AlSploit rules
 --Remotes full name in variable
