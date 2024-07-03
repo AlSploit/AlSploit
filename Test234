@@ -2733,10 +2733,10 @@ local function Nuker(NearestBed, NearestOre)
 			
 			DamageBlockRemote:InvokeServer({
 				blockRef = {
-					blockPosition = (TargetBlock * 3),
+					blockPosition = TargetBlock,
 				},
 
-				hitPosition = (TargetBlock * 3),
+				hitPosition = TargetBlock,
 				hitNormal = Vector3.FromNormalId(TargetSide)
 			})
 
