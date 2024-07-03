@@ -1438,7 +1438,7 @@ local function FindPlacedBlocks(Position, Side)
 		local ExtraBlock = FindPlacedBlock(BlockPosition)
 		
 		if ExtraBlock then
-			if IsBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) and ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" then
+			if IsBlockBreakable(BlockPosition and ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic") then
 				table.insert(Blocks, ExtraBlock.Name)
 			end
 			
@@ -1484,10 +1484,10 @@ local function GetBestBreakSide(Position)
 	return SoftestBlock, SoftestSide
 end
 
-function IsBlockBreakable(Block)
+function IsBlockBreakable(BlockPosition)
 	local IsBlockBreakableValue = false
 	
-	if BlockController:isBlockBreakable({blockPosition = Block.Position / 3}, LocalPlayer) then
+	if BlockController:isBlockBreakable({blockPosition = BlockPosition / 3}, LocalPlayer) then
 		IsBlockBreakableValue = true
 	end
 	
