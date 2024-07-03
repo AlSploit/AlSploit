@@ -1397,10 +1397,11 @@ local function FindBestBreakSide(Position)
 			if SoftestBlockStrength <= BlockStrength then
 				SoftestBlockStrength = BlockStrength
 				SoftestBlock = v2
+				
 				print(v2.Name)
 			end	
 		end	
-	end)
+	end
 	
 	return SoftestBlockStrength, SoftestBlock
 end
