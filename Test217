@@ -1398,7 +1398,9 @@ local function FindBestBreakSide(Position)
 			if BlockMetaGame then
 				local BestTool = GetBestTool(v2)
 
-				SideStrength = (SideStrength - ItemTable[BestTool.itemType].breakBlock[BlockMetaGame.breakType])
+				if BestTool then
+					SideStrength = (SideStrength - ItemTable[BestTool.itemType].breakBlock[BlockMetaGame.breakType])
+				end
 			end
 		end
 
