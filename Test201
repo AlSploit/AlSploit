@@ -1932,15 +1932,11 @@ function GetSpeed()
 		end
 		
 		if (tick() - InfiniteFlyTick) <= 0.8 then
-			Speed = Speed - 7
+			Speed = Speed - 20
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
 			Speed = Speed + 30
-		end
-		
-		if InfiniteFlyValue == true or FlyValue == true then
-			Speed = Speed - 0.5
 		end
 
 		if DamageBoost == true then
