@@ -1463,10 +1463,10 @@ function FindPlacedBlocks(Position, Side)
 			end
 			
 			LastFound = ExtraBlock
-			
-			if IsBlockCovered == false then
-				break
-			end
+		end
+		
+		if IsBlockCovered == false then
+			break
 		end
 		
 		if not ExtraBlock then
@@ -1482,7 +1482,6 @@ function IsBlockBreakable(BlockPosition)
 	
 	if BlockController:isBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) then
 		IsBlockBreakableValue = true
-		print(BlockPosition)
 	end
 	
 	return IsBlockBreakableValue
