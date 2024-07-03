@@ -2736,7 +2736,7 @@ local function Nuker(NearestBed, NearestOre)
 					blockPosition = (TargetBlock * 3),
 				},
 
-				hitPosition = TargetBlock * 3
+				hitPosition = (TargetBlock * 3),
 				hitNormal = Vector3.FromNormalId(TargetSide)
 			})
 
