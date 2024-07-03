@@ -1421,6 +1421,16 @@ local function FindNearestGhost(MaxDistance)
 	return NearestGhost
 end
 
+local function IsBlockBreakable(Block)
+	local IsBlockBreakableValue = false
+	
+	if BlockController:isBlockBreakable({blockPosition = Block.Position / 3}, LocalPlayer) then
+		IsBlockBreakableValue = true
+	end
+	
+	return IsBlockBreakableValue
+end
+
 local function GetEquippedKit()
 	if ClientGotten == true then
 		return ClientHandlerStore:getState().Bedwars.kit
@@ -2633,12 +2643,8 @@ local function Nuker(NearestBed, NearestOre)
 	task.spawn(function()
 		if NearestBed then
 			NearestBedFound = true
-
-			if IsBlockCovered(NearestBed) then
-				
-			end
 			
-			if IsBlockCovered(NearestBed) == false then
+			if IsBlockBreakable(NearestBed) == true then
 				DamageBlockRemote:InvokeServer({
 					blockRef = {
 						blockPosition = GetServerPosition(NearestBed.Position)
