@@ -1463,7 +1463,7 @@ function FindPlacedBlocks(Position, Side)
 		
 		if ExtraBlock then
 			if ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" and ExtraBlock.Name ~= "iron_ore" and IsBlockBreakable(BlockPosition) then
-				table.insert(Blocks, ExtraBlock.Name)
+				table.insert(Blocks, ExtraBlock)
 			end
 			
 			LastFound = ExtraBlock
