@@ -4865,13 +4865,13 @@ task.spawn(function()
 					if IsAlive(LocalPlayer) then
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
 							ConsumeItemRemote:InvokeServer({
-								["item"] = MainInventory:FindFirstChild("speed_potion")
+								["item"] = MainInventory:WaitForChild("speed_potion")
 							})
 						end
 
 						if SpeedPie then
 							ConsumeItemRemote:InvokeServer({
-								["item"] = MainInventory:FindFirstChild("pie")
+								["item"] = MainInventory:WaitForChild("pie")
 							})
 						end
 					end
