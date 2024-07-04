@@ -1207,7 +1207,13 @@ local MainInventory = nil
 task.spawn(function()
 	repeat task.wait() until GetMatchState() ~= 0
 	
-	MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+	repeat
+		task.wait()
+		
+		pcall(function()
+			MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+		end)
+	until MainInventory
 end)
 
 local InventoryUti, InventoryUtilGotten = nil, false
@@ -7474,13 +7480,13 @@ task.spawn(function()
 end)
 
 --recall bedtp playertp
---iscovered() no iscovered() == truew yes
+--fix autoconsume
 
 --AlSploit rules
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
---aimbot shit
---fix autoconsume
+--iscovered() no iscovered() == true yey
+
 
 
 local remote = game:GetService("ReplicatedStorage"):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneDoubleDown');
