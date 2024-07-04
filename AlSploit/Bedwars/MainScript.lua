@@ -1,4 +1,4 @@
-local Owner = "asgasdgsadg4523"
+local Owner = "AlSploitFunny"
 
 local LocalPlayer = game.Players.LocalPlayer
 
@@ -1063,6 +1063,20 @@ local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitF
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
 local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
 local PlayGuitarRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar")
+
+local DestroyPetrifiedPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer")
+local SayMessageRequestRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+local ProjectileFireRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
+local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")
+local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
+local JoinQueueRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
+local SetInvItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
+local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
+local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
+
+local ReportPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
+local SwordHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
+
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
 task.spawn(function()
@@ -1075,14 +1089,6 @@ task.spawn(function()
 	end
 end)
 
-local SayMessageRequestRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
-local ProjectileFireRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
-local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
-local JoinQueueRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
-local SetInvItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
-local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
-local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
-
 local DamageIndicator
 
 task.spawn(function()
@@ -1091,17 +1097,67 @@ task.spawn(function()
 	end
 end)
 
-local DestroyPetrifiedPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer")
-local ReportPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
-local ProjectileMeta = require(ReplicatedStorage.TS.projectile["projectile-meta"]).ProjectileMeta
-local SwordHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
-local CombatConstant = require(ReplicatedStorage.TS.combat["combat-constant"]).CombatConstant
-local PlacementCPS = require(ReplicatedStorage.TS["shared-constants"]).CpsConstants
+local ProjectileMeta, ProjectileMetaGotten = nil, false
+	
+task.spawn(function()
+	ProjectileMeta = require(ReplicatedStorage.TS.projectile["projectile-meta"]).ProjectileMeta
+end)
 
-local KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
-local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+task.spawn(function()
+	if ProjectileMeta then
+		ProjectileMetaGotten = true
+	end
+end)
 
-local AbilityController = nil
+local CombatConstant, CombatConstantGotten = nil, false
+
+task.spawn(function()
+	CombatConstant = require(ReplicatedStorage.TS.combat["combat-constant"]).CombatConstant
+end)
+
+task.spawn(function()
+	if CombatConstant then
+		CombatConstantGotten = true
+	end
+end)
+
+local PlacementCPS, PlacementCpsGotten = nil, false
+
+task.spawn(function()
+	PlacementCPS = require(ReplicatedStorage.TS["shared-constants"]).CpsConstants
+end)
+
+task.spawn(function()
+	if PlacementCPS then
+		PlacementCpsGotten = true
+	end
+end)
+
+local KnockBackTable, KnockBackTableGotten = nil, false
+
+task.spawn(function()
+	KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
+end)
+
+task.spawn(function()
+	if KnockBackTable then
+		KnockBackTableGotten = true
+	end
+end)
+
+local ItemTable, ItemTableGotten = nil, false
+
+task.spawn(function()
+	ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+end)
+
+task.spawn(function()
+	if ItemTable then
+		ItemTableGotten = true
+	end
+end)
+
+local AbilityController, AbilityControllerGotten = nil, false
 
 task.spawn(function()
 	if FlameworkGotten == true then
@@ -1109,7 +1165,24 @@ task.spawn(function()
 	end
 end)
 
-local BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
+task.spawn(function()
+	if AbilityController then
+		AbilityControllerGotten = true
+	end
+end)
+
+local BlockController, BlockControllerGotten = nil, false
+
+
+task.spawn(function()
+	BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
+end)
+
+task.spawn(function()
+	if BlockController then
+		BlockControllerGotten = true
+	end
+end)
 
 local BlockPlacementController
 local ViewmodelController
@@ -1134,11 +1207,38 @@ local MainInventory = nil
 task.spawn(function()
 	repeat task.wait() until GetMatchState() ~= 0
 	
-	MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+	repeat
+		task.wait()
+		
+		pcall(function()
+			MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+		end)
+	until MainInventory
 end)
 
-local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
-local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+local InventoryUti, InventoryUtilGotten = nil, false
+
+task.spawn(function()
+	InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
+end)
+
+task.spawn(function()
+	if InventoryUtil then
+		InventoryUtilGotten = true
+	end
+end)
+
+local ItemTable, ItemTableGotten = nil, false
+
+task.spawn(function()
+	ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+end)
+
+task.spawn(function()
+	if ItemTable then
+		ItemTableGotten = true
+	end
+end)
 
 local ScytheDisablerAnticheatDisabled = false
 local KillAuraAnimationCooldown = false
@@ -1170,6 +1270,13 @@ local Animations = {
 	}
 }
 
+local Sides = {}
+
+table.insert(Sides, Enum.NormalId.Top)
+table.insert(Sides, Enum.NormalId.Left)
+table.insert(Sides, Enum.NormalId.Right)
+table.insert(Sides, Enum.NormalId.Back)
+table.insert(Sides, Enum.NormalId.Front)
 
 local function TweenToNearestPlayer()
 	if IsAlive(LocalPlayer) then
@@ -1357,7 +1464,7 @@ end
 
 local function TweenToNearestBed()
 	if IsAlive(LocalPlayer) then
-		local NearestBed = FindNearestBed()
+		local NearestBed = FindNearestBed(false)
 
 		if NearestBed then
 			local RaycastParameters = RaycastParams.new()
@@ -1375,6 +1482,28 @@ local function TweenToNearestBed()
 			end
 		end
 	end
+end
+
+local function FindBestBreakSide(Position)
+	local SoftestBlockStrength, SoftestBlock = math.huge, nil
+	local BlockStrength = 0
+
+	for i, v in next, (Sides) do
+		for i2, v2 in next, FindPlacedBlocks(Position, v) do			
+			local BlockMetaGame = ItemTable[v2.Name].block
+
+			if BlockMetaGame then
+				BlockStrength = (BlockMetaGame.health and BlockMetaGame.health or 10)
+			end
+			
+			if BlockStrength <= SoftestBlockStrength then			
+				SoftestBlockStrength = BlockStrength
+				SoftestBlock = v2
+			end	
+		end	
+	end
+	
+	return SoftestBlockStrength, SoftestBlock
 end
 
 local function GetServerPosition(Position)
@@ -1421,6 +1550,45 @@ local function FindNearestGhost(MaxDistance)
 	return NearestGhost
 end
 
+function FindPlacedBlocks(Position, Side)
+	local LastFound, Blocks = nil, {}
+	
+	for i = 1, 20 do
+		local BlockPosition = (Position + (Vector3.FromNormalId(Side) * (i * 3)))
+		
+		local IsBlockCovered = IsBlockCovered(BlockPosition)
+		local ExtraBlock = FindPlacedBlock(BlockPosition)
+		
+		if ExtraBlock then
+			if ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" and ExtraBlock.Name ~= "iron_ore" and IsBlockBreakable(BlockPosition) then
+				table.insert(Blocks, ExtraBlock)
+			end
+			
+			LastFound = ExtraBlock
+		end
+		
+		if IsBlockCovered == false then
+			break
+		end
+		
+		if not ExtraBlock then
+			break
+		end
+	end
+	
+	return Blocks
+end
+
+function IsBlockBreakable(BlockPosition)
+	local IsBlockBreakableValue = false
+	
+	if BlockController:isBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) then
+		IsBlockBreakableValue = true
+	end
+	
+	return IsBlockBreakableValue
+end
+
 local function GetEquippedKit()
 	if ClientGotten == true then
 		return ClientHandlerStore:getState().Bedwars.kit
@@ -1460,20 +1628,34 @@ local function SendChatMessage(Message)
 	SayMessageRequestRemote:FireServer(unpack(Arguments))
 end
 
-local function FindPlacedBlock(Position)
+function FindPlacedBlock(Position)
 	local BlockPosition = BlockController:getBlockPosition(Position)
 
 	return BlockController:getStore():getBlockAt(BlockPosition), BlockPosition
 end
 
-function FindNearestBed(MaxDistance)
+function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
+	local AmountOfBeds = -1
 	local MaxDistance = MaxDistance or math.huge
 	local NearestBed = nil
-
+	
 	for i, v in next, CollectionService:GetTagged("bed")do
-		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
-			if v:GetAttribute("BedShieldEndTime") then 				
-				if v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow() then
+		AmountOfBeds = AmountOfBeds + 1
+	end
+	
+	if IgnoreBedSheildEndTime == false then
+		for i, v in next, CollectionService:GetTagged("bed")do
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
+				if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+					if Distance < MaxDistance then
+						MaxDistance = Distance
+						NearestBed = v
+					end
+				end
+
+				if not v:GetAttribute("BedShieldEndTime") then
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 					if Distance < MaxDistance then
@@ -1482,8 +1664,12 @@ function FindNearestBed(MaxDistance)
 					end
 				end
 			end
-
-			if not v:GetAttribute("BedShieldEndTime") then
+		end
+	end
+	
+	if IgnoreBedSheildEndTime == true then
+		for i, v in next, CollectionService:GetTagged("bed")do
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then				
 				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 				if Distance < MaxDistance then
@@ -1566,7 +1752,23 @@ function FindNearestOre(MaxDistance)
 	return NearestOre
 end
 
-function TouchingGround()
+function IsBlockCovered(Position)
+	local CoveredSides = 0
+	
+	for i, v in next, Sides do
+		local BlockPosition = (Position + (Vector3.FromNormalId(v) * 3))
+		local Block = FindPlacedBlock(BlockPosition)
+		
+		if Block then
+			CoveredSides = CoveredSides + 1
+		end
+	end
+	
+	return CoveredSides == 5
+end
+
+
+local function TouchingGround()
 	if IsAlive(LocalPlayer) then
 		local Parameters = RaycastParams.new()
 		
@@ -1681,13 +1883,9 @@ end
 function KillHumanoid(Time)
 	local Time = Time or 0
 
-	if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") then
-		if LocalPlayer.leaderstats.Bed.Value == "✅" then
-			LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
-
-			ResetCharacterRemote:FireServer()
-		end
-	end
+	LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Dead)
+	
+	ResetCharacterRemote:FireServer()
 end
 
 local function GetInventory(Player)
@@ -1932,11 +2130,11 @@ function GetSpeed()
 		end
 		
 		if ScytheDisablerAnticheatDisabled == true then
-			Speed = Speed + 40
+			Speed = Speed + 35
 		end
 		
 		if (tick() - InfiniteFlyTick) <= 0.8 then
-			Speed = Speed - 10
+			Speed = Speed - 20
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
@@ -1944,7 +2142,7 @@ function GetSpeed()
 		end
 
 		if DamageBoost == true then
-			Speed = Speed + 17
+			Speed = Speed + 20
 		end
 
 		Speed = ((Speed + Settings.Speed.Speed) - 20)
@@ -2570,6 +2768,7 @@ local function InfFly()
 
 		repeat 
 			task.wait()
+			
 			StartLevelHead = SpoofedCamera.Position.Y	
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
 		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
@@ -2578,7 +2777,7 @@ local function InfFly()
 		
 		CreateNotification(3, "Slowing down, preventing lagback")
 		
-		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, -1, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
+		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 			
 		SetCamera(LocalPlayer.Character)
@@ -2609,36 +2808,26 @@ local function Nuker(NearestBed, NearestOre)
 	task.spawn(function()
 		if NearestBed then
 			NearestBedFound = true
+			
+			local NearestBedCovered = IsBlockCovered(NearestBed.Position)
+			
+			local Strength, TargetBlock = FindBestBreakSide(NearestBed.Position)
+			local Strength2, TargetBlock2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
+			
+			local TargetBlock = (Strength < Strength2 and TargetBlock or TargetBlock2)
+			
+			if NearestBedCovered == false then
+				TargetBlock = NearestBed
+			end		
+			
+			DamageBlockRemote:InvokeServer({
+				blockRef = {
+					blockPosition = GetServerPosition(TargetBlock.Position),
+				},
 
-			local NukerRaycastParameters = RaycastParams.new()
-			local TargetBlock = nil
-
-			NukerRaycastParameters.FilterType = Enum.RaycastFilterType.Exclude
-			NukerRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
-			NukerRaycastParameters.IgnoreWater = true
-
-			local RaycastResult = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 30, 0), Vector3.new(0, -35, 0), NukerRaycastParameters)
-
-			task.spawn(function()
-				if RaycastResult then
-					if RaycastResult.Instance then
-						TargetBlock = RaycastResult.Instance
-					end
-
-					if not RaycastResult.Instance then
-						TargetBlock = NearestBed
-					end				
-
-					DamageBlockRemote:InvokeServer({
-						blockRef = {
-							blockPosition = GetServerPosition(TargetBlock.Position)
-						},
-
-						hitPosition = GetServerPosition(TargetBlock.Position),
-						hitNormal = GetServerPosition(TargetBlock.Position)
-					})
-				end
-			end)			
+				hitPosition = GetServerPosition(TargetBlock.Position),
+				hitNormal = GetServerPosition(TargetBlock.Position)
+			})
 
 			task.spawn(function()
 				local _, Value = Camera:WorldToScreenPoint(NearestBed.Position)
@@ -2693,7 +2882,7 @@ local function FlyMe()
 
 		task.spawn(function()
 			FlyBodyVelocity = Instance.new("BodyVelocity")
-			FlyBodyVelocity.MaxForce = Vector3.new(0, 9e9, 0)
+			FlyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
 			FlyBodyVelocity.Name = "FlyBodyVelocity"
 			FlyBodyVelocity.Parent = LocalPlayer.Character.PrimaryPart
 
@@ -2862,16 +3051,18 @@ task.spawn(function()
 
 		local Scythe = GetScythe()
 
-		if not Scythe and Settings.ScytheDisabler == true then
+		if not Scythe and Settings.ScytheDisabler.Value == true then
 			CreateNotification(3, "You need a scythe to use ScytheDisabler")
 		end
 
 		repeat
-			task.wait()
+			task.wait(0.01)
 
+			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
+			
 			Scythe = GetScythe()
 
-			if Scythe and IsAlive(LocalPlayer) then				
+			if Scythe and IsAlive(LocalPlayer) and (Settings.KillAura.Value == true and NearestPlayer or true) then				
 				SwitchItem(Scythe.itemType)
 
 				local Movedirection = LocalPlayer.Character.Humanoid.MoveDirection
@@ -2885,7 +3076,7 @@ task.spawn(function()
 				ScytheDisablerAnticheatDisabled = true
 			end
 
-			if not Scythe or not IsAlive(LocalPlayer) then
+			if not Scythe or not IsAlive(LocalPlayer) or not (Settings.KillAura.Value == true and NearestPlayer or true) then
 				ScytheDisablerAnticheatDisabled = false
 			end
 		until Settings.ScytheDisabler.Value == false
@@ -4674,13 +4865,13 @@ task.spawn(function()
 					if IsAlive(LocalPlayer) then
 						if SpeedPotion and not LocalPlayer.Character:GetAttribute("StatusEffect_speed") then
 							ConsumeItemRemote:InvokeServer({
-								["item"] = MainInventory:FindFirstChild("speed_potion")
+								["item"] = MainInventory:WaitForChild("speed_potion")
 							})
 						end
 
 						if SpeedPie then
 							ConsumeItemRemote:InvokeServer({
-								["item"] = MainInventory:FindFirstChild("pie")
+								["item"] = MainInventory:WaitForChild("pie")
 							})
 						end
 					end
@@ -4738,7 +4929,7 @@ task.spawn(function()
 						task.spawn(function()
 							DamageBoost = true
 
-							task.wait(0.78)
+							task.wait(0.6)
 
 							DamageBoost = false	
 						end) 
@@ -5430,7 +5621,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			task.spawn(function()
-				for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
+				for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
 					task.spawn(function()
 						if v:IsA("ImageButton") then
 							task.spawn(function()
@@ -5470,7 +5661,7 @@ task.spawn(function()
 				repeat task.wait() until IsAlive(LocalPlayer)
 
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
 						task.spawn(function()
 							if v:IsA("ImageButton") then
 								task.spawn(function()
@@ -5508,7 +5699,7 @@ task.spawn(function()
 
 				task.spawn(function()
 					if Settings.CustomInventory.Value == true then
-						for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
+						for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
 							task.spawn(function()
 								if v:IsA("UICorner") then
 									v.CornerRadius= UDim.new(0, 6)
@@ -5543,7 +5734,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.CustomInventory.Value == true then
-				for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
+				for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do	
 					task.spawn(function()
 						if v:IsA("UICorner") then
 							v.CornerRadius= UDim.new(0, 8)
@@ -5576,7 +5767,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.CustomInventory.Value == false then
-				for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
+				for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
 					task.spawn(function()
 						if v:IsA("UICorner") then
 							v:Destroy()
@@ -5651,7 +5842,7 @@ task.spawn(function()
 				task.spawn(function()
 					if Settings.CustomHealthBar.Value == true then
 						task.spawn(function()
-							for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+							for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
 								if v:IsA("Frame") then
 									local UICorner = Instance.new("UICorner")
 
@@ -5664,7 +5855,7 @@ task.spawn(function()
 						end)
 
 						task.spawn(function()
-							for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):GetDescendants() do	
+							for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
 								if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
 									local UICorner = Instance.new("UICorner")
 
@@ -5681,7 +5872,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.CustomHealthBar.Value == true then
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
 						if v:IsA("Frame") then
 							local UICorner = Instance.new("UICorner")
 
@@ -5694,7 +5885,7 @@ task.spawn(function()
 				end)
 
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
 						if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
 							local UICorner = Instance.new("UICorner")
 
@@ -5709,7 +5900,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.CustomHealthBar.Value == false then
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
 						task.spawn(function()
 							if v:IsA("Frame") then
 								v.BackgroundColor3 = Color3.new(0.796078, 0.211765, 0.141176)
@@ -5725,7 +5916,7 @@ task.spawn(function()
 				end)				
 
 				task.spawn(function()
-					for i, v in next, LocalPlayer.PlayerGui.hotbar:FindFirstChild("1"):GetDescendants() do	
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
 						if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
 							if v:FindFirstChild("UICorner") then
 								v:FindFirstChild("UICorner"):Destroy()
@@ -6361,10 +6552,8 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) then
 					repeat task.wait() until GetMatchState() ~= 0
 
-					local NearestPlayer = FindNearestPlayer()
-
 					task.spawn(function()
-						if NearestPlayer then
+						if FindNearestPlayer() and  LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
@@ -6377,6 +6566,10 @@ task.spawn(function()
 								end
 							end)
 						end	
+						
+						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
+							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+						end
 					end)					
 				end
 
@@ -6385,7 +6578,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0					
 
-							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
+							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() and  LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
 
 								TweenToNearestPlayer()
@@ -6524,22 +6717,24 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) then
 					repeat task.wait() until GetMatchState() ~= 0
 
-					local NearestBed = FindNearestBed()
-
 					task.spawn(function()
-						if NearestBed then
+						if FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
 							KillHumanoid(0)
 
 							LocalPlayer.CharacterAdded:Connect(function()
 								repeat task.wait() until IsAlive(LocalPlayer)
 
-								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() then
+								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) then
 									task.wait(0.15)
 
 									TweenToNearestBed()
 								end
 							end)
 						end	
+						
+						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
+							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+						end
 					end)					
 				end
 
@@ -6548,7 +6743,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer)						
 
-							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed() then
+							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
 
 								TweenToNearestBed()
@@ -6607,7 +6802,7 @@ task.spawn(function()
 				task.wait(0.1)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-					local NearestBed = FindNearestBed(Settings.Nuker.Range) or nil
+					local NearestBed = FindNearestBed(true, Settings.Nuker.Range) or nil
 					local NearestOre = FindNearestOre(Settings.Nuker.Range) or nil
 
 					task.spawn(function()
@@ -6632,7 +6827,7 @@ task.spawn(function()
 				task.wait()
 
 				if Settings.Nuker.CustomAnimation == true and IsAlive(LocalPlayer) and NearestBedFound and CanSeeNearestBed and not NearestEntityFound then
-					task.wait(0.25)
+					task.wait(0.2)
 
 					ViewmodelController:playAnimation(15)
 				end
@@ -7284,9 +7479,23 @@ task.spawn(function()
 	end)
 end)
 
---recall  bedtp playertp
--- nuker raycast every block and whichever one is less distance raycasted to bed then pick
+local remote = game:GetService("ReplicatedStorage"):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneDoubleDown');
+local effects = {
+	'fire_3', 'forest_3', 'cloud_3', 'void_3', 'static_3', 'updraft_2', 
+	'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
+	'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
+	'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
+}
 
---AlSploit rules
---Remotes full name in variable
---fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
+
+renderexploit = task.spawn(function()
+	repeat 
+		task.wait(0.5)
+		
+		for i, v in effects do 
+			remote:FireServer({statusEffectType = v})
+		end
+	until not game
+end)
+
+CreateNotification(3, "Credits to render for the enchant thing")
