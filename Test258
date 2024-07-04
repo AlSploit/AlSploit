@@ -1063,6 +1063,20 @@ local PurchaseItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitF
 local BlockPlacingRemote =  ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlaceBlock")
 local ConsumeItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ConsumeItem")
 local PlayGuitarRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar")
+
+local DestroyPetrifiedPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer")
+local SayMessageRequestRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+local ProjectileFireRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
+local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")
+local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
+local JoinQueueRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
+local SetInvItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
+local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
+local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
+
+local ReportPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
+local SwordHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
+
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
 
 task.spawn(function()
@@ -1075,14 +1089,6 @@ task.spawn(function()
 	end
 end)
 
-local SayMessageRequestRemote = ReplicatedStorage:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
-local ProjectileFireRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire")
-local DamageBlockRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock")local ScytheDashRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash")
-local JoinQueueRemote = ReplicatedStorage:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
-local SetInvItemRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem")
-local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit")
-local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
-
 local DamageIndicator
 
 task.spawn(function()
@@ -1091,17 +1097,67 @@ task.spawn(function()
 	end
 end)
 
-local DestroyPetrifiedPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer")
-local ReportPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
-local ProjectileMeta = require(ReplicatedStorage.TS.projectile["projectile-meta"]).ProjectileMeta
-local SwordHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
-local CombatConstant = require(ReplicatedStorage.TS.combat["combat-constant"]).CombatConstant
-local PlacementCPS = require(ReplicatedStorage.TS["shared-constants"]).CpsConstants
+local ProjectileMeta, ProjectileMetaGotten = nil, false
+	
+task.spawn(function()
+	ProjectileMeta = require(ReplicatedStorage.TS.projectile["projectile-meta"]).ProjectileMeta
+end)
 
-local KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
-local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+task.spawn(function()
+	if ProjectileMeta then
+		ProjectileMetaGotten = true
+	end
+end)
 
-local AbilityController = nil
+local CombatConstant, CombatConstantGotten = nil, false
+
+task.spawn(function()
+	CombatConstant = require(ReplicatedStorage.TS.combat["combat-constant"]).CombatConstant
+end)
+
+task.spawn(function()
+	if CombatConstant then
+		CombatConstantGotten = true
+	end
+end)
+
+local PlacementCPS, PlacementCpsGotten = nil, false
+
+task.spawn(function()
+	PlacementCPS = require(ReplicatedStorage.TS["shared-constants"]).CpsConstants
+end)
+
+task.spawn(function()
+	if PlacementCPS then
+		PlacementCpsGotten = true
+	end
+end)
+
+local KnockBackTable, KnockBackTableGotten = nil, false
+
+task.spawn(function()
+	KnockBackTable = debug.getupvalue(require(ReplicatedStorage.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
+end)
+
+task.spawn(function()
+	if KnockBackTable then
+		KnockBackTableGotten = true
+	end
+end)
+
+local ItemTable, ItemTableGotten = nil, false
+
+task.spawn(function()
+	ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+end)
+
+task.spawn(function()
+	if ItemTable then
+		ItemTableGotten = true
+	end
+end)
+
+local AbilityController, AbilityControllerGotten = nil, false
 
 task.spawn(function()
 	if FlameworkGotten == true then
@@ -1109,7 +1165,24 @@ task.spawn(function()
 	end
 end)
 
-local BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
+task.spawn(function()
+	if AbilityController then
+		AbilityControllerGotten = true
+	end
+end)
+
+local BlockController, BlockControllerGotten = nil, false
+
+
+task.spawn(function()
+	BlockController = require(ReplicatedStorage["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine
+end)
+
+task.spawn(function()
+	if BlockController then
+		BlockControllerGotten = true
+	end
+end)
 
 local BlockPlacementController
 local ViewmodelController
@@ -1137,8 +1210,29 @@ task.spawn(function()
 	MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 end)
 
-local InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
-local ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+local InventoryUti, InventoryUtilGotten = nil, false
+
+task.spawn(function()
+	InventoryUtil = require(ReplicatedStorage.TS.inventory["inventory-util"]).InventoryUtil
+end)
+
+task.spawn(function()
+	if InventoryUtil then
+		InventoryUtilGotten = true
+	end
+end)
+
+local ItemTable, ItemTableGotten = nil, false
+
+task.spawn(function()
+	ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+end)
+
+task.spawn(function()
+	if ItemTable then
+		ItemTableGotten = true
+	end
+end)
 
 local ScytheDisablerAnticheatDisabled = false
 local KillAuraAnimationCooldown = false
@@ -1543,7 +1637,7 @@ function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 		AmountOfBeds = AmountOfBeds + 1
 	end
 	
-	if IgnoreBedSheildEndTime == true then
+	if IgnoreBedSheildEndTime == false then
 		for i, v in next, CollectionService:GetTagged("bed")do
 			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
 				if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
@@ -1567,7 +1661,7 @@ function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 		end
 	end
 	
-	if IgnoreBedSheildEndTime == false then
+	if IgnoreBedSheildEndTime == true then
 		for i, v in next, CollectionService:GetTagged("bed")do
 			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then				
 				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
@@ -7387,3 +7481,23 @@ end)
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --aimbot shit
 --fix autoconsume
+
+
+local remote = game:GetService("ReplicatedStorage"):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneDoubleDown');
+local effects = {
+	'fire_3', 'forest_3', 'cloud_3', 'void_3', 'static_3', 'updraft_2', 
+	'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
+	'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
+	'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
+}
+
+
+renderexploit = task.spawn(function()
+	repeat 
+		task.wait(0.5)
+		
+		for i, v in effects do 
+			remote:FireServer({statusEffectType = v})
+		end
+	until not game
+end)
