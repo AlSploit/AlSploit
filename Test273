@@ -2688,19 +2688,13 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 				
 				local KillAuraHook
 				
-				KillAuraHook = hookmetamethod(game, "__namecall", function(self)
-					local Arguments = {
-						weapon = "stone_sword",
-						chargedAttack = {chargeRatio = 0},
-						entityInstance = Entity,
-						validate = {
-							raycast = {
-								cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
-								cursorDirection = HashFunction(LookVector)
-							},
-							targetPosition = HashFunction(EntityPrimaryPart.Position),
-							selfPosition = HashFunction(SelfPosition)
-						}}
+				KillAuraHook = hookmetamethod(game, "__namecall", function(self, ...)
+					local NameCallMethod = getnamecallmethod()
+					local Arguments = {...}
+					
+					if NameCallMethod == "FireServer" and tostring(self) == "SwordHit" then
+						return nil
+					end
 					
 					return KillAuraHook(self, unpack(Arguments))
 				end)
@@ -5687,6 +5681,87 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local RecallBedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallBedTp", Settings.RecallBedTp.Value, function(CallBack)
+		Settings.RecallBedTp.Value = CallBack
+
+		task.spawn(function()
+			if Settings.RecallBedTp.Value == true then
+				if IsAlive(LocalPlayer) then
+					repeat task.wait() until GetMatchState() ~= 0
+
+					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed() then		
+						Recall()
+
+						local RecallTick = tick()
+
+						repeat
+							task.wait()
+						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
+
+						local NearestBed, NearestBedDistance = FindNearestBed()
+
+						TweenToNearestBed((NearestBedDistance / 56) / 23.33)
+					end
+				end
+
+				task.spawn(function()
+					if not IsAlive(LocalPlayer) then
+						LocalPlayer.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
+
+							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed()then
+								task.wait(0.25)
+
+								local NearestBed, NearestBedDistance = FindNearestBed()
+
+								TweenToNearestBed((NearestBedDistance / 56) / 23.33)
+							end
+						end)
+					end
+				end)				
+			end	
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.RecallBedTp.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.RecallBedTp.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.RecallBedTp.KeyBind then
+					Settings.RecallBedTp.Value = not Settings.RecallBedTp.Value
+
+					if Settings.RecallBedTp.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.RecallBedTp.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local CustomInventory, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "CustomHotbar", Settings.CustomInventory.Value, function(CallBack)
 		Settings.CustomInventory.Value = CallBack
 
@@ -6436,87 +6511,6 @@ task.spawn(function()
 					end
 
 					if Settings.GalaxySky.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local RecallBedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallPlayerTp", Settings.RecallBedTp.Value, function(CallBack)
-		Settings.RecallBedTp.Value = CallBack
-
-		task.spawn(function()
-			if Settings.RecallBedTp.Value == true then
-				if IsAlive(LocalPlayer) then
-					repeat task.wait() until GetMatchState() ~= 0
-
-					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed() then		
-						Recall()
-
-						local RecallTick = tick()
-
-						repeat
-							task.wait()
-						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
-
-						local NearestBed, NearestBedDistance = FindNearestBed()
-
-						TweenToNearestBed((NearestBedDistance / 56) / 23.33)
-					end
-				end
-
-				task.spawn(function()
-					if not IsAlive(LocalPlayer) then
-						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
-
-							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed()then
-								task.wait(0.25)
-
-								local NearestBed, NearestBedDistance = FindNearestBed()
-
-								TweenToNearestBed((NearestBedDistance / 56) / 23.33)
-							end
-						end)
-					end
-				end)				
-			end	
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.RecallBedTp.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.RecallBedTp.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.RecallBedTp.KeyBind then
-					Settings.RecallBedTp.Value = not Settings.RecallBedTp.Value
-
-					if Settings.RecallBedTp.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.RecallBedTp.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
