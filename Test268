@@ -1278,12 +1278,14 @@ table.insert(Sides, Enum.NormalId.Right)
 table.insert(Sides, Enum.NormalId.Back)
 table.insert(Sides, Enum.NormalId.Front)
 
-local function TweenToNearestPlayer()
+local function TweenToNearestPlayer(Time)
+	local Time = Time or 0.65
+	
 	if IsAlive(LocalPlayer) then
 		local NearestPlayer = FindNearestPlayer()
 
 		if NearestPlayer then
-			local TweenInformation = TweenInfo.new(0.65, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
 			local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
 
 			PlayerTpTween:Play()
@@ -5600,9 +5602,9 @@ task.spawn(function()
 							task.wait()
 							
 							LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
-						until (tick() - RecallTick) >= 6.25
+						until (tick() - RecallTick) >= 6.2
 						
-						TweenToNearestPlayer()
+						TweenToNearestPlayer(0.42)
 					end
 				end
 
@@ -5614,7 +5616,7 @@ task.spawn(function()
 							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer()then
 								task.wait(0.25)
 
-								TweenToNearestPlayer()
+								TweenToNearestPlayer(0.42)
 							end
 						end)
 					end
