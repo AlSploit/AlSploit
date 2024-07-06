@@ -3580,7 +3580,7 @@ task.spawn(function()
 				local WaitTime = (StatsService.PerformanceStats.Ping:GetValue() and StatsService.PerformanceStats.Ping:GetValue() or 500)
 					
 				task.spawn(function()
-					if StatsService.PerformanceStats.Ping:GetValue() > 1500 then
+					if StatsService.PerformanceStats.Ping:GetValue() > 500 then
 						WaitTime = math.huge
 					end
 				end)
@@ -5599,12 +5599,14 @@ task.spawn(function()
 						local RecallTick = tick()
 						
 						repeat
-							task.wait()
-							
-							LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
-						until (tick() - RecallTick) >= 6.2
+							if IsAlive(LocalPlayer) then
+								
+							end
+						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallPlayerTp.Value == false
 						
-						TweenToNearestPlayer(0.42)
+						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+						
+						TweenToNearestPlayer((NearestPlayerDistance / 55) / 23.33)
 					end
 				end
 
@@ -5616,7 +5618,9 @@ task.spawn(function()
 							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer()then
 								task.wait(0.25)
 
-								TweenToNearestPlayer(0.42)
+								local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+
+								TweenToNearestPlayer((NearestPlayerDistance / 55) / 23.33)
 							end
 						end)
 					end
@@ -7549,3 +7553,38 @@ end)
 --jellyfish attack
 --recall tp bed and player
 --fixed inffly
+
+local LocalPlayer = game.Players.LocalPlayer
+
+function FindNearestPlayer(MaxDistance)
+	local NearestDistance = MaxDistance or 0
+	local NearestPlayer
+
+	for i, v in next, game.Players:GetPlayers() do
+		if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v ~= LocalPlayer and v.Team ~= LocalPlayer.Team then
+			local Distance = (v.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+
+			if Distance > NearestDistance then
+				NearestPlayer = v
+				NearestDistance = Distance
+			end
+		end
+	end
+
+	return NearestPlayer, NearestDistance
+end
+
+local Args = {
+	[1] = "recall"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility"):FireServer(unpack(Args))
+
+task.spawn(function()
+	task.wait(6.2)
+	
+	local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
+
+	local RecallTween = game:GetService("TweenService"):Create(LocalPlayer.Character.HumanoidRootPart, TweenInfo.new((NearestPlayerDistance / 55) / 23, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0), {CFrame = FindNearestPlayer().Character.HumanoidRootPart.CFrame + Vector3.new(0, 10, 0)})
+
+	RecallTween:Play()
+end)
