@@ -1,4 +1,4 @@
-local Owner = "asgasdgsadg4523"
+local Owner = "AlSploitFunny1"
 
 local LocalPlayer = game.Players.LocalPlayer
 
@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration3.lua"
+local SaveFileName = "AlSploitConfiguration4.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -880,7 +880,6 @@ local function CreateSettingsFile()
 		DamageBoost = {KeyBind = "..."},
 		ChatSpammer = {Speed = 50, KeyBind = "..."},	
 		AutoConsume = {KeyBind = "..."},
-		InstantWin = {KeyBind = "..."},
 		FpsBooster = {KeyBind = "..."},
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
@@ -936,17 +935,17 @@ local function CreateSettingsFile()
 		if writefile and makefolder and readfile and isfile then 
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
+			writefile("AlSploit/Bedwars/" .. SaveFileName, JSONEncodeSettings)
 		end
 	end)	
 end
 
 local function CheckFirstTime()
-	if isfile("AlSploit/Bedwars" .. SaveFileName) then
+	if isfile("AlSploit/Bedwars/" .. SaveFileName) then
 		return false
 	end
 
-	if not isfile("AlSploit/Bedwars" .. SaveFileName) then
+	if not isfile("AlSploit/Bedwars/" .. SaveFileName) then
 		return true
 	end
 end
@@ -1075,6 +1074,7 @@ local GroundHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForC
 local AfkInfoRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
 
 local ReportPlayerRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ReportPlayer")
+local UseAbilityRemote = ReplicatedStorage:WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility")
 local SwordHitRemote = ReplicatedStorage:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
 
 local ClientHandlerStore, ClientHandlerStoreGotten = nil, false
@@ -1920,6 +1920,7 @@ local function Invisibility()
 
 	Animation.Priority = Enum.AnimationPriority.Action4
 	Animation.Looped = true
+	
 	Animation:Play()
 	Animation:AdjustSpeed(0 / 10)
 end
@@ -1937,7 +1938,7 @@ local function PlaceBlock(Position, Block)
 end
 
 local function StealChest(NearestChest)	
-	NearestChest = NearestChest and NearestChest.Value or nil				
+	NearestChest = NearestChest and NearestChest.Value or nil
 
 	local Chestitems = NearestChest and NearestChest:GetChildren()
 
@@ -2753,7 +2754,7 @@ function GetBow()
 end
 
 local function InfFly()
-	if InfiniteFlyValue == true and IsAlive(LocalPlayer) and Settings.Invisible.Value == false then
+	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
 		local StartLevelPrimaryPart = LocalPlayer.Character.PrimaryPart.Position.Y
 		local StartLevelHead = LocalPlayer.Character.Head.Position.Y
 		
@@ -3566,8 +3567,16 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait(0.1)
-
+				local WaitTime = (StatsService.PerformanceStats.Ping:GetValue() and StatsService.PerformanceStats.Ping:GetValue() or 500)
+					
+				task.spawn(function()
+					if StatsService.PerformanceStats.Ping:GetValue() > 1500 then
+						WaitTime = math.huge
+					end
+				end)
+				
+				task.wait(WaitTime / 1000)
+				
 				task.spawn(function()		
 					if IsAlive(LocalPlayer) then	
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer(math.huge)
@@ -4138,56 +4147,6 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local InstantWin, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InstantWin", Settings.InstantWin.Value, function(CallBack)
-		Settings.InstantWin.Value = CallBack
-		
-		local QueueName = GetQueueType()
-		
-		if QueueName ~= "bridge_duel_to2" and Settings.InstantWin.Value == true then
-			CreateNotification(3, "Instant win only works for Bridge Duel")
-		end
-
-		repeat
-			task.wait()
-
-			QueueName = GetQueueType()
-
-			if IsAlive(LocalPlayer) and QueueName == "bridge_duel_to2" then
-				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-
-				task.spawn(function()
-					for i, v in next, WorkSpace:GetDescendants() do
-						if v:IsA("TouchTransmitter") and v.Parent:IsA("BasePart") then
-							firetouchinterest(HumanoidRootPart, v.Parent, 0)
-							firetouchinterest(HumanoidRootPart, v.Parent, 1)
-						end
-					end
-				end)	
-			end					
-		until Settings.InstantWin.Value == false
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.InstantWin.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.InstantWin.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
 			end
 		end)
 	end)
@@ -5616,6 +5575,89 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local RecallPlayerTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallPlayerTp", Settings.RecallPlayerTp.Value, function(CallBack)
+		Settings.RecallPlayerTp.Value = CallBack
+		
+		task.spawn(function()
+			if Settings.RecallPlayerTp.Value == true then
+				if IsAlive(LocalPlayer) then
+					repeat task.wait() until GetMatchState() ~= 0
+
+					if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+						local Arguments = {
+							[1] = "recall"
+						}
+
+						UseAbilityRemote:FireServer(unpack(Arguments))
+						
+						task.wait(6.079)
+
+						TweenToNearestPlayer()
+					end
+				end
+
+				task.spawn(function()
+					if not IsAlive(LocalPlayer) then
+						LocalPlayer.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
+
+							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+								local Arguments = {
+									[1] = "recall"
+								}
+
+								UseAbilityRemote:FireServer(unpack(Arguments))
+								
+								task.wait(6.079)
+
+								TweenToNearestPlayer()
+							end
+						end)
+					end
+				end)				
+			end	
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.RecallPlayerTp.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.RecallPlayerTp.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.RecallPlayerTp.KeyBind then
+					Settings.RecallPlayerTp.Value = not Settings.RecallPlayerTp.Value
+
+					if Settings.RecallPlayerTp.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.RecallPlayerTp.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local CustomInventory, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "CustomHotbar", Settings.CustomInventory.Value, function(CallBack)
 		Settings.CustomInventory.Value = CallBack
 
@@ -6553,22 +6595,24 @@ task.spawn(function()
 					repeat task.wait() until GetMatchState() ~= 0
 
 					task.spawn(function()
-						if FindNearestPlayer() and  LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
-							KillHumanoid(0)
+						if Settings.PlayerTp.Value == true then
+							if FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+								KillHumanoid(0)
 
-							LocalPlayer.CharacterAdded:Connect(function()
-								repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0
+								LocalPlayer.CharacterAdded:Connect(function()
+									repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0
 
-								if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
-									task.wait(0.15)
+									if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
+										task.wait(0.15)
 
-									TweenToNearestPlayer()
-								end
-							end)
-						end	
-						
+										TweenToNearestPlayer()
+									end
+								end)
+							end	
+						end
+											
 						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
-							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+							CreateNotification(3, "Unable to teleport to player, you have no bed")
 						end
 					end)					
 				end
@@ -6578,7 +6622,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0					
 
-							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() and  LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
 
 								TweenToNearestPlayer()
@@ -6718,20 +6762,22 @@ task.spawn(function()
 					repeat task.wait() until GetMatchState() ~= 0
 
 					task.spawn(function()
-						if FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
-							KillHumanoid(0)
+						if Settings.BedTp.Value == true then
+							if FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
+								KillHumanoid(0)
 
-							LocalPlayer.CharacterAdded:Connect(function()
-								repeat task.wait() until IsAlive(LocalPlayer)
+								LocalPlayer.CharacterAdded:Connect(function()
+									repeat task.wait() until IsAlive(LocalPlayer)
 
-								if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) then
-									task.wait(0.15)
+									if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) then
+										task.wait(0.15)
 
-									TweenToNearestBed()
-								end
-							end)
-						end	
-						
+										TweenToNearestBed()
+									end
+								end)
+							end	
+						end
+		
 						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
 							CreateNotification(3, "Unable to teleport to bed, you have no bed")
 						end
@@ -6944,6 +6990,8 @@ task.spawn(function()
 
 		task.spawn(function()
 			LocalPlayer.CharacterAdded:Connect(function()
+				task.wait(0.3)
+				
 				if Settings.Cape.Value == true then
 					local DecalId = (Settings.Cape.Sigma and 13528140280 or 16331277884)
 
@@ -7480,30 +7528,12 @@ task.spawn(function()
 end)
 
 --recall bedtp playertp
---fix autoconsume
+--fix fonts
+--magic number 6.079
+--characteraddedcheck
+--killauraanimationfix
 
 --AlSploit rules
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --iscovered() no iscovered() == true yey
-
-
-
-local remote = game:GetService("ReplicatedStorage"):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneDoubleDown');
-local effects = {
-	'fire_3', 'forest_3', 'cloud_3', 'void_3', 'static_3', 'updraft_2', 
-	'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
-	'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
-	'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
-}
-
-
-renderexploit = task.spawn(function()
-	repeat 
-		task.wait(0.5)
-		
-		for i, v in effects do 
-			remote:FireServer({statusEffectType = v})
-		end
-	until not game
-end)
