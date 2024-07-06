@@ -2734,6 +2734,14 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 	end)
 end
 
+local function Recall()
+	local Arguments = {
+		[1] = "recall"
+	}
+
+	UseAbilityRemote:FireServer(unpack(Arguments))
+end
+
 function GetBow()
 	local BestBow, BestBowDamage = nil, 0
 
@@ -5583,15 +5591,15 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) then
 					repeat task.wait() until GetMatchState() ~= 0
 
-					if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
-						local Arguments = {
-							[1] = "recall"
-						}
-
-						UseAbilityRemote:FireServer(unpack(Arguments))
+					if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then		
+						Recall()
 						
-						task.wait(6.29)
-
+						local RecallTick = tick()
+						
+						repeat
+							LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
+						until (tick() - RecallTick) >= 6.25
+						
 						TweenToNearestPlayer()
 					end
 				end
@@ -5601,7 +5609,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
 
-							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
 								task.wait(0.25)
 
 								TweenToNearestPlayer()
@@ -6783,7 +6791,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer)						
 
-							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
+							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
 								task.wait(0.25)
 
 								TweenToNearestBed()
@@ -7531,3 +7539,9 @@ end)
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --iscovered() no iscovered() == true yey
+
+--update logs
+--aimbot lag fix
+--jellyfish attack
+--recall tp bed and player
+--fixed inffly
