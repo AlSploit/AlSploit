@@ -2686,18 +2686,34 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 
 				SelfPosition = LocalPlayerHumanoidRootPart.Position + LookVector * (Magnitude - 14)
 				
-				local KillAuraHook
-				
-				KillAuraHook = hookmetamethod(game, "__namecall", function(self, ...)
-					local NameCallMethod = getnamecallmethod()
-					local Arguments = {...}
-					
-					if NameCallMethod == "FireServer" and tostring(self) == "SwordHit" then
-						return nil
-					end
-					
-					return KillAuraHook(self, unpack(Arguments))
-				end)
+				task.spawn(function()
+					local KillAuraHook
+
+					KillAuraHook = hookmetamethod(game, "__namecall", function(self, ...)
+						local NameCallMethod = getnamecallmethod()
+						local Arguments = {...}
+
+						if NameCallMethod == "FireServer" and tostring(self) == "SwordHit" then
+							Arguments = {
+								weapon = Weapon.tool,
+								chargedAttack = {chargeRatio = 0},
+								entityInstance = Entity,
+								validate = {
+									raycast = {
+										cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
+										cursorDirection = HashFunction(LookVector)
+									},
+									targetPosition = HashFunction(EntityPrimaryPart.Position),
+									selfPosition = HashFunction(SelfPosition)
+								}
+							}
+							
+							return Arguments
+						end
+
+						return KillAuraHook(self, unpack(Arguments))
+					end)
+				end)			
 
 				SwordHitRemote:FireServer({
 					weapon = Weapon.tool,
