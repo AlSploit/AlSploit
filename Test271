@@ -5599,9 +5599,7 @@ task.spawn(function()
 						local RecallTick = tick()
 						
 						repeat
-							if IsAlive(LocalPlayer) then
-								
-							end
+							task.wait()
 						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallPlayerTp.Value == false
 						
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
