@@ -1390,7 +1390,7 @@ local function FindNearestEntity(MaxDistance)
 	local IsNotAPlayer = true
 	
 	task.spawn(function()
-		for i, v in next, CollectionService:GetTagged("JellyFish") do
+		for i, v in next, CollectionService:GetTagged("jellyfish") do
 			if v.PrimaryPart then
 				local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
@@ -5590,7 +5590,7 @@ task.spawn(function()
 
 						UseAbilityRemote:FireServer(unpack(Arguments))
 						
-						task.wait(6.079)
+						task.wait(6.29)
 
 						TweenToNearestPlayer()
 					end
@@ -5602,13 +5602,7 @@ task.spawn(function()
 							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
 
 							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
-								local Arguments = {
-									[1] = "recall"
-								}
-
-								UseAbilityRemote:FireServer(unpack(Arguments))
-								
-								task.wait(6.079)
+								task.wait(0.25)
 
 								TweenToNearestPlayer()
 							end
