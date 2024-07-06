@@ -2685,6 +2685,25 @@ local function SwordHit(Entity, Weapon, NearestEntityDistance)
 				end)
 
 				SelfPosition = LocalPlayerHumanoidRootPart.Position + LookVector * (Magnitude - 14)
+				
+				local KillAuraHook
+				
+				KillAuraHook = hookmetamethod(game, "__namecall", function(self)
+					local Arguments = {
+						weapon = "stone_sword",
+						chargedAttack = {chargeRatio = 0},
+						entityInstance = Entity,
+						validate = {
+							raycast = {
+								cameraPosition = HashFunction(LocalPlayerHumanoidRootPart.Position), 
+								cursorDirection = HashFunction(LookVector)
+							},
+							targetPosition = HashFunction(EntityPrimaryPart.Position),
+							selfPosition = HashFunction(SelfPosition)
+						}}
+					
+					return KillAuraHook(self, unpack(Arguments))
+				end)
 
 				SwordHitRemote:FireServer({
 					weapon = Weapon.tool,
@@ -2742,6 +2761,8 @@ local function Recall()
 	}
 
 	UseAbilityRemote:FireServer(unpack(Arguments))
+	
+	CreateNotification(3, "Do not move, you will be anticheated")
 end
 
 function GetBow()
@@ -5604,7 +5625,7 @@ task.spawn(function()
 						
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 						
-						TweenToNearestPlayer((NearestPlayerDistance / 55) / 23.33)
+						TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
 					end
 				end
 
@@ -5618,7 +5639,7 @@ task.spawn(function()
 
 								local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
-								TweenToNearestPlayer((NearestPlayerDistance / 55) / 23.33)
+								TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
 							end
 						end)
 					end
@@ -6415,6 +6436,87 @@ task.spawn(function()
 					end
 
 					if Settings.GalaxySky.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local RecallBedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallPlayerTp", Settings.RecallBedTp.Value, function(CallBack)
+		Settings.RecallBedTp.Value = CallBack
+
+		task.spawn(function()
+			if Settings.RecallBedTp.Value == true then
+				if IsAlive(LocalPlayer) then
+					repeat task.wait() until GetMatchState() ~= 0
+
+					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed() then		
+						Recall()
+
+						local RecallTick = tick()
+
+						repeat
+							task.wait()
+						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
+
+						local NearestBed, NearestBedDistance = FindNearestBed()
+
+						TweenToNearestBed((NearestBedDistance / 56) / 23.33)
+					end
+				end
+
+				task.spawn(function()
+					if not IsAlive(LocalPlayer) then
+						LocalPlayer.CharacterAdded:Connect(function()
+							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
+
+							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed()then
+								task.wait(0.25)
+
+								local NearestBed, NearestBedDistance = FindNearestBed()
+
+								TweenToNearestBed((NearestBedDistance / 56) / 23.33)
+							end
+						end)
+					end
+				end)				
+			end	
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.RecallBedTp.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.RecallBedTp.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.RecallBedTp.KeyBind then
+					Settings.RecallBedTp.Value = not Settings.RecallBedTp.Value
+
+					if Settings.RecallBedTp.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.RecallBedTp.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -7551,38 +7653,3 @@ end)
 --jellyfish attack
 --recall tp bed and player
 --fixed inffly
-
-local LocalPlayer = game.Players.LocalPlayer
-
-function FindNearestPlayer(MaxDistance)
-	local NearestDistance = MaxDistance or 0
-	local NearestPlayer
-
-	for i, v in next, game.Players:GetPlayers() do
-		if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v ~= LocalPlayer and v.Team ~= LocalPlayer.Team then
-			local Distance = (v.Character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-
-			if Distance > NearestDistance then
-				NearestPlayer = v
-				NearestDistance = Distance
-			end
-		end
-	end
-
-	return NearestPlayer, NearestDistance
-end
-
-local Args = {
-	[1] = "recall"
-}
-game:GetService("ReplicatedStorage"):WaitForChild("events-@easy-games/game-core:shared/game-core-networking@getEvents.Events"):WaitForChild("useAbility"):FireServer(unpack(Args))
-
-task.spawn(function()
-	task.wait(6.2)
-	
-	local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
-
-	local RecallTween = game:GetService("TweenService"):Create(LocalPlayer.Character.HumanoidRootPart, TweenInfo.new((NearestPlayerDistance / 55) / 23, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0), {CFrame = FindNearestPlayer().Character.HumanoidRootPart.CFrame + Vector3.new(0, 10, 0)})
-
-	RecallTween:Play()
-end)
