@@ -4369,7 +4369,7 @@ task.spawn(function()
 
 				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
 					for i = 1, Settings.Scaffold.ExpandDistance do
-						local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.5)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
+						local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, 3, 0)
 						local Position = GetServerPosition(ScaffoldCFrame)
 						local Block = GetBlock()
 
@@ -5597,6 +5597,8 @@ task.spawn(function()
 						local RecallTick = tick()
 						
 						repeat
+							task.wait()
+							
 							LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
 						until (tick() - RecallTick) >= 6.25
 						
@@ -7531,9 +7533,9 @@ end)
 
 --recall bedtp playertp
 --fix fonts
---magic number 6.079
 --characteraddedcheck
 --killauraanimationfix
+--scaffold
 
 --AlSploit rules
 --Remotes full name in variable
