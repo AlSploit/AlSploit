@@ -113,3 +113,5 @@ local function CreateLog(Parent)
 	UIPadding.Parent = Text
 	UIPadding.PaddingLeft = UDim.new(0, 25)
 end
+
+CreateMainGui()
