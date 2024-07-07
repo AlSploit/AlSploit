@@ -2,6 +2,7 @@ local LocalPlayer = game.Players.LocalPlayer
 
 local TweenService = game:GetService("TweenService")
 
+local ScrollingFrame
 local AlSploitSpyKit = Instance.new("ScreenGui")
 
 AlSploitSpyKit.Name = "AlSploitSpyKit"
@@ -16,7 +17,7 @@ local function CreateMainGui()
 	local Title = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local LogsContainer = Instance.new("Frame")
-	local ScrollingFrame = Instance.new("ScrollingFrame")
+	ScrollingFrame = Instance.new("ScrollingFrame")
 	local UIListLayout = Instance.new("UIListLayout")
 
 	LoadingFrame.Name = "LoadingFrame"
@@ -90,13 +91,13 @@ local function CreateMainGui()
 	return ScrollingFrame
 end
 
-local function CreateLog(Parent, Text)
+local function CreateLog(Text)
 	local Log = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local UIPadding = Instance.new("UIPadding")	
 	
 	Log.Name = "Title"
-	Log.Parent = Parent
+	Log.Parent = ScrollingFrame
 	Log.BackgroundColor3 = Color3.new(1, 1, 1)
 	Log.BackgroundTransparency = 1.000
 	Log.BorderColor3 = Color3.new(0, 0, 0)
@@ -119,7 +120,22 @@ local function CreateLog(Parent, Text)
 end
 
 task.spawn(function()
-	local LoadingFrame = CreateMainGui()
+	CreateMainGui()
 	
-	CreateLog(LoadingFrame, "[12:12] AlSploit detected HttpGet being used")
+	local Time = os.date("%X")
+	
+	CreateLog(Time .. " Could Not Restore Functions, This Can Be Dangerous If The Script You Are Trying To Spy On Has An Anti Spy.")
+
+	
+	if not restorefunction then
+		CreateLog(Time .. " Could Not Restore Functions, This Can Be Dangerous If The Script You Are Trying To Spy On Has An Anti Spy.")
+	end
+	
+	repeat
+		task.wait()
+		
+		if restorefunction then
+			restorefunction(hookfunction)
+		end
+	until not game
 end)
