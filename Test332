@@ -122,6 +122,10 @@ local function CreateLog(Text)
 	local MouseEntered = false
 	
 	task.spawn(function()
+		Log.MouseLeave:Connect(function()
+			MouseEntered = false
+		end)
+		
 		Log.MouseEnter:Connect(function()
 			MouseEntered = true
 		end)
