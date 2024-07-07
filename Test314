@@ -217,7 +217,9 @@ task.spawn(function()
 			AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
 				local Link = ...
 				
-				CreateLog("[" .. Time .. "]" .. " HttpRequest Spotted " .. RequestData .. " " .. Link .. ".")
+				print(...)
+				
+				CreateLog("[" .. Time .. "]" .. " HttpRequest Spotted " .. RequestData .. ".")
 
 				return AntiHttpRequest(RequestData, ...)
 			end)
