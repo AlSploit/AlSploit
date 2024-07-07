@@ -124,7 +124,7 @@ task.spawn(function()
 	
 	local Time = os.date("%X")
 	
-	CreateLog(Time .. " Could Not Restore Functions, This Can Be Dangerous If The Script You Are Trying To Spy On Has An Anti Spy.")
+	CreateLog("[" .. Time .. "]" .. " Unable To Restore Functions, This Can Be Dangerous If The Script You Are Spying On Has An Anti Spy.")
 
 	
 	if not restorefunction then
