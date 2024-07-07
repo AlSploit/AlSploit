@@ -2048,14 +2048,44 @@ local function GetSword()
 		end
 		
 		if ItemTableGotten == false then
-			--for i, v2 in next, WeaponMetaGame do
-				--local name = sword[1]
-				--local meta = sword[2]
-				--if meta > bestSwordMeta and hasItem(name) then
-					--bestSword = name
-					--bestSwordMeta = meta
-				--end
-			--end	
+			local WeaponMetaGame = {
+				{"rageblade", 100},
+				{"emerald_sword", 99},
+				{"deathbloom", 99},
+				{"glitch_void_sword", 98},
+				{"sky_scythe", 98},
+				{"diamond_sword", 97}, 
+				{"iron_sword", 96},
+				{"stone_sword", 95},
+				{"wood_sword", 94},
+				{"emerald_dao", 93},
+				{"diamond_dao", 99},
+				{"diamond_dagger", 99},
+				{"diamond_great_hammer", 99},
+				{"diamond_scythe", 99},
+				{"iron_dao", 97},
+				{"iron_scythe", 97},
+				{"iron_dagger", 97},
+				{"iron_great_hammer", 97},
+				{"stone_dao", 96},
+				{"stone_dagger", 96},
+				{"stone_great_hammer", 96},
+				{"stone_scythe", 96},
+				{"wood_dao", 95},
+				{"woodscythe", 95},
+				{"wood_great_hammer", 95},
+				{"wood_dagger", 95},
+				{"frosty_hammer", 1},
+			}
+		
+			for i, v2 in next, WeaponMetaGame do
+				local MetaGame = v2[2]
+				
+				if MetaGame > HighestDamage and HasItem(v2[1]) then
+					HighestDamage = MetaGame
+					Sword = v
+				end
+			end	
 		end
 	end
 
@@ -2181,7 +2211,7 @@ function GetBlock()
 	end
 end
 
-local function HasItem(Name)
+function HasItem(Name)
 	for i, v in next, GetInventory(LocalPlayer).items do
 		if v.itemType:find(Name) then
 			return v 
@@ -7711,5 +7741,3 @@ end)
 --recall tp bed and player
 --fixed inffly anticheat
 --fixed fly anticheast
-
-setclipboard(ItemTable)
