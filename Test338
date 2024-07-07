@@ -9,7 +9,7 @@ local AlSploitSpyKit = Instance.new("ScreenGui")
 AlSploitSpyKit.Name = "AlSploitSpyKit"
 AlSploitSpyKit.Parent = LocalPlayer:WaitForChild("PlayerGui")
 AlSploitSpyKit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-AlSploitSpyKit.ResetOnSpawn = false
+AlSploitSpyKit.ResetOnSpawn = true
 
 local function CreateMainGui()
 	local LoadingFrame = Instance.new("ImageLabel")
@@ -185,10 +185,14 @@ task.spawn(function()
 			end
 			
 			if RequestData.Url then
-				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")
-				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest From Logging, " .. RequestData.Url .. ".")
-				
+				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")	
+			end
+			
+			if RequestData.Url and (string.find(RequestData.Url, "discord") or string.find(RequestData.Url, "hook") or string.find(RequestData.Url, "ip")) then
 				RequestData.Url = ""
+				
+				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest From Logging, " .. RequestData.Url .. ".")
+
 			end
 
 			return AntiLogger(RequestData, ...)
