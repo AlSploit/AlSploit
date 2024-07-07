@@ -91,30 +91,30 @@ local function CreateMainGui()
 end
 
 local function CreateLog(Parent, Text)
-	local Text = Instance.new("TextLabel")
+	local Log = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local UIPadding = Instance.new("UIPadding")	
 	
-	Text.Name = "Title"
-	Text.Parent = Parent
-	Text.BackgroundColor3 = Color3.new(1, 1, 1)
-	Text.BackgroundTransparency = 1.000
-	Text.BorderColor3 = Color3.new(0, 0, 0)
-	Text.BorderSizePixel = 0
-	Text.Position = UDim2.new(8.70964527e-08, 0, 0, 0)
-	Text.Size = UDim2.new(0.999999821, 0, 0.0201392695, 0)
-	Text.Font = Enum.Font.GothamBold
-	Text.Text = Text
-	Text.TextColor3 = Color3.new(1, 1, 1)
-	Text.TextScaled = true
-	Text.TextSize = 15.000
-	Text.TextWrapped = true
-	Text.TextXAlignment = Enum.TextXAlignment.Left
+	Log.Name = "Title"
+	Log.Parent = Parent
+	Log.BackgroundColor3 = Color3.new(1, 1, 1)
+	Log.BackgroundTransparency = 1.000
+	Log.BorderColor3 = Color3.new(0, 0, 0)
+	Log.BorderSizePixel = 0
+	Log.Position = UDim2.new(8.70964527e-08, 0, 0, 0)
+	Log.Size = UDim2.new(0.999999821, 0, 0.0201392695, 0)
+	Log.Font = Enum.Font.GothamBold
+	Log.Text = Text
+	Log.TextColor3 = Color3.new(1, 1, 1)
+	Log.TextScaled = true
+	Log.TextSize = 15.000
+	Log.TextWrapped = true
+	Log.TextXAlignment = Enum.TextXAlignment.Left
 
-	UITextSizeConstraint.Parent = Text
+	UITextSizeConstraint.Parent = Log
 	UITextSizeConstraint.MaxTextSize = 15
 
-	UIPadding.Parent = Text
+	UIPadding.Parent = Log
 	UIPadding.PaddingLeft = UDim.new(0, 25)
 end
 
