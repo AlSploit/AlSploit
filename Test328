@@ -146,10 +146,10 @@ task.spawn(function()
 		local Request = http_request or request or HttpPost or fluxus.request
 
 		AntiLogger = HookFunction(Request, function(RequestData, ...)
-			print(...)
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")
 			
 			for i, v in next, RequestData do
-				print(v)
+				print(i, v)
 			end
 
 			return AntiLogger(RequestData, ...)
