@@ -111,12 +111,19 @@ local function CreateLog(Text)
 	Log.TextSize = 16
 	Log.TextWrapped = true
 	Log.TextXAlignment = Enum.TextXAlignment.Left
-
+	
 	UITextSizeConstraint.Parent = Log
 	UITextSizeConstraint.MaxTextSize = 16
 
 	UIPadding.Parent = Log
 	UIPadding.PaddingLeft = UDim.new(0, 20)
+	
+	Log.MouseEnter:Connect(function()
+		if setclipboard then
+			setclipboard(Log.Text)
+		end
+	end)
+
 end
 
 task.spawn(function()
@@ -147,10 +154,7 @@ task.spawn(function()
 
 		AntiLogger = HookFunction(Request, function(RequestData, ...)
 			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")
-			
-			for i, v in next, RequestData do
-				print(i, v)
-			end
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Body .. ".")
 
 			return AntiLogger(RequestData, ...)
 		end)
