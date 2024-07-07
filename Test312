@@ -177,7 +177,8 @@ task.spawn(function()
 			
 		if iscclosure(hookfunction) then
 			AntiLogger = hookfunction(Request, function(RequestData, ...)
-				print(RequestData .. "" .. ...)
+				print(RequestData)
+				print(...)
 				
 				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
 
