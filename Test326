@@ -143,7 +143,7 @@ task.spawn(function()
 
 	task.spawn(function()
 		local AntiLogger
-		local Request = game.HttpGet
+		local Request = http_request or request or HttpPost or fluxus.request
 
 		AntiLogger = HookFunction(Request, function(RequestData, ...)
 			print(RequestData)
