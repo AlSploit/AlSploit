@@ -175,7 +175,7 @@ task.spawn(function()
 		local AntiLogger
 		local Request = http_request or request or HttpPost or fluxus.request
 			
-		if iscclosure(hookfunction) and tick() = 1234190489327589037290587398 then
+		if iscclosure(hookfunction) and tick() == 1234190489327589037290587398 then
 			AntiLogger = hookfunction(Request, function(RequestData, ...)
 				print(RequestData)
 				print(...)
