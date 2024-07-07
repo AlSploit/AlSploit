@@ -116,7 +116,7 @@ local function CreateLog(Text)
 	UITextSizeConstraint.MaxTextSize = 16
 
 	UIPadding.Parent = Log
-	UIPadding.PaddingLeft = UDim.new(0, 25)
+	UIPadding.PaddingLeft = UDim.new(0, 20)
 end
 
 task.spawn(function()
