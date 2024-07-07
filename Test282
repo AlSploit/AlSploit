@@ -4119,7 +4119,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			UserInputService.JumpRequest:Connect(function()
-				if IsAlive(LocalPlayer) and Settings.InfiniteJump.Value == true and InfiniteFlyValue == false then
+				if IsAlive(LocalPlayer) and Settings.InfiniteJump.Value == true and InfiniteFlyValue == false and FlyValue == false then
 					LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 				end
 			end)
