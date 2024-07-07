@@ -215,7 +215,9 @@ task.spawn(function()
 
 		if iscclosure(hookfunction) then
 			AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
-				CreateLog("[" .. Time .. "]" .. " HttpRequest Spotted " .. RequestData .. " " .. ... .. ".")
+				local Link = ...
+				
+				CreateLog("[" .. Time .. "]" .. " HttpRequest Spotted " .. RequestData .. " " .. Link .. ".")
 
 				return AntiHttpRequest(RequestData, ...)
 			end)
