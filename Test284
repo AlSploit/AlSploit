@@ -2887,8 +2887,11 @@ local function FlyMe()
 
 					DisplayTween:Play()		
 					
-					if (tick() - FlyGroundTime) <= 0.1 then
-						SliderDisplay.Size = UDim2.new(0, 0, 1, 0)
+					if (tick() - FlyGroundTime) <= 0.05 then
+						local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+						local DisplayTween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
+
+						DisplayTween:Play()	
 					end
 				end				
 
@@ -4275,11 +4278,22 @@ task.spawn(function()
 					Settings.HighJump.Value = not Settings.HighJump.Value
 
 					if Settings.HighJump.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+						task.spawn(function()
+							if IsAlive(LocalPlayer) then
+								LocalPlayer.Character.PrimaryPart.Velocity = LocalPlayer.Character.PrimaryPart.Velocity + Vector3.new(0, 150, 0)
+
+								task.wait(0.2)
+
+								Settings.HighJump.Value = false
+								UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+							end
+						end)
+
+						UIGradient2.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.HighJump.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+						UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
 			end
@@ -5395,7 +5409,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local Tracers, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Tracers", Settings.Tracers.Value, function(CallBack)
+	local Tracers, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Tracers", Settings.Tracers.Value, function(CallBack)
 		Settings.Tracers.Value = CallBack
 
 		task.spawn(function()
@@ -5444,7 +5458,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.Tracers.KeyBind, LayoutOrder + 1, function(CallBack)
+				InstanceUI = CreateKeyBind(UtilityTab, Settings.Tracers.KeyBind, LayoutOrder + 1, function(CallBack)
 					Settings.Tracers.KeyBind = CallBack
 				end)
 			end
@@ -5585,7 +5599,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local Esp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Esp", Settings.Esp.Value, function(CallBack)
+	local Esp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "Esp", Settings.Esp.Value, function(CallBack)
 		Settings.Esp.Value = CallBack
 
 		task.spawn(function()
@@ -5644,7 +5658,7 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.Esp.KeyBind, LayoutOrder + 1, function(CallBack)
+				InstanceUI = CreateKeyBind(UtilityTab, Settings.Esp.KeyBind, LayoutOrder + 1, function(CallBack)
 					Settings.Esp.KeyBind = CallBack
 				end)
 			end
@@ -6336,13 +6350,17 @@ task.spawn(function()
 							task.wait()
 						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
 
-						local NearestBed, NearestBedDistance = FindNearestBed()
+						local NearestBed = FindNearestBed(false)
+						
+						if IsAlive(LocalPlayer) and NearestBed then
+							local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-						TweenToNearestBed(0.42)
-						
-						Settings.RecallBedTp.Value = false
-						
-						UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+							TweenToNearestBed((Magnitude / 55) / 23.33)
+
+							Settings.RecallBedTp.Value = false
+
+							UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+						end					
 					end
 				end
 
@@ -6354,13 +6372,17 @@ task.spawn(function()
 							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false)then
 								task.wait(0.25)
 
-								local NearestBed, NearestBedDistance = FindNearestBed()
+								local NearestBed = FindNearestBed(false)
 
-								TweenToNearestBed(0.42)
-								
-								Settings.RecallBedTp.Value = false
-								
-								UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+								if IsAlive(LocalPlayer) and NearestBed then
+									local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+									TweenToNearestBed((Magnitude / 55) / 23.33)
+
+									Settings.RecallBedTp.Value = false
+
+									UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+								end		
 							end
 						end)
 					end
@@ -7686,4 +7708,5 @@ end)
 --aimbot lag fix
 --jellyfish attack
 --recall tp bed and player
---fixed inffly
+--fixed inffly anticheat
+--fixed fly anticheast
