@@ -196,7 +196,7 @@ task.spawn(function()
 		local Request = game.HttpGet
 
 		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			if not table.find(HttpRequests, ..., 0) then
+			if HttpRequests[...] then
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
 
 				table.insert(HttpRequests, ...)
