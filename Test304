@@ -179,15 +179,15 @@ task.spawn(function()
 		AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
 			setclipboard(RequestData.Url)
 			
-			CreateLog("[" .. Time .. "]" .. "Copied Url Of The HttpRequest")
+			CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpRequest")
 
 			for i, v in next, RequestData do
-				CreateLog("[" .. Time .. "]" .. "HttpRequest: " .. v)
+				CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
 			end
 			
 			RequestData.Url = "..."
 			
-			CreateLog("[" .. Time .. "]" .. "Stopped A HttpRequest.")
+			CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
 
 			return AntiHttpRequest(RequestData, ...)
 		end)
