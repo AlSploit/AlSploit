@@ -19,8 +19,6 @@ local function CreateMainGui()
 	local LogsContainer = Instance.new("Frame")
 	ScrollingFrame = Instance.new("ScrollingFrame")
 	local UIListLayout = Instance.new("UIListLayout")
-	
-	print("12")
 
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = AlSploitSpyKit
@@ -37,8 +35,6 @@ local function CreateMainGui()
 	UIStroke.Parent = LoadingFrame
 	UIStroke.Thickness = 1
 	UIStroke.Color = Color3.new(1, 1, 1)
-	
-	print("12")
 
 	Title.Name = "Title"
 	Title.Parent = LoadingFrame
@@ -58,8 +54,6 @@ local function CreateMainGui()
 	UITextSizeConstraint.Parent = Title
 	UITextSizeConstraint.MaxTextSize = 20
 
-
-	print("12")
 	LogsContainer.Name = "LogsContainer"
 	LogsContainer.Parent = LoadingFrame
 	LogsContainer.BackgroundColor3 = Color3.new(1, 1, 1)
@@ -81,8 +75,6 @@ local function CreateMainGui()
 	ScrollingFrame.MidImage = "rbxassetid://0"
 	ScrollingFrame.ScrollBarThickness = 10
 	ScrollingFrame.TopImage = "rbxassetid://0"
-	
-	print("12")
 
 	UIListLayout.Parent = ScrollingFrame
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -95,7 +87,7 @@ local function CreateMainGui()
 
 		LoadingFrameTween:Play()
 	end)
-	print("12")
+
 	return ScrollingFrame
 end
 
@@ -129,26 +121,18 @@ end
 
 task.spawn(function()
 	CreateMainGui()
-	
-	print("1")
 
 	task.wait(1)
-	
-	print("2")
 
 	local Time = os.date("%X")
 	
-	print("3")
-	
 	local HookMetaMethod = hookmetamethod
 	local HookFunction = hookfunction
-	
-	print("4")
 
 	task.spawn(function()
 		AntiKick = HookMetaMethod(game, "__namecall", function(Player, ...)
 			if Player == LocalPlayer and getnamecallmethod():lower() == "kick" then
-				CreateLog("[" .. Time .. "]" .. "Tried Kicking, Action Stopped.")
+				CreateLog("[" .. Time .. "]" .. " Tried Kicking, Action Stopped.")
 			end
 
 			return AntiKick(Player, ...)
@@ -157,7 +141,7 @@ task.spawn(function()
 		CreateLog("[" .. Time .. "]" .. "AntiKick Has Loaded.")
 	end)
 	
-	print("5")
+	getgenv().hookfunction = function() end
 
 	task.spawn(function()
 		local HttpRequest
@@ -169,6 +153,4 @@ task.spawn(function()
 			return AntiLogger(RequestData, ...)
 		end)
 	end)
-	
-	print("6")
 end)
