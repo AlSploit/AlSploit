@@ -2876,7 +2876,7 @@ local function FlyMe()
 			repeat
 				task.wait()
 
-				if tick() - FlyGroundTime <= 2.3 then
+				if (tick() - FlyGroundTime) <= 2.3 then
 					local MaxFlyTime = 2.3
 					local FlyTime = DecimalRound(tick() - FlyGroundTime, 1)
 
@@ -2885,7 +2885,11 @@ local function FlyMe()
 					local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
 					local DisplayTween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
 
-					DisplayTween:Play()				
+					DisplayTween:Play()		
+					
+					if (tick() - FlyGroundTime) <= 0.1 then
+						SliderDisplay.Size = UDim2.new(0, 0, 1, 0)
+					end
 				end				
 
 			until FlyValue == false or not IsAlive(LocalPlayer)
