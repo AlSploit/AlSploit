@@ -198,4 +198,31 @@ task.spawn(function()
 			return AntiHttpRequest(RequestData, ...)
 		end)
 	end)
+	
+	task.spawn(function()
+		local AntiHttpGetRequest
+		local Request = game.HttpGet
+
+		AntiHttpGetRequest = hookfunction(Request, function(RequestData, ...)
+			CreateLog("[" .. Time .. "]" .. " Stopped A HttpGetRequest.")
+
+			if setclipboard then
+				setclipboard(RequestData.Url)
+
+				CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpGetRequest")
+			end
+
+			if not setclipboard then
+				CreateLog("[" .. Time .. "]" .. " Unable To Copy Url Of The HttpGetRequest")
+			end				
+
+			for i, v in next, RequestData do
+				CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
+			end
+
+			--RequestData.Url = "..."
+
+			return AntiHttpRequest(RequestData, ...)
+		end)
+	end)
 end)
