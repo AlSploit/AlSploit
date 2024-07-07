@@ -177,17 +177,23 @@ task.spawn(function()
 		local Request = http_request or request or HttpPost or fluxus.request
 			
 		AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
-			setclipboard(RequestData.Url)
+			CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
 			
-			CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpRequest")
+			if setclipboard then
+				setclipboard(RequestData.Url)
 
+				CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpRequest")
+			end
+			
+			if not setclipboard then
+				CreateLog("[" .. Time .. "]" .. " Unable To Copy Url Of The HttpRequest")
+			end				
+			
 			for i, v in next, RequestData do
 				CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
 			end
 			
 			RequestData.Url = "..."
-			
-			CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
 
 			return AntiHttpRequest(RequestData, ...)
 		end)
