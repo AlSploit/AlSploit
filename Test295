@@ -21,8 +21,8 @@ local function CreateMainGui()
 
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = AlSploitSpyKit
-	LoadingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	LoadingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	LoadingFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+	LoadingFrame.BorderColor3 = Color3.new(0, 0, 0)
 	LoadingFrame.BorderSizePixel = 0
 	LoadingFrame.Position = UDim2.new(0.282, 0, 0.22, 0)
 	LoadingFrame.Size = UDim2.new(0, 0, 0, 0)
@@ -37,15 +37,15 @@ local function CreateMainGui()
 
 	Title.Name = "Title"
 	Title.Parent = LoadingFrame
-	Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Title.BackgroundColor3 = Color3.new(1, 1, 1)
 	Title.BackgroundTransparency = 1.000
-	Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Title.BorderColor3 = Color3.new(0, 0, 0)
 	Title.BorderSizePixel = 0
-	Title.Position = UDim2.new(1.742, 0, 0, 0)
+	Title.Position = UDim2.new(0, 0, 0, 0)
 	Title.Size = UDim2.new(1, 0, 0.102, 0)
 	Title.Font = Enum.Font.GothamBold
 	Title.Text = "Logs"
-	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Title.TextColor3 = Color3.new(1, 1, 1)
 	Title.TextScaled = true
 	Title.TextSize = 20.000
 	Title.TextWrapped = true
@@ -55,18 +55,18 @@ local function CreateMainGui()
 
 	LogsContainer.Name = "LogsContainer"
 	LogsContainer.Parent = LoadingFrame
-	LogsContainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	LogsContainer.BackgroundColor3 = Color3.new(1, 1, 1)
 	LogsContainer.BackgroundTransparency = 1.000
-	LogsContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	LogsContainer.BorderColor3 = Color3.new(0, 0, 0)
 	LogsContainer.BorderSizePixel = 0
 	LogsContainer.Position = UDim2.new(2.177, 0, 0.150, 0)
 	LogsContainer.Size = UDim2.new(1, 0, 0.850, 0)
 
 	ScrollingFrame.Parent = LoadingFrame
 	ScrollingFrame.Active = true
-	ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ScrollingFrame.BackgroundColor3 = Color3.new(1, 1, 1)
 	ScrollingFrame.BackgroundTransparency = 1.000
-	ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	ScrollingFrame.BorderColor3 = Color3.new(0, 0, 0)
 	ScrollingFrame.BorderSizePixel = 0
 	ScrollingFrame.Position = UDim2.new(0, 0, 0.150, 0)
 	ScrollingFrame.Size = UDim2.new(1, 0, 0.850, 0)
@@ -90,22 +90,22 @@ local function CreateMainGui()
 	return ScrollingFrame
 end
 
-local function CreateLog(Parent)
+local function CreateLog(Parent, Text)
 	local Text = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local UIPadding = Instance.new("UIPadding")	
 	
 	Text.Name = "Title"
 	Text.Parent = Parent
-	Text.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Text.BackgroundColor3 = Color3.new(1, 1, 1)
 	Text.BackgroundTransparency = 1.000
-	Text.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Text.BorderColor3 = Color3.new(0, 0, 0)
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(8.70964527e-08, 0, 0, 0)
 	Text.Size = UDim2.new(0.999999821, 0, 0.0201392695, 0)
 	Text.Font = Enum.Font.GothamBold
-	Text.Text = "AlSploit Has Detected"
-	Text.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Text.Text = Text
+	Text.TextColor3 = Color3.new(1, 1, 1)
 	Text.TextScaled = true
 	Text.TextSize = 15.000
 	Text.TextWrapped = true
@@ -118,4 +118,8 @@ local function CreateLog(Parent)
 	UIPadding.PaddingLeft = UDim.new(0, 25)
 end
 
-CreateMainGui()
+task.spawn(function()
+	local LoadingFrame = CreateMainGui()
+	
+	CreateLog(LoadingFrame, "Test")
+end)
