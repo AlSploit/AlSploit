@@ -122,6 +122,8 @@ end
 task.spawn(function()
 	CreateMainGui()
 	
+	task.wait(1)
+	
 	local Time = os.date("%X")
 	
 	task.spawn(function()
@@ -151,6 +153,8 @@ task.spawn(function()
 	
 	task.spawn(function()
 		if hookmetamethod then
+			local AntiKick
+			
 			AntiKick = hookmetamethod(game, "__namecall", function(Data, ...)
 				if Data == LocalPlayer and getnamecallmethod():lower() == "kick" then
 					CreateLog("[" .. Time .. "]" .. "Tried Kicking, Action Stopped.")
@@ -166,5 +170,26 @@ task.spawn(function()
 		if not hookmetamethod then
 			CreateLog("[" .. Time .. "]" .. " Antikick Was Unable To Load.")
 		end
+	end)
+	
+	task.spawn(function()
+		local AntiHttpRequest
+		local Request = http_request or request or HttpPost or fluxus.request
+			
+		AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
+			setclipboard(RequestData.Url)
+			
+			CreateLog("[" .. Time .. "]" .. "Copied Url Of The HttpRequest")
+
+			for i, v in next, RequestData do
+				CreateLog("[" .. Time .. "]" .. "HttpRequest: " .. v)
+			end
+			
+			RequestData.Url = "..."
+			
+			CreateLog("[" .. Time .. "]" .. "Stopped A HttpRequest.")
+
+			return AntiHttpRequest(RequestData, ...)
+		end)
 	end)
 end)
