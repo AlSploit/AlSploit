@@ -146,8 +146,11 @@ task.spawn(function()
 		local Request = http_request or request or HttpPost or fluxus.request
 
 		AntiLogger = HookFunction(Request, function(RequestData, ...)
-			print(RequestData)
 			print(...)
+			
+			for i, v in next, RequestData do
+				print(v)
+			end
 
 			return AntiLogger(RequestData, ...)
 		end)
