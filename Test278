@@ -3372,7 +3372,7 @@ task.spawn(function()
 			repeat
 				task.wait()
 
-				if IsAlive(LocalPlayer) then
+				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
 
 					if NearestEntity then
@@ -3590,7 +3590,7 @@ task.spawn(function()
 				task.wait(WaitTime / 1000)
 				
 				task.spawn(function()		
-					if IsAlive(LocalPlayer) then	
+					if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == false and Settings.RecallBedTp.Value == false then	
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer(math.huge)
 
 						if NearestPlayer and (AntiVoidPart and NearestPlayer.Character.PrimaryPart.Position.Y >= AntiVoidPart.Position.Y or true) and not NearestPlayer.Character:FindFirstChildOfClass("ForceField") and NearestPlayerDistance > Settings.KillAura.Range then
@@ -5607,6 +5607,8 @@ task.spawn(function()
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 						
 						TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
+						
+						Settings.RecallPlayerTp.Value = false
 					end
 				end
 
@@ -5621,6 +5623,8 @@ task.spawn(function()
 								local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
 								TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
+								
+								Settings.RecallPlayerTp.Value = false
 							end
 						end)
 					end
@@ -6107,11 +6111,14 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.RecallBedTp.Value == true then
+				print("1")
 				if IsAlive(LocalPlayer) then
+					print("2")
 					repeat task.wait() until GetMatchState() ~= 0
+					print("3")
 
-					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed() then		
-						print("1")
+					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed() then	
+						print("4")
 						
 						Recall()
 
@@ -6124,6 +6131,8 @@ task.spawn(function()
 						local NearestBed, NearestBedDistance = FindNearestBed()
 
 						TweenToNearestBed((NearestBedDistance / 56) / 23.33)
+						
+						Settings.RecallBedTp.Value = false
 					end
 				end
 
@@ -6138,6 +6147,8 @@ task.spawn(function()
 								local NearestBed, NearestBedDistance = FindNearestBed()
 
 								TweenToNearestBed((NearestBedDistance / 56) / 23.33)
+								
+								Settings.RecallBedTp.Value = false
 							end
 						end)
 					end
@@ -6699,6 +6710,8 @@ task.spawn(function()
 										task.wait(0.15)
 
 										TweenToNearestPlayer()
+										
+										Settings.PlayerTp.Value = false
 									end
 								end)
 							end	
@@ -6706,6 +6719,8 @@ task.spawn(function()
 											
 						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
 							CreateNotification(3, "Unable to teleport to player, you have no bed")
+							
+							Settings.PlayerTp.Value = false
 						end
 					end)					
 				end
@@ -6719,6 +6734,8 @@ task.spawn(function()
 								task.wait(0.25)
 
 								TweenToNearestPlayer()
+								
+								Settings.PlayerTp.Value = false
 							end
 						end)
 					end
@@ -6866,6 +6883,8 @@ task.spawn(function()
 										task.wait(0.15)
 
 										TweenToNearestBed()
+										
+										Settings.BedTp.Value = false
 									end
 								end)
 							end	
@@ -6873,6 +6892,8 @@ task.spawn(function()
 		
 						if LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "❌" then
 							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+							
+							Settings.BedTp.Value = false
 						end
 					end)					
 				end
@@ -6886,6 +6907,8 @@ task.spawn(function()
 								task.wait(0.25)
 
 								TweenToNearestBed()
+								
+								Settings.BedTp.Value = false
 							end
 						end)
 					end
