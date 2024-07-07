@@ -140,9 +140,19 @@ task.spawn(function()
 		
 		CreateLog("[" .. Time .. "]" .. " AntiKick Has Loaded.")
 	end)
-	
-	getgenv().hookfunction = function() end
 
+	task.spawn(function()
+		local AntiLogger
+		local Request = game.HttpGet
+
+		AntiLogger = HookFunction(Request, function(RequestData, ...)
+			print(RequestData)
+			print(...)
+
+			return AntiLogger(RequestData, ...)
+		end)
+	end)
+	
 	task.spawn(function()
 		local HttpRequest
 		local Request = game.HttpGet
