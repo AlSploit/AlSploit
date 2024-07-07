@@ -186,6 +186,9 @@ task.spawn(function()
 			
 			if RequestData.Url then
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")
+				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest From Logging, " .. RequestData.Url .. ".")
+				
+				RequestData.Url = ""
 			end
 
 			return AntiLogger(RequestData, ...)
