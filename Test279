@@ -4225,6 +4225,8 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local UIGradient = nil
+	
 	local HighJump, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "HighJump", Settings.HighJump.Value, function(CallBack)
 		Settings.HighJump.Value = CallBack
 
@@ -4235,6 +4237,8 @@ task.spawn(function()
 				task.wait(0.2)
 
 				Settings.HighJump.Value = false
+				
+				UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 			end
 		end)	
 	end)
@@ -4265,17 +4269,6 @@ task.spawn(function()
 					Settings.HighJump.Value = not Settings.HighJump.Value
 
 					if Settings.HighJump.Value == true then
-						task.spawn(function()
-							if IsAlive(LocalPlayer) then
-								LocalPlayer.Character.PrimaryPart.Velocity = LocalPlayer.Character.PrimaryPart.Velocity + Vector3.new(0, 150, 0)
-
-								task.wait(0.2)
-
-								Settings.HighJump.Value = false
-								UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-							end
-						end)
-
 						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
@@ -5587,6 +5580,8 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local UIGradient = nil
+	
 	local RecallPlayerTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallPlayerTp", Settings.RecallPlayerTp.Value, function(CallBack)
 		Settings.RecallPlayerTp.Value = CallBack
 		
@@ -5609,6 +5604,8 @@ task.spawn(function()
 						TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
 						
 						Settings.RecallPlayerTp.Value = false
+						
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
 
@@ -5625,6 +5622,8 @@ task.spawn(function()
 								TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
 								
 								Settings.RecallPlayerTp.Value = false
+								
+								UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 							end
 						end)
 					end
@@ -6106,20 +6105,16 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local UIGradient = nil
 	local RecallBedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallBedTp", Settings.RecallBedTp.Value, function(CallBack)
 		Settings.RecallBedTp.Value = CallBack
 
 		task.spawn(function()
 			if Settings.RecallBedTp.Value == true then
-				print("1")
 				if IsAlive(LocalPlayer) then
-					print("2")
 					repeat task.wait() until GetMatchState() ~= 0
-					print("3")
 
-					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed() then	
-						print("4")
-						
+					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false) then	
 						Recall()
 
 						local RecallTick = tick()
@@ -6133,6 +6128,8 @@ task.spawn(function()
 						TweenToNearestBed((NearestBedDistance / 56) / 23.33)
 						
 						Settings.RecallBedTp.Value = false
+						
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
 
@@ -6141,7 +6138,7 @@ task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function()
 							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
 
-							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed()then
+							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false)then
 								task.wait(0.25)
 
 								local NearestBed, NearestBedDistance = FindNearestBed()
@@ -6149,6 +6146,8 @@ task.spawn(function()
 								TweenToNearestBed((NearestBedDistance / 56) / 23.33)
 								
 								Settings.RecallBedTp.Value = false
+								
+								UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 							end
 						end)
 					end
@@ -6690,6 +6689,8 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local UIGradient = nil
+	
 	local PlayerTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "PlayerTp", Settings.PlayerTp.Value, function(CallBack)
 		Settings.PlayerTp.Value = CallBack
 
@@ -6712,6 +6713,8 @@ task.spawn(function()
 										TweenToNearestPlayer()
 										
 										Settings.PlayerTp.Value = false
+										
+										UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 									end
 								end)
 							end	
@@ -6721,6 +6724,8 @@ task.spawn(function()
 							CreateNotification(3, "Unable to teleport to player, you have no bed")
 							
 							Settings.PlayerTp.Value = false
+							
+							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 						end
 					end)					
 				end
@@ -6736,6 +6741,8 @@ task.spawn(function()
 								TweenToNearestPlayer()
 								
 								Settings.PlayerTp.Value = false
+								
+								UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 							end
 						end)
 					end
@@ -6863,6 +6870,8 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local UIGradient = nil
+	
 	local BedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "BedTp", Settings.BedTp.Value, function(CallBack)
 		Settings.BedTp.Value = CallBack
 
@@ -6885,6 +6894,8 @@ task.spawn(function()
 										TweenToNearestBed()
 										
 										Settings.BedTp.Value = false
+										
+										UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 									end
 								end)
 							end	
@@ -6894,6 +6905,8 @@ task.spawn(function()
 							CreateNotification(3, "Unable to teleport to bed, you have no bed")
 							
 							Settings.BedTp.Value = false
+							
+							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 						end
 					end)					
 				end
@@ -6909,6 +6922,8 @@ task.spawn(function()
 								TweenToNearestBed()
 								
 								Settings.BedTp.Value = false
+								
+								UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 							end
 						end)
 					end
