@@ -128,6 +128,10 @@ task.spawn(function()
 		if not restorefunction then
 			CreateLog("[" .. Time .. "]" .. " Unable To Restore Functions, This Can Be Dangerous If The Script You Are Spying On Has An Anti Spy.")
 		end
+		
+		if restorefunction then
+			CreateLog("[" .. Time .. "]" .. " Restore Function Has Loaded.")
+		end
 	end)
 	
 	task.spawn(function()
@@ -149,18 +153,18 @@ task.spawn(function()
 		if hookmetamethod then
 			AntiKick = hookmetamethod(game, "__namecall", function(Data, ...)
 				if Data == LocalPlayer and getnamecallmethod():lower() == "kick" then
-					CreateLog("[" .. Time .. "]" .. "tried kicking, action stopped.")
+					CreateLog("[" .. Time .. "]" .. "Tried Kicking, Action Stopped.")
 				end
 
 				return AntiKick(Data, ...)
 			end)
 
 
-			CreateLog("[" .. Time .. "]" .. "antikick has loaded.")
+			CreateLog("[" .. Time .. "]" .. " Antikick Has Loaded.")
 		end
 		
 		if not hookmetamethod then
-			CreateLog("[" .. Time .. "]" .. "antikick was unable to load.")
+			CreateLog("[" .. Time .. "]" .. " Antikick Was Unable To Load.")
 		end
 	end)
 end)
