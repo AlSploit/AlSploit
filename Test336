@@ -76,6 +76,7 @@ local function CreateMainGui()
 	ScrollingFrame.MidImage = "rbxassetid://0"
 	ScrollingFrame.ScrollBarThickness = 10
 	ScrollingFrame.TopImage = "rbxassetid://0"
+	ScrollingFrame.CanvasSize = UDim2.new(0, 0, 4, 0)
 
 	UIListLayout.Parent = ScrollingFrame
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -104,7 +105,7 @@ local function CreateLog(Text)
 	Log.BorderColor3 = Color3.new(0, 0, 0)
 	Log.BorderSizePixel = 0
 	Log.Position = UDim2.new(8.710, 0, 0, 0)
-	Log.Size = UDim2.new(1, 0, 0.023, 0)
+	Log.Size = UDim2.new(1, 0, 0.009, 0)
 	Log.Font = Enum.Font.GothamBold
 	Log.Text = Text
 	Log.TextColor3 = Color3.new(1, 1, 1)
@@ -206,9 +207,3 @@ task.spawn(function()
 		end)
 	end)
 end)
-
-for i, v in next, game.Players.LocalPlayer.PlayerGui:GetDescendants() do
-	if v:IsA("ScreenGui") and not v.Name == "AlSploitSpyKit" then
-		v:Destroy()
-	end
-end
