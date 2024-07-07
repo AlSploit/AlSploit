@@ -163,7 +163,6 @@ task.spawn(function()
 				return AntiKick(Data, ...)
 			end)
 
-
 			CreateLog("[" .. Time .. "]" .. " Antikick Has Loaded.")
 		end
 		
@@ -193,8 +192,13 @@ task.spawn(function()
 				for i, v in next, RequestData do
 					CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
 				end
+				
+				for i, v in next, ... do
+					CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
+				end
 
-				RequestData.Url = "..."
+
+				--RequestData.Url = "..."
 
 				return AntiHttpRequest(RequestData, ...)
 			end)
