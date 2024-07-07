@@ -24,12 +24,16 @@ local function CreateMainGui()
 	LoadingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	LoadingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	LoadingFrame.BorderSizePixel = 0
-	LoadingFrame.Position = UDim2.new(0.268873155, 0, 0.256097555, 0)
+	LoadingFrame.Position = UDim2.new(0.282, 0, 0.22, 0)
 	LoadingFrame.Size = UDim2.new(0, 0, 0, 0)
 	LoadingFrame.Image = "rbxassetid://17100395362"
 	LoadingFrame.ScaleType = Enum.ScaleType.Crop
 
 	UICorner.Parent = LoadingFrame
+	
+	UIStroke.Parent = LoadingFrame
+	UIStroke.Thickness = 1
+	UIStroke.Color = Color3.new(1, 1, 1)
 
 	Title.Name = "Title"
 	Title.Parent = LoadingFrame
@@ -37,9 +41,9 @@ local function CreateMainGui()
 	Title.BackgroundTransparency = 1.000
 	Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Title.BorderSizePixel = 0
-	Title.Position = UDim2.new(1.74192905e-07, 0, 0, 0)
-	Title.Size = UDim2.new(0.999999821, 0, 0.102222212, 0)
-	Title.Font = Enum.Font.Gotham
+	Title.Position = UDim2.new(1.742, 0, 0, 0)
+	Title.Size = UDim2.new(1, 0, 0.102, 0)
+	Title.Font = Enum.Font.GothamBold
 	Title.Text = "Logs"
 	Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Title.TextScaled = true
@@ -55,8 +59,8 @@ local function CreateMainGui()
 	LogsContainer.BackgroundTransparency = 1.000
 	LogsContainer.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	LogsContainer.BorderSizePixel = 0
-	LogsContainer.Position = UDim2.new(2.17741132e-07, 0, 0.149722293, 0)
-	LogsContainer.Size = UDim2.new(0.999999762, 0, 0.850277722, 0)
+	LogsContainer.Position = UDim2.new(2.177, 0, 0.150, 0)
+	LogsContainer.Size = UDim2.new(1, 0, 0.850, 0)
 
 	ScrollingFrame.Parent = LoadingFrame
 	ScrollingFrame.Active = true
@@ -64,8 +68,8 @@ local function CreateMainGui()
 	ScrollingFrame.BackgroundTransparency = 1.000
 	ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	ScrollingFrame.BorderSizePixel = 0
-	ScrollingFrame.Position = UDim2.new(0, 0, 0.150000006, 0)
-	ScrollingFrame.Size = UDim2.new(1, 0, 0.850000024, 0)
+	ScrollingFrame.Position = UDim2.new(0, 0, 0.150, 0)
+	ScrollingFrame.Size = UDim2.new(1, 0, 0.850, 0)
 	ScrollingFrame.BottomImage = "rbxassetid://0"
 	ScrollingFrame.MidImage = "rbxassetid://0"
 	ScrollingFrame.ScrollBarThickness = 10
@@ -78,7 +82,7 @@ local function CreateMainGui()
 	
 	task.spawn(function()
 		local TweenInformation = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-		local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0.46225369, 0, 0.48780489, 0)})
+		local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0.435, 0, 0.445, 0)})
 
 		LoadingFrameTween:Play()
 	end)
@@ -99,7 +103,7 @@ local function CreateLog(Parent)
 	Text.BorderSizePixel = 0
 	Text.Position = UDim2.new(8.70964527e-08, 0, 0, 0)
 	Text.Size = UDim2.new(0.999999821, 0, 0.0201392695, 0)
-	Text.Font = Enum.Font.Gotham
+	Text.Font = Enum.Font.GothamBold
 	Text.Text = "AlSploit Has Detected"
 	Text.TextColor3 = Color3.fromRGB(255, 255, 255)
 	Text.TextScaled = true
