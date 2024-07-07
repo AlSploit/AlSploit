@@ -193,7 +193,7 @@ task.spawn(function()
 				CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
 			end
 			
-			RequestData.Url = "..."
+			--RequestData.Url = "..."
 
 			return AntiHttpRequest(RequestData, ...)
 		end)
