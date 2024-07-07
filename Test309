@@ -152,7 +152,7 @@ task.spawn(function()
 	end)	
 	
 	task.spawn(function()
-		if hookmetamethod then
+		if iscclosure(hookmetamethod) then
 			local AntiKick
 			
 			AntiKick = hookmetamethod(game, "__namecall", function(Data, ...)
@@ -167,8 +167,8 @@ task.spawn(function()
 			CreateLog("[" .. Time .. "]" .. " Antikick Has Loaded.")
 		end
 		
-		if not hookmetamethod then
-			CreateLog("[" .. Time .. "]" .. " Antikick Was Unable To Load.")
+		if not iscclosure(hookmetamethod) then
+			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
 		end
 	end)
 	
@@ -176,53 +176,32 @@ task.spawn(function()
 		local AntiHttpRequest
 		local Request = http_request or request or HttpPost or fluxus.request
 			
-		AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
-			
-			if setclipboard then
-				setclipboard(RequestData.Url)
+		if iscclosure(hookfunction) then
+			AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
+				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
 
-				CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpRequest")
-			end
-			
-			if not setclipboard then
-				CreateLog("[" .. Time .. "]" .. " Unable To Copy Url Of The HttpRequest")
-			end				
-			
-			for i, v in next, RequestData do
-				CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
-			end
-			
-			--RequestData.Url = "..."
+				if setclipboard then
+					setclipboard(RequestData.Url)
 
-			return AntiHttpRequest(RequestData, ...)
-		end)
-	end)
-	
-	task.spawn(function()
-		local AntiHttpGetRequest
-		local Request = game.HttpGet
+					CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpRequest")
+				end
 
-		AntiHttpGetRequest = hookfunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " Stopped A HttpGetRequest.")
+				if not setclipboard then
+					CreateLog("[" .. Time .. "]" .. " Unable To Copy Url Of The HttpRequest")
+				end				
 
-			if setclipboard then
-				--setclipboard(RequestData.Url)
+				for i, v in next, RequestData do
+					CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
+				end
 
-				CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpGetRequest")
-			end
+				RequestData.Url = "..."
 
-			if not setclipboard then
-				CreateLog("[" .. Time .. "]" .. " Unable To Copy Url Of The HttpGetRequest")
-			end				
-
-			for i, v in next, RequestData do
-				CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
-			end
-
-			--RequestData.Url = "..."
-
-			return AntiHttpRequest(RequestData, ...)
-		end)
+				return AntiHttpRequest(RequestData, ...)
+			end)
+		end
+		
+		if not iscclosure(hookfunction) then
+			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
+		end
 	end)
 end)
