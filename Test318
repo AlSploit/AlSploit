@@ -31,7 +31,7 @@ local function CreateMainGui()
 	LoadingFrame.ScaleType = Enum.ScaleType.Crop
 
 	UICorner.Parent = LoadingFrame
-	
+
 	UIStroke.Parent = LoadingFrame
 	UIStroke.Thickness = 1
 	UIStroke.Color = Color3.new(1, 1, 1)
@@ -80,14 +80,14 @@ local function CreateMainGui()
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout.Padding = UDim.new(0, 5)
-	
+
 	task.spawn(function()
 		local TweenInformation = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
 		local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0.435, 0, 0.445, 0)})
 
 		LoadingFrameTween:Play()
 	end)
-	
+
 	return ScrollingFrame
 end
 
@@ -95,7 +95,7 @@ local function CreateLog(Text)
 	local Log = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 	local UIPadding = Instance.new("UIPadding")	
-	
+
 	Log.Name = "Title"
 	Log.Parent = ScrollingFrame
 	Log.BackgroundColor3 = Color3.new(1, 1, 1)
@@ -121,110 +121,44 @@ end
 
 task.spawn(function()
 	CreateMainGui()
-	
+
 	task.wait(1)
-	
+
 	local Time = os.date("%X")
 	
+	local HookMetaMethod = hookmetamethod
+	local HookFunction = hookfunction
+
 	task.spawn(function()
 		if not restorefunction then
 			CreateLog("[" .. Time .. "]" .. " Unable To Restore Functions, This Can Be Dangerous If The Script You Are Spying On Has An Anti Spy.")
 		end
-		
+
 		if restorefunction then
 			CreateLog("[" .. Time .. "]" .. " Restore Function Has Loaded.")
 		end
 	end)
-	
+
 	task.spawn(function()
-		if restorefunction then
-			repeat
-				task.wait()
+		AntiKick = HookMetaMethod(game, "__namecall", function(Data, ...)
+			if Data == LocalPlayer and getnamecallmethod():lower() == "kick" then
+				CreateLog("[" .. Time .. "]" .. "Tried Kicking, Action Stopped.")
+			end
 
-				Time = os.date("%X")
-
-				if restorefunction then
-					restorefunction(hookmetamethod)
-					restorefunction(hookfunction)
-				end
-			until not game
-		end
-	end)	
-	
-	task.spawn(function()
-		if iscclosure(hookmetamethod) then
-			local AntiKick
-			
-			AntiKick = hookmetamethod(game, "__namecall", function(Data, ...)
-				if Data == LocalPlayer and getnamecallmethod():lower() == "kick" then
-					CreateLog("[" .. Time .. "]" .. "Tried Kicking, Action Stopped.")
-				end
-
-				return AntiKick(Data, ...)
-			end)
-
-			CreateLog("[" .. Time .. "]" .. " Antikick Has Loaded.")
-		end
+			return AntiKick(Data, ...)
+		end)
 		
-		if not iscclosure(hookmetamethod) then
-			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
-		end
+		CreateLog("[" .. Time .. "]" .. "AntiKick Has Loaded.")
 	end)
-	
+
 	task.spawn(function()
-		local AntiLogger
-		local Request = http_request or request or HttpPost or fluxus.request
-			
-		if iscclosure(hookfunction) and tick() == 1234190489327589037290587398 then
-			AntiLogger = hookfunction(Request, function(RequestData, ...)
-				print(RequestData)
-				print(...)
-				
-				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
+		local HttpRequest
+		local Request = game.HttpGet
 
-				if setclipboard then
-					setclipboard(RequestData.Url)
+		HttpRequest = HookFunction(Request, function(RequestData, ...)
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
 
-					CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpRequest")
-				end
-
-				if not setclipboard then
-					CreateLog("[" .. Time .. "]" .. " Unable To Copy Url Of The HttpRequest")
-				end				
-
-				for i, v in next, RequestData do
-					CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
-				end
-				
-				for i, v in next, ... do
-					CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
-				end
-
-				return AntiHttpRequest(RequestData, ...)
-			end)
-		end
-		
-		if not iscclosure(hookfunction) then
-			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
-		end
-	end)
-	
-	task.spawn(function()
-		local AntiHttpRequest
-		local Request = http_request or request or HttpPost or fluxus.request
-
-		if iscclosure(hookfunction) then
-			AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
-				local Link = ...
-				
-				CreateLog("[" .. Time .. "]" .. " HttpRequest Spotted " .. RequestData .. Link .. ".")
-
-				return AntiHttpRequest(RequestData, ...)
-			end)
-		end
-
-		if not iscclosure(hookfunction) then
-			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
-		end
+			return AntiLogger(RequestData, ...)
+		end)
 	end)
 end)
