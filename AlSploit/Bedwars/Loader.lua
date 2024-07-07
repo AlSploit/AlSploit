@@ -209,6 +209,14 @@ local function LoadFolders()
 end
 
 local function LoadFiles()
+	if isfile("AlSploit/Fonts/Minecraft.otf") then
+		deletefile("AlSploit/Fonts/Minecraft.otf")
+	end
+	
+	if isfile("AlSploit/Fonts/MinecraftFace.otf") then
+		deletefile("AlSploit/Fonts/MinecraftFace.otf")
+	end
+	
 	writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)	
 	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({Name = "Minecraft", faces = {{Name = "Regular", Weight = 500, Style = "Normal", AssetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
 end
