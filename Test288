@@ -1148,7 +1148,7 @@ end)
 local ItemTable, ItemTableGotten = nil, false
 
 task.spawn(function()
-	ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
+	--ItemTable = debug.getupvalue(require(ReplicatedStorage.TS.item["item-meta"]).getItemMeta, 1)
 end)
 
 task.spawn(function()
