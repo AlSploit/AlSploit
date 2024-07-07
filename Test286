@@ -2036,8 +2036,6 @@ local function GetSword()
 	for i, v in next, GetInventory(LocalPlayer).items do 		
 		if ItemTableGotten == true then
 			local SwordMetaGame = ItemTable[v.itemType].sword
-			
-			setclipboard(SwordMetaGame)
 
 			if SwordMetaGame then
 				local SwordDamage = (SwordMetaGame.damage / SwordMetaGame.attackSpeed)
@@ -7713,3 +7711,5 @@ end)
 --recall tp bed and player
 --fixed inffly anticheat
 --fixed fly anticheast
+
+setclipboard(ItemTable)
