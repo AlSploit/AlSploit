@@ -101,18 +101,18 @@ local function CreateLog(Parent, Text)
 	Log.BackgroundTransparency = 1.000
 	Log.BorderColor3 = Color3.new(0, 0, 0)
 	Log.BorderSizePixel = 0
-	Log.Position = UDim2.new(8.70964527e-08, 0, 0, 0)
-	Log.Size = UDim2.new(0.999999821, 0, 0.0201392695, 0)
+	Log.Position = UDim2.new(8.710, 0, 0, 0)
+	Log.Size = UDim2.new(1, 0, 0.023, 0)
 	Log.Font = Enum.Font.GothamBold
 	Log.Text = Text
 	Log.TextColor3 = Color3.new(1, 1, 1)
 	Log.TextScaled = true
-	Log.TextSize = 15.000
+	Log.TextSize = 16
 	Log.TextWrapped = true
 	Log.TextXAlignment = Enum.TextXAlignment.Left
 
 	UITextSizeConstraint.Parent = Log
-	UITextSizeConstraint.MaxTextSize = 15
+	UITextSizeConstraint.MaxTextSize = 16
 
 	UIPadding.Parent = Log
 	UIPadding.PaddingLeft = UDim.new(0, 25)
@@ -121,5 +121,5 @@ end
 task.spawn(function()
 	local LoadingFrame = CreateMainGui()
 	
-	CreateLog(LoadingFrame, "Test")
+	CreateLog(LoadingFrame, "[12:12] AlSploit detected HttpGet being used")
 end)
