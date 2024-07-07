@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration4.lua"
+local SaveFileName = "AlSploitConfiguration5.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -953,12 +953,12 @@ end
 local function SaveSettings()	
 	local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-	writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)	
+	writefile("AlSploit/Bedwars/" .. SaveFileName, JSONEncodeSettings)	
 end
 
 local function LoadSettings()
 	if isfile("AlSploit/Bedwars" .. SaveFileName) then
-		Settings = HttpService:JSONDecode(readfile("AlSploit/Bedwars" .. SaveFileName))
+		Settings = HttpService:JSONDecode(readfile("AlSploit/Bedwars/" .. SaveFileName))
 
 		Loaded = true
 	end
