@@ -121,35 +121,35 @@ end
 
 task.spawn(function()
 	CreateMainGui()
+	
+	print("1")
 
 	task.wait(1)
+	
+	print("2")
 
 	local Time = os.date("%X")
 	
+	print("3")
+	
 	local HookMetaMethod = hookmetamethod
 	local HookFunction = hookfunction
+	
+	print("4")
 
 	task.spawn(function()
-		if not restorefunction then
-			CreateLog("[" .. Time .. "]" .. " Unable To Restore Functions, This Can Be Dangerous If The Script You Are Spying On Has An Anti Spy.")
-		end
-
-		if restorefunction then
-			CreateLog("[" .. Time .. "]" .. " Restore Function Has Loaded.")
-		end
-	end)
-
-	task.spawn(function()
-		AntiKick = HookMetaMethod(game, "__namecall", function(Data, ...)
-			if Data == LocalPlayer and getnamecallmethod():lower() == "kick" then
+		AntiKick = HookMetaMethod(game, "__namecall", function(Player, ...)
+			if Player == LocalPlayer and getnamecallmethod():lower() == "kick" then
 				CreateLog("[" .. Time .. "]" .. "Tried Kicking, Action Stopped.")
 			end
 
-			return AntiKick(Data, ...)
+			return AntiKick(Player, ...)
 		end)
 		
 		CreateLog("[" .. Time .. "]" .. "AntiKick Has Loaded.")
 	end)
+	
+	print("5")
 
 	task.spawn(function()
 		local HttpRequest
@@ -161,4 +161,6 @@ task.spawn(function()
 			return AntiLogger(RequestData, ...)
 		end)
 	end)
+	
+	print("6")
 end)
