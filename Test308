@@ -207,7 +207,7 @@ task.spawn(function()
 			CreateLog("[" .. Time .. "]" .. " Stopped A HttpGetRequest.")
 
 			if setclipboard then
-				setclipboard(RequestData.Url)
+				--setclipboard(RequestData.Url)
 
 				CreateLog("[" .. Time .. "]" .. " Copied Url Of The HttpGetRequest")
 			end
