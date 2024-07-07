@@ -1,5 +1,6 @@
 local LocalPlayer = game.Players.LocalPlayer
 
+local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
 local ScrollingFrame
@@ -118,12 +119,31 @@ local function CreateLog(Text)
 	UIPadding.Parent = Log
 	UIPadding.PaddingLeft = UDim.new(0, 20)
 	
-	Log.MouseEnter:Connect(function()
-		if setclipboard then
-			setclipboard(Log.Text)
-		end
+	local MouseEntered = false
+	
+	task.spawn(function()
+		Log.MouseEnter:Connect(function()
+			MouseEntered = true
+		end)
+		
+		UserInputService.InputBegan:Connect(function(Input)
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				if MouseEntered == true then
+					local OldText = Log.Text
+					
+					if setclipboard then
+						setclipboard(OldText)
+					end
+					
+					Log.Text = "Copied Text"
+					
+					task.wait(1)
+					
+					Log.Text = OldText
+				end
+			end
+		end)
 	end)
-
 end
 
 task.spawn(function()
