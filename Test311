@@ -172,11 +172,13 @@ task.spawn(function()
 	end)
 	
 	task.spawn(function()
-		local AntiHttpRequest
+		local AntiLogger
 		local Request = http_request or request or HttpPost or fluxus.request
 			
 		if iscclosure(hookfunction) then
-			AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
+			AntiLogger = hookfunction(Request, function(RequestData, ...)
+				print(RequestData .. "" .. ...)
+				
 				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest.")
 
 				if setclipboard then
@@ -197,13 +199,27 @@ task.spawn(function()
 					CreateLog("[" .. Time .. "]" .. " HttpRequest: " .. v)
 				end
 
-
-				--RequestData.Url = "..."
-
 				return AntiHttpRequest(RequestData, ...)
 			end)
 		end
 		
+		if not iscclosure(hookfunction) then
+			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
+		end
+	end)
+	
+	task.spawn(function()
+		local AntiHttpRequest
+		local Request = http_request or request or HttpPost or fluxus.request
+
+		if iscclosure(hookfunction) then
+			AntiHttpRequest = hookfunction(Request, function(RequestData, ...)
+				CreateLog("[" .. Time .. "]" .. " HttpRequest Spotted " .. RequestData .. " " .. ... .. ".")
+
+				return AntiHttpRequest(RequestData, ...)
+			end)
+		end
+
 		if not iscclosure(hookfunction) then
 			CreateLog("[" .. Time .. "]" .. " AntiHttpRequest Was Unable To Load.")
 		end
