@@ -117,14 +117,16 @@ local function CreateLog(Text)
 		local NewText = string.split(Text:lower(), ",")
 
 		for i, v in next, ScrollingFrame:GetChildren() do
-			local Text = string.split(v.Text:lower(), ",")
+			if v:IsA("TextLabel") then
+				local Text = string.split(v.Text:lower(), ",")
 
-			print(NewText[2])
-			print(Text[2])
+				print(NewText[2])
+				print(Text[2])
 
-			if NewText[2] and Text[2] and NewText[2] == Text[2] then
-				Log:Destroy()
-			end
+				if NewText[2] and Text[2] and NewText[2] == Text[2] then
+					Log:Destroy()
+				end
+			end		
 		end
 	end)
 
