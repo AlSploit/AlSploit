@@ -7584,7 +7584,8 @@ task.spawn(function()
 								v.FontFace = AlSploitFont
 							end
 						end)						
-				end)		
+					end
+				end)
 			end
 		end)
 		
@@ -7724,3 +7725,10 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RequestFortuneDoubleDown"):FireServer(unpack(args))
+
+--scaffold
+
+--AlSploit rules
+--Remotes full name in variable
+--fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
+--iscovered() no iscovered() == true yey
