@@ -204,10 +204,10 @@ task.spawn(function()
 		local Request = game.HttpGet
 
 		HttpGet = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ...) then
+			if not table.find(LogTable, ..., 1) then
 				CreateLog("[" .. Time .. "]" .. " HttpGet Was Spotted, " .. ... .. ".")
 				
-				table.insert(LogTable, ...)
+				table.insert(LogTable, ..., 1)
 			end
 			
 			return HttpGet(RequestData, ...)
@@ -219,10 +219,10 @@ task.spawn(function()
 		local Request = HttpService.GetAsync
 
 		GetAsync = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ...) then
+			if not table.find(LogTable, ..., 1) then
 				CreateLog("[" .. Time .. "]" .. " GetAsync Was Spotted, " .. ... .. ".")
 
-				table.insert(LogTable, ...)
+				table.insert(LogTable, ..., 1)
 			end
 
 			return GetAsync(RequestData, ...)
@@ -234,10 +234,10 @@ task.spawn(function()
 		local Request = HttpService.PostAsync
 
 		PostAsync = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ...) then
+			if not table.find(LogTable, ..., 1) then
 				CreateLog("[" .. Time .. "]" .. " PostAsync Was Spotted, " .. ... .. ".")
 
-				table.insert(LogTable, ...)
+				table.insert(LogTable, ..., 1)
 			end
 
 			return PostAsync(RequestData, ...)
@@ -249,10 +249,10 @@ task.spawn(function()
 		local Request = HttpService.RequestAsync
 
 		RequestAsync = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ...) then
+			if not table.find(LogTable, ..., 1) then
 				CreateLog("[" .. Time .. "]" .. " RequestAsync Was Spotted, " .. ... .. ".")
 
-				table.insert(LogTable, ...)
+				table.insert(LogTable, ..., 1)
 			end
 
 			return RequestAsync(RequestData, ...)
