@@ -258,4 +258,10 @@ task.spawn(function()
 			return RequestAsync(RequestData, ...)
 		end)
 	end)
+	
+	task.spawn(function()
+		for i, v in next, LogsTable do
+			print(i, v)
+		end
+	end)
 end)
