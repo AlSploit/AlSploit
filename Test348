@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration4.lua"
+local SaveFileName = "AlSploitConfiguration5.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -935,17 +935,17 @@ local function CreateSettingsFile()
 		if writefile and makefolder and readfile and isfile then 
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-			writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)
+			writefile("AlSploit/" .. SaveFileName, JSONEncodeSettings)
 		end
 	end)	
 end
 
 local function CheckFirstTime()
-	if isfile("AlSploit/Bedwars" .. SaveFileName) then
+	if isfile("AlSploit/" .. SaveFileName) then
 		return false
 	end
 
-	if not isfile("AlSploit/Bedwars" .. SaveFileName) then
+	if not isfile("AlSploit/" .. SaveFileName) then
 		return true
 	end
 end
@@ -953,12 +953,12 @@ end
 local function SaveSettings()	
 	local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-	writefile("AlSploit/Bedwars" .. SaveFileName, JSONEncodeSettings)	
+	writefile("AlSploit/" .. SaveFileName, JSONEncodeSettings)	
 end
 
 local function LoadSettings()
-	if isfile("AlSploit/Bedwars" .. SaveFileName) then
-		Settings = HttpService:JSONDecode(readfile("AlSploit/Bedwars" .. SaveFileName))
+	if isfile("AlSploit/" .. SaveFileName) then
+		Settings = HttpService:JSONDecode(readfile("AlSploit/" .. SaveFileName))
 
 		Loaded = true
 	end
@@ -7739,8 +7739,6 @@ local args = {
 game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RequestFortuneDoubleDown"):FireServer(unpack(args))
 
 --scaffold
---fix fonts
---fix config file
 
 --AlSploit rules
 --Remotes full name in variable
