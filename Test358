@@ -161,6 +161,8 @@ task.spawn(function()
 	
 	local HookMetaMethod = hookmetamethod
 	local HookFunction = hookfunction
+	
+	local LogTable = {"PlaceHolder"}
 
 	task.spawn(function()
 		AntiKick = HookMetaMethod(game, "__namecall", function(Player, ...)
@@ -198,46 +200,62 @@ task.spawn(function()
 	end)
 	
 	task.spawn(function()
-		local HttpRequest
+		local HttpGet
 		local Request = game.HttpGet
 
-		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+		HttpGet = HookFunction(Request, function(RequestData, ...)
+			if not table.find(LogTable, ...) then
+				CreateLog("[" .. Time .. "]" .. " HttpGet Was Spotted, " .. ... .. ".")
+				
+				table.insert(LogTable, ...)
+			end
 			
-			return HttpRequest(RequestData, ...)
+			return HttpGet(RequestData, ...)
 		end)
 	end)
 	
 	task.spawn(function()
-		local HttpRequest
+		local GetAsync
 		local Request = HttpService.GetAsync
 
-		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+		GetAsync = HookFunction(Request, function(RequestData, ...)
+			if not table.find(LogTable, ...) then
+				CreateLog("[" .. Time .. "]" .. " GetAsync Was Spotted, " .. ... .. ".")
 
-			return HttpRequest(RequestData, ...)
+				table.insert(LogTable, ...)
+			end
+
+			return GetAsync(RequestData, ...)
 		end)
 	end)
 	
 	task.spawn(function()
-		local HttpRequest
+		local PostAsync
 		local Request = HttpService.PostAsync
 
-		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+		PostAsync = HookFunction(Request, function(RequestData, ...)
+			if not table.find(LogTable, ...) then
+				CreateLog("[" .. Time .. "]" .. " PostAsync Was Spotted, " .. ... .. ".")
 
-			return HttpRequest(RequestData, ...)
+				table.insert(LogTable, ...)
+			end
+
+			return PostAsync(RequestData, ...)
 		end)
 	end)
 	
 	task.spawn(function()
-		local HttpRequest
+		local RequestAsync
 		local Request = HttpService.RequestAsync
 
-		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+		RequestAsync = HookFunction(Request, function(RequestData, ...)
+			if not table.find(LogTable, ...) then
+				CreateLog("[" .. Time .. "]" .. " RequestAsync Was Spotted, " .. ... .. ".")
 
-			return HttpRequest(RequestData, ...)
+				table.insert(LogTable, ...)
+			end
+
+			return RequestAsync(RequestData, ...)
 		end)
 	end)
 end)
