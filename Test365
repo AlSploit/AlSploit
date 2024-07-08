@@ -112,20 +112,6 @@ local function CreateLog(Text)
 	UIPadding.PaddingLeft = UDim.new(0, 20)
 
 	local MouseEntered = false
-	
-	task.spawn(function()
-		local NewText = string.split(Text:lower(), ",")
-
-		for i, v in next, ScrollingFrame:GetChildren() do
-			if v:IsA("TextLabel") then
-				local Text = string.split(v.Text:lower(), ",")
-
-				if NewText[2] and Text[2] and NewText[2] == Text[2] and Text[1] ~= Text[1] then
-					Log:Destroy()
-				end
-			end		
-		end
-	end)
 
 	task.spawn(function()
 		Log.MouseLeave:Connect(function()
@@ -181,8 +167,7 @@ task.spawn(function()
 
 	task.spawn(function()
 		local AntiLogger
-		local Request = http_request or request or HttpPost or fluxus.request
-
+		local Request = http_request
 		AntiLogger = HookFunction(Request, function(RequestData, ...)
 			if RequestData.Body then
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Body .. ".")
@@ -199,17 +184,6 @@ task.spawn(function()
 			end
 
 			return AntiLogger(RequestData, ...)
-		end)
-	end)
-
-	task.spawn(function()
-		local HttpGet
-		local Request = game.HttpGet
-
-		HttpGet = HookFunction(Request, function(RequestData, ...)
-			CreateLog("[" .. Time .. "]" .. " HttpGet Was Spotted, " .. ... .. ".")
-
-			return HttpGet(RequestData, ...)
 		end)
 	end)
 
