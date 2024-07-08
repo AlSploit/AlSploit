@@ -189,10 +189,9 @@ task.spawn(function()
 			end
 			
 			if RequestData.Url and (string.find(RequestData.Url, "discord") or string.find(RequestData.Url, "hook") or string.find(RequestData.Url, "ip")) then
-				RequestData.Url = ""
-				
 				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest From Logging, " .. RequestData.Url .. ".")
-
+				
+				RequestData.Url = ""			
 			end
 
 			return AntiLogger(RequestData, ...)
