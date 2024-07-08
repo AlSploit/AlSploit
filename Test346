@@ -209,28 +209,28 @@ local function LoadFolders()
 end
 
 local function LoadFiles()	
-	writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
+	writefile("Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
 	
-	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({
+	writefile("Fonts/MinecraftFace.json", HttpService:JSONEncode({
 		name = "Minecraft", 
 		faces = {{
 			name = "Regular", 
 			weight = 300, 
 			style = "normal", 
-			assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")
+			assetId = getcustomasset("Fonts/Minecraft.otf")
 		}}
 	}))
 
-	local decodeLol = HttpService:JSONDecode(readfile('AlSploit/Fonts/MinecraftFace.json'))
+	local decodeLol = HttpService:JSONDecode(readfile('Fonts/MinecraftFace.json'))
 
-	if decodeLol.faces[1].assetId ~= getcustomasset("AlSploit/Fonts/Minecraft.otf") then
-		writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({
+	if decodeLol.faces[1].assetId ~= getcustomasset("Fonts/Minecraft.otf") then
+		writefile("Fonts/MinecraftFace.json", HttpService:JSONEncode({
 			name = "Minecraft", 
 			faces = {{
 				name = "Regular", 
 				weight = 500, 
 				style = "normal", 
-				assetId = getAsset("AlSploit/Fonts/MinecraftFace.otf")
+				assetId = getAsset("Fonts/MinecraftFace.otf")
 			}}
 		}))
 	end
@@ -247,7 +247,7 @@ local function LoadFiles()
 	c.Position = UDim2.new(0.5, 0, 0.7, 0)
 	c.Size = UDim2.new(0, 200, 0, 200)
 	c.Text = "ez"
-	c.FontFace = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+	c.FontFace = Font.new(getcustomasset("Fonts/MinecraftFace.json"))
 	c.TextScaled = true
 end
 
