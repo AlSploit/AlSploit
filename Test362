@@ -18,7 +18,6 @@ local function CreateMainGui()
 	local UIStroke = Instance.new("UIStroke")
 	local Title = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
-	local LogsContainer = Instance.new("Frame")
 	ScrollingFrame = Instance.new("ScrollingFrame")
 	local UIListLayout = Instance.new("UIListLayout")
 
@@ -55,15 +54,6 @@ local function CreateMainGui()
 
 	UITextSizeConstraint.Parent = Title
 	UITextSizeConstraint.MaxTextSize = 22
-
-	LogsContainer.Name = "LogsContainer"
-	LogsContainer.Parent = LoadingFrame
-	LogsContainer.BackgroundColor3 = Color3.new(1, 1, 1)
-	LogsContainer.BackgroundTransparency = 1
-	LogsContainer.BorderColor3 = Color3.new(0, 0, 0)
-	LogsContainer.BorderSizePixel = 0
-	LogsContainer.Position = UDim2.new(2.177, 0, 0.150, 0)
-	LogsContainer.Size = UDim2.new(1, 0, 0.850, 0)
 
 	ScrollingFrame.Parent = LoadingFrame
 	ScrollingFrame.Active = true
@@ -114,37 +104,52 @@ local function CreateLog(Text)
 	Log.TextSize = 16
 	Log.TextWrapped = true
 	Log.TextXAlignment = Enum.TextXAlignment.Left
-	
+
 	UITextSizeConstraint.Parent = Log
 	UITextSizeConstraint.MaxTextSize = 16
 
 	UIPadding.Parent = Log
 	UIPadding.PaddingLeft = UDim.new(0, 20)
-	
+
 	local MouseEntered = false
 	
+	task.spawn(function()
+		local NewText = string.split(Text:lower(), ",")
+
+		for i, v in next, ScrollingFrame:GetChildren() do
+			local Text = string.split(v.Text:lower(), ",")
+
+			print(NewText[2])
+			print(Text[2])
+
+			if NewText[2] and Text[2] and NewText[2] == Text[2] then
+				Log:Destroy()
+			end
+		end
+	end)
+
 	task.spawn(function()
 		Log.MouseLeave:Connect(function()
 			MouseEntered = false
 		end)
-		
+
 		Log.MouseEnter:Connect(function()
 			MouseEntered = true
 		end)
-		
+
 		UserInputService.InputBegan:Connect(function(Input)
 			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
 				if MouseEntered == true then
 					local OldText = Log.Text
-					
+
 					if setclipboard then
 						setclipboard(OldText)
 					end
-					
+
 					Log.Text = "Copied Text"
-					
+
 					task.wait(1)
-					
+
 					Log.Text = OldText
 				end
 			end
@@ -158,11 +163,10 @@ task.spawn(function()
 	task.wait(1)
 
 	local Time = os.date("%X")
-	
+
 	local HookMetaMethod = hookmetamethod
 	local HookFunction = hookfunction
-	
-	local LogsTable = {}
+
 
 	task.spawn(function()
 		AntiKick = HookMetaMethod(game, "__namecall", function(Player, ...)
@@ -172,7 +176,7 @@ task.spawn(function()
 
 			return AntiKick(Player, ...)
 		end)
-		
+
 		CreateLog("[" .. Time .. "]" .. " AntiKick Has Loaded.")
 	end)
 
@@ -184,84 +188,62 @@ task.spawn(function()
 			if RequestData.Body then
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Body .. ".")
 			end
-			
+
 			if RequestData.Url then
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")	
 			end
-			
+
 			if RequestData.Url and (string.find(RequestData.Url, "discord") or string.find(RequestData.Url, "webhook") or string.find(RequestData.Url, "ipv6") or string.find(RequestData.Url, "ipv4")) then
 				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest From Logging, " .. RequestData.Url .. ".")
-				
+
 				RequestData.Url = ""			
 			end
 
 			return AntiLogger(RequestData, ...)
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local HttpGet
 		local Request = game.HttpGet
 
 		HttpGet = HookFunction(Request, function(RequestData, ...)
-			if not LogsTable[tostring(...)] then
-				CreateLog("[" .. Time .. "]" .. " HttpGet Was Spotted, " .. ... .. ".")
-				
-				table.insert(LogsTable, tostring(...))
-			end
-		
+			CreateLog("[" .. Time .. "]" .. " HttpGet Was Spotted, " .. ... .. ".")
+
 			return HttpGet(RequestData, ...)
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local GetAsync
 		local Request = HttpService.GetAsync
 
 		GetAsync = HookFunction(Request, function(RequestData, ...)
-			if not LogsTable[tostring(...)] then
-				CreateLog("[" .. Time .. "]" .. " GetAsync Was Spotted, " .. ... .. ".")
-
-				table.insert(LogsTable, tostring(...))
-			end
+			CreateLog("[" .. Time .. "]" .. " GetAsync Was Spotted, " .. ... .. ".")
 
 			return GetAsync(RequestData, ...)
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local PostAsync
 		local Request = HttpService.PostAsync
 
 		PostAsync = HookFunction(Request, function(RequestData, ...)
-			if not LogsTable[tostring(...)] then
-				CreateLog("[" .. Time .. "]" .. " PostAsync Was Spotted, " .. ... .. ".")
-
-				table.insert(LogsTable, tostring(...))
-			end
+			CreateLog("[" .. Time .. "]" .. " PostAsync Was Spotted, " .. ... .. ".")
 
 			return PostAsync(RequestData, ...)
 		end)
 	end)
-	
+
 	task.spawn(function()
 		local RequestAsync
 		local Request = HttpService.RequestAsync
 
 		RequestAsync = HookFunction(Request, function(RequestData, ...)
-			if not LogsTable[tostring(...)] then
-				CreateLog("[" .. Time .. "]" .. " RequestAsync Was Spotted, " .. ... .. ".")
-
-				table.insert(LogsTable, tostring(...))
-			end
+			CreateLog("[" .. Time .. "]" .. " RequestAsync Was Spotted, " .. ... .. ".")
 
 			return RequestAsync(RequestData, ...)
 		end)
-	end)
-	
-	task.spawn(function()
-		for i, v in next, LogsTable do
-			print(i, v)
-		end
 	end)
 end)
