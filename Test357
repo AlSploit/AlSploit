@@ -218,4 +218,26 @@ task.spawn(function()
 			return HttpRequest(RequestData, ...)
 		end)
 	end)
+	
+	task.spawn(function()
+		local HttpRequest
+		local Request = HttpService.PostAsync
+
+		HttpRequest = HookFunction(Request, function(RequestData, ...)
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+
+			return HttpRequest(RequestData, ...)
+		end)
+	end)
+	
+	task.spawn(function()
+		local HttpRequest
+		local Request = HttpService.RequestAsync
+
+		HttpRequest = HookFunction(Request, function(RequestData, ...)
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+
+			return HttpRequest(RequestData, ...)
+		end)
+	end)
 end)
