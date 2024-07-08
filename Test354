@@ -188,7 +188,7 @@ task.spawn(function()
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. RequestData.Url .. ".")	
 			end
 			
-			if RequestData.Url and (string.find(RequestData.Url, "discord") or string.find(RequestData.Url, "hook") or string.find(RequestData.Url, "ip")) then
+			if RequestData.Url and (string.find(RequestData.Url, "discord") or string.find(RequestData.Url, "webhook") or string.find(RequestData.Url, "ipv6") or string.find(RequestData.Url, "ipv4")) then
 				CreateLog("[" .. Time .. "]" .. " Stopped A HttpRequest From Logging, " .. RequestData.Url .. ".")
 				
 				RequestData.Url = ""			
