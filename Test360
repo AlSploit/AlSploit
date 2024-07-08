@@ -162,7 +162,7 @@ task.spawn(function()
 	local HookMetaMethod = hookmetamethod
 	local HookFunction = hookfunction
 	
-	local LogTable = {"PlaceHolder"}
+	local LogsTable = {}
 
 	task.spawn(function()
 		AntiKick = HookMetaMethod(game, "__namecall", function(Player, ...)
@@ -204,12 +204,12 @@ task.spawn(function()
 		local Request = game.HttpGet
 
 		HttpGet = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ..., 1) then
+			if not LogsTable[tostring(...)] then
 				CreateLog("[" .. Time .. "]" .. " HttpGet Was Spotted, " .. ... .. ".")
 				
-				table.insert(LogTable, ..., 1)
+				table.insert(LogsTable, tostring(...))
 			end
-			
+		
 			return HttpGet(RequestData, ...)
 		end)
 	end)
@@ -219,10 +219,10 @@ task.spawn(function()
 		local Request = HttpService.GetAsync
 
 		GetAsync = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ..., 1) then
+			if not LogsTable[tostring(...)] then
 				CreateLog("[" .. Time .. "]" .. " GetAsync Was Spotted, " .. ... .. ".")
 
-				table.insert(LogTable, ..., 1)
+				table.insert(LogsTable, tostring(...))
 			end
 
 			return GetAsync(RequestData, ...)
@@ -234,10 +234,10 @@ task.spawn(function()
 		local Request = HttpService.PostAsync
 
 		PostAsync = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ..., 1) then
+			if not LogsTable[tostring(...)] then
 				CreateLog("[" .. Time .. "]" .. " PostAsync Was Spotted, " .. ... .. ".")
 
-				table.insert(LogTable, ..., 1)
+				table.insert(LogsTable, tostring(...))
 			end
 
 			return PostAsync(RequestData, ...)
@@ -249,10 +249,10 @@ task.spawn(function()
 		local Request = HttpService.RequestAsync
 
 		RequestAsync = HookFunction(Request, function(RequestData, ...)
-			if not table.find(LogTable, ..., 1) then
+			if not LogsTable[tostring(...)] then
 				CreateLog("[" .. Time .. "]" .. " RequestAsync Was Spotted, " .. ... .. ".")
 
-				table.insert(LogTable, ..., 1)
+				table.insert(LogsTable, tostring(...))
 			end
 
 			return RequestAsync(RequestData, ...)
