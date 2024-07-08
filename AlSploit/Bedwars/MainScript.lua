@@ -741,7 +741,7 @@ local function CreateTargetHud()
 	Status.Size = UDim2.new(0.228, 0, 0.249, 0)
 	Status.Font = Enum.Font.GothamBold
 	Status.Text = "Win"
-	Status.TextColor3 = Color3.fromRGB(0, 255, 0)
+	Status.TextColor3 = Color3.new(0, 1, 0)
 	Status.TextScaled = true
 	Status.TextSize = 15.000
 	Status.TextWrapped = true
@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration4.lua"
+local SaveFileName = "AlSploitConfiguration5.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -935,17 +935,17 @@ local function CreateSettingsFile()
 		if writefile and makefolder and readfile and isfile then 
 			local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-			writefile("AlSploit/Bedwars/" .. SaveFileName, JSONEncodeSettings)
+			writefile("AlSploit/" .. SaveFileName, JSONEncodeSettings)
 		end
 	end)	
 end
 
 local function CheckFirstTime()
-	if isfile("AlSploit/Bedwars/" .. SaveFileName) then
+	if isfile("AlSploit/" .. SaveFileName) then
 		return false
 	end
 
-	if not isfile("AlSploit/Bedwars/" .. SaveFileName) then
+	if not isfile("AlSploit/" .. SaveFileName) then
 		return true
 	end
 end
@@ -953,12 +953,12 @@ end
 local function SaveSettings()	
 	local JSONEncodeSettings = HttpService:JSONEncode(Settings)
 
-	writefile("AlSploit/Bedwars/" .. SaveFileName, JSONEncodeSettings)	
+	writefile("AlSploit/" .. SaveFileName, JSONEncodeSettings)	
 end
 
 local function LoadSettings()
-	if isfile("AlSploit/Bedwars" .. SaveFileName) then
-		Settings = HttpService:JSONDecode(readfile("AlSploit/Bedwars/" .. SaveFileName))
+	if isfile("AlSploit/" .. SaveFileName) then
+		Settings = HttpService:JSONDecode(readfile("AlSploit/" .. SaveFileName))
 
 		Loaded = true
 	end
@@ -4875,6 +4875,7 @@ task.spawn(function()
 
 				local SpeedPotion = HasItem("speed_potion")
 				local SpeedPie = HasItem("pie")
+				local Apple = HasItem("apple")
 
 				task.spawn(function()
 					if IsAlive(LocalPlayer) then
@@ -4883,12 +4884,18 @@ task.spawn(function()
 								["item"] = MainInventory:WaitForChild("speed_potion")
 							})
 						end
-
+						
 						if SpeedPie then
 							ConsumeItemRemote:InvokeServer({
 								["item"] = MainInventory:WaitForChild("pie")
 							})
 						end
+						
+						if Apple then
+							ConsumeItemRemote:InvokeServer({
+								["item"] = MainInventory:WaitForChild("apple")
+							})
+						end					
 					end
 				end)		
 			until Settings.AutoConsume.Value == false
@@ -5565,7 +5572,6 @@ task.spawn(function()
 
 						v.CharacterAdded:Connect(function(Character)
 							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
-
 
 							if Settings.Tracers.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer then
 								CreateTracer(v)
@@ -6386,7 +6392,7 @@ task.spawn(function()
 						if IsAlive(LocalPlayer) and NearestBed then
 							local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-							TweenToNearestBed((Magnitude / 55) / 23.33)
+							TweenToNearestBed((Magnitude / 112) / 23.33)
 
 							Settings.RecallBedTp.Value = false
 
@@ -6408,7 +6414,7 @@ task.spawn(function()
 								if IsAlive(LocalPlayer) and NearestBed then
 									local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-									TweenToNearestBed((Magnitude / 55) / 23.33)
+									TweenToNearestBed((Magnitude / 112) / 23.33)
 
 									Settings.RecallBedTp.Value = false
 
@@ -7548,8 +7554,8 @@ task.spawn(function()
 		Settings.Fonts.Value = CallBack
 		
 		task.spawn(function()
-			if getcustomasset and isfile("AlSploit/Fonts/MinecraftFace.json") then
-				local AlSploitFont = Font.new(getcustomasset("AlSploit/Fonts/MinecraftFace.json"))
+			if getcustomasset and isfile("AlSploit/MinecraftFace.json") then
+				local AlSploitFont = Font.new(getcustomasset("AlSploit/MinecraftFace.json"))
 				
 				task.spawn(function()			
 					if Settings.Fonts.Value == true then				
@@ -7573,30 +7579,17 @@ task.spawn(function()
 							end
 						end)		
 
-						WorkSpace.DescendantAdded:Connect(function(v)
-							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-								v.FontFace = AlSploitFont
-							end
-						end)
-
 						LocalPlayer.PlayerGui.DescendantAdded:Connect(function(v)
 							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
 								v.FontFace = AlSploitFont
 							end
-						end)
-
-						AlSploit.DescendantAdded:Connect(function(v)
-							if Settings.Fonts.Value == true and v:IsA("TextLabel") then
-								v.FontFace = AlSploitFont
-							end
-						end)
-					end						
+						end)						
 				end)		
 			end
 		end)
 		
 		task.spawn(function()
-			if not getcustomasset or not isfile or not isfile("AlSploit/Fonts/MinecraftFace.json") then
+			if not getcustomasset or not isfile or not isfile("AlSploit/MinecraftFace.json") then
 				CreateNotification(5, "Your executor does not support custom fonts")
 			end
 		end)
@@ -7723,3 +7716,11 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+local args = {
+	[1] = {
+		["statusEffectType"] = "fortune_1"
+	}
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RequestFortuneDoubleDown"):FireServer(unpack(args))
