@@ -209,7 +209,7 @@ local function LoadFiles()
 			name = "Regular", 
 			weight = 500, 
 			style = "normal", 
-			assetId = getcustomasset("AlSploit/MinecraftFace.otf")
+			assetId = getcustomasset("AlSploit/Minecraft.otf")
 		}}
 	}))
 end
