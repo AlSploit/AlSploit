@@ -36,10 +36,10 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	LoadingFrame.Name = "LoadingFrame"
 	LoadingFrame.Parent = AlSploit
-	LoadingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	LoadingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	LoadingFrame.BackgroundColor3 = Color3.new(1, 1, 1)
+	LoadingFrame.BorderColor3 = Color3.new(0, 0 ,0)
 	LoadingFrame.BorderSizePixel = 0
-	LoadingFrame.Position = UDim2.new(0.322303236, 0, 0.280487806, 0)
+	LoadingFrame.Position = UDim2.new(0.322, 0, 0.280, 0)
 	LoadingFrame.Size = UDim2.new(0, 0, 0, 0)
 	LoadingFrame.Image = "rbxassetid://17100395362"
 	LoadingFrame.ScaleType = Enum.ScaleType.Crop
@@ -53,22 +53,22 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	Title.Name = "Title"
 	Title.Parent = LoadingFrame
-	Title.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Title.BackgroundColor3 = Color3.new(1, 1, 1)
 	Title.BackgroundTransparency = 1.000
-	Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Title.BorderColor3 = Color3.new(0, 0 ,0)
 	Title.BorderSizePixel = 0
-	Title.Position = UDim2.new(0.000605325156, 0, 0.02233251, 0)
-	Title.Size = UDim2.new(0.998529434, 0, 0.663888872, 0)
+	Title.Position = UDim2.new(0, 0, 0.022, 0)
+	Title.Size = UDim2.new(1, 0, 0.664, 0)
 	Title.Image = "rbxassetid://17100452624"
 	Title.ScaleType = Enum.ScaleType.Fit
 
 	LoadingBar.Name = "LoadingBar"
 	LoadingBar.Parent = LoadingFrame
-	LoadingBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	LoadingBar.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	LoadingBar.BackgroundColor3 = Color3.new(1, 1, 1)
+	LoadingBar.BorderColor3 = Color3.new(0, 0 ,0)
 	LoadingBar.BorderSizePixel = 0
-	LoadingBar.Position = UDim2.new(0.0720588267, 0, 0.658333361, 0)
-	LoadingBar.Size = UDim2.new(0.852941155, 0, 0.027777778, 0)
+	LoadingBar.Position = UDim2.new(0.072, 0, 0.658, 0)
+	LoadingBar.Size = UDim2.new(0.853, 0, 0.028, 0)
 
 	UICorner_2.CornerRadius = UDim.new(0, 3)
 	UICorner_2.Parent = LoadingBar
@@ -80,8 +80,8 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	Fill.Name = "Fill"
 	Fill.Parent = LoadingBar
-	Fill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Fill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Fill.BackgroundColor3 = Color3.new(1, 1, 1)
+	Fill.BorderColor3 = Color3.new(0, 0 ,0)
 	Fill.BorderSizePixel = 0
 	Fill.Size = UDim2.new(0, 0, 1, 0)
 
@@ -96,15 +96,15 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	Percentage.Name = "Percentage"
 	Percentage.Parent = LoadingFrame
-	Percentage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Percentage.BackgroundColor3 = Color3.new(1, 1, 1)
 	Percentage.BackgroundTransparency = 1.000
-	Percentage.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Percentage.BorderColor3 = Color3.new(0, 0 ,0)
 	Percentage.BorderSizePixel = 0
-	Percentage.Position = UDim2.new(0.35147059, 0, 0.519444466, 0)
-	Percentage.Size = UDim2.new(0.294117659, 0, 0.138888896, 0)
+	Percentage.Position = UDim2.new(0.351, 0, 0.519, 0)
+	Percentage.Size = UDim2.new(0.294, 0, 0.139, 0)
 	Percentage.Font = Enum.Font.GothamBold
 	Percentage.Text = "0%"
-	Percentage.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Percentage.TextColor3 = Color3.new(1, 1, 1)
 	Percentage.TextScaled = true
 	Percentage.TextSize = 20.000
 	Percentage.TextWrapped = true
@@ -114,15 +114,15 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	Discord.Name = "Discord"
 	Discord.Parent = LoadingFrame
-	Discord.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Discord.BackgroundColor3 = Color3.new(1, 1, 1)
 	Discord.BackgroundTransparency = 1.000
-	Discord.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Discord.BorderColor3 = Color3.new(0, 0 ,0)
 	Discord.BorderSizePixel = 0
-	Discord.Position = UDim2.new(0, 0, 0.889999986, 0)
-	Discord.Size = UDim2.new(0.998529434, 0, 0.0972222239, 0)
+	Discord.Position = UDim2.new(0, 0, 0.890, 0)
+	Discord.Size = UDim2.new(1, 0, 0.097, 0)
 	Discord.Font = Enum.Font.GothamBold
 	Discord.Text = "Discord Username: godclutcher"
-	Discord.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Discord.TextColor3 = Color3.new(1, 1, 1)
 	Discord.TextScaled = true
 	Discord.TextSize = 16.000
 	Discord.TextWrapped = true
@@ -132,15 +132,15 @@ local function MakeAlSploitLoadingScreen(Time)
 
 	DiscordServer.Name = "DiscordServer"
 	DiscordServer.Parent = LoadingFrame
-	DiscordServer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	DiscordServer.BackgroundColor3 = Color3.new(1, 1, 1)
 	DiscordServer.BackgroundTransparency = 1.000
-	DiscordServer.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	DiscordServer.BorderColor3 = Color3.new(0, 0 ,0)
 	DiscordServer.BorderSizePixel = 0
-	DiscordServer.Position = UDim2.new(0.00147058826, 0, 0.822222233, 0)
-	DiscordServer.Size = UDim2.new(1, 0, 0.0694444478, 0)
+	DiscordServer.Position = UDim2.new(0, 0, 0.822, 0)
+	DiscordServer.Size = UDim2.new(1, 0, 0.0694, 0)
 	DiscordServer.Font = Enum.Font.GothamBold
 	DiscordServer.Text = "Discord Server: discord.gg/JJryxTawZa"
-	DiscordServer.TextColor3 = Color3.fromRGB(255, 255, 255)
+	DiscordServer.TextColor3 = Color3.new(1, 1, 1)
 	DiscordServer.TextScaled = true
 	DiscordServer.TextSize = 16.000
 	DiscordServer.TextWrapped = true
@@ -150,7 +150,7 @@ local function MakeAlSploitLoadingScreen(Time)
 	
 	task.spawn(function()
 		local TweenInformation = TweenInfo.new(0.6, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
-		local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0.355393529, 0, 0.365853667, 0)})
+		local LoadingFrameTween = TweenService:Create(LoadingFrame, TweenInformation, {Size = UDim2.new(0.355, 0, 0.366, 0)})
 
 		LoadingFrameTween:Play()
 		
@@ -198,27 +198,20 @@ local function LoadFolders()
 	if not isfolder("AlSploit") then
 		makefolder("AlSploit")
 	end
-	
-	if not isfolder("AlSploit/Bedwars") then
-		makefolder("AlSploit/Bedwars")
-	end
-	
-	if not isfolder("AlSploit/Fonts") then
-		makefolder("AlSploit/Fonts")
-	end
 end
 
-local function LoadFiles()
-	if isfile("AlSploit/Fonts/Minecraft.otf") then
-		deletefile("AlSploit/Fonts/Minecraft.otf")
-	end
+local function LoadFiles()	
+	writefile("AlSploit/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
 	
-	if isfile("AlSploit/Fonts/MinecraftFace.otf") then
-		deletefile("AlSploit/Fonts/MinecraftFace.otf")
-	end
-	
-	writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)	
-	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({Name = "Minecraft", faces = {{Name = "Regular", Weight = 500, Style = "Normal", AssetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")}}}))
+	writefile("AlSploit/MinecraftFace.json", HttpService:JSONEncode({
+		name = "Minecraft", 
+		faces = {{
+			name = "Regular", 
+			weight = 500, 
+			style = "normal", 
+			assetId = getcustomasset("AlSploit/MinecraftFace.otf")
+		}}
+	}))
 end
 
 task.spawn(function()
