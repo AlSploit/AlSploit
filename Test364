@@ -120,10 +120,7 @@ local function CreateLog(Text)
 			if v:IsA("TextLabel") then
 				local Text = string.split(v.Text:lower(), ",")
 
-				print(NewText[2])
-				print(Text[2])
-
-				if NewText[2] and Text[2] and NewText[2] == Text[2] then
+				if NewText[2] and Text[2] and NewText[2] == Text[2] and Text[1] ~= Text[1] then
 					Log:Destroy()
 				end
 			end		
