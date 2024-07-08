@@ -2,6 +2,7 @@ local LocalPlayer = game.Players.LocalPlayer
 
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local HttpService = game:GetService("HttpService")
 
 local ScrollingFrame
 local AlSploitSpyKit = Instance.new("ScreenGui")
@@ -9,7 +10,7 @@ local AlSploitSpyKit = Instance.new("ScreenGui")
 AlSploitSpyKit.Name = "AlSploitSpyKit"
 AlSploitSpyKit.Parent = LocalPlayer:WaitForChild("PlayerGui")
 AlSploitSpyKit.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-AlSploitSpyKit.ResetOnSpawn = true
+AlSploitSpyKit.ResetOnSpawn = false
 
 local function CreateMainGui()
 	local LoadingFrame = Instance.new("ImageLabel")
@@ -203,12 +204,27 @@ task.spawn(function()
 		local Request = game.HttpGet
 
 		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			if HttpRequests[...] then
+			if not HttpRequests[...] then
 				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
 
 				table.insert(HttpRequests, ...)
 			end
 					
+			return HttpRequest(RequestData, ...)
+		end)
+	end)
+	
+	task.spawn(function()
+		local HttpRequest
+		local Request = HttpService.GetAsync
+
+		HttpRequest = HookFunction(Request, function(RequestData, ...)
+			if not HttpRequests[...] then
+				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+
+				table.insert(HttpRequests, ...)
+			end
+
 			return HttpRequest(RequestData, ...)
 		end)
 	end)
