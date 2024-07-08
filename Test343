@@ -209,7 +209,7 @@ local function LoadFolders()
 end
 
 local function LoadFiles()	
-	writefile("Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
+	writefile("AlSploit/Fonts/Minecraft.otf", HttpRequest({Url = MinecraftFontUrl, Method = "GET"}).Body)
 	
 	writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({
 		name = "Minecraft", 
@@ -217,20 +217,20 @@ local function LoadFiles()
 			name = "Regular", 
 			weight = 300, 
 			style = "normal", 
-			assetId = getcustomasset("Fonts/Minecraft.otf")
+			assetId = getcustomasset("AlSploit/Fonts/Minecraft.otf")
 		}}
 	}))
 
-	local decodeLol = HttpService:JSONDecode(readfile('Fonts/MinecraftFace.json'))
+	local decodeLol = HttpService:JSONDecode(readfile('AlSploit/Fonts/MinecraftFace.json'))
 
 	if decodeLol.faces[1].assetId ~= getcustomasset("AlSploit/Fonts/MinecraftFace.otf") then
-		writefile("Fonts/MinecraftFace.json", HttpService:JSONEncode({
+		writefile("AlSploit/Fonts/MinecraftFace.json", HttpService:JSONEncode({
 			name = "Minecraft", 
 			faces = {{
 				name = "Regular", 
 				weight = 500, 
 				style = "normal", 
-				assetId = getAsset("Fonts/MinecraftFace.otf")
+				assetId = getAsset("AlSploit/Fonts/MinecraftFace.otf")
 			}}
 		}))
 	end
