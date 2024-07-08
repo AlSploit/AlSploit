@@ -161,8 +161,6 @@ task.spawn(function()
 	
 	local HookMetaMethod = hookmetamethod
 	local HookFunction = hookfunction
-	
-	local HttpRequests = {}
 
 	task.spawn(function()
 		AntiKick = HookMetaMethod(game, "__namecall", function(Player, ...)
@@ -204,12 +202,8 @@ task.spawn(function()
 		local Request = game.HttpGet
 
 		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			if not HttpRequests[...] then
-				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
-
-				table.insert(HttpRequests, ...)
-			end
-					
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
+			
 			return HttpRequest(RequestData, ...)
 		end)
 	end)
@@ -219,11 +213,7 @@ task.spawn(function()
 		local Request = HttpService.GetAsync
 
 		HttpRequest = HookFunction(Request, function(RequestData, ...)
-			if not HttpRequests[...] then
-				CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
-
-				table.insert(HttpRequests, ...)
-			end
+			CreateLog("[" .. Time .. "]" .. " HttpRequest Was Spotted, " .. ... .. ".")
 
 			return HttpRequest(RequestData, ...)
 		end)
