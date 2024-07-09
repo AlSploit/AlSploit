@@ -1393,7 +1393,9 @@ local function CreateAntiVoidPart()
 							local TweenInformation = TweenInfo.new((NearestBlockDistance / 23), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 							local BlockTweeen = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(NearestBlock.Position + Vector3.new(0, 2, 0))})
 							
-							BlockTweeen:Play()
+							--BlockTweeen:Play()
+							
+							LocalPlayer.Character.PrimaryPart:PivotTo(CFrame.new(NearestBlock.Position + Vector3.new(0, 2, 0)))
 						end
 					end
 				end)		
@@ -4308,9 +4310,10 @@ task.spawn(function()
 				task.spawn(function()
 					for i = 1, 3 do
 						if IsAlive(LocalPlayer) then
-							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 100, 0))
+							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 0, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 125, 0))
 							
-							task.wait(0.25)
+							task.wait(0.2)
 						end
 					end
 				end)
@@ -4354,7 +4357,16 @@ task.spawn(function()
 					if Settings.HighJump.Value == true then
 						task.spawn(function()
 							if IsAlive(LocalPlayer) then
-								LocalPlayer.Character.PrimaryPart.Velocity = LocalPlayer.Character.PrimaryPart.Velocity + Vector3.new(0, 150, 0)
+								task.spawn(function()
+									for i = 1, 3 do
+										if IsAlive(LocalPlayer) then
+											LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 0, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+											LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 125, 0))
+
+											task.wait(0.2)
+										end
+									end
+								end)
 
 								task.wait(0.2)
 
