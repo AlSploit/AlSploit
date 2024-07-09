@@ -1485,7 +1485,7 @@ function FindNearestBlock()
 	local NearestBlock, NearestBlockDistance = nil, 9e9
 	
 	for i, v in next, CollectionService:GetTagged("block") do
-		local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position)
+		local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position).Magnitude
 		
 		if Magnitude < NearestBlockDistance then
 			NearestBlockDistance = Magnitude
