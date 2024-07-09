@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration5.lua"
+local SaveFileName = "AlSploitConfiguration6.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -883,7 +883,7 @@ local function CreateSettingsFile()
 		FpsBooster = {KeyBind = "..."},
 		Indicators = {KeyBind = "..."},
 		AutoReport = {KeyBind = "..."},
-		MotionBlur = {KeyBind = "..."},
+		Atmosphere = {KeyBind = "..."},
 		TargetHud = {Range = 20, KeyBind = "..."},
 		WinterSky = {KeyBind = "..."},
 		NoNameTag = {KeyBind = "..."},
@@ -1372,31 +1372,11 @@ local function CreateAntiVoidPart()
 	task.spawn(function()
 		AntiVoidPart.Touched:Connect(function()
 			if IsAlive(LocalPlayer) and AntiVoidPart and LocalPlayer.Character.PrimaryPart.Position.Y <= WorkSpace.AntiVoidPart.Position.Y then
-				local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
-				
-				task.spawn(function()
-					if NearestPlayer and IsAlive(LocalPlayer) then
-						for i = 1, 3 do
-							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 100, LocalPlayer.Character.PrimaryPart.Velocity.Z)
-						end
+				for i = 1, 3 do
+					if IsAlive(LocalPlayer) then
+						LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 100, LocalPlayer.Character.PrimaryPart.Velocity.Z)
 					end
-				end)
-				
-				task.spawn(function()
-					if not NearestPlayer and IsAlive(LocalPlayer) then
-						LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, (AntiVoidPart.Position.Y + 20), LocalPlayer.Character.PrimaryPart.Position.Z))
-
-						local NearestBlock, NearestBlockDistance = FindNearestBlock()
-						
-						if NearestBlock then
-							
-							local TweenInformation = TweenInfo.new((NearestBlockDistance / 23), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
-							local BlockTweeen = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(NearestBlock.Position + Vector3.new(0, 2, 0))})
-							
-							BlockTweeen:Play()
-						end
-					end
-				end)		
+				end
 			end
 		end)
 	end)
@@ -6338,6 +6318,71 @@ task.spawn(function()
 	end)
 end)
 
+
+
+task.spawn(function()
+	local NoNameTag, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Atmosphere", Settings.Atmosphere.Value, function(CallBack)
+		Settings.Atmosphere.Value = CallBack
+
+
+		task.spawn(function()
+			if Settings.Atmosphere.Value == true then
+				local ColorCorrection = Instance.new("ColorCorrectionEffect")
+
+				ColorCorrection.Parent = LightingService
+				ColorCorrection.Name = "Atmosphere"
+				
+				ColorCorrection.Brightness = 0  
+				ColorCorrection.TintColor = Color3.new(0.411765, 0.215686, 1)
+				ColorCorrection.Contrast = 0
+			end
+		end)	
+		
+		task.spawn(function()
+			if Settings.Atmosphere.Value == false and LightingService:FindFirstChild("Atmosphere") then
+				LightingService.Atmosphere:Destroy()
+			end
+		end)	
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Atmosphere.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Atmosphere.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Atmosphere.KeyBind then
+					Settings.Atmosphere.Value = not Settings.Atmosphere.Value
+
+					if Settings.Atmosphere.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Atmosphere.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
 task.spawn(function()
 	local NoNameTag, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "NoNameTag", Settings.NoNameTag.Value, function(CallBack)
 		Settings.NoNameTag.Value = CallBack
@@ -6513,73 +6558,6 @@ task.spawn(function()
 					end
 
 					if Settings.RecallBedTp.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local MotionBlur, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "MotionBlur", Settings.MotionBlur.Value, function(CallBack)
-		Settings.MotionBlur.Value = CallBack
-
-		task.spawn(function()
-			if Settings.MotionBlur.Value == true then
-				local MotionBlur = Instance.new("BlurEffect")
-
-				MotionBlur.Parent = LightingService
-				MotionBlur.Name = "MotionBlur"
-				MotionBlur.Size = 3
-
-				local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
-
-				ColorCorrectionEffect.Saturation = 0.2
-
-				ColorCorrectionEffect.Parent = LightingService
-				ColorCorrectionEffect.Name = "ColorCorrectionEffect"		
-			end
-		end)			
-
-		task.spawn(function()
-			if Settings.MotionBlur.Value == false and LightingService:FindFirstChild("ColorCorrectionEffect") and LightingService:FindFirstChild("MotionBlur") then
-				LightingService.ColorCorrectionEffect:Destroy()
-				LightingService.MotionBlur:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.MotionBlur.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.MotionBlur.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.MotionBlur.KeyBind then
-					Settings.MotionBlur.Value = not Settings.MotionBlur.Value
-
-					if Settings.MotionBlur.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.MotionBlur.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -7771,15 +7749,26 @@ task.spawn(function()
 	end)
 end)
 
-local args = {
-	[1] = {
-		["statusEffectType"] = "fortune_1"
-	}
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RequestFortuneDoubleDown"):FireServer(unpack(args))
-
 task.spawn(function()
+	local remote = ReplicatedStorage:WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneDoubleDown');
+	local effects = {
+		'fire_3', 'forest_3', 'cloud_3', 'void_3', 'static_3', 'updraft_2', 
+		'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
+		'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
+		'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
+	}
+
+	task.spawn(function()
+		repeat 
+			task.wait()
+
+			for i,v in effects do 
+				remote:FireServer({statusEffectType = v})
+			end
+			task.wait(0.8)
+		until not game
+	end);
+	
 	repeat
 		task.wait()
 		
@@ -7803,10 +7792,8 @@ task.spawn(function()
 	until not game
 end)
 
---scaffold
---antivoid
---highjump
 --atmosphere
+--highjumpkeybind
 
 --AlSploit rules
 --Remotes full name in variable
