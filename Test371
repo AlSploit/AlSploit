@@ -1384,18 +1384,15 @@ local function CreateAntiVoidPart()
 				
 				task.spawn(function()
 					if not NearestPlayer and IsAlive(LocalPlayer) then
-						local Block = FindPlacedBlock((LocalPlayer.Character.HumanoidRootPart.CFrame.p - Vector3.new(0, 1, 0)) + LocalPlayer.Character.PrimaryPart.Velocity.Unit)
+						local NearestBlock, NearestBlockDistance = FindNearestBlock()
 						
-						if not Block then
-							Block = FindPlacedBlock(LocalPlayer.Character.HumanoidRootPart.CFrame.p - Vector3.new(0, 3, 0))
-						end
-						
-						if Block then
-							local h = Instance.new("Highlight")
+						if NearestBlock then
+							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, (NearestBlock.Position.Y + 1.5), LocalPlayer.Character.PrimaryPart.Position.Z))
 							
-							h.FillColor = Color3.new(0.368627, 0.517647, 1)
-							h.FillTransparency = 0
-							h.Parent = Block
+							local TweenInformation = TweenInfo.new((NearestBlockDistance / 23), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
+							local BlockTweeen = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(NearestBlock.Position)})
+							
+							BlockTweeen:Play()
 						end
 					end
 				end)		
@@ -1482,6 +1479,21 @@ local function FindNearestEntity(MaxDistance)
 	end
 
 	return nil
+end
+
+function FindNearestBlock()
+	local NearestBlock, NearestBlockDistance = nil, 9e9
+	
+	for i, v in next, CollectionService:GetTagged("block") do
+		local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position)
+		
+		if Magnitude < NearestBlockDistance then
+			NearestBlockDistance = Magnitude
+			NearestBlock = v
+		end
+	end
+	
+	return NearestBlock, NearestBlockDistance
 end
 
 local function TweenToNearestBed()
