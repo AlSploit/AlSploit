@@ -1384,10 +1384,11 @@ local function CreateAntiVoidPart()
 				
 				task.spawn(function()
 					if not NearestPlayer and IsAlive(LocalPlayer) then
+						LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, (AntiVoidPart.Position.Y + 20), LocalPlayer.Character.PrimaryPart.Position.Z))
+
 						local NearestBlock, NearestBlockDistance = FindNearestBlock()
 						
 						if NearestBlock then
-							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, (NearestBlock.Position.Y + 1.5), LocalPlayer.Character.PrimaryPart.Position.Z))
 							
 							local TweenInformation = TweenInfo.new((NearestBlockDistance / 23), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 							local BlockTweeen = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(NearestBlock.Position)})
