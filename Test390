@@ -6203,7 +6203,7 @@ task.spawn(function()
 									local UICorner = Instance.new("UICorner")
 									
 									UIGradient.Parent = v
-									UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.45098, 0.356863, 0.792157), ColorSequenceKeypoint.new(1.00, Color3.new(0.576471, 0.470588, 1))}
+									UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.45098, 0.356863, 0.792157)), ColorSequenceKeypoint.new(1.00, Color3.new(0.576471, 0.470588, 1))}
 
 									UICorner.Parent = v
 									UICorner.CornerRadius= UDim.new(0, 4)
