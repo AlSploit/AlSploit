@@ -3960,17 +3960,14 @@ task.spawn(function()
 	local Sprint, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "Sprint", Settings.Sprint.Value, function(CallBack)
 		Settings.Sprint.Value = CallBack
 
-		local OldSprintFunction
+		local OldSprintFunction = SprintController.stopSprinting
 
 		task.spawn(function()
 			if Settings.Sprint.Value == true and KnitClientGotten == true then
-				OldSprintFunction = SprintController.stopSprinting
-
 				SprintController.stopSprinting = function(...)
-					local Function = OldSprintFunction(...)
-
 					SprintController:startSprinting()
-					return Function
+					
+					return OldSprintFunction(...)
 				end
 
 				task.spawn(function()
@@ -4274,27 +4271,7 @@ task.spawn(function()
 					Settings.HighJump.Value = not Settings.HighJump.Value
 
 					if Settings.HighJump.Value == true then
-						task.spawn(function()
-							if IsAlive(LocalPlayer) then
-								task.spawn(function()
-									for i = 1, 3 do
-										if IsAlive(LocalPlayer) then
-											LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 0, LocalPlayer.Character.PrimaryPart.Velocity.Z)
-											LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 125, 0))
-
-											task.wait(0.2)
-										end
-									end
-								end)
-
-								task.wait(0.2)
-
-								Settings.HighJump.Value = false
-								UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-							end
-						end)
-
-						UIGradient2.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.HighJump.Value == false then
@@ -4313,6 +4290,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.InfiniteFly.Value == true and InfiniteFlyValue == false then
 				InfiniteFlyValue = true
+				
 				InfFly()
 			end
 
@@ -4350,10 +4328,11 @@ task.spawn(function()
 					if Settings.InfiniteFly.Value == true then
 						task.spawn(function()
 							InfiniteFlyValue = true
+							
 							InfFly()
 						end)
 
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.InfiniteFly.Value == false then
