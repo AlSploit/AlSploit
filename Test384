@@ -539,7 +539,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 
 				CallBack(math.round(Percentage * MaximumValue))
 			end
-		until Settings.UnInject.Value == false or not Slider
+		until not Slider
 	end)
 
 	return Slider
@@ -651,7 +651,7 @@ local function CreateTargetHud()
 			task.wait(0.001)
 
 			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
-		until Settings.UnInject.Value == false
+		until not UIStroke
 	end)
 
 	DisplayBackground.Name = "DisplayBackground"
@@ -782,7 +782,7 @@ local function CreateFlyHud()
 			task.wait(0.001)
 
 			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
-		until Settings.UnInject.Value == false
+		until not UIStroke
 	end)
 
 	UICorner.Parent = Background
@@ -4090,6 +4090,57 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local InfiniteJump, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InfiniteJump", Settings.InfiniteJump.Value, function(CallBack)
+		Settings.InfiniteJump.Value = CallBack
+
+		task.spawn(function()
+			UserInputService.JumpRequest:Connect(function()
+				if IsAlive(LocalPlayer) and Settings.InfiniteJump.Value == true and InfiniteFlyValue == false and FlyValue == false then
+					LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+				end
+			end)
+		end)	
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.InfiniteJump.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.InfiniteJump.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.InfiniteJump.KeyBind then
+					Settings.InfiniteJump.Value = not Settings.InfiniteJump.Value
+
+					if Settings.InfiniteJump.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.InfiniteJump.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local ChestStealer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "ChestStealer", Settings.ChestStealer.Value, function(CallBack)
 		Settings.ChestStealer.Value = CallBack
 
@@ -4168,117 +4219,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local InfiniteJump, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InfiniteJump", Settings.InfiniteJump.Value, function(CallBack)
-		Settings.InfiniteJump.Value = CallBack
-
-		task.spawn(function()
-			UserInputService.JumpRequest:Connect(function()
-				if IsAlive(LocalPlayer) and Settings.InfiniteJump.Value == true and InfiniteFlyValue == false and FlyValue == false then
-					LocalPlayer.Character.Humanoid:ChangeState("Jumping")
-				end
-			end)
-		end)	
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.InfiniteJump.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.InfiniteJump.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.InfiniteJump.KeyBind then
-					Settings.InfiniteJump.Value = not Settings.InfiniteJump.Value
-
-					if Settings.InfiniteJump.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.InfiniteJump.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local InfiniteFly, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InfiniteFly", Settings.InfiniteFly.Value, function(CallBack)
-		Settings.InfiniteFly.Value = CallBack
-
-		task.spawn(function()
-			if Settings.InfiniteFly.Value == true and InfiniteFlyValue == false then
-				InfiniteFlyValue = true
-				InfFly()
-			end
-
-			if Settings.InfiniteFly.Value == false and InfiniteFlyValue == true then
-				InfiniteFlyValue = false
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.InfiniteFly.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.InfiniteFly.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.InfiniteFly.KeyBind then
-					Settings.InfiniteFly.Value = not Settings.InfiniteFly.Value						
-
-					if Settings.InfiniteFly.Value == true then
-						task.spawn(function()
-							InfiniteFlyValue = true
-							InfFly()
-						end)
-
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.InfiniteFly.Value == false then
-						InfiniteFlyValue = false
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local UIGradient2 = nil
 
 	local HighJump, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "HighJump", Settings.HighJump.Value, function(CallBack)
@@ -4291,12 +4231,12 @@ task.spawn(function()
 						if IsAlive(LocalPlayer) then
 							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 0, LocalPlayer.Character.PrimaryPart.Velocity.Z)
 							LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 125, 0))
-							
+
 							task.wait(0.2)
 						end
 					end
 				end)
-				
+
 				task.wait(0.2)
 
 				Settings.HighJump.Value = false
@@ -4359,6 +4299,66 @@ task.spawn(function()
 
 					if Settings.HighJump.Value == false then
 						UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local InfiniteFly, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "InfiniteFly", Settings.InfiniteFly.Value, function(CallBack)
+		Settings.InfiniteFly.Value = CallBack
+
+		task.spawn(function()
+			if Settings.InfiniteFly.Value == true and InfiniteFlyValue == false then
+				InfiniteFlyValue = true
+				InfFly()
+			end
+
+			if Settings.InfiniteFly.Value == false and InfiniteFlyValue == true then
+				InfiniteFlyValue = false
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.InfiniteFly.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.InfiniteFly.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.InfiniteFly.KeyBind then
+					Settings.InfiniteFly.Value = not Settings.InfiniteFly.Value						
+
+					if Settings.InfiniteFly.Value == true then
+						task.spawn(function()
+							InfiniteFlyValue = true
+							InfFly()
+						end)
+
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.InfiniteFly.Value == false then
+						InfiniteFlyValue = false
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
 			end
