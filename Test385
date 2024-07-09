@@ -7587,7 +7587,10 @@ task.spawn(function()
 		
 		task.spawn(function()
 			if Settings.UnInject.Value == true then
+				Settings.UnInject.Value = false
+				
 				AlSploit:Destroy()
+				Blur:Destroy()
 			end
 		end)
 	end)
