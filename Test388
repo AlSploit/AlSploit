@@ -2194,7 +2194,7 @@ function GetSpeed()
 		end
 
 		if (tick() - InfiniteFlyTick) <= 0.8 then
-			Speed = Speed - 20
+			Speed = Speed - 10
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
@@ -2847,6 +2847,8 @@ local function InfFly()
 
 		CreateNotification(3, "Slowing down, preventing lagback")
 
+		LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
+	
 		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 
@@ -4271,7 +4273,27 @@ task.spawn(function()
 					Settings.HighJump.Value = not Settings.HighJump.Value
 
 					if Settings.HighJump.Value == true then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+						task.spawn(function()
+							if IsAlive(LocalPlayer) then
+								task.spawn(function()
+									for i = 1, 3 do
+										if IsAlive(LocalPlayer) then
+											LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 0, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+											LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 125, 0))
+
+											task.wait(0.2)
+										end
+									end
+								end)
+
+								task.wait(0.2)
+
+								Settings.HighJump.Value = false
+								UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+							end
+						end)
+
+						UIGradient2.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.HighJump.Value == false then
@@ -4332,11 +4354,12 @@ task.spawn(function()
 							InfFly()
 						end)
 
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
 					if Settings.InfiniteFly.Value == false then
 						InfiniteFlyValue = false
+						
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -6041,7 +6064,7 @@ task.spawn(function()
 							task.spawn(function()
 								if v:IsA("ImageButton") then
 									v.BackgroundTransparency = 0.2
-									v.BackgroundColor3 = Color3.new(0.635294, 0.313725, 1)
+									v.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
 
 									local UICorner = Instance.new("UICorner")
 
@@ -6076,7 +6099,7 @@ task.spawn(function()
 					task.spawn(function()
 						if v:IsA("ImageButton") then							
 							v.BackgroundTransparency = 0.2
-							v.BackgroundColor3 = Color3.new(0.635294, 0.313725, 1)
+							v.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
 
 							local UICorner = Instance.new("UICorner")
 
@@ -6181,7 +6204,7 @@ task.spawn(function()
 									UICorner.Parent = v
 									UICorner.CornerRadius= UDim.new(0, 4)
 
-									v.BackgroundColor3 = Color3.new(0.635294, 0.313725, 1)
+									v.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
 								end
 							end
 						end)
@@ -6211,7 +6234,7 @@ task.spawn(function()
 							UICorner.Parent = v
 							UICorner.CornerRadius= UDim.new(0, 4)
 
-							v.BackgroundColor3 = Color3.new(0.635294, 0.313725, 1)
+							v.BackgroundColor3 = Color3.new(0.411765, 0.215686, 1)
 						end
 					end
 				end)
@@ -6298,7 +6321,105 @@ task.spawn(function()
 	end)
 end)
 
+task.spawn(function()
+	local UIGradient2 = nil
+	local RecallBedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallBedTp", Settings.RecallBedTp.Value, function(CallBack)
+		Settings.RecallBedTp.Value = CallBack
 
+		task.spawn(function()
+			if Settings.RecallBedTp.Value == true then
+				if IsAlive(LocalPlayer) then
+					repeat task.wait() until Settings.UnInject.Value == true or GetMatchState() ~= 0
+
+					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false) then	
+						Recall()
+
+						local RecallTick = tick()
+
+						repeat
+							task.wait()
+						until Settings.UnInject.Value == true or (tick() - RecallTick) >= 6.1 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
+
+						local NearestBed = FindNearestBed(false)
+
+						if IsAlive(LocalPlayer) and NearestBed then
+							local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+							TweenToNearestBed((Magnitude / 112) / 23.33)
+
+							Settings.RecallBedTp.Value = false
+
+							UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+						end					
+					end
+				end
+
+				task.spawn(function()
+					if not IsAlive(LocalPlayer) then
+						LocalPlayer.CharacterAdded:Connect(function()
+							repeat task.wait() until Settings.UnInject.Value == true or IsAlive(LocalPlayer) and GetMatchState() ~= 0		
+
+							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false)then
+								task.wait(0.25)
+
+								local NearestBed = FindNearestBed(false)
+
+								if IsAlive(LocalPlayer) and NearestBed then
+									local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+									TweenToNearestBed((Magnitude / 112) / 23.33)
+
+									Settings.RecallBedTp.Value = false
+
+									UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+								end		
+							end
+						end)
+					end
+				end)				
+			end	
+		end)
+	end)
+
+	UIGradient2 = UIGradient
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.RecallBedTp.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.RecallBedTp.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.RecallBedTp.KeyBind then
+					Settings.RecallBedTp.Value = not Settings.RecallBedTp.Value
+
+					if Settings.RecallBedTp.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.RecallBedTp.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
 
 task.spawn(function()
 	local NoNameTag, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Atmosphere", Settings.Atmosphere.Value, function(CallBack)
@@ -6438,106 +6559,6 @@ task.spawn(function()
 					end
 
 					if Settings.NoNameTag.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local UIGradient2 = nil
-	local RecallBedTp, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "RecallBedTp", Settings.RecallBedTp.Value, function(CallBack)
-		Settings.RecallBedTp.Value = CallBack
-
-		task.spawn(function()
-			if Settings.RecallBedTp.Value == true then
-				if IsAlive(LocalPlayer) then
-					repeat task.wait() until Settings.UnInject.Value == true or GetMatchState() ~= 0
-
-					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false) then	
-						Recall()
-
-						local RecallTick = tick()
-
-						repeat
-							task.wait()
-						until Settings.UnInject.Value == true or (tick() - RecallTick) >= 6.1 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
-
-						local NearestBed = FindNearestBed(false)
-
-						if IsAlive(LocalPlayer) and NearestBed then
-							local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
-
-							TweenToNearestBed((Magnitude / 112) / 23.33)
-
-							Settings.RecallBedTp.Value = false
-
-							UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-						end					
-					end
-				end
-
-				task.spawn(function()
-					if not IsAlive(LocalPlayer) then
-						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until Settings.UnInject.Value == true or IsAlive(LocalPlayer) and GetMatchState() ~= 0		
-
-							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false)then
-								task.wait(0.25)
-
-								local NearestBed = FindNearestBed(false)
-
-								if IsAlive(LocalPlayer) and NearestBed then
-									local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
-
-									TweenToNearestBed((Magnitude / 112) / 23.33)
-
-									Settings.RecallBedTp.Value = false
-
-									UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-								end		
-							end
-						end)
-					end
-				end)				
-			end	
-		end)
-	end)
-
-	UIGradient2 = UIGradient
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.RecallBedTp.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.RecallBedTp.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.RecallBedTp.KeyBind then
-					Settings.RecallBedTp.Value = not Settings.RecallBedTp.Value
-
-					if Settings.RecallBedTp.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.RecallBedTp.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
