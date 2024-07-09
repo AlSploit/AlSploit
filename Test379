@@ -1351,7 +1351,7 @@ local function CreateAntiVoidPart()
 	AntiVoidPart.Position = Vector3.new(0, 99999, 0)
 	AntiVoidPart.Transparency = Settings.AntiVoid.Transparency
 	AntiVoidPart.Color = Color3.new(0.666667, 0, 1)
-	AntiVoidPart.CanCollide = true
+	AntiVoidPart.CanCollide = false
 	AntiVoidPart.Anchored = true
 
 	task.spawn(function()
