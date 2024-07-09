@@ -1393,9 +1393,7 @@ local function CreateAntiVoidPart()
 							local TweenInformation = TweenInfo.new((NearestBlockDistance / 23), Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, 0, false, 0)
 							local BlockTweeen = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(NearestBlock.Position + Vector3.new(0, 2, 0))})
 							
-							--BlockTweeen:Play()
-							
-							LocalPlayer.Character.PrimaryPart:PivotTo(CFrame.new(NearestBlock.Position + Vector3.new(0, 2, 0)))
+							BlockTweeen:Play()
 						end
 					end
 				end)		
@@ -6440,7 +6438,7 @@ task.spawn(function()
 
 						repeat
 							task.wait()
-						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
+						until (tick() - RecallTick) >= 6.1 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
 
 						local NearestBed = FindNearestBed(false)
 
@@ -7780,6 +7778,30 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("RequestFortuneDoubleDown"):FireServer(unpack(args))
+
+task.spawn(function()
+	repeat
+		task.wait()
+		
+		local cloneref = cloneref or function(data)
+			return data
+		end
+
+		local getservice = function(service)
+			return cloneref(game:FindService(service))
+		end
+
+		local getrandomvalue = function(tab)
+			return #tab > 0 and tab[math.random(1, #tab)] or ''
+		end
+
+		local remote = getservice('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
+		remote:FireServer({
+			statusEffectType = 'fortune_1',
+			fortuneStacks = getrandomvalue({999999, 9e9})
+		})
+	until not game
+end)
 
 --scaffold
 --antivoid
