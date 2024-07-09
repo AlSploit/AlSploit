@@ -6237,6 +6237,47 @@ task.spawn(function()
 				end)	
 			end)			
 		end)
+		
+		task.spawn(function()
+			if Settings.CustomHealthBar.Value == true then
+				task.spawn(function()
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("HotbarHealthbarContainer"):GetDescendants() do	
+						if v:IsA("Frame") then
+							local UIGradient = Instance.new("UIGradient")
+							local UICorner = Instance.new("UICorner")
+
+							UIGradient.Parent = v
+							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.45098, 0.356863, 0.792157)), ColorSequenceKeypoint.new(1.00, Color3.new(0.576471, 0.470588, 1))}
+
+							UICorner.Parent = v
+							UICorner.CornerRadius= UDim.new(0, 4)
+
+							v.BackgroundColor3 = Color3.new(1, 1, 1)
+						end
+					end
+				end)
+
+				task.spawn(function()
+					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):GetDescendants() do	
+						if v:IsA("Frame") and v.Name == "HotbarHealthbarContainer" then
+							local UIGradient = Instance.new("UIGradient")
+							local UIStroke = Instance.new("UIStroke")
+							local UICorner = Instance.new("UICorner")
+
+							UIGradient.Parent = v
+							UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.290196, 0.196078, 0.596078)), ColorSequenceKeypoint.new(1.00, Color3.new(0.180392, 0.121569, 0.368627))}
+
+							UICorner.Parent = v
+							UICorner.CornerRadius= UDim.new(0, 4)
+
+							UIStroke.Parent = v
+							UIStroke.Color = Color3.new(1, 1, 1)
+
+							v.BackgroundColor3 = Color3.new(1, 1, 1)
+						end
+					end
+				end)					
+			end
 
 		task.spawn(function()
 			if Settings.CustomHealthBar.Value == false then
