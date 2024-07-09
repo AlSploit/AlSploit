@@ -539,7 +539,7 @@ local function CreateSlider(Parent, Name, DefaultValue, MaximumValue, LayoutOrde
 
 				CallBack(math.round(Percentage * MaximumValue))
 			end
-		until not Slider
+		until Settings.UnInject.Value == false or not Slider
 	end)
 
 	return Slider
@@ -651,7 +651,7 @@ local function CreateTargetHud()
 			task.wait(0.001)
 
 			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
-		until not game
+		until Settings.UnInject.Value == false
 	end)
 
 	DisplayBackground.Name = "DisplayBackground"
@@ -782,7 +782,7 @@ local function CreateFlyHud()
 			task.wait(0.001)
 
 			UIStroke.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
-		until not game
+		until Settings.UnInject.Value == false
 	end)
 
 	UICorner.Parent = Background
@@ -858,7 +858,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration6.lua"
+local SaveFileName = "AlSploitConfiguration7.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -896,6 +896,7 @@ local function CreateSettingsFile()
 		Scaffold = {ExpandDistance = 1, KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
+		UnInject = {KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
 		PlayerTp = {KeyBind = "..."},
 		Tracers = {KeyBind = "..."},
@@ -989,10 +990,10 @@ task.spawn(function()
 		if writefile then
 			SaveSettings()
 		end	
-	until not game
+	until Settings.UnInject.Value == false
 end)
 
-repeat task.wait() until Loaded == true
+repeat task.wait() until Settings.UnInject.Value == false or Loaded == true
 
 local KnitClient, KnitClientGotten = nil, false
 
@@ -1203,7 +1204,7 @@ end)
 local MainInventory = nil
 
 task.spawn(function()
-	repeat task.wait() until GetMatchState() ~= 0
+	repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 	repeat
 		task.wait()
@@ -1211,7 +1212,7 @@ task.spawn(function()
 		pcall(function()
 			MainInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 		end)
-	until MainInventory
+	until Settings.UnInject.Value == false or MainInventory
 end)
 
 local InventoryUti, InventoryUtilGotten = nil, false
@@ -1333,7 +1334,7 @@ function FindNearestPlayer(MaxDistance)
 end
 
 local function CreateAntiVoidPart()
-	repeat task.wait() until GetMatchState() ~= 0
+	repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 	local OldLowestPosition = math.huge
 	local LowestPosition = 99999
@@ -1860,7 +1861,7 @@ local function CreateTracer(Player)
 						Tracer.Visible = false
 					end
 				end		
-			until Settings.Tracers.Value == false or not IsAlive(Player)
+			until Settings.UnInject.Value == false or Settings.Tracers.Value == false or not IsAlive(Player)
 
 			Tracer:Remove()
 		end)
@@ -1916,7 +1917,7 @@ local function PurchaseItem(Arguments)
 end
 
 local function Invisibility()
-	repeat task.wait() until GetMatchState() ~= 0 and IsAlive(LocalPlayer)
+	repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0 and IsAlive(LocalPlayer)
 
 	local Animation = Instance.new("Animation")
 	local Id = 11335949902
@@ -2840,7 +2841,7 @@ local function InfFly()
 
 			StartLevelHead = SpoofedCamera.Position.Y	
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
-		until InfiniteFlyValue == false or not IsAlive(LocalPlayer)
+		until Settings.UnInject.Value == false or InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 
 		InfiniteFlyTick = tick()
 
@@ -2941,7 +2942,7 @@ local function FlyMe()
 					end
 				end				
 
-			until FlyValue == false or not IsAlive(LocalPlayer)
+			until Settings.UnInject.Value == false or FlyValue == false or not IsAlive(LocalPlayer)
 
 			FlyHud:Destroy()
 		end)		
@@ -3000,7 +3001,7 @@ local function FlyMe()
 						end
 					end
 				end)
-			until FlyValue == false or not IsAlive(LocalPlayer)
+			until Settings.UnInject.Value == false or FlyValue == false or not IsAlive(LocalPlayer)
 
 			if LocalPlayer.Character.PrimaryPart:FindFirstChild("FlyBodyVelocity") then
 				LocalPlayer.Character.PrimaryPart:FindFirstChild("FlyBodyVelocity"):Destroy()
@@ -3011,7 +3012,7 @@ local function FlyMe()
 end
 
 task.spawn(function()
-	repeat task.wait() until GetMatchState() ~= 0
+	repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 	if KnitClientGotten == true then
 		local ZephyrUpdate = ZephyrController.updateJump
@@ -3046,7 +3047,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	repeat task.wait() until GetMatchState() ~= 0
+	repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 	task.spawn(function()
 		for i, v in next, PlayerService:GetPlayers() do
@@ -3145,7 +3146,7 @@ task.spawn(function()
 			if not Scythe or not IsAlive(LocalPlayer) or not (Settings.KillAura.Value == true and NearestPlayer or true) then
 				ScytheDisablerAnticheatDisabled = false
 			end
-		until Settings.ScytheDisabler.Value == false
+		until Settings.UnInject.Value == false or Settings.ScytheDisabler.Value == false
 	end)
 
 	task.spawn(function()
@@ -3299,7 +3300,7 @@ task.spawn(function()
 						end
 					end)				
 				end	
-			until Settings.AutoClicker.Value == false
+			until Settings.UnInject.Value == false or Settings.AutoClicker.Value == false
 		end)
 	end)
 
@@ -3434,7 +3435,7 @@ task.spawn(function()
 						Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
 					end
 				end				
-			until Settings.AimAssist.Value == false
+			until Settings.UnInject.Value == false or Settings.AimAssist.Value == false
 		end)
 	end)
 
@@ -3527,7 +3528,7 @@ task.spawn(function()
 						end
 					end)
 				end
-			until not game	
+			until Settings.UnInject.Value == false	
 		end)
 	end)
 
@@ -3719,7 +3720,7 @@ task.spawn(function()
 						end
 					end
 				end)
-			until Settings.Aimbot.Value == false
+			until Settings.UnInject.Value == false or Settings.Aimbot.Value == false
 		end)
 	end)
 
@@ -3825,7 +3826,7 @@ task.spawn(function()
 							if Clone:FindFirstChild("HumanoidRootPart") then
 								Clone.HumanoidRootPart.Position = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Position.X, Clone.HumanoidRootPart.Position.Y, LocalPlayer.Character.HumanoidRootPart.Position.Z)
 							end
-						until not Clone
+						until Settings.UnInject.Value == false or not Clone
 					end)			
 
 					task.wait(0.2)
@@ -3838,7 +3839,7 @@ task.spawn(function()
 
 					task.wait(0.1)
 				end
-			until Settings.AntiHit.Value == false
+			until Settings.UnInject.Value == false or Settings.AntiHit.Value == false
 		end)
 	end)
 
@@ -4105,7 +4106,7 @@ task.spawn(function()
 						end
 					end
 				end)
-			until Settings.ChestStealer.Value == false
+			until Settings.UnInject.Value == false or Settings.ChestStealer.Value == false
 		end)
 	end)
 
@@ -4459,7 +4460,7 @@ task.spawn(function()
 						end		
 					end
 				end
-			until Settings.Scaffold.Value == false			
+			until Settings.UnInject.Value == false or Settings.Scaffold.Value == false			
 		end)
 	end)
 
@@ -4538,7 +4539,7 @@ task.spawn(function()
 						StrafeTween:Play()
 					end
 				end				
-			until Settings.Strafe.Value == false
+			until Settings.UnInject.Value == false or Settings.Strafe.Value == false
 		end)
 	end)
 
@@ -4648,7 +4649,7 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					GroundHitRemote:FireServer()
 				end
-			until Settings.NoFall.Value == false
+			until Settings.UnInject.Value == false or Settings.NoFall.Value == false
 		end)
 	end)
 
@@ -4709,7 +4710,7 @@ task.spawn(function()
 								LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, Settings.Spider.Speed, LocalPlayer.Character.PrimaryPart.Velocity.Z)							
 							end
 						end
-					until Settings.Spider.Value == false
+					until Settings.UnInject.Value == false or Settings.Spider.Value == false
 				end)
 			end
 		end)
@@ -4931,7 +4932,7 @@ task.spawn(function()
 						end					
 					end
 				end)		
-			until Settings.AutoConsume.Value == false
+			until Settings.UnInject.Value == false or Settings.AutoConsume.Value == false
 		end)
 	end)
 
@@ -5045,7 +5046,7 @@ task.spawn(function()
 						ChatSpam()
 					end
 				end)
-			until Settings.ChatSpammer.Value == false
+			until Settings.UnInject.Value == false or Settings.ChatSpammer.Value == false
 		end)
 	end)
 
@@ -5126,7 +5127,7 @@ task.spawn(function()
 						end
 					end	
 				end)		
-			until Settings.AutoReport.Value == false
+			until Settings.UnInject.Value == false or Settings.AutoReport.Value == false
 		end)
 	end)
 
@@ -5223,7 +5224,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if GetQueueType():find("Skywars") then
-				repeat task.wait(3) until not IsAlive(LocalPlayer)
+				repeat task.wait(3) until Settings.UnInject.Value == false or not IsAlive(LocalPlayer)
 
 				if Settings.PlayAgain.Value == true then
 					JoinQueueRemote:FireServer({queueType = GetQueueType()})
@@ -5232,7 +5233,7 @@ task.spawn(function()
 		end)
 
 		task.spawn(function()
-			repeat task.wait(3) until GetMatchState() == 2
+			repeat task.wait(3) until Settings.UnInject.Value == false or GetMatchState() == 2
 
 			if Settings.PlayAgain.Value == true then
 				JoinQueueRemote:FireServer({queueType = GetQueueType()})
@@ -5437,7 +5438,7 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					AutoBuy()
 				end
-			until Settings.AutoBuy.Value == false or GetQueueType():find("Skywars")
+			until Settings.UnInject.Value == false or Settings.AutoBuy.Value == false or GetQueueType():find("Skywars")
 		end)
 	end)
 
@@ -5494,7 +5495,7 @@ task.spawn(function()
 				}
 
 				AfkInfoRemote:FireServer(Args)
-			until Settings.AntiAfk.Value == false
+			until Settings.UnInject.Value == false or Settings.AntiAfk.Value == false
 		end)
 	end)
 
@@ -5547,7 +5548,7 @@ task.spawn(function()
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					AutoKit()
 				end
-			until Settings.AutoKit.Value == false
+			until Settings.UnInject.Value == false or Settings.AutoKit.Value == false
 		end)
 	end)
 
@@ -5594,7 +5595,7 @@ task.spawn(function()
 		Settings.Tracers.Value = CallBack
 
 		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
+			repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 			if Settings.Tracers.Value == true then
 				task.spawn(function()
@@ -5604,7 +5605,7 @@ task.spawn(function()
 						end
 
 						v.CharacterAdded:Connect(function(Character)
-							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(PlayerService:FindFirstChild(Character.Name))
 
 							if Settings.Tracers.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer then
 								CreateTracer(v)
@@ -5614,11 +5615,11 @@ task.spawn(function()
 				end)
 
 				task.spawn(function()
-					repeat task.wait() until GetMatchState() ~= 0
+					repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 					PlayerService.PlayerAdded:Connect(function(Player)
 						Player.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(Player)
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(Player)
 
 							if Settings.Tracers.Value == true and IsAlive(Player) and Player ~= LocalPlayer then
 								CreateTracer(Player)
@@ -5673,7 +5674,7 @@ task.spawn(function()
 		Settings.Esp.Value = CallBack
 
 		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
+			repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 			if Settings.Esp.Value == true then
 				task.spawn(function()
@@ -5683,7 +5684,7 @@ task.spawn(function()
 						end
 
 						v.CharacterAdded:Connect(function(Character)
-							repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(PlayerService:FindFirstChild(Character.Name))
 
 
 							if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
@@ -5696,7 +5697,7 @@ task.spawn(function()
 				task.spawn(function()
 					PlayerService.PlayerAdded:Connect(function(Player)
 						Player.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(Player)
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(Player)
 
 							if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
 								CreateOutline(Player)
@@ -5708,7 +5709,7 @@ task.spawn(function()
 		end)
 
 		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
+			repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 			if Settings.Esp.Value == false then
 				for i, v in next, PlayerService:GetPlayers() do
@@ -5753,7 +5754,7 @@ task.spawn(function()
 								end
 
 								v.CharacterAdded:Connect(function(Character)
-									repeat task.wait() until IsAlive(PlayerService:FindFirstChild(Character.Name))
+									repeat task.wait() until Settings.UnInject.Value == false or IsAlive(PlayerService:FindFirstChild(Character.Name))
 
 									if Settings.Esp.Value == true and IsAlive(PlayerService:FindFirstChild(Character.Name)) and v ~= LocalPlayer and not v.Character.PrimaryPart:FindFirstChild("Esp") then
 										CreateOutline(v)
@@ -5765,7 +5766,7 @@ task.spawn(function()
 						task.spawn(function()
 							PlayerService.PlayerAdded:Connect(function(Player)
 								Player.CharacterAdded:Connect(function()
-									repeat task.wait() until Player
+									repeat task.wait() until Settings.UnInject.Value == false or Player
 
 									if Settings.Esp.Value == true and IsAlive(Player) and Player ~= LocalPlayer and not Player.Character.PrimaryPart:FindFirstChild("Esp") then
 										CreateOutline(Player)
@@ -5805,7 +5806,7 @@ task.spawn(function()
 				if Settings.Fov.Value == true and KnitClientGotten == true then
 					FovController:setFOV(Settings.Fov.Fov)
 				end
-			until Settings.Fov.Value == false
+			until Settings.UnInject.Value == false or Settings.Fov.Value == false
 		end)
 
 		if KnitClientGotten == true and ClientHandlerStoreGotten == true then
@@ -5883,7 +5884,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.RecallPlayerTp.Value == true then
 				if IsAlive(LocalPlayer) then
-					repeat task.wait() until GetMatchState() ~= 0
+					repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 					if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer() then		
 						Recall()
@@ -5892,7 +5893,7 @@ task.spawn(function()
 
 						repeat
 							task.wait()
-						until (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallPlayerTp.Value == false
+						until Settings.UnInject.Value == false or (tick() - RecallTick) >= 6.2 or not IsAlive(LocalPlayer) or Settings.RecallPlayerTp.Value == false
 
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
@@ -5907,7 +5908,7 @@ task.spawn(function()
 				task.spawn(function()
 					if not IsAlive(LocalPlayer) then
 						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer) and GetMatchState() ~= 0		
 
 							if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == true and FindNearestPlayer()then
 								task.wait(0.25)
@@ -6010,7 +6011,7 @@ task.spawn(function()
 			end)
 
 			LocalPlayer.CharacterAdded:Connect(function()
-				repeat task.wait() until IsAlive(LocalPlayer)
+				repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer)
 
 				task.spawn(function()
 					for i, v in next, LocalPlayer.PlayerGui:WaitForChild("hotbar"):FindFirstChild("1"):FindFirstChild("ItemsHotbar"):GetDescendants() do					
@@ -6189,7 +6190,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			LocalPlayer.CharacterAdded:Connect(function()
-				repeat task.wait() until IsAlive(LocalPlayer)
+				repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer)
 
 				task.spawn(function()
 					if Settings.CustomHealthBar.Value == true then
@@ -6332,9 +6333,9 @@ task.spawn(function()
 				ColorCorrection.Parent = LightingService
 				ColorCorrection.Name = "Atmosphere"
 				
-				ColorCorrection.Brightness = 0  
+				ColorCorrection.Brightness = 0.1
 				ColorCorrection.TintColor = Color3.new(0.411765, 0.215686, 1)
-				ColorCorrection.Contrast = 0
+				ColorCorrection.Contrast = 0.2
 			end
 		end)	
 		
@@ -6400,7 +6401,7 @@ task.spawn(function()
 
 					task.spawn(function()
 						LocalPlayer.CharacterAdded:Connect(function(Character)
-							repeat task.wait() until IsAlive(LocalPlayer)
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer)
 
 							task.wait(0.3)
 
@@ -6474,7 +6475,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.RecallBedTp.Value == true then
 				if IsAlive(LocalPlayer) then
-					repeat task.wait() until GetMatchState() ~= 0
+					repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 					if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false) then	
 						Recall()
@@ -6483,7 +6484,7 @@ task.spawn(function()
 
 						repeat
 							task.wait()
-						until (tick() - RecallTick) >= 6.1 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
+						until Settings.UnInject.Value == false or (tick() - RecallTick) >= 6.1 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
 
 						local NearestBed = FindNearestBed(false)
 
@@ -6502,7 +6503,7 @@ task.spawn(function()
 				task.spawn(function()
 					if not IsAlive(LocalPlayer) then
 						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0		
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer) and GetMatchState() ~= 0		
 
 							if IsAlive(LocalPlayer) and Settings.RecallBedTp.Value == true and FindNearestBed(false)then
 								task.wait(0.25)
@@ -7002,7 +7003,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.PlayerTp.Value == true then
 				if IsAlive(LocalPlayer) then
-					repeat task.wait() until GetMatchState() ~= 0
+					repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 					task.spawn(function()
 						if Settings.PlayerTp.Value == true then
@@ -7010,7 +7011,7 @@ task.spawn(function()
 								KillHumanoid(0)
 
 								LocalPlayer.CharacterAdded:Connect(function()
-									repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0
+									repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer) and GetMatchState() ~= 0
 
 									if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() then
 										task.wait(0.15)
@@ -7038,7 +7039,7 @@ task.spawn(function()
 				task.spawn(function()
 					if not IsAlive(LocalPlayer) then
 						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0					
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer) and GetMatchState() ~= 0					
 
 							if IsAlive(LocalPlayer) and Settings.PlayerTp.Value == true and FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅"  then
 								task.wait(0.25)
@@ -7105,7 +7106,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.BedTp.Value == true then
 				if IsAlive(LocalPlayer) then
-					repeat task.wait() until GetMatchState() ~= 0
+					repeat task.wait() until Settings.UnInject.Value == false or GetMatchState() ~= 0
 
 					task.spawn(function()
 						if Settings.BedTp.Value == true then
@@ -7113,7 +7114,7 @@ task.spawn(function()
 								KillHumanoid(0)
 
 								LocalPlayer.CharacterAdded:Connect(function()
-									repeat task.wait() until IsAlive(LocalPlayer)
+									repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer)
 
 									if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) then
 										task.wait(0.15)
@@ -7141,7 +7142,7 @@ task.spawn(function()
 				task.spawn(function()
 					if not IsAlive(LocalPlayer) then
 						LocalPlayer.CharacterAdded:Connect(function()
-							repeat task.wait() until IsAlive(LocalPlayer)						
+							repeat task.wait() until Settings.UnInject.Value == false or IsAlive(LocalPlayer)						
 
 							if IsAlive(LocalPlayer) and Settings.BedTp.Value == true and FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats") and LocalPlayer.leaderstats:FindFirstChild("Bed") and LocalPlayer.leaderstats.Bed.Value == "✅" then
 								task.wait(0.25)
@@ -7223,7 +7224,7 @@ task.spawn(function()
 						end
 					end)
 				end
-			until Settings.Nuker.Value == false
+			until Settings.UnInject.Value == false or Settings.Nuker.Value == false
 
 			NearestBedFound = false
 		end)
@@ -7237,7 +7238,7 @@ task.spawn(function()
 
 					ViewmodelController:playAnimation(15)
 				end
-			until not game
+			until Settings.UnInject.Value == false
 		end)
 	end)
 
@@ -7374,7 +7375,7 @@ task.spawn(function()
 						CapeTween:Play()
 					end			
 				end		
-			until Settings.Cape.Value == false			
+			until Settings.UnInject.Value == false or Settings.Cape.Value == false			
 		end)
 
 		task.spawn(function()
@@ -7517,7 +7518,7 @@ task.spawn(function()
 				if not IsAlive(LocalPlayer) then
 					TargetHud.Visible = false
 				end
-			until Settings.TargetHud.Value == false
+			until Settings.UnInject.Value == false or Settings.TargetHud.Value == false
 
 			TargetHud.Visible = false
 		end)
@@ -7575,6 +7576,55 @@ task.spawn(function()
 
 			if Value == false then
 				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local UnInject, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "UnInject", Settings.UnInject.Value, function(CallBack)
+		Settings.UnInject.Value = CallBack
+		
+		task.spawn(function()
+			if Settings.UnInject.Value == true then
+				AlSploit:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.UnInject.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.UnInject.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.UnInject.KeyBind then
+					Settings.UnInject.Value = not Settings.UnInject.Value
+
+					if Settings.UnInject.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.UnInject.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
 			end
 		end)
 	end)
@@ -7719,7 +7769,7 @@ task.spawn(function()
 				end)
 			end
 		end)		
-	until not game
+	until Settings.UnInject.Value == false
 end)
 
 task.spawn(function()
@@ -7747,49 +7797,6 @@ task.spawn(function()
 	task.spawn(function()
 		setfpscap(999)
 	end)
-end)
-
-task.spawn(function()
-	local remote = ReplicatedStorage:WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneDoubleDown');
-	local effects = {
-		'fire_3', 'forest_3', 'cloud_3', 'void_3', 'static_3', 'updraft_2', 
-		'shield_gen_3', 'anti_knockback_2', 'rapid_regen_3', 'execute_3', 
-		'wind_3', 'plunder_2', 'critical_strike_3', 'volley_3', 
-		'grounded_3', 'clingy_3', 'life_steal_3', 'fortune_1'
-	}
-
-	task.spawn(function()
-		repeat 
-			task.wait()
-
-			for i,v in effects do 
-				remote:FireServer({statusEffectType = v})
-			end
-			task.wait(0.8)
-		until not game
-	end);
-	
-	repeat
-		task.wait()
-		
-		local cloneref = cloneref or function(data)
-			return data
-		end
-
-		local getservice = function(service)
-			return cloneref(game:FindService(service))
-		end
-
-		local getrandomvalue = function(tab)
-			return #tab > 0 and tab[math.random(1, #tab)] or ''
-		end
-
-		local remote = getservice('ReplicatedStorage'):WaitForChild('rbxts_include'):WaitForChild('node_modules'):WaitForChild('@rbxts'):WaitForChild('net'):WaitForChild('out'):WaitForChild('_NetManaged'):WaitForChild('RequestFortuneCashOut')
-		remote:FireServer({
-			statusEffectType = 'fortune_1',
-			fortuneStacks = getrandomvalue({999999, 9e9})
-		})
-	until not game
 end)
 
 --atmosphere
