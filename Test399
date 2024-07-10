@@ -4905,6 +4905,101 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local RemoteSpammer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "RemoteSpammer", Settings.RemoteSpammer.Value, function(CallBack)
+		Settings.RemoteSpammer.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if Settings.RemoteSpammer.DragonBreath == true then
+					DragonBreathRemote:FireServer({LocalPlayer})
+				end
+
+				if Settings.RemoteSpammer.Confetti == true then
+					AbilityController:useAbility("PARTY_POPPER")
+				end
+			until Settings.UnInject.Value == true or Settings.RemoteSpammer.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(UtilityTab, Settings.RemoteSpammer.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.RemoteSpammer.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.RemoteSpammer.KeyBind then
+					Settings.RemoteSpammer.Value = not Settings.RemoteSpammer.Value
+
+					if Settings.RemoteSpammer.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.RemoteSpammer.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateMiniToggle(UtilityTab, "DragonBreath", Settings.RemoteSpammer.DragonBreath, LayoutOrder + 2, function(CallBack)
+					Settings.RemoteSpammer.DragonBreath = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateMiniToggle(UtilityTab, "Confetti", Settings.RemoteSpammer.Confetti, LayoutOrder + 3, function(CallBack)
+					Settings.RemoteSpammer.Confetti = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local AutoConsume, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "AutoConsume", Settings.AutoConsume.Value, function(CallBack)
 		Settings.AutoConsume.Value = CallBack
 
@@ -5033,101 +5128,6 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local RemoteSpammer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "RemoteSpammer", Settings.RemoteSpammer.Value, function(CallBack)
-		Settings.RemoteSpammer.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-			
-				if Settings.RemoteSpammer.DragonBreath == true then
-					DragonBreathRemote:FireServer(LocalPlayer)
-				end
-				
-				if Settings.RemoteSpammer.Confetti == true then
-					AbilityController:useAbility("PARTY_POPPER")
-				end
-			until Settings.UnInject.Value == true or Settings.RemoteSpammer.Value == false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(UtilityTab, Settings.RemoteSpammer.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.RemoteSpammer.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.RemoteSpammer.KeyBind then
-					Settings.RemoteSpammer.Value = not Settings.RemoteSpammer.Value
-
-					if Settings.RemoteSpammer.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.RemoteSpammer.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-	
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateMiniToggle(CombatTab, "DragonBreath", Settings.RemoteSpammer.DragonBreath, LayoutOrder + 2, function(CallBack)
-					Settings.RemoteSpammer.DragonBreath = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-	
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateMiniToggle(CombatTab, "Confetti", Settings.RemoteSpammer.Confetti, LayoutOrder + 3, function(CallBack)
-					Settings.RemoteSpammer.Confetti = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
 			end
 		end)
 	end)
