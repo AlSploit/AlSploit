@@ -4075,9 +4075,11 @@ task.spawn(function()
 		Settings.SemiAnticheatDisabler.Value = CallBack
 		
 		task.spawn(function()
-			ControlModule.moveFunction = function(Self, Vector, ...)
+			local OldFunction = ControlModule.moveFunction
+			
+			OldFunction = function(Self, Vector, ...)
 				if Settings.SemiAnticheatDisabler == true and IsAlive(LocalPlayer) and isnetworkowner and not isnetworkowner(LocalPlayer.Character.PrimaryPart) then
-					Vector = LocalPlayer.Character.PrimaryPart.CFrame.LookVector
+					Vector = LocalPlayer.Character.PrimaryPart.Position
 				end
 
 				return OldFunction(Self, Vector, ...)
