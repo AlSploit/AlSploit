@@ -860,7 +860,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration8.lua"
+local SaveFileName = "AlSploitConfiguration10.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -868,6 +868,7 @@ local function CreateSettingsFile()
 	local MetaTable = {__index, DefaultSetting.Properties}
 
 	Settings = {
+		SemiAnticheatDisabler = {KeyBind = "..."},
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
 		RecallPlayerTp = {KeyBind = "..."},
@@ -1043,6 +1044,18 @@ task.spawn(function()
 	if ClientGotten then
 		HannahPromptTriggerRemote = Client:Get("HannahPromptTrigger")
 	end	
+end)
+
+local ControlModule, ControlModuleGotten = nil, false
+
+task.spawn(function()
+	ControlModule = require(game.Players.LocalPlayer.PlayerScripts.PlayerModule).controls
+end)
+
+task.spawn(function()
+	if ControlModule then
+		ControlModuleGotten = true
+	end
 end)
 
 local Flamework, FlameworkGotten = nil, false
@@ -1393,7 +1406,7 @@ local function FindNearestEntity(MaxDistance)
 	local NearestEntityDistance = MaxDistance
 	local NearestEntity = nil
 	local IsNotAPlayer = true
-	
+
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("Drone") do
 			if v.PrimaryPart then
@@ -1406,7 +1419,7 @@ local function FindNearestEntity(MaxDistance)
 			end 
 		end
 	end)
-	
+
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("DiamondGuardian") do
 			if v.PrimaryPart then
@@ -1432,7 +1445,7 @@ local function FindNearestEntity(MaxDistance)
 			end
 		end
 	end)	
-	
+
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("jellyfish") do
 			if v.PrimaryPart then
@@ -1482,16 +1495,16 @@ end
 
 function FindNearestBlock()
 	local NearestBlock, NearestBlockDistance = nil, 9e9
-	
+
 	for i, v in next, CollectionService:GetTagged("block") do
 		local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position).Magnitude
-		
+
 		if Magnitude < NearestBlockDistance then
 			NearestBlockDistance = Magnitude
 			NearestBlock = v
 		end
 	end
-	
+
 	return NearestBlock, NearestBlockDistance
 end
 
@@ -2865,7 +2878,7 @@ local function InfFly()
 		CreateNotification(3, "Slowing down, preventing lagback")
 
 		LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
-	
+
 		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
 		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
 
@@ -3045,7 +3058,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	RunService.Heartbeat:Connect(function(Delta)
+	local Speed = RunService.Heartbeat:Connect(function(Delta)
 		local SpeedRaycastParameters = RaycastParams.new()
 
 		SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
@@ -3062,6 +3075,12 @@ task.spawn(function()
 				end
 			end
 		end)			
+	end)
+	
+	task.spawn(function()
+		repeat task.wait() until Settings.UnInject.Value == true
+		
+		Speed:Disconnect()
 	end)
 end)
 
@@ -3166,7 +3185,7 @@ task.spawn(function()
 				ScytheDisablerAnticheatDisabled = false
 			end
 		until Settings.UnInject.Value == true or Settings.ScytheDisabler.Value == false
-		
+
 		ScytheDisablerAnticheatDisabled = true
 	end)
 
@@ -4052,6 +4071,59 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
+		Settings.SemiAnticheatDisabler.Value = CallBack
+		
+		task.spawn(function()
+			ControlModule.moveFunction = function(self, Vector, ...)
+				if Settings.SemiAnticheatDisabler == true and isnetworkowner and not isnetworkowner(LocalPlayer.Character.PrimaryPart) then
+					Vector = Camera.CFrame.LookVector
+				end
+
+				return OldFunction(self, Vector, ...)
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.SemiAnticheatDisabler.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.SemiAnticheatDisabler.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.SemiAnticheatDisabler.KeyBind then
+					Settings.SemiAnticheatDisabler.Value = not Settings.SemiAnticheatDisabler.Value
+
+					if Settings.SemiAnticheatDisabler.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.SemiAnticheatDisabler.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "NoPlacementCps", Settings.NoPlacementCps.Value, function(CallBack)
 		Settings.NoPlacementCps.Value = CallBack
 
@@ -4334,7 +4406,7 @@ task.spawn(function()
 		task.spawn(function()
 			if Settings.InfiniteFly.Value == true and InfiniteFlyValue == false then
 				InfiniteFlyValue = true
-				
+
 				InfFly()
 			end
 
@@ -4372,7 +4444,7 @@ task.spawn(function()
 					if Settings.InfiniteFly.Value == true then
 						task.spawn(function()
 							InfiniteFlyValue = true
-							
+
 							InfFly()
 						end)
 
@@ -4381,7 +4453,7 @@ task.spawn(function()
 
 					if Settings.InfiniteFly.Value == false then
 						InfiniteFlyValue = false
-						
+
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -4474,15 +4546,13 @@ task.spawn(function()
 				task.wait()
 
 				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
-					for i = 1, 2 do
-						local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
-						local Position = GetServerPosition(ScaffoldCFrame)
-						local Block = GetBlock()
+					local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
+					local Position = GetServerPosition(ScaffoldCFrame)
+					local Block = GetBlock()
 
-						if Block then
-							PlaceBlock(Position, Block)
-						end		
-					end
+					if Block then
+						PlaceBlock(Position, Block)
+					end	
 				end
 			until Settings.UnInject.Value == true or Settings.Scaffold.Value == false			
 		end)
@@ -6529,13 +6599,13 @@ task.spawn(function()
 
 				ColorCorrection.Parent = Camera
 				ColorCorrection.Name = "Atmosphere"
-				
+
 				ColorCorrection.Brightness = 0.1
 				ColorCorrection.TintColor = Color3.new(0.411765, 0.215686, 1)
 				ColorCorrection.Contrast = 0.2
 			end
 		end)	
-		
+
 		task.spawn(function()
 			if Settings.Atmosphere.Value == false and Camera:FindFirstChild("Atmosphere") then
 				Camera.Atmosphere:Destroy()
@@ -7681,11 +7751,11 @@ end)
 task.spawn(function()
 	local UnInject, DropDownButton, LayoutOrder, UIGradient = CreateToggle(GuiTab, "UnInject", Settings.UnInject.Value, function(CallBack)
 		Settings.UnInject.Value = CallBack
-		
+
 		task.spawn(function()
 			if Settings.UnInject.Value == true then
 				Settings.UnInject.Value = false
-				
+
 				AlSploit:Destroy()
 				Blur:Destroy()
 			end
