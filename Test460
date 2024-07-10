@@ -4080,15 +4080,18 @@ task.spawn(function()
 		local Anticheated = false
 
 		local function BypassAnticheat()	
+			print("1")
 			AnticheatedTick = tick()
 
 			task.spawn(function()
 				ControlModule.moveFunction = function(Self, vec, facecam, ...)
 					vec = LocalPlayer.Character.PrimaryPart.CFrame.LookVector
+					print("2")
 					
 					AnticheatedTick = math.huge
 
 					if (tick() - AnticheatedTick) > 3 then
+						print("3")
 						ControlModule.moveFunction = OldMoveFunction
 					end
 
