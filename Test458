@@ -4075,13 +4075,42 @@ task.spawn(function()
 		Settings.SemiAnticheatDisabler.Value = CallBack
 		
 		task.spawn(function()
-			local OldFunction = ControlModule.moveFunction
-			
-			OldFunction = function(Self, Vector, ...)
-				Vector = LocalPlayer.Character.PrimaryPart.CFrame.LookVector * 2
+			local OldMoveFunction = ControlModule.moveFunction
 
-				return OldFunction(Self, Vector, ...)
+			local AnticheatedTick = tick()
+			local Anticheated = false
+
+			local function BypassAnticheat()	
+				AnticheatedTick = tick()
+
+				task.spawn(function()
+					if (tick() - AnticheatedTick) <= 0.5 then
+						ControlModule.moveFunction = function(Self, vec, facecam, ...)
+							vec = game.Players.LocalPlayer.Character.PrimaryPart.CFrame.LookVector
+
+							if (tick() - AnticheatedTick) > 3 then
+								ControlModule.moveFunction = OldMoveFunction
+							end
+
+							return OldMoveFunction(Self, vec, facecam, ...)
+						end
+					end	
+				end)
 			end
+
+			task.spawn(function()
+				repeat
+					task.wait()
+
+					if IsAlive(LocalPlayer) and gethiddenproperty and gethiddenproperty(game.Players.LocalPlayer.Character.PrimaryPart, "NetworkOwnershipRule") == Enum.NetworkOwnership.Manual then
+						if sethiddenproperty then
+							sethiddenproperty(game.Players.LocalPlayer.Character.PrimaryPart, "NetworkOwnershipRule", Enum.NetworkOwnership.Automatic)
+						end
+
+						BypassAnticheat()
+					end
+				until Settings.UnInject.Value == true or Settings.SemiAnticheatDisabler.Value == false
+			end)
 		end)
 	end)
 
