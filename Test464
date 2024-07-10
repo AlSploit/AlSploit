@@ -4077,16 +4077,16 @@ task.spawn(function()
 		local OldMoveFunction = ControlModule.moveFunction
 		
 		local function BypassAnticheat()	
-			ControlModule.moveFunction = function(Self, vec, facecam, ...)
+			ControlModule.moveFunction = function(Self, vec, ...)
 				vec = Camera.CFrame.LookVector
 
-				return OldMoveFunction(Self, vec, facecam, ...)
+				return OldMoveFunction(Self, vec, ...)
 			end
 		end
 
 		task.spawn(function()
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler == true then
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then
 					BypassAnticheat()
 
 					task.wait(4.5)
