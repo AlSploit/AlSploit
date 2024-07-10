@@ -860,7 +860,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration7.lua"
+local SaveFileName = "AlSploitConfiguration8.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -1393,9 +1393,9 @@ local function FindNearestEntity(MaxDistance)
 	local NearestEntityDistance = MaxDistance
 	local NearestEntity = nil
 	local IsNotAPlayer = true
-
+	
 	task.spawn(function()
-		for i, v in next, CollectionService:GetTagged("jellyfish") do
+		for i, v in next, CollectionService:GetTagged("Drone") do
 			if v.PrimaryPart then
 				local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
@@ -1406,7 +1406,7 @@ local function FindNearestEntity(MaxDistance)
 			end 
 		end
 	end)
-
+	
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("DiamondGuardian") do
 			if v.PrimaryPart then
@@ -1432,6 +1432,19 @@ local function FindNearestEntity(MaxDistance)
 			end
 		end
 	end)	
+	
+	task.spawn(function()
+		for i, v in next, CollectionService:GetTagged("jellyfish") do
+			if v.PrimaryPart then
+				local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+				if Distance < NearestEntityDistance and  Distance <= MaxDistance then
+					NearestEntityDistance = Distance
+					NearestEntity = v
+				end
+			end 
+		end
+	end)
 
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("Monster") do
