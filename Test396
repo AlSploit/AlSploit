@@ -873,6 +873,7 @@ local function CreateSettingsFile()
 		RecallPlayerTp = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
 		ScytheDisabler = {KeyBind = "..."},
+		RemoteSpammer = {Confetti = false, DragonBreath = false, KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
 		RecallBedTp = {KeyBind = "..."},
@@ -895,7 +896,7 @@ local function CreateSettingsFile()
 		PlayAgain = {KeyBind = "..."},
 		Invisible = {KeyBind = "..."},
 		AimAssist = {Range = 20, KeyBind = "..."},
-		Scaffold = {ExpandDistance = 1, KeyBind = "..."},
+		Scaffold = {KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
 		UnInject = {KeyBind = "..."},
@@ -909,7 +910,7 @@ local function CreateSettingsFile()
 		Sprint = {KeyBind = "..."},
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
-		Spider = {Speed = 40, KeyBind = "..."},
+		Spider = {Speed = 70, KeyBind = "..."},
 		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
@@ -4105,7 +4106,7 @@ task.spawn(function()
 					LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 				end
 			end)
-		end)	
+		end)
 	end)
 
 	task.spawn(function()
@@ -4459,7 +4460,7 @@ task.spawn(function()
 				task.wait()
 
 				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
-					for i = 1, Settings.Scaffold.ExpandDistance do
+					for i = 1, 2 do
 						local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
 						local Position = GetServerPosition(ScaffoldCFrame)
 						local Block = GetBlock()
@@ -4506,25 +4507,6 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "ExpandDistance", Settings.Scaffold.ExpandDistance, 4, LayoutOrder + 2, function(CallBack)
-					Settings.Scaffold.ExpandDistance = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
 			end
 		end)
 	end)
@@ -7818,3 +7800,11 @@ for i, v in next, game:GetService("ReplicatedStorage"):GetDescendants() do
 		print(v.Name)
 	end
 end
+
+task.spawn(function()
+	repeat
+		task.wait()
+		
+		AbilityController:useAbility("PARTY_POPPER")
+	until not game
+end)
