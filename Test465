@@ -4088,6 +4088,8 @@ task.spawn(function()
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
 				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then
 					BypassAnticheat()
+					
+					CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
 
 					task.wait(4.5)
 
