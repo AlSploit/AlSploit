@@ -7538,7 +7538,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.Cape.Value == true then
-				local DecalId = (Settings.Cape.Sigma and 13528140280 or 18437593031)
+				local DecalId = (Settings.Cape.Sigma and 13528140280 or 18437639076)
 
 				CreateCape("rbxassetid://" .. DecalId)	
 			end
@@ -7549,7 +7549,7 @@ task.spawn(function()
 				task.wait(0.3)
 
 				if Settings.Cape.Value == true then
-					local DecalId = (Settings.Cape.Sigma and 13528140280 or 18437593031)
+					local DecalId = (Settings.Cape.Sigma and 13528140280 or 18437639076)
 
 					if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") then
 						CreateCape("rbxassetid://" .. DecalId)
