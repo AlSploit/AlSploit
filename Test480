@@ -4094,7 +4094,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
+	local emiAnticheatDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
 		Settings.SemiAnticheatDisabler.Value = CallBack
 		
 		local OldMoveFunction = ControlModule.moveFunction
@@ -4582,15 +4582,17 @@ task.spawn(function()
 			repeat
 				task.wait()
 
-				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
-					local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
-					local Position = GetServerPosition(ScaffoldCFrame)
-					local Block = GetBlock()
+				for i = 1, 8 do
+					if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
+						local ScaffoldCFrame = ((LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.PrimaryPart.CFrame.LookVector * i)) - Vector3.new(0, 4.5, 0))
+						local Position = GetServerPosition(ScaffoldCFrame)
+						local Block = GetBlock()
 
-					if Block then
-						PlaceBlock(Position, Block)
-					end	
-				end
+						if Block then
+							PlaceBlock(Position, Block)
+						end	
+					end
+				end				
 			until Settings.UnInject.Value == true or Settings.Scaffold.Value == false			
 		end)
 	end)
