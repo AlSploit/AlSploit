@@ -860,7 +860,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration10.lua"
+local SaveFileName = "AlSploitConfiguration11.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -874,7 +874,7 @@ local function CreateSettingsFile()
 		RecallPlayerTp = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
 		ScytheDisabler = {KeyBind = "..."},
-		RemoteSpammer = {Confetti = false, DragonBreath = false, KeyBind = "..."},
+		EffectSpammer = {Confetti = false, DragonBreath = false, KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
 		RecallBedTp = {KeyBind = "..."},
@@ -5003,21 +5003,21 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local RemoteSpammer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "RemoteSpammer", Settings.RemoteSpammer.Value, function(CallBack)
-		Settings.RemoteSpammer.Value = CallBack
+	local EffectSpammer, DropDownButton, LayoutOrder, UIGradient = CreateToggle(UtilityTab, "EffectSpammer", Settings.EffectSpammer.Value, function(CallBack)
+		Settings.EffectSpammer.Value = CallBack
 
 		task.spawn(function()
 			repeat
 				task.wait()
 
-				if Settings.RemoteSpammer.DragonBreath == true then
+				if Settings.EffectSpammer.DragonBreath == true then
 					DragonBreathRemote:FireServer({LocalPlayer})
 				end
 
-				if Settings.RemoteSpammer.Confetti == true then
+				if Settings.EffectSpammer.Confetti == true then
 					AbilityController:useAbility("PARTY_POPPER")
 				end
-			until Settings.UnInject.Value == true or Settings.RemoteSpammer.Value == false
+			until Settings.UnInject.Value == true or Settings.EffectSpammer.Value == false
 		end)
 	end)
 
@@ -5029,8 +5029,8 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateKeyBind(UtilityTab, Settings.RemoteSpammer.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.RemoteSpammer.KeyBind = CallBack
+				InstanceUI = CreateKeyBind(UtilityTab, Settings.EffectSpammer.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.EffectSpammer.KeyBind = CallBack
 				end)
 			end
 
@@ -5043,14 +5043,14 @@ task.spawn(function()
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.RemoteSpammer.KeyBind then
-					Settings.RemoteSpammer.Value = not Settings.RemoteSpammer.Value
+				if Input.KeyCode.Name == Settings.EffectSpammer.KeyBind then
+					Settings.EffectSpammer.Value = not Settings.EffectSpammer.Value
 
-					if Settings.RemoteSpammer.Value == true then
+					if Settings.EffectSpammer.Value == true then
 						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
-					if Settings.RemoteSpammer.Value == false then
+					if Settings.EffectSpammer.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -5066,8 +5066,8 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateMiniToggle(UtilityTab, "DragonBreath", Settings.RemoteSpammer.DragonBreath, LayoutOrder + 2, function(CallBack)
-					Settings.RemoteSpammer.DragonBreath = CallBack
+				InstanceUI = CreateMiniToggle(UtilityTab, "DragonBreath", Settings.EffectSpammer.DragonBreath, LayoutOrder + 2, function(CallBack)
+					Settings.EffectSpammer.DragonBreath = CallBack
 				end)
 			end
 
@@ -5085,8 +5085,8 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateMiniToggle(UtilityTab, "Confetti", Settings.RemoteSpammer.Confetti, LayoutOrder + 3, function(CallBack)
-					Settings.RemoteSpammer.Confetti = CallBack
+				InstanceUI = CreateMiniToggle(UtilityTab, "Confetti", Settings.EffectSpammer.Confetti, LayoutOrder + 3, function(CallBack)
+					Settings.EffectSpammer.Confetti = CallBack
 				end)
 			end
 
@@ -8001,17 +8001,3 @@ end)
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --iscovered() no iscovered() == true yey
-
-for i, v in next, game:GetService("ReplicatedStorage"):GetDescendants() do
-	if v.Name:find("spin") or v.Name:find("dash") then
-		print(v.Name)
-	end
-end
-
-local args = {
-	[1] = {
-		["forgeUpgrade"] = 2
-	}
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetForgeSelectMechanic"):FireServer(unpack(args))
