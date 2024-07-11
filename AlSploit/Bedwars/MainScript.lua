@@ -1269,6 +1269,7 @@ local JadeHammerTick = 0
 local AntiVoidPart = nil
 local DamageBoost = false
 local ZephyrOrb = 0
+local Ping = 0
 
 local FlyValue = false
 local FlyDown = false
@@ -3175,7 +3176,15 @@ task.spawn(function()
 		end
 
 		repeat
-			task.wait(0.01)
+			local WaitTime = (Ping and Ping or 500)
+
+			task.spawn(function()
+				if Ping > 500 then
+					WaitTime = math.huge
+				end
+			end)
+
+			task.wait(WaitTime / 1000)
 
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 
@@ -3687,10 +3696,10 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				local WaitTime = (StatsService.PerformanceStats.Ping:GetValue() and StatsService.PerformanceStats.Ping:GetValue() or 500)
+				local WaitTime = (Ping and Ping or 500)
 
 				task.spawn(function()
-					if StatsService.PerformanceStats.Ping:GetValue() > 500 then
+					if Ping > 500 then
 						WaitTime = math.huge
 					end
 				end)
@@ -7987,12 +7996,27 @@ task.spawn(function()
 
 		ViewModel.RightHand.RightWrist.C1 = C1 * CFrame.Angles(math.rad(0), math.rad(0), math.rad(RotationZ.Value))
 	end)
-
+	
 	task.spawn(function()
 		CreateNotification(5, "AlSploit has loaded!")
+	end)
+
+	task.spawn(function()
+		repeat
+			task.wait()
+			
+			Ping = (StatsService.PerformanceStats.Ping:GetValue() and StatsService.PerformanceStats.Ping:GetValue() or 500)
+		until Settings.UnInject.Value == true
 	end)
 
 	task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+--watermark
+
+--AlSploit rules
+--Remotes full name in variable
+--fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
+--iscovered() no iscovered() == true yey
