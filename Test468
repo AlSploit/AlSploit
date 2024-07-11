@@ -4078,7 +4078,7 @@ task.spawn(function()
 		
 		local function BypassAnticheat()	
 			ControlModule.moveFunction = function(Self, vec, ...)
-				vec = Camera.CFrame.LookVector
+				vec = (Camera.CFrame.LookVector + Vector3.new(0, 10, 0))
 
 				return OldMoveFunction(Self, vec, ...)
 			end
@@ -4090,23 +4090,8 @@ task.spawn(function()
 					BypassAnticheat()
 					
 					CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
-					
-					task.spawn(function()
-						local Part = Instance.new("Part")
-						
-						Part.Parent = game.Workspace
-						Part.Position = Camera.CFrame.LookVector
-						
-						repeat
-							task.wait(1)
-							
-							Part.Position = Part.Position + Camera.CFrame.LookVector
-						until not game
-						
-						Part:Destroy()
-					end)
 
-					task.wait(5.5)
+					task.wait(5)
 
 					ControlModule.moveFunction = OldMoveFunction
 				end 
