@@ -75,7 +75,7 @@ task.spawn(function()
 	OpenButton.BorderSizePixel = 0
 	OpenButton.Position = UDim2.new(0.963, 0, 0.352, 0)
 	OpenButton.Size = UDim2.new(0.0330, 0, 0.0838, 0)
-	OpenButton.Image = "rbxassetid://18413671510"
+	OpenButton.Image = "rbxassetid://18437559135"
 	OpenButton.BackgroundColor3 = Color3.new(0, 0, 0)
 	OpenButton.AutoButtonColor = false
 
@@ -6534,7 +6534,7 @@ task.spawn(function()
 
 						repeat
 							task.wait()
-						until Settings.UnInject.Value == true or (tick() - RecallTick) >= 6.15 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
+						until Settings.UnInject.Value == true or (tick() - RecallTick) >= 6.05 or not IsAlive(LocalPlayer) or Settings.RecallBedTp.Value == false
 
 						local NearestBed = FindNearestBed(false)
 
@@ -7538,7 +7538,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			if Settings.Cape.Value == true then
-				local DecalId = (Settings.Cape.Sigma and 13528140280 or 16331277884)
+				local DecalId = (Settings.Cape.Sigma and 13528140280 or 18437593031)
 
 				CreateCape("rbxassetid://" .. DecalId)	
 			end
@@ -7549,7 +7549,7 @@ task.spawn(function()
 				task.wait(0.3)
 
 				if Settings.Cape.Value == true then
-					local DecalId = (Settings.Cape.Sigma and 13528140280 or 16331277884)
+					local DecalId = (Settings.Cape.Sigma and 13528140280 or 18437593031)
 
 					if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChild("Cape") then
 						CreateCape("rbxassetid://" .. DecalId)
@@ -7996,6 +7996,8 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
+
+--watermark
 
 --AlSploit rules
 --Remotes full name in variable
