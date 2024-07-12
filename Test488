@@ -4133,7 +4133,7 @@ task.spawn(function()
 					Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
 	
 					if Raycast then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / 5))
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / 4))
 						
 						print(Camera.CFrame.LookVector.Magnitude)
 						
