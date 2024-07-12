@@ -2869,8 +2869,7 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
-		local StartLevelPrimaryPart = LocalPlayer.Character.PrimaryPart.Position.Y
-		local StartLevelHead = LocalPlayer.Character.Head.Position.Y
+		local StartLevelHead = LocalPlayer.Character.Head.Position.Y + 1
 
 		local SpoofedCamera = CreateSpoofedCamera()	
 
@@ -2895,7 +2894,7 @@ local function InfFly()
 		LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 
 		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
+		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, (SpoofedCamera.Position.Y - 2), SpoofedCamera.Position.Z))
 
 		SetCamera(LocalPlayer.Character)
 
@@ -3020,8 +3019,8 @@ local function FlyMe()
 						local FlyTeleportPosition = 0
 						local FlyRaycastParameters = RaycastParams.new()
 
-						FlyRaycastParameters.FilterType = Enum.RaycastFilterType.Include
 						FlyRaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+						FlyRaycastParameters.FilterType = Enum.RaycastFilterType.Include
 
 						local FlyRaycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(0, -3000, 0), FlyRaycastParameters)
 
@@ -3073,23 +3072,27 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local Speed = RunService.Heartbeat:Connect(function(Delta)
-		local SpeedRaycastParameters = RaycastParams.new()
+	local Speed
+	
+	task.spawn(function()
+		Speed = RunService.Heartbeat:Connect(function(Delta)
+			local SpeedRaycastParameters = RaycastParams.new()
 
-		SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
+			SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
 
-		task.spawn(function()
-			if Settings.Speed.Value == true and IsAlive(LocalPlayer) then			
-				local SpeedValue = GetSpeed()
-				local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
+			task.spawn(function()
+				if Settings.Speed.Value == true and IsAlive(LocalPlayer) then			
+					local SpeedValue = GetSpeed()
+					local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
 
-				local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedCFrame, SpeedRaycastParameters)
+					local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedCFrame, SpeedRaycastParameters)
 
-				if not Raycast then
-					LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + SpeedCFrame
+					if not Raycast then
+						LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + SpeedCFrame
+					end
 				end
-			end
-		end)			
+			end)			
+		end)
 	end)
 	
 	task.spawn(function()
@@ -3176,7 +3179,7 @@ task.spawn(function()
 		end
 
 		repeat
-			local WaitTime = (Ping and Ping or 500)
+			local WaitTime = (Ping and Ping or 750)
 
 			task.spawn(function()
 				if Ping > 500 then
@@ -3564,10 +3567,10 @@ task.spawn(function()
 		Settings.KillAura.Value = CallBack
 
 		task.spawn(function()
-			repeat
-				task.wait(0)
+			repeat				
+				task.wait(Ping >= 500 and Ping / 1000 or 0)
 
-				if Settings.KillAura.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+				if Settings.KillAura.Value == true and IsAlive(LocalPlayer) then --GetMatchState() ~= 0
 					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.KillAura.Range)
 					local Sword = GetSword()
 
@@ -4094,29 +4097,61 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local emiAnticheatDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
+	local SemiAnticheatDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
 		Settings.SemiAnticheatDisabler.Value = CallBack
 		
 		local OldMoveFunction = ControlModule.moveFunction
 		
+		local MultiplyValue = ((GetSpeed() + 20) * 2.51)
+		local ClonePosition = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.PrimaryPart.CFrame.LookVector * MultiplyValue)
+		
+		local Clone = nil
+		
+		local function CreateClone()
+			LocalPlayer.Character.Archivable = true
+
+			Clone = LocalPlayer.Character:Clone()
+
+			Clone.Parent = WorkSpace
+			Clone.Name = "Clone"
+
+			Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
+			
+			Camera.CameraSubject = Clone			
+		end
+		
 		local function BypassAnticheat()	
 			ControlModule.moveFunction = function(Self, vec, ...)
-				vec = (Camera.CFrame.LookVector + Vector3.new(0, 0.25, 0))
+				local RaycastParameters = RaycastParams.new()
 
+				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+
+				local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
+
+				if Raycast then
+					Clone.PrimaryPart.CFrame = Raycast.Position
+				end
+				
 				return OldMoveFunction(Self, vec, ...)
 			end
 		end
 
 		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+			
+			task.wait(3)
+			
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
 				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then
-					BypassAnticheat()
-					
 					CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
+					
+					BypassAnticheat()
+					CreateClone()
 
 					task.wait(4.5)
-
-					ControlModule.moveFunction = OldMoveFunction
+					
+					Clone:Destroy()
 				end 
 			end)
 		end)
@@ -4810,23 +4845,19 @@ task.spawn(function()
 		Settings.Spider.Value = CallBack
 
 		task.spawn(function()
-			if Settings.Spider.Value == true then
-				task.spawn(function()
-					repeat
-						task.wait()
+			repeat
+				task.wait()
 
-						if IsAlive(LocalPlayer) and FlyValue == false then											
-							local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
+				if IsAlive(LocalPlayer) and FlyValue == false then											
+					local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
 
-							local BlockRay = FindPlacedBlock(LocalPlayer.Character.PrimaryPart.Position + ((MoveDirection * 2) - Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight, 0)))				
+					local BlockRay = FindPlacedBlock(LocalPlayer.Character.PrimaryPart.Position + ((MoveDirection * 2) - Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight, 0)))				
 
-							if BlockRay then
-								LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, Settings.Spider.Speed, LocalPlayer.Character.PrimaryPart.Velocity.Z)							
-							end
-						end
-					until Settings.UnInject.Value == true or Settings.Spider.Value == false
-				end)
-			end
+					if BlockRay then
+						LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, Settings.Spider.Speed, LocalPlayer.Character.PrimaryPart.Velocity.Z)							
+					end
+				end
+			until Settings.UnInject.Value == true or Settings.Spider.Value == false
 		end)
 	end)
 
@@ -5019,7 +5050,15 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 750)
+
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
 
 				if Settings.EffectSpammer.DragonBreath == true then
 					DragonBreathRemote:FireServer({LocalPlayer})
@@ -8016,9 +8055,33 @@ task.spawn(function()
 	end)
 end)
 
+ReplicatedStorage.rbxts_include.node_modules["@rbxts"].net.out._NetManaged.RequestFortuneDoubleDown:FireServer({statusEffectType = 'fortune_1'})
+
 --watermark
+--recall fix
+--ping fix
+--semidisabler fix
 
 --AlSploit rules
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --iscovered() no iscovered() == true yey
+
+local lightingService = game:GetService("Lighting")
+
+sethiddenproperty(lightingService, "Technology", "ShadowMap")
+lightingService.Ambient = Color3.fromRGB(69, 69, 69)
+lightingService.Brightness = 3
+lightingService.EnvironmentDiffuseScale = 1
+lightingService.EnvironmentSpecularScale = 1
+lightingService.OutdoorAmbient = Color3.fromRGB(69, 69, 69)
+lightingService.Atmosphere.Density = 0.1
+lightingService.Atmosphere.Offset = 0.25
+lightingService.Atmosphere.Color = Color3.fromRGB(198, 198, 198)
+lightingService.Atmosphere.Decay = Color3.fromRGB(104, 112, 124)
+lightingService.Atmosphere.Glare = 0
+lightingService.Atmosphere.Haze = 0
+lightingService.ClockTime = 13
+lightingService.GeographicLatitude = 0
+lightingService.GlobalShadows = false
+lightingService.TimeOfDay = "13:00:00"
