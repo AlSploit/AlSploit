@@ -4117,7 +4117,7 @@ task.spawn(function()
 
 			Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
 			
-			Camera.CameraSubject = Clone			
+			Camera.CameraSubject = Clone.Humanoid	
 		end
 		
 		local function BypassAnticheat()	
@@ -4134,15 +4134,15 @@ task.spawn(function()
 	
 					if Raycast then
 						Clone.PrimaryPart.CFrame = CFrame.new(Raycast.Position + Vector3.new(0, 5, 0))
+						
+						vec = Camera.CFrame.LookVector
 					end
 				end
 				
 				if not Raycast then
-					Clone.PrimaryPart.CFrame = CFrame.new((Raycast.Position + Vector3.new(0, 5, 0) - Camera.CFrame.LookVector))
+					Clone.PrimaryPart.CFrame = CFrame.new((Clone.PrimaryPart.Position - Camera.CFrame.LookVector))
 				end
-				
-				print(Camera.CFrame.LookVector)
-				
+
 				return OldMoveFunction(Self, vec, ...)
 			end
 		end
