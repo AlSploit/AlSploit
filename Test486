@@ -4102,9 +4102,6 @@ task.spawn(function()
 		
 		local OldMoveFunction = ControlModule.moveFunction
 		
-		local MultiplyValue = ((GetSpeed() + 20) * 2.51)
-		local ClonePosition = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.PrimaryPart.CFrame.LookVector * MultiplyValue)
-		
 		local Clone = nil
 		
 		local function CreateClone()
@@ -4139,12 +4136,6 @@ task.spawn(function()
 					end
 				end
 				
-				if not Raycast then
-					ControlModule.moveFunction = OldMoveFunction
-					
-					Clone.PrimaryPart.CFrame = CFrame.new((Clone.PrimaryPart.Position - Camera.CFrame.LookVector))
-				end
-
 				return OldMoveFunction(Self, vec, ...)
 			end
 		end
