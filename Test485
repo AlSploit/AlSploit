@@ -4129,7 +4129,7 @@ task.spawn(function()
 
 				local Raycast
 				
-				if Clone then
+				if Clone.PrimaryPart then
 					Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
 	
 					if Raycast then
@@ -4140,6 +4140,8 @@ task.spawn(function()
 				end
 				
 				if not Raycast then
+					ControlModule.moveFunction = OldMoveFunction
+					
 					Clone.PrimaryPart.CFrame = CFrame.new((Clone.PrimaryPart.Position - Camera.CFrame.LookVector))
 				end
 
@@ -4159,9 +4161,17 @@ task.spawn(function()
 					BypassAnticheat()
 					CreateClone()
 					
+					task.wait(4.5)
+					
+					if not IsAlive(LocalPlayer) then
+						ControlModule.moveFunction = OldMoveFunction
+						
+						Clone:Destroy()
+					end
+					
 					if IsAlive(LocalPlayer) then
-						task.wait(4.5)
-
+						ControlModule.moveFunction = OldMoveFunction
+						
 						Camera.CameraSubject = LocalPlayer.Character.Humanoid
 						Clone:Destroy()
 					end
