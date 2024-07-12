@@ -4115,6 +4115,22 @@ task.spawn(function()
 			Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
 			
 			Camera.CameraSubject = Clone.Humanoid	
+			
+			task.spawn(function()
+				for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
+					v:Destroy()
+				end
+
+				for i, v in next, Clone:GetChildren() do
+					if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+						v.Transparency = 1
+					end
+
+					if v:IsA("Accessory") then
+						v:FindFirstChild("Handle").Transparency = 1
+					end
+				end
+			end)
 		end
 		
 		local function BypassAnticheat()	
