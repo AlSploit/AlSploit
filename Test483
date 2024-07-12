@@ -4127,11 +4127,21 @@ task.spawn(function()
 				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 
-				local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
-
-				if Raycast then
-					Clone.PrimaryPart.CFrame = CFrame.new(Raycast.Position + Vector3.new(0, 5, 0))
+				local Raycast
+				
+				if Clone then
+					Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
+	
+					if Raycast then
+						Clone.PrimaryPart.CFrame = CFrame.new(Raycast.Position + Vector3.new(0, 5, 0))
+					end
 				end
+				
+				if not Raycast then
+					Clone.PrimaryPart.CFrame = CFrame.new((Raycast.Position + Vector3.new(0, 5, 0) - Camera.CFrame.LookVector))
+				end
+				
+				print(Camera.CFrame.LookVector)
 				
 				return OldMoveFunction(Self, vec, ...)
 			end
