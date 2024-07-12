@@ -4118,6 +4118,9 @@ task.spawn(function()
 		end
 		
 		local function BypassAnticheat()	
+			CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
+			CreateClone()
+						 
 			ControlModule.moveFunction = function(Self, vec, ...)
 				local RaycastParameters = RaycastParams.new()
 
@@ -4130,7 +4133,9 @@ task.spawn(function()
 					Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
 	
 					if Raycast then
-						Clone.PrimaryPart.CFrame = CFrame.new(Raycast.Position + Vector3.new(0, 5, 0))
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / 5))
+						
+						print(Camera.CFrame.LookVector.Magnitude)
 						
 						vec = Camera.CFrame.LookVector
 					end
@@ -4146,11 +4151,8 @@ task.spawn(function()
 			task.wait(3)
 			
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then
-					CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
-					
-					BypassAnticheat()
-					CreateClone()
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then					
+					BypassAnticheat()			
 					
 					task.wait(4.5)
 					
