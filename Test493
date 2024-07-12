@@ -4144,9 +4144,9 @@ task.spawn(function()
 				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 				
 				if Clone.PrimaryPart then
-					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
-					local Raycast2 = WorkSpace:Raycast((Clone.PrimaryPart.Position + (Camera.CFrame.LookVector * 2)), Vector3.new(0, -1000, 0), RaycastParameters)
-	
+					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -9999, 0), RaycastParameters)
+					local Raycast2 = WorkSpace:Raycast((Clone.PrimaryPart.Position - Vector3.new(0, 10, 0)), (Vector3.new(0, -9999, 0) + (Camera.CFrame.LookVector * 2)), RaycastParameters)
+
 					if Raycast or Raycast2 then
 						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / 2.8))
 						
