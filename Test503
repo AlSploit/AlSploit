@@ -4216,142 +4216,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local AntiLagback, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AntiLagback", Settings.AntiLagback.Value, function(CallBack)
-		Settings.AntiLagback.Value = CallBack
-		
-		local OldMoveFunction = ControlModule.moveFunction
-		
-		local Clone = nil
-		
-		local function CreateClone()
-			LocalPlayer.Character.Archivable = true
-
-			Clone = LocalPlayer.Character:Clone()
-
-			Clone.Parent = WorkSpace
-			Clone.Name = "Clone"
-
-			Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
-			
-			Camera.CameraSubject = Clone.Humanoid	
-			
-			task.spawn(function()
-				for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
-					v:Destroy()
-				end
-
-				for i, v in next, Clone:GetChildren() do
-					if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
-						v.Transparency = 1
-					end
-
-					if v:IsA("Accessory") then
-						v:FindFirstChild("Handle").Transparency = 1
-					end
-				end
-			end)
-		end
-		
-		local function BypassAnticheat()	
-			CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
-			CreateClone()
-						 
-			ControlModule.moveFunction = function(Self, vec, ...)
-				local RaycastParameters = RaycastParams.new()
-
-				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
-				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
-				
-				if Clone.PrimaryPart then
-					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
-					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (Camera.CFrame.LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
-	
-					if Raycast or Raycast2 then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / ((GetSpeed() + 20) / 3.1)))
-						
-						vec = Camera.CFrame.LookVector
-					end
-					
-					if not Clone then
-						if IsAlive(LocalPlayer) then
-							ControlModule.moveFunction = OldMoveFunction
-
-							Camera.CameraSubject = LocalPlayer.Character.Humanoid
-						end
-					end
-				end
-				
-				return OldMoveFunction(Self, vec, ...)
-			end
-		end
-
-		task.spawn(function()
-			repeat task.wait() until GetMatchState() ~= 0
-			
-			task.wait(3)
-			
-			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true then					
-					BypassAnticheat()			
-					
-					task.wait(4.5)
-					
-					if not IsAlive(LocalPlayer) then
-						ControlModule.moveFunction = OldMoveFunction
-						
-						Clone:Destroy()
-					end
-					
-					if IsAlive(LocalPlayer) then
-						ControlModule.moveFunction = OldMoveFunction
-						
-						Camera.CameraSubject = LocalPlayer.Character.Humanoid
-						Clone:Destroy()
-					end
-				end 
-			end)
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.AntiLagback.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.AntiLagback.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.AntiLagback.KeyBind then
-					Settings.AntiLagback.Value = not Settings.AntiLagback.Value
-
-					if Settings.AntiLagback.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.AntiLagback.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "NoPlacementCps", Settings.NoPlacementCps.Value, function(CallBack)
 		Settings.NoPlacementCps.Value = CallBack
 
@@ -4534,6 +4398,142 @@ task.spawn(function()
 
 			if Value == false then
 				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AntiLagback, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AntiLagback", Settings.AntiLagback.Value, function(CallBack)
+		Settings.AntiLagback.Value = CallBack
+
+		local OldMoveFunction = ControlModule.moveFunction
+
+		local Clone = nil
+
+		local function CreateClone()
+			LocalPlayer.Character.Archivable = true
+
+			Clone = LocalPlayer.Character:Clone()
+
+			Clone.Parent = WorkSpace
+			Clone.Name = "Clone"
+
+			Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
+
+			Camera.CameraSubject = Clone.Humanoid	
+
+			task.spawn(function()
+				for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
+					v:Destroy()
+				end
+
+				for i, v in next, Clone:GetChildren() do
+					if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+						v.Transparency = 1
+					end
+
+					if v:IsA("Accessory") then
+						v:FindFirstChild("Handle").Transparency = 1
+					end
+				end
+			end)
+		end
+
+		local function BypassAnticheat()	
+			CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
+			CreateClone()
+
+			ControlModule.moveFunction = function(Self, vec, ...)
+				local RaycastParameters = RaycastParams.new()
+
+				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+
+				if Clone.PrimaryPart then
+					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
+					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (Camera.CFrame.LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
+
+					if Raycast or Raycast2 then
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / ((GetSpeed() + 20) / 3)))
+
+						vec = Camera.CFrame.LookVector
+					end
+
+					if not Clone then
+						if IsAlive(LocalPlayer) then
+							ControlModule.moveFunction = OldMoveFunction
+
+							Camera.CameraSubject = LocalPlayer.Character.Humanoid
+						end
+					end
+				end
+
+				return OldMoveFunction(Self, vec, ...)
+			end
+		end
+
+		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+
+			task.wait(3)
+
+			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true then					
+					BypassAnticheat()			
+
+					task.wait(4.5)
+
+					if not IsAlive(LocalPlayer) then
+						ControlModule.moveFunction = OldMoveFunction
+
+						Clone:Destroy()
+					end
+
+					if IsAlive(LocalPlayer) then
+						ControlModule.moveFunction = OldMoveFunction
+
+						Camera.CameraSubject = LocalPlayer.Character.Humanoid
+						Clone:Destroy()
+					end
+				end 
+			end)
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AntiLagback.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AntiLagback.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AntiLagback.KeyBind then
+					Settings.AntiLagback.Value = not Settings.AntiLagback.Value
+
+					if Settings.AntiLagback.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AntiLagback.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
 			end
 		end)
 	end)
@@ -6769,79 +6769,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local OldTheme, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "OldTheme", Settings.OldTheme.Value, function(CallBack)
-		Settings.OldTheme.Value = CallBack
-
-		task.spawn(function()
-			if Settings.OldTheme.Value == true then
-				LightingService.Ambient = Color3.new(0.270588, 0.270588, 0.270588)
-				LightingService.Brightness = 3
-				LightingService.EnvironmentDiffuseScale = 1
-				LightingService.EnvironmentSpecularScale = 1
-				LightingService.OutdoorAmbient = Color3.new(0.270588, 0.270588, 0.270588)
-				LightingService.Atmosphere.Density = 0.1
-				LightingService.Atmosphere.Offset = 0.25
-				LightingService.Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
-				LightingService.Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
-				LightingService.Atmosphere.Glare = 0
-				LightingService.Atmosphere.Haze = 0
-				LightingService.ClockTime = 13
-				LightingService.GeographicLatitude = 0
-				LightingService.GlobalShadows = false
-				LightingService.TimeOfDay = "13:00:00"
-			end			
-		end)			
-
-		task.spawn(function()
-			if Settings.OldTheme.Value == false then
-				local NameTag = ReplicatedStorage:FindFirstChild("Nametag")
-
-				if IsAlive(LocalPlayer) and NameTag and not LocalPlayer.Character.Head:FindFirstChild("Nametag") then
-					NameTag.Parent = LocalPlayer.Character.Head
-				end
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.OldTheme.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.OldTheme.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.OldTheme.KeyBind then
-					Settings.OldTheme.Value = not Settings.OldTheme.Value
-
-					if Settings.OldTheme.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.OldTheme.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local NoNameTag, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "NoNameTag", Settings.NoNameTag.Value, function(CallBack)
 		Settings.NoNameTag.Value = CallBack
 
@@ -7173,6 +7100,79 @@ task.spawn(function()
 					end
 
 					if Settings.GalaxySky.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local OldTheme, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "OldTheme", Settings.OldTheme.Value, function(CallBack)
+		Settings.OldTheme.Value = CallBack
+
+		task.spawn(function()
+			if Settings.OldTheme.Value == true then
+				LightingService.Ambient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.Brightness = 3
+				LightingService.EnvironmentDiffuseScale = 1
+				LightingService.EnvironmentSpecularScale = 1
+				LightingService.OutdoorAmbient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.Atmosphere.Density = 0.1
+				LightingService.Atmosphere.Offset = 0.25
+				LightingService.Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
+				LightingService.Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
+				LightingService.Atmosphere.Glare = 0
+				LightingService.Atmosphere.Haze = 0
+				LightingService.ClockTime = 13
+				LightingService.GeographicLatitude = 0
+				LightingService.GlobalShadows = false
+				LightingService.TimeOfDay = "13:00:00"
+			end			
+		end)			
+
+		task.spawn(function()
+			if Settings.OldTheme.Value == false then
+				local NameTag = ReplicatedStorage:FindFirstChild("Nametag")
+
+				if IsAlive(LocalPlayer) and NameTag and not LocalPlayer.Character.Head:FindFirstChild("Nametag") then
+					NameTag.Parent = LocalPlayer.Character.Head
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.OldTheme.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.OldTheme.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.OldTheme.KeyBind then
+					Settings.OldTheme.Value = not Settings.OldTheme.Value
+
+					if Settings.OldTheme.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.OldTheme.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
