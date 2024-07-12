@@ -860,7 +860,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration11.lua"
+local SaveFileName = "AlSploitConfiguration12.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -868,7 +868,7 @@ local function CreateSettingsFile()
 	local MetaTable = {__index, DefaultSetting.Properties}
 
 	Settings = {
-		SemiAnticheatDisabler = {KeyBind = "..."},
+		AntiLagback = {KeyBind = "..."},
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
 		RecallPlayerTp = {KeyBind = "..."},
@@ -892,6 +892,7 @@ local function CreateSettingsFile()
 		WinterSky = {KeyBind = "..."},
 		NoNameTag = {KeyBind = "..."},
 		AntiStaff = {Kick = false, KeyBind = "..."},
+		Watermark = {KeyBind = "..."},
 		AutoToxic = {KeyBind = "..."},
 		GalaxySky = {KeyBind = "..."},
 		PlayAgain = {KeyBind = "..."},
@@ -900,6 +901,7 @@ local function CreateSettingsFile()
 		Scaffold = {KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
+		OldTheme = {KeyBind = "..."},
 		UnInject = {KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
 		PlayerTp = {KeyBind = "..."},
@@ -912,7 +914,7 @@ local function CreateSettingsFile()
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 70, KeyBind = "..."},
-		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
+		TargetStrafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
@@ -3310,6 +3312,123 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local TargetStrafe, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "TargetStrafe", Settings.TargetStrafe.Value, function(CallBack)
+		Settings.TargetStrafe.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				if IsAlive(LocalPlayer) then
+					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.TargetStrafe.Range)
+
+					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
+						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.TargetStrafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+						local TargetStrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.TargetStrafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
+
+						TargetStrafeTween:Play()
+					end
+				end				
+			until Settings.UnInject.Value == true or Settings.TargetStrafe.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(CombatTab, Settings.TargetStrafe.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.TargetStrafe.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.TargetStrafe.KeyBind then
+					Settings.TargetStrafe.Value = not Settings.TargetStrafe.Value
+
+					if Settings.TargetStrafe.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.TargetStrafe.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateMiniToggle(CombatTab, "GoBackwards", Settings.TargetStrafe.GoBackwards, LayoutOrder + 2, function(CallBack)
+					Settings.TargetStrafe.GoBackwards = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(CombatTab, "Speed", Settings.TargetStrafe.Speed, 22, LayoutOrder + 3, function(CallBack)
+					Settings.TargetStrafe.Speed = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.TargetStrafe.Range, 20, LayoutOrder + 4, function(CallBack)
+					Settings.TargetStrafe.Range = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local AutoClicker, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "AutoClicker", Settings.AutoClicker.Value, function(CallBack)
 		Settings.AutoClicker.Value = CallBack
 
@@ -4097,8 +4216,8 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local SemiAnticheatDisabler, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
-		Settings.SemiAnticheatDisabler.Value = CallBack
+	local AntiLagback, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AntiLagback", Settings.AntiLagback.Value, function(CallBack)
+		Settings.AntiLagback.Value = CallBack
 		
 		local OldMoveFunction = ControlModule.moveFunction
 		
@@ -4172,7 +4291,7 @@ task.spawn(function()
 			task.wait(3)
 			
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then					
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true then					
 					BypassAnticheat()			
 					
 					task.wait(4.5)
@@ -4202,8 +4321,8 @@ task.spawn(function()
 			Value = not Value
 
 			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.SemiAnticheatDisabler.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.SemiAnticheatDisabler.KeyBind = CallBack
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AntiLagback.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AntiLagback.KeyBind = CallBack
 				end)
 			end
 
@@ -4216,14 +4335,14 @@ task.spawn(function()
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.SemiAnticheatDisabler.KeyBind then
-					Settings.SemiAnticheatDisabler.Value = not Settings.SemiAnticheatDisabler.Value
+				if Input.KeyCode.Name == Settings.AntiLagback.KeyBind then
+					Settings.AntiLagback.Value = not Settings.AntiLagback.Value
 
-					if Settings.SemiAnticheatDisabler.Value == true then
+					if Settings.AntiLagback.Value == true then
 						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
 					end
 
-					if Settings.SemiAnticheatDisabler.Value == false then
+					if Settings.AntiLagback.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -4702,123 +4821,6 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local Strafe, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Strafe", Settings.Strafe.Value, function(CallBack)
-		Settings.Strafe.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-
-				if IsAlive(LocalPlayer) then
-					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
-
-					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
-						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-						local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
-
-						StrafeTween:Play()
-					end
-				end				
-			until Settings.UnInject.Value == true or Settings.Strafe.Value == false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.Strafe.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.Strafe.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.Strafe.KeyBind then
-					Settings.Strafe.Value = not Settings.Strafe.Value
-
-					if Settings.Strafe.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.Strafe.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateMiniToggle(BlatantTab, "GoBackwards", Settings.Strafe.GoBackwards, LayoutOrder + 2, function(CallBack)
-					Settings.Strafe.GoBackwards = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Strafe.Speed, 22, LayoutOrder + 3, function(CallBack)
-					Settings.Strafe.Speed = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 20, LayoutOrder + 4, function(CallBack)
-					Settings.Strafe.Range = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
 			end
 		end)
 	end)
@@ -6767,6 +6769,79 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local OldTheme, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "OldTheme", Settings.OldTheme.Value, function(CallBack)
+		Settings.OldTheme.Value = CallBack
+
+		task.spawn(function()
+			if Settings.OldTheme.Value == true then
+				LightingService.Ambient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.Brightness = 3
+				LightingService.EnvironmentDiffuseScale = 1
+				LightingService.EnvironmentSpecularScale = 1
+				LightingService.OutdoorAmbient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.Atmosphere.Density = 0.1
+				LightingService.Atmosphere.Offset = 0.25
+				LightingService.Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
+				LightingService.Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
+				LightingService.Atmosphere.Glare = 0
+				LightingService.Atmosphere.Haze = 0
+				LightingService.ClockTime = 13
+				LightingService.GeographicLatitude = 0
+				LightingService.GlobalShadows = false
+				LightingService.TimeOfDay = "13:00:00"
+			end			
+		end)			
+
+		task.spawn(function()
+			if Settings.OldTheme.Value == false then
+				local NameTag = ReplicatedStorage:FindFirstChild("Nametag")
+
+				if IsAlive(LocalPlayer) and NameTag and not LocalPlayer.Character.Head:FindFirstChild("Nametag") then
+					NameTag.Parent = LocalPlayer.Character.Head
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.OldTheme.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.OldTheme.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.OldTheme.KeyBind then
+					Settings.OldTheme.Value = not Settings.OldTheme.Value
+
+					if Settings.OldTheme.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.OldTheme.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local NoNameTag, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "NoNameTag", Settings.NoNameTag.Value, function(CallBack)
 		Settings.NoNameTag.Value = CallBack
 
@@ -8092,33 +8167,12 @@ task.spawn(function()
 	end)
 end)
 
-ReplicatedStorage.rbxts_include.node_modules["@rbxts"].net.out._NetManaged.RequestFortuneDoubleDown:FireServer({statusEffectType = 'fortune_1'})
-
 --watermark
 --recall fix
 --ping fix
---semidisabler fix
+--make fpsboost and oldtheme work when false
 
 --AlSploit rules
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --iscovered() no iscovered() == true yey
-
-local lightingService = game:GetService("Lighting")
-
-sethiddenproperty(lightingService, "Technology", "ShadowMap")
-lightingService.Ambient = Color3.fromRGB(69, 69, 69)
-lightingService.Brightness = 3
-lightingService.EnvironmentDiffuseScale = 1
-lightingService.EnvironmentSpecularScale = 1
-lightingService.OutdoorAmbient = Color3.fromRGB(69, 69, 69)
-lightingService.Atmosphere.Density = 0.1
-lightingService.Atmosphere.Offset = 0.25
-lightingService.Atmosphere.Color = Color3.fromRGB(198, 198, 198)
-lightingService.Atmosphere.Decay = Color3.fromRGB(104, 112, 124)
-lightingService.Atmosphere.Glare = 0
-lightingService.Atmosphere.Haze = 0
-lightingService.ClockTime = 13
-lightingService.GeographicLatitude = 0
-lightingService.GlobalShadows = false
-lightingService.TimeOfDay = "13:00:00"
