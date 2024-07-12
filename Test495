@@ -2869,7 +2869,7 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
-		local StartLevelHead = LocalPlayer.Character.Head.Position.Y
+		local StartLevelHead = LocalPlayer.Character.Head.Position.Y + 0.1
 
 		local SpoofedCamera = CreateSpoofedCamera()	
 
@@ -4144,11 +4144,11 @@ task.spawn(function()
 				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 				
 				if Clone.PrimaryPart then
-					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -9999, 0), RaycastParameters)
-					local Raycast2 = WorkSpace:Raycast((Clone.PrimaryPart.Position - Vector3.new(0, 10, 0)), (Vector3.new(0, -9999, 0) + (Camera.CFrame.LookVector * 3)), RaycastParameters)
-
-					if Raycast or Raycast2 then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / 2.9))
+					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
+					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 10, 0)) + (Camera.CFrame.LookVector * 1.8)), Vector3.new(0, -1000, 0), RaycastParameters)
+	
+					if Raycast then
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / 2.8))
 						
 						vec = Camera.CFrame.LookVector
 					end
