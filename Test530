@@ -1295,8 +1295,8 @@ local InfiniteFlyValue = false
 local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
-local InfiniteFlyTick = 0
 local JadeHammerTick = 0
+local AnticheatTick = 0
 local AntiVoidPart = nil
 local DamageBoost = false
 local ZephyrOrb = 0
@@ -2259,8 +2259,8 @@ function GetSpeed()
 			Speed = Speed + 35
 		end
 
-		if (tick() - InfiniteFlyTick) <= 0.8 then
-			Speed = Speed - 10
+		if (tick() - AnticheatTick) <= 0.3 then
+			Speed = Speed - 8
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
@@ -2902,7 +2902,7 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
-		local StartLevelHead = LocalPlayer.Character.Head.Position.Y + 0.4
+		local StartLevelHead = (LocalPlayer.Character.Head.Position.Y - 0.1)
 
 		local SpoofedCamera = CreateSpoofedCamera()	
 
@@ -2920,7 +2920,7 @@ local function InfFly()
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
 		until Settings.UnInject.Value == true or InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 
-		InfiniteFlyTick = tick()
+		AnticheatTick = tick()
 
 		CreateNotification(3, "Slowing down, preventing lagback")
 
@@ -4464,15 +4464,17 @@ task.spawn(function()
 
 				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+				
+				local LookVector = Vector3.new(Camera.CFrame.LookVector.X, 0, Camera.CFrame.LookVector.Z).Unit
 
 				if Clone.PrimaryPart then
-					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + Camera.CFrame.LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
-					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (Camera.CFrame.LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
+					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
+					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
 
 					if Raycast or Raycast2 then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / (180 / (GetSpeed() + 20))))
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (LookVector / (180 / (GetSpeed() + 20))))
 
-						vec = Camera.CFrame.LookVector + Vector3.new(0, 1.5, 0)
+						vec = LookVector
 					end
 
 					if not Clone then
@@ -4510,6 +4512,9 @@ task.spawn(function()
 
 						Camera.CameraSubject = LocalPlayer.Character.Humanoid
 						Clone:Destroy()
+						
+						CreateNotification(2, "Bypassed Anticheat")
+						AnticheatTick = tick()
 					end
 				end 
 			end)
@@ -8247,7 +8252,7 @@ task.spawn(function()
 			local Cpu =  StatsService.PerformanceStats.CPU:GetValue()
 			local Gpu =  StatsService.PerformanceStats.GPU:GetValue()
 
-			local DevicePerformance = ((PrimitivesCount / 100) + Received + Memory + Ping + Sent + Cpu + Gpu)
+			local DevicePerformance = ((PrimitivesCount / 75) + Received + Memory + Ping + Sent + Cpu + Gpu)
 			
 			WaitTime = (DevicePerformance / PrimitivesCount)
 
@@ -8265,7 +8270,6 @@ game.Players.LocalPlayer.Chatted:Connect(function(Message)
 	end
 end)
 
---watermark
 --recall fix
 --longjump
 
@@ -8273,3 +8277,17 @@ end)
 --Remotes full name in variable
 --fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
 --iscovered() no iscovered() == true yey
+
+
+local Bird = Instance.new("MeshPart")
+
+Bird.Parent = game.Workspace
+Bird.MeshId = "rbxassetid://13656458897"
+Bird.TextureID = "rbxassetid://13656459250"
+Bird.Size = Vector3.new(2.189, 1.789, 2.799)
+
+while task.wait() and IsAlive(LocalPlayer) do
+	Bird.CFrame = CFrame.new(game.Players.LocalPlayer.Character.PrimaryPart.Position + game.Players.LocalPlayer.Character.PrimaryPart.CFrame.LookVector / 2.5) - Vector3.new(0, 2, 0)
+	Bird.Orientation = game.Players.LocalPlayer.Character.PrimaryPart.Orientation
+	Bird.CanCollide = false
+end
