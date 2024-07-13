@@ -2902,7 +2902,7 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
-		local StartLevelHead = LocalPlayer.Character.Head.Position.Y
+		local StartLevelHead = (LocalPlayer.Character.Head.Position.Y + 0.1)
 
 		local SpoofedCamera = CreateSpoofedCamera()	
 
@@ -3638,7 +3638,7 @@ task.spawn(function()
 					local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
 
 					if NearestEntity then
-						local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).unit
+						local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).Unit
 
 						Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
 					end
@@ -4472,7 +4472,7 @@ task.spawn(function()
 					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
 
 					if Raycast or Raycast2 then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (LookVector / (190 / (GetSpeed() + 20))))
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (LookVector / (170 / (GetSpeed() + 20))))
 
 						vec = LookVector
 					end
@@ -8263,30 +8263,3 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
-
-game.Players.LocalPlayer.Chatted:Connect(function(Message)
-	if Message:find(";cmd") then
-		CreateNotification(2, "command initiated")
-	end
-end)
-
---recall fix
---longjump
-
---AlSploit rules
---Remotes full name in variable
---fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
---iscovered() no iscovered() == true yey
-
-local Bird = Instance.new("MeshPart")
-
-Bird.Parent = game.Workspace
-Bird.MeshId = "rbxassetid://13656458897"
-Bird.TextureID = "rbxassetid://13656459250"
-Bird.Size = Vector3.new(2.189, 1.789, 2.799)
-
-while task.wait() do
-	Bird.CFrame = CFrame.new(game.Players.LocalPlayer.Character.PrimaryPart.Position + game.Players.LocalPlayer.Character.PrimaryPart.CFrame.LookVector / 2.5) - Vector3.new(0, 2, 0)
-	Bird.Orientation = game.Players.LocalPlayer.Character.PrimaryPart.Orientation
-	Bird.CanCollide = false
-end
