@@ -4494,7 +4494,7 @@ task.spawn(function()
 			task.wait(3)
 
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true and Settings.RecallPlayerTp == false and Settings.RecallBedTp == false then					
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true and Settings.RecallPlayerTp.Value == false and Settings.RecallBedTp.Value == false then					
 					BypassAnticheat()			
 
 					task.wait(4.5)
