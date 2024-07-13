@@ -4494,7 +4494,7 @@ task.spawn(function()
 			task.wait(3)
 
 			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true then					
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true and Settings.RecallPlayerTp == false and Settings.RecallBedTp == false then					
 					BypassAnticheat()			
 
 					task.wait(4.5)
@@ -6194,6 +6194,8 @@ task.spawn(function()
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
 						TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
+						
+						task.wait((NearestPlayerDistance / 56) / 23)
 
 						Settings.RecallPlayerTp.Value = false
 
@@ -6213,6 +6215,8 @@ task.spawn(function()
 
 								TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
 
+								task.wait((NearestPlayerDistance / 56) / 23)
+								
 								Settings.RecallPlayerTp.Value = false
 
 								UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
@@ -6640,6 +6644,8 @@ task.spawn(function()
 							local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 							TweenToNearestBed((Magnitude / 112) / 23.33)
+							
+							task.wait((Magnitude / 112) / 23)
 
 							Settings.RecallBedTp.Value = false
 
@@ -6662,6 +6668,8 @@ task.spawn(function()
 									local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 									TweenToNearestBed((Magnitude / 112) / 23.33)
+									
+									task.wait((Magnitude / 112) / 23)
 
 									Settings.RecallBedTp.Value = false
 
