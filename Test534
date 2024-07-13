@@ -250,7 +250,7 @@ task.spawn(function()
 		WriteFile = HookFunction(writefile, function(...)
 			CreateLog("[" .. Time .. "]" .. " WriteFile Was Spotted, " .. ... .. ".")
 
-			return RequestAsync(...)
+			return WriteFile(...)
 		end)
 	end)
 end)
