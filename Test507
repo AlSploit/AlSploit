@@ -8216,7 +8216,7 @@ task.spawn(function()
 		repeat
 			task.wait()
 
-			local PrimitivesCount = (StatsService.PrimitivesCount:GetValue() / 20)
+			local PrimitivesCount = (StatsService.PrimitivesCount / 20)
 			local Received = StatsService.PerformanceStats.NetworkReceived:GetValue()
 			local Memory = (StatsService.PerformanceStats.Memory:GetValue() / 20)
 			local Sent = StatsService.PerformanceStats.NetworkSent:GetValue()
