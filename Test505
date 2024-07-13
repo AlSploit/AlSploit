@@ -3317,7 +3317,15 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 500)
+
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
 
 				if IsAlive(LocalPlayer) then
 					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.TargetStrafe.Range)
@@ -3609,7 +3617,15 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 500)
+
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
@@ -3972,7 +3988,15 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 500)
+
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
 
 				local NearestPlayer = FindNearestPlayer(Settings.AntiHit.Range)
 
@@ -4771,9 +4795,17 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 500)
 
-				for i = 1, 8 do
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
+
+				for i = 1, 3 do
 					if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
 						local ScaffoldCFrame = ((LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.PrimaryPart.CFrame.LookVector * i)) - Vector3.new(0, 4.5, 0))
 						local Position = GetServerPosition(ScaffoldCFrame)
@@ -5192,8 +5224,16 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 500)
 
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
+				
 				local SpeedPotion = HasItem("speed_potion")
 				local SpeedPie = HasItem("pie")
 				local Apple = HasItem("apple")
@@ -5830,7 +5870,15 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				local WaitTime = (Ping and Ping or 500)
+
+				task.spawn(function()
+					if Ping > 500 then
+						WaitTime = math.huge
+					end
+				end)
+
+				task.wait(WaitTime / 1000)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					AutoKit()
@@ -8170,7 +8218,7 @@ end)
 --watermark
 --recall fix
 --ping fix
---make fpsboost and oldtheme work when false
+--longjump
 
 --AlSploit rules
 --Remotes full name in variable
