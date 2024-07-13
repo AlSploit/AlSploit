@@ -616,6 +616,35 @@ local function CreateNotification(Duration, Message)
 	end)
 end
 
+local function CreateWatermark()
+	local TextLabel = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local UIGradient = Instance.new("UIGradient")
+
+	TextLabel.Parent = AlSploit
+	TextLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+	TextLabel.BackgroundTransparency = 1.000
+	TextLabel.BorderColor3 = Color3.new(0, 0, 0)
+	TextLabel.BorderSizePixel = 0
+	TextLabel.Position = UDim2.new(0.735, 0, 0, 0)
+	TextLabel.Size = UDim2.new(0.200, 0, 0.183, 0)
+	TextLabel.Font = Enum.Font.GothamBold
+	TextLabel.Text = "AlSploit"
+	TextLabel.TextColor3 = Color3.new(1, 1, 1)
+	TextLabel.TextScaled = true
+	TextLabel.TextSize = 50.000
+	TextLabel.TextWrapped = true
+
+	UITextSizeConstraint.Parent = TextLabel
+	UITextSizeConstraint.MaxTextSize = 50
+
+	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0, 0.6, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.411765, 0.764706, 1))}
+	UIGradient.Rotation = 90
+	UIGradient.Parent = TextLabel
+	
+	return TextLabel
+end
+
 local function CreateTargetHud()
 	local Background = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
@@ -860,7 +889,7 @@ end
 local Settings = {}
 local Loaded = false
 
-local SaveFileName = "AlSploitConfiguration11.lua"
+local SaveFileName = "AlSploitConfiguration12.lua"
 
 local function CreateSettingsFile()
 	local DefaultSetting = {Properties = {Value = false}}
@@ -868,13 +897,14 @@ local function CreateSettingsFile()
 	local MetaTable = {__index, DefaultSetting.Properties}
 
 	Settings = {
-		SemiAnticheatDisabler = {KeyBind = "..."},
+		AntiLagback = {KeyBind = "..."},
 		CustomHealthBar = {KeyBind = "..."},
 		CustomInventory = {KeyBind = "..."},
 		RecallPlayerTp = {KeyBind = "..."},
 		NoPlacementCps = {KeyBind = "..."},
 		ScytheDisabler = {KeyBind = "..."},
 		EffectSpammer = {Confetti = false, DragonBreath = false, KeyBind = "..."},
+		TargetStrafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
 		RecallBedTp = {KeyBind = "..."},
@@ -892,6 +922,7 @@ local function CreateSettingsFile()
 		WinterSky = {KeyBind = "..."},
 		NoNameTag = {KeyBind = "..."},
 		AntiStaff = {Kick = false, KeyBind = "..."},
+		Watermark = {KeyBind = "..."},
 		AutoToxic = {KeyBind = "..."},
 		GalaxySky = {KeyBind = "..."},
 		PlayAgain = {KeyBind = "..."},
@@ -900,6 +931,7 @@ local function CreateSettingsFile()
 		Scaffold = {KeyBind = "..."},
 		KillAura = {Range = 21, CustomAnimation = true, ToolCheck = false, KeyBind = "..."},
 		AntiVoid = {Transparency = 0.65, KeyBind = "..."},
+		OldTheme = {KeyBind = "..."},
 		UnInject = {KeyBind = "..."},
 		HighJump = {KeyBind = "..."},
 		PlayerTp = {KeyBind = "..."},
@@ -912,7 +944,6 @@ local function CreateSettingsFile()
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 70, KeyBind = "..."},
-		Strafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
@@ -1264,11 +1295,13 @@ local InfiniteFlyValue = false
 local CanSeeNearestBed = false
 local FlyBodyVelocity = nil
 local NearestBedFound = false
-local InfiniteFlyTick = 0
 local JadeHammerTick = 0
+local AnticheatTick = 0
 local AntiVoidPart = nil
 local DamageBoost = false
 local ZephyrOrb = 0
+
+local WaitTime = 0
 local Ping = 0
 
 local FlyValue = false
@@ -2226,8 +2259,8 @@ function GetSpeed()
 			Speed = Speed + 35
 		end
 
-		if (tick() - InfiniteFlyTick) <= 0.8 then
-			Speed = Speed - 10
+		if (tick() - AnticheatTick) <= 0.3 then
+			Speed = Speed - 8
 		end
 
 		if (tick() - JadeHammerTick) <= 1.4 then
@@ -2869,8 +2902,7 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
-		local StartLevelPrimaryPart = LocalPlayer.Character.PrimaryPart.Position.Y
-		local StartLevelHead = LocalPlayer.Character.Head.Position.Y
+		local StartLevelHead = (LocalPlayer.Character.Head.Position.Y + 0.1)
 
 		local SpoofedCamera = CreateSpoofedCamera()	
 
@@ -2888,14 +2920,14 @@ local function InfFly()
 			SpoofedCamera.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, SpoofedCamera.Position.Y + (FlyUp and 0.5 or 0) + (FlyDown and -0.5 or 0), LocalPlayer.Character.PrimaryPart.Position.Z)
 		until Settings.UnInject.Value == true or InfiniteFlyValue == false or not IsAlive(LocalPlayer)
 
-		InfiniteFlyTick = tick()
+		AnticheatTick = tick()
 
 		CreateNotification(3, "Slowing down, preventing lagback")
 
 		LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 
 		LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.new(LocalPlayer.Character.HumanoidRootPart.Velocity.X, 0, LocalPlayer.Character.HumanoidRootPart.Velocity.Z)
-		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, StartLevelPrimaryPart, SpoofedCamera.Position.Z))
+		LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(Vector3.new(SpoofedCamera.Position.X, (SpoofedCamera.Position.Y - 2), SpoofedCamera.Position.Z))
 
 		SetCamera(LocalPlayer.Character)
 
@@ -3020,8 +3052,8 @@ local function FlyMe()
 						local FlyTeleportPosition = 0
 						local FlyRaycastParameters = RaycastParams.new()
 
-						FlyRaycastParameters.FilterType = Enum.RaycastFilterType.Include
 						FlyRaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+						FlyRaycastParameters.FilterType = Enum.RaycastFilterType.Include
 
 						local FlyRaycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(0, -3000, 0), FlyRaycastParameters)
 
@@ -3073,23 +3105,27 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local Speed = RunService.Heartbeat:Connect(function(Delta)
-		local SpeedRaycastParameters = RaycastParams.new()
+	local Speed
+	
+	task.spawn(function()
+		Speed = RunService.Heartbeat:Connect(function(Delta)
+			local SpeedRaycastParameters = RaycastParams.new()
 
-		SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
+			SpeedRaycastParameters.FilterDescendantsInstances = {LocalPlayer.Character}
 
-		task.spawn(function()
-			if Settings.Speed.Value == true and IsAlive(LocalPlayer) then			
-				local SpeedValue = GetSpeed()
-				local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
+			task.spawn(function()
+				if Settings.Speed.Value == true and IsAlive(LocalPlayer) then			
+					local SpeedValue = GetSpeed()
+					local SpeedCFrame = LocalPlayer.Character.Humanoid.MoveDirection * SpeedValue * Delta
 
-				local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedCFrame, SpeedRaycastParameters)
+					local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedCFrame, SpeedRaycastParameters)
 
-				if not Raycast then
-					LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + SpeedCFrame
+					if not Raycast then
+						LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + SpeedCFrame
+					end
 				end
-			end
-		end)			
+			end)			
+		end)
 	end)
 	
 	task.spawn(function()
@@ -3176,16 +3212,8 @@ task.spawn(function()
 		end
 
 		repeat
-			local WaitTime = (Ping and Ping or 500)
-
-			task.spawn(function()
-				if Ping > 500 then
-					WaitTime = math.huge
-				end
-			end)
-
-			task.wait(WaitTime / 1000)
-
+			task.wait(WaitTime)
+			
 			local NearestPlayer = FindNearestPlayer(Settings.KillAura.Range)
 
 			Scythe = GetScythe()
@@ -3301,6 +3329,123 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local TargetStrafe, DropDownButton, LayoutOrder, UIGradient = CreateToggle(CombatTab, "TargetStrafe", Settings.TargetStrafe.Value, function(CallBack)
+		Settings.TargetStrafe.Value = CallBack
+
+		task.spawn(function()
+			repeat
+				task.wait(WaitTime)
+				
+				if IsAlive(LocalPlayer) then
+					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.TargetStrafe.Range)
+
+					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
+						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.TargetStrafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+						local TargetStrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.TargetStrafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
+
+						TargetStrafeTween:Play()
+					end
+				end				
+			until Settings.UnInject.Value == true or Settings.TargetStrafe.Value == false
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(CombatTab, Settings.TargetStrafe.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.TargetStrafe.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.TargetStrafe.KeyBind then
+					Settings.TargetStrafe.Value = not Settings.TargetStrafe.Value
+
+					if Settings.TargetStrafe.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.TargetStrafe.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateMiniToggle(CombatTab, "GoBackwards", Settings.TargetStrafe.GoBackwards, LayoutOrder + 2, function(CallBack)
+					Settings.TargetStrafe.GoBackwards = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(CombatTab, "Speed", Settings.TargetStrafe.Speed, 22, LayoutOrder + 3, function(CallBack)
+					Settings.TargetStrafe.Speed = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateSlider(CombatTab, "Range", Settings.TargetStrafe.Range, 20, LayoutOrder + 4, function(CallBack)
+					Settings.TargetStrafe.Range = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
 			end
 		end)
 	end)
@@ -3488,12 +3633,12 @@ task.spawn(function()
 		task.spawn(function()
 			repeat
 				task.wait()
-
+				
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
 
 					if NearestEntity then
-						local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).unit
+						local LookVector = (NearestEntity.PrimaryPart.Position - Camera.CFrame.Position).Unit
 
 						Camera.CFrame = CFrame.new(Camera.CFrame.Position, Camera.CFrame.Position + LookVector)
 					end
@@ -3564,9 +3709,9 @@ task.spawn(function()
 		Settings.KillAura.Value = CallBack
 
 		task.spawn(function()
-			repeat
+			repeat				
 				task.wait(0)
-
+				
 				if Settings.KillAura.Value == true and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.KillAura.Range)
 					local Sword = GetSword()
@@ -3696,19 +3841,11 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				local WaitTime = (Ping and Ping or 500)
-
-				task.spawn(function()
-					if Ping > 500 then
-						WaitTime = math.huge
-					end
-				end)
-
-				task.wait(WaitTime / 1000)
-
+				task.wait(WaitTime)
+				
 				task.spawn(function()		
 					if IsAlive(LocalPlayer) and Settings.RecallPlayerTp.Value == false and Settings.RecallBedTp.Value == false then	
-						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer(math.huge)
+						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
 						if NearestPlayer and (AntiVoidPart and NearestPlayer.Character.PrimaryPart.Position.Y >= AntiVoidPart.Position.Y or true) and not NearestPlayer.Character:FindFirstChildOfClass("ForceField") and NearestPlayerDistance > Settings.KillAura.Range then
 							local BestBow = GetBow()
@@ -3850,8 +3987,8 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
-
+				task.wait(WaitTime)
+				
 				local NearestPlayer = FindNearestPlayer(Settings.AntiHit.Range)
 
 				if IsAlive(LocalPlayer) and NearestPlayer and GetMatchState() ~= 0 then
@@ -4094,73 +4231,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "SemiAnticheatDisabler", Settings.SemiAnticheatDisabler.Value, function(CallBack)
-		Settings.SemiAnticheatDisabler.Value = CallBack
-		
-		local OldMoveFunction = ControlModule.moveFunction
-		
-		local function BypassAnticheat()	
-			ControlModule.moveFunction = function(Self, vec, ...)
-				vec = (Camera.CFrame.LookVector + Vector3.new(0, 0.25, 0))
-
-				return OldMoveFunction(Self, vec, ...)
-			end
-		end
-
-		task.spawn(function()
-			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
-				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.SemiAnticheatDisabler.Value == true then
-					BypassAnticheat()
-					
-					CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
-
-					task.wait(4.5)
-
-					ControlModule.moveFunction = OldMoveFunction
-				end 
-			end)
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.SemiAnticheatDisabler.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.SemiAnticheatDisabler.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.SemiAnticheatDisabler.KeyBind then
-					Settings.SemiAnticheatDisabler.Value = not Settings.SemiAnticheatDisabler.Value
-
-					if Settings.SemiAnticheatDisabler.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.SemiAnticheatDisabler.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
 	local NoPlacementCps, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "NoPlacementCps", Settings.NoPlacementCps.Value, function(CallBack)
 		Settings.NoPlacementCps.Value = CallBack
 
@@ -4276,7 +4346,7 @@ task.spawn(function()
 
 		task.spawn(function()	
 			repeat
-				task.wait(0.1)
+				task.wait(WaitTime)
 
 				task.spawn(function()
 					if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
@@ -4343,6 +4413,147 @@ task.spawn(function()
 
 			if Value == false then
 				InstanceUI:Destroy()
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local AntiLagback, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "AntiLagback", Settings.AntiLagback.Value, function(CallBack)
+		Settings.AntiLagback.Value = CallBack
+
+		local OldMoveFunction = ControlModule.moveFunction
+
+		local Clone = nil
+
+		local function CreateClone()
+			LocalPlayer.Character.Archivable = true
+
+			Clone = LocalPlayer.Character:Clone()
+
+			Clone.Parent = WorkSpace
+			Clone.Name = "Clone"
+
+			Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
+
+			Camera.CameraSubject = Clone.Humanoid	
+
+			task.spawn(function()
+				for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
+					v:Destroy()
+				end
+
+				for i, v in next, Clone:GetChildren() do
+					if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+						v.Transparency = 1
+					end
+
+					if v:IsA("Accessory") then
+						v:FindFirstChild("Handle").Transparency = 1
+					end
+				end
+			end)
+		end
+
+		local function BypassAnticheat()	
+			CreateNotification(3, "Bypassing Anticheat, You Will Be Positioned Towards Your Camera")
+			CreateClone()
+
+			ControlModule.moveFunction = function(Self, vec, ...)
+				local RaycastParameters = RaycastParams.new()
+
+				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+				
+				local LookVector = Vector3.new(Camera.CFrame.LookVector.X, 0, Camera.CFrame.LookVector.Z).Unit
+
+				if Clone.PrimaryPart then
+					local Raycast = WorkSpace:Raycast((Clone.PrimaryPart.Position + LookVector), Vector3.new(0, -1000, 0), RaycastParameters)
+					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
+
+					if Raycast or Raycast2 then
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (LookVector / (170 / (GetSpeed() + 20))))
+
+						vec = LookVector
+					end
+
+					if not Clone then
+						if IsAlive(LocalPlayer) then
+							ControlModule.moveFunction = OldMoveFunction
+
+							Camera.CameraSubject = LocalPlayer.Character.Humanoid
+						end
+					end
+				end
+
+				return OldMoveFunction(Self, vec, ...)
+			end
+		end
+
+		task.spawn(function()
+			repeat task.wait() until GetMatchState() ~= 0
+
+			task.wait(3)
+
+			LocalPlayer:GetAttributeChangedSignal("LastTeleported"):Connect(function()
+				if IsAlive(LocalPlayer) and not LocalPlayer.Character:FindFirstChildWhichIsA("ForceField") and Settings.AntiLagback.Value == true and Settings.RecallPlayerTp.Value == false and Settings.RecallBedTp.Value == false then					
+					BypassAnticheat()			
+
+					task.wait(4.5)
+
+					if not IsAlive(LocalPlayer) then
+						ControlModule.moveFunction = OldMoveFunction
+
+						Clone:Destroy()
+					end
+
+					if IsAlive(LocalPlayer) then
+						ControlModule.moveFunction = OldMoveFunction
+
+						Camera.CameraSubject = LocalPlayer.Character.Humanoid
+						Clone:Destroy()
+						
+						CreateNotification(2, "Bypassed Anticheat")
+						AnticheatTick = tick()
+					end
+				end 
+			end)
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(BlatantTab, Settings.AntiLagback.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.AntiLagback.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.AntiLagback.KeyBind then
+					Settings.AntiLagback.Value = not Settings.AntiLagback.Value
+
+					if Settings.AntiLagback.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.AntiLagback.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
 			end
 		end)
 	end)
@@ -4580,17 +4791,19 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(WaitTime)
+				
+				for i = 1, 3 do
+					if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
+						local ScaffoldCFrame = ((LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.PrimaryPart.CFrame.LookVector * i)) - Vector3.new(0, 4.5, 0))
+						local Position = GetServerPosition(ScaffoldCFrame)
+						local Block = GetBlock()
 
-				if IsAlive(LocalPlayer) and FlyValue == false and GetMatchState() ~= 0 then
-					local ScaffoldCFrame = LocalPlayer.Character.PrimaryPart.Position + (LocalPlayer.Character.Humanoid.MoveDirection * (i * 3.3)) - Vector3.new(0, (LocalPlayer.Character.PrimaryPart.Size.Y / 2) + (LocalPlayer.Character.Humanoid.HipHeight + 1.5), 0)
-					local Position = GetServerPosition(ScaffoldCFrame)
-					local Block = GetBlock()
-
-					if Block then
-						PlaceBlock(Position, Block)
-					end	
-				end
+						if Block then
+							PlaceBlock(Position, Block)
+						end	
+					end
+				end				
 			until Settings.UnInject.Value == true or Settings.Scaffold.Value == false			
 		end)
 	end)
@@ -4628,123 +4841,6 @@ task.spawn(function()
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local Strafe, DropDownButton, LayoutOrder, UIGradient = CreateToggle(BlatantTab, "Strafe", Settings.Strafe.Value, function(CallBack)
-		Settings.Strafe.Value = CallBack
-
-		task.spawn(function()
-			repeat
-				task.wait()
-
-				if IsAlive(LocalPlayer) then
-					local NearestEntity, NearestEntityDistance = FindNearestEntity(Settings.Strafe.Range)
-
-					if GetMatchState() ~= 0 and NearestEntity and (AntiVoidPart and NearestEntity.PrimaryPart.Position.Y > AntiVoidPart.Position.Y or true) then
-						local TweenInformation = TweenInfo.new((NearestEntityDistance / Settings.Strafe.Speed), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-						local StrafeTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = (Settings.Strafe.GoBackwards and CFrame.new(NearestEntity.PrimaryPart.Position - NearestEntity.PrimaryPart.CFrame.LookVector) or NearestEntity.PrimaryPart.Position)})
-
-						StrafeTween:Play()
-					end
-				end				
-			until Settings.UnInject.Value == true or Settings.Strafe.Value == false
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(BlatantTab, Settings.Strafe.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.Strafe.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.Strafe.KeyBind then
-					Settings.Strafe.Value = not Settings.Strafe.Value
-
-					if Settings.Strafe.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.Strafe.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateMiniToggle(BlatantTab, "GoBackwards", Settings.Strafe.GoBackwards, LayoutOrder + 2, function(CallBack)
-					Settings.Strafe.GoBackwards = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Speed", Settings.Strafe.Speed, 22, LayoutOrder + 3, function(CallBack)
-					Settings.Strafe.Speed = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateSlider(BlatantTab, "Range", Settings.Strafe.Range, 20, LayoutOrder + 4, function(CallBack)
-					Settings.Strafe.Range = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
 			end
 		end)
 	end)
@@ -4808,23 +4904,19 @@ task.spawn(function()
 		Settings.Spider.Value = CallBack
 
 		task.spawn(function()
-			if Settings.Spider.Value == true then
-				task.spawn(function()
-					repeat
-						task.wait()
+			repeat
+				task.wait()
 
-						if IsAlive(LocalPlayer) and FlyValue == false then											
-							local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
+				if IsAlive(LocalPlayer) and FlyValue == false then											
+					local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
 
-							local BlockRay = FindPlacedBlock(LocalPlayer.Character.PrimaryPart.Position + ((MoveDirection * 2) - Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight, 0)))				
+					local BlockRay = FindPlacedBlock(LocalPlayer.Character.PrimaryPart.Position + ((MoveDirection * 2) - Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight, 0)))				
 
-							if BlockRay then
-								LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, Settings.Spider.Speed, LocalPlayer.Character.PrimaryPart.Velocity.Z)							
-							end
-						end
-					until Settings.UnInject.Value == true or Settings.Spider.Value == false
-				end)
-			end
+					if BlockRay then
+						LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, Settings.Spider.Speed, LocalPlayer.Character.PrimaryPart.Velocity.Z)							
+					end
+				end
+			until Settings.UnInject.Value == true or Settings.Spider.Value == false
 		end)
 	end)
 
@@ -5017,15 +5109,17 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
+				task.wait(WaitTime)
+				
+				if Settings.RecallPlayerTp.Value == false and Settings.RecallBedTp == false then
+					if Settings.EffectSpammer.DragonBreath == true then
+						DragonBreathRemote:FireServer({LocalPlayer})
+					end
 
-				if Settings.EffectSpammer.DragonBreath == true then
-					DragonBreathRemote:FireServer({LocalPlayer})
-				end
-
-				if Settings.EffectSpammer.Confetti == true then
-					AbilityController:useAbility("PARTY_POPPER")
-				end
+					if Settings.EffectSpammer.Confetti == true then
+						AbilityController:useAbility("PARTY_POPPER")
+					end
+				end			
 			until Settings.UnInject.Value == true or Settings.EffectSpammer.Value == false
 		end)
 	end)
@@ -5112,8 +5206,8 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
-
+				task.wait(WaitTime)
+				
 				local SpeedPotion = HasItem("speed_potion")
 				local SpeedPie = HasItem("pie")
 				local Apple = HasItem("apple")
@@ -5750,8 +5844,8 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait()
-
+				task.wait(WaitTime)
+				
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					AutoKit()
 				end
@@ -6105,6 +6199,8 @@ task.spawn(function()
 						local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
 						TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
+						
+						task.wait((NearestPlayerDistance / 56) / 23)
 
 						Settings.RecallPlayerTp.Value = false
 
@@ -6124,6 +6220,8 @@ task.spawn(function()
 
 								TweenToNearestPlayer((NearestPlayerDistance / 56) / 23.33)
 
+								task.wait((NearestPlayerDistance / 56) / 23)
+								
 								Settings.RecallPlayerTp.Value = false
 
 								UIGradient2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
@@ -6551,6 +6649,8 @@ task.spawn(function()
 							local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 							TweenToNearestBed((Magnitude / 112) / 23.33)
+							
+							task.wait((Magnitude / 112) / 23)
 
 							Settings.RecallBedTp.Value = false
 
@@ -6573,6 +6673,8 @@ task.spawn(function()
 									local Magnitude = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 									TweenToNearestBed((Magnitude / 112) / 23.33)
+									
+									task.wait((Magnitude / 112) / 23)
 
 									Settings.RecallBedTp.Value = false
 
@@ -6763,6 +6865,63 @@ task.spawn(function()
 					end
 
 					if Settings.NoNameTag.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local Watermark, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Watermark", Settings.Watermark.Value, function(CallBack)
+		Settings.Watermark.Value = CallBack
+
+		local Watermark
+
+		task.spawn(function()
+			if Settings.Watermark.Value == true then
+				Watermark = CreateWatermark()
+			end			
+		end)			
+
+		task.spawn(function()
+			if Settings.Watermark.Value == false and Watermark then
+				Watermark:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Watermark.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Watermark.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Watermark.KeyBind then
+					Settings.Watermark.Value = not Settings.Watermark.Value
+
+					if Settings.Watermark.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Watermark.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -7020,6 +7179,79 @@ task.spawn(function()
 					end
 
 					if Settings.GalaxySky.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
+	local OldTheme, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "OldTheme", Settings.OldTheme.Value, function(CallBack)
+		Settings.OldTheme.Value = CallBack
+
+		task.spawn(function()
+			if Settings.OldTheme.Value == true then
+				LightingService.Ambient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.Brightness = 3
+				LightingService.EnvironmentDiffuseScale = 1
+				LightingService.EnvironmentSpecularScale = 1
+				LightingService.OutdoorAmbient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.Atmosphere.Density = 0.1
+				LightingService.Atmosphere.Offset = 0.25
+				LightingService.Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
+				LightingService.Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
+				LightingService.Atmosphere.Glare = 0
+				LightingService.Atmosphere.Haze = 0
+				LightingService.ClockTime = 13
+				LightingService.GeographicLatitude = 0
+				LightingService.GlobalShadows = false
+				LightingService.TimeOfDay = "13:00:00"
+			end			
+		end)			
+
+		task.spawn(function()
+			if Settings.OldTheme.Value == false then
+				local NameTag = ReplicatedStorage:FindFirstChild("Nametag")
+
+				if IsAlive(LocalPlayer) and NameTag and not LocalPlayer.Character.Head:FindFirstChild("Nametag") then
+					NameTag.Parent = LocalPlayer.Character.Head
+				end
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.OldTheme.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.OldTheme.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.OldTheme.KeyBind then
+					Settings.OldTheme.Value = not Settings.OldTheme.Value
+
+					if Settings.OldTheme.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.OldTheme.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
@@ -7410,7 +7642,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait(0.1)
+				task.wait(WaitTime)
 
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestBed = FindNearestBed(true, Settings.Nuker.Range) or nil
@@ -8005,7 +8237,25 @@ task.spawn(function()
 		repeat
 			task.wait()
 			
-			Ping = (StatsService.PerformanceStats.Ping:GetValue() and StatsService.PerformanceStats.Ping:GetValue() or 500)
+			Ping = StatsService.PerformanceStats.Ping:GetValue()
+		until Settings.UnInject.Value == true
+	end)
+	
+	task.spawn(function()
+		repeat
+			task.wait()
+
+			local PrimitivesCount = (StatsService.PrimitivesCount)
+			local Received = StatsService.PerformanceStats.NetworkReceived:GetValue()
+			local Memory = (StatsService.PerformanceStats.Memory:GetValue() / 100)
+			local Sent = StatsService.PerformanceStats.NetworkSent:GetValue()
+			local Cpu =  StatsService.PerformanceStats.CPU:GetValue()
+			local Gpu =  StatsService.PerformanceStats.GPU:GetValue()
+
+			local DevicePerformance = ((PrimitivesCount / 75) + Received + Memory + Ping + Sent + Cpu + Gpu)
+			
+			WaitTime = (DevicePerformance / PrimitivesCount)
+
 		until Settings.UnInject.Value == true
 	end)
 
@@ -8013,10 +8263,3 @@ task.spawn(function()
 		setfpscap(999)
 	end)
 end)
-
---watermark
-
---AlSploit rules
---Remotes full name in variable
---fireserver example :FireServer({petrifyId = PetrifiedPlayer:GetAttribute("PetrifyId")})
---iscovered() no iscovered() == true yey
