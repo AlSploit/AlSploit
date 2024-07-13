@@ -4470,7 +4470,7 @@ task.spawn(function()
 					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (Camera.CFrame.LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
 
 					if Raycast or Raycast2 then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / (200 / (GetSpeed() + 20))))
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / (230 / (GetSpeed() + 20))))
 
 						vec = Camera.CFrame.LookVector + Vector3.new(0, 1.5, 0)
 					end
