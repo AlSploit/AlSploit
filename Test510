@@ -8144,9 +8144,9 @@ task.spawn(function()
 		repeat
 			task.wait()
 
-			local PrimitivesCount = StatsService.PrimitivesCount
+			local PrimitivesCount = (StatsService.PrimitivesCount / 20)
 			local Received = StatsService.PerformanceStats.NetworkReceived:GetValue()
-			local Memory = StatsService.PerformanceStats.Memory:GetValue()
+			local Memory = (StatsService.PerformanceStats.Memory:GetValue() / 20)
 			local Sent = StatsService.PerformanceStats.NetworkSent:GetValue()
 			local Cpu =  StatsService.PerformanceStats.CPU:GetValue()
 			local Gpu =  StatsService.PerformanceStats.GPU:GetValue()
