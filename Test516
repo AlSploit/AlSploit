@@ -3632,7 +3632,7 @@ task.spawn(function()
 
 		task.spawn(function()
 			repeat
-				task.wait(WaitTime)
+				task.wait()
 				
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
 					local NearestEntity = FindNearestEntity(Settings.AimAssist.Range)
@@ -6861,6 +6861,63 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Watermark, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Watermark", Settings.Watermark.Value, function(CallBack)
+		Settings.Watermark.Value = CallBack
+
+		local Watermark
+
+		task.spawn(function()
+			if Settings.Watermark.Value == true then
+				Watermark = CreateWatermark()
+			end			
+		end)			
+
+		task.spawn(function()
+			if Settings.Watermark.Value == false and Watermark then
+				Watermark:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Watermark.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Watermark.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Watermark.KeyBind then
+					Settings.Watermark.Value = not Settings.Watermark.Value
+
+					if Settings.Watermark.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Watermark.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local WinterSky, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "WinterSky", Settings.WinterSky.Value, function(CallBack)
 		Settings.WinterSky.Value = CallBack
 
@@ -7109,63 +7166,6 @@ task.spawn(function()
 					end
 
 					if Settings.GalaxySky.Value == false then
-						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
-					end
-				end
-			end
-		end)
-	end)
-end)
-
-task.spawn(function()
-	local Watermark, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Watermark", Settings.Watermark.Value, function(CallBack)
-		Settings.Watermark.Value = CallBack
-		
-		local Watermark
-
-		task.spawn(function()
-			if Settings.Watermark.Value == true then
-				Watermark = CreateWatermark()
-			end			
-		end)			
-
-		task.spawn(function()
-			if Settings.Watermark.Value == false and Watermark then
-				Watermark:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		local InstanceUI
-		local Value = false
-
-		DropDownButton.Activated:Connect(function()
-			Value = not Value
-
-			if Value == true then
-				InstanceUI = CreateKeyBind(WorldTab, Settings.Watermark.KeyBind, LayoutOrder + 1, function(CallBack)
-					Settings.Watermark.KeyBind = CallBack
-				end)
-			end
-
-			if Value == false then
-				InstanceUI:Destroy()
-			end
-		end)
-	end)
-
-	task.spawn(function()
-		UserInputService.InputBegan:Connect(function(Input)
-			if not UserInputService:GetFocusedTextBox() then
-				if Input.KeyCode.Name == Settings.Watermark.KeyBind then
-					Settings.Watermark.Value = not Settings.Watermark.Value
-
-					if Settings.Watermark.Value == true then
-						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
-					end
-
-					if Settings.Watermark.Value == false then
 						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 					end
 				end
