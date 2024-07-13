@@ -616,6 +616,35 @@ local function CreateNotification(Duration, Message)
 	end)
 end
 
+local function CreateWatermark()
+	local TextLabel = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	local UIGradient = Instance.new("UIGradient")
+
+	TextLabel.Parent = AlSploit
+	TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel.BackgroundTransparency = 1.000
+	TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	TextLabel.BorderSizePixel = 0
+	TextLabel.Position = UDim2.new(0.735449731, 0, 0, 0)
+	TextLabel.Size = UDim2.new(0.208986416, 0, 0.182926834, 0)
+	TextLabel.Font = Enum.Font.GothamBold
+	TextLabel.Text = "AlSploit"
+	TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TextLabel.TextScaled = true
+	TextLabel.TextSize = 50.000
+	TextLabel.TextWrapped = true
+
+	UITextSizeConstraint.Parent = TextLabel
+	UITextSizeConstraint.MaxTextSize = 50
+
+	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 153, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(105, 195, 255))}
+	UIGradient.Rotation = 90
+	UIGradient.Parent = TextLabel
+	
+	return TextLabel
+end
+
 local function CreateTargetHud()
 	local Background = Instance.new("Frame")
 	local UICorner = Instance.new("UICorner")
@@ -875,6 +904,7 @@ local function CreateSettingsFile()
 		NoPlacementCps = {KeyBind = "..."},
 		ScytheDisabler = {KeyBind = "..."},
 		EffectSpammer = {Confetti = false, DragonBreath = false, KeyBind = "..."},
+		TargetStrafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		ChestStealer = {Range = 30, KeyBind = "..."},
 		InfiniteJump = {KeyBind = "..."},
 		RecallBedTp = {KeyBind = "..."},
@@ -914,7 +944,6 @@ local function CreateSettingsFile()
 		NoFall = {KeyBind = "..."},
 		Aimbot = {ToolCheck = false, KeyBind = "..."},
 		Spider = {Speed = 70, KeyBind = "..."},
-		TargetStrafe = {Speed = 22, Range = 20, GoBackwards = true, KeyBind = "..."},
 		Fonts = {KeyBind = "..."},
 		Speed = {Speed = 23, KeyBind = "..."},
 		Reach = {KeyBind = "..."},
@@ -5077,13 +5106,15 @@ task.spawn(function()
 			repeat
 				task.wait(WaitTime)
 				
-				if Settings.EffectSpammer.DragonBreath == true then
-					DragonBreathRemote:FireServer({LocalPlayer})
-				end
+				if Settings.RecallPlayerTp.Value == false and Settings.RecallBedTp == false then
+					if Settings.EffectSpammer.DragonBreath == true then
+						DragonBreathRemote:FireServer({LocalPlayer})
+					end
 
-				if Settings.EffectSpammer.Confetti == true then
-					AbilityController:useAbility("PARTY_POPPER")
-				end
+					if Settings.EffectSpammer.Confetti == true then
+						AbilityController:useAbility("PARTY_POPPER")
+					end
+				end			
 			until Settings.UnInject.Value == true or Settings.EffectSpammer.Value == false
 		end)
 	end)
@@ -7087,6 +7118,63 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Watermark, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "Watermark", Settings.Watermark.Value, function(CallBack)
+		Settings.Watermark.Value = CallBack
+		
+		local Watermark
+
+		task.spawn(function()
+			if Settings.Watermark.Value == true then
+				Watermark = CreateWatermark
+			end			
+		end)			
+
+		task.spawn(function()
+			if Settings.Watermark.Value == false and Watermark then
+				Watermark:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		local InstanceUI
+		local Value = false
+
+		DropDownButton.Activated:Connect(function()
+			Value = not Value
+
+			if Value == true then
+				InstanceUI = CreateKeyBind(WorldTab, Settings.Watermark.KeyBind, LayoutOrder + 1, function(CallBack)
+					Settings.Watermark.KeyBind = CallBack
+				end)
+			end
+
+			if Value == false then
+				InstanceUI:Destroy()
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if not UserInputService:GetFocusedTextBox() then
+				if Input.KeyCode.Name == Settings.Watermark.KeyBind then
+					Settings.Watermark.Value = not Settings.Watermark.Value
+
+					if Settings.Watermark.Value == true then
+						UIGradient.Color =  ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.411765, 0.215686, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.560784, 0.411765, 1))}
+					end
+
+					if Settings.Watermark.Value == false then
+						UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+					end
+				end
+			end
+		end)
+	end)
+end)
+
+task.spawn(function()
 	local OldTheme, DropDownButton, LayoutOrder, UIGradient = CreateToggle(WorldTab, "OldTheme", Settings.OldTheme.Value, function(CallBack)
 		Settings.OldTheme.Value = CallBack
 
@@ -8154,8 +8242,7 @@ task.spawn(function()
 			local DevicePerformance = ((PrimitivesCount / 100) + Received + Memory + Ping + Sent + Cpu + Gpu)
 			
 			WaitTime = (DevicePerformance / PrimitivesCount)
-			
-			print(DevicePerformance, WaitTime)
+
 		until Settings.UnInject.Value == true
 	end)
 
@@ -8166,7 +8253,6 @@ end)
 
 --watermark
 --recall fix
---ping fix
 --longjump
 
 --AlSploit rules
