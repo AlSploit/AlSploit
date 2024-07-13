@@ -8144,16 +8144,16 @@ task.spawn(function()
 		repeat
 			task.wait()
 
-			local PrimitivesCount = (StatsService.PrimitivesCount / 20)
+			local PrimitivesCount = (StatsService.PrimitivesCount / 100)
 			local Received = StatsService.PerformanceStats.NetworkReceived:GetValue()
-			local Memory = (StatsService.PerformanceStats.Memory:GetValue() / 20)
+			local Memory = (StatsService.PerformanceStats.Memory:GetValue() / 100)
 			local Sent = StatsService.PerformanceStats.NetworkSent:GetValue()
 			local Cpu =  StatsService.PerformanceStats.CPU:GetValue()
 			local Gpu =  StatsService.PerformanceStats.GPU:GetValue()
 
-			local DevicePerformance = (PrimitivesCount + Received + Memory + Sent + Cpu + Gpu)
+			local DevicePerformance = (PrimitivesCount + Received + Memory + Ping + Sent + Cpu + Gpu)
 			
-			WaitTime = (DevicePerformance / Ping)
+			WaitTime = (DevicePerformance / 250)
 			
 			print(DevicePerformance, WaitTime)
 		until Settings.UnInject.Value == true
