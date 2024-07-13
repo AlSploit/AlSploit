@@ -2871,7 +2871,7 @@ end
 
 local function InfFly()
 	if InfiniteFlyValue == true and IsAlive(LocalPlayer) then
-		local StartLevelHead = LocalPlayer.Character.Head.Position.Y + 0.1
+		local StartLevelHead = LocalPlayer.Character.Head.Position.Y + 0.4
 
 		local SpoofedCamera = CreateSpoofedCamera()	
 
@@ -4455,7 +4455,7 @@ task.spawn(function()
 					local Raycast2 = WorkSpace:Raycast(((Clone.PrimaryPart.Position - Vector3.new(0, 15, 0)) + (Camera.CFrame.LookVector * 3)), Vector3.new(0, -1000, 0), RaycastParameters)
 
 					if Raycast or Raycast2 then
-						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / ((GetSpeed() + 20) / 3)))
+						Clone.PrimaryPart.CFrame = CFrame.new(Clone.PrimaryPart.Position + (Camera.CFrame.LookVector / ((GetSpeed() + 20) / 2)))
 
 						vec = Camera.CFrame.LookVector
 					end
