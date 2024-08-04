@@ -110,6 +110,8 @@ local IsFile = isfile
 
 local ReadFile = readfile
 
+local DelFolder = delfolder
+
 task.spawn(function()
 	task.spawn(function()
 		if IsFolder and not IsFolder("AlSploit") then
@@ -1358,17 +1360,9 @@ local KillauraAnimations = {
 	}
 }
 
-local KnitGotten, KnitClient
-
-repeat
-	task.wait()
-	
-	KnitGotten, KnitClient = pcall(function()
-		return debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
-	end)
-until KnitGotten
-
 local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
+
+local KnitClient = debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
 
 local LocalPlayerInventory = ReplicatedStorageService:WaitForChild("Inventories"):WaitForChild(LocalPlayer.Name)
 
@@ -1568,6 +1562,14 @@ local function ShootProjectile(Item, Projectile, NearestPlayer)
 	BedwarsRemotes.ProjectileFireRemote:InvokeServer(unpack(Args))
 end
 
+local function HasItemEquipped(Item)
+	if LocalPlayer.Character.HandInvItem.Value.Name and LocalPlayer.Character.HandInvItem.Value.Name == Item then
+		return true
+	end
+	
+	return false
+end
+
 local function GetMatchState()
 	return ClientStore:getState().Game.matchState
 end
@@ -1661,7 +1663,7 @@ end
 
 local function GetScythe()
 	for i, v in next, GetInventory(LocalPlayer).items do
-		if v.itemType:find("scythe") then 
+		if v.itemType:find("scythe") and not v.itemType:find("sky") then 
 			return v
 		end
 	end
@@ -1751,15 +1753,15 @@ task.spawn(function()
 				Scythe = GetScythe()
 
 				if Scythe and IsAlive(LocalPlayer) then
-					local HandInvItem = LocalPlayer.Character.HandInvItem.Value
+					local HasItemEquipped = HasItemEquipped(Scythe.itemType)
 
-					if HandInvItem == Scythe.itemType then
+					if HasItemEquipped == true then
 						local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
 						local Vector = (LocalPlayer.Character.PrimaryPart.CFrame.lookVector * 1.25)
 
 						ScytheAnticheatDisabledSpeed = AlSploitSettings.ScytheDisabler.Speed.Value
 
-						if (MoveDirection - Vector).Magnitude > 1 then
+						if (MoveDirection - Vector).Magnitude > 1.6 then
 							ScytheAnticheatDisabledSpeed = math.random(0, AlSploitSettings.ScytheDisabler.Speed.Value)
 
 							Vector = MoveDirection
@@ -1770,8 +1772,7 @@ task.spawn(function()
 						BedwarsRemotes.ScytheDashRemote:FireServer({direction = Vector})	
 					end
 
-
-					if HandInvItem ~= Scythe.itemType then
+					if HasItemEquipped == false then
 						ScytheAnticheatDisabled = false
 					end
 				end
@@ -1792,8 +1793,8 @@ task.spawn(function()
 
 		Function = function() end,
 
-		MaximumValue = 18,
-		DefaultValue = 18
+		MaximumValue = 50,
+		DefaultValue = 50
 	})
 end)
 
@@ -1847,6 +1848,54 @@ task.spawn(function()
 
 		MaximumValue = 100,
 		DefaultValue = 20
+	})
+end)
+
+task.spawn(function()
+	local AimAssist = CombatTab:CreateToggle({
+		Name = "AimAssist",
+		
+		Function = function()
+			repeat
+				task.wait()
+				
+				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+					local NearestPlayer = FindNearestPlayer(AlSploitSettings.AimAssist.Range.Value)
+					local NearestEntity = FindNearestEntity(AlSploitSettings.AimAssist.Range.Value)		
+
+					if NearestPlayer or NearestEntity then
+						local NearestEntityPrimaryPart = (AlSploitSettings.AimAssist.FaceMobs.Value == true and (NearestEntity and NearestEntity.PrimaryPart or nil) or (NearestPlayer and NearestPlayer.Character.PrimaryPart or nil))
+						
+						if not NearestEntityPrimaryPart then
+							return
+						end
+						
+						local LookVector = (NearestEntityPrimaryPart.Position - Camera.CFrame.Position).Unit
+
+						Camera.CFrame = CFrame.new(Camera.CFrame.Position, (Camera.CFrame.Position + LookVector))
+					end
+				end				
+			until shared.UnInjected == true or AlSploitSettings.AimAssist.Value == false
+		end,
+		
+		HoverText = "Makes Your Camera Face The Disered Entity 👁️"
+	})
+	
+	AimAssist:CreateToggle({
+		Name = "FaceMobs",
+		
+		Function = function() end,
+		
+		DefaultValue = false
+	})
+	
+	AimAssist:CreateSlider({
+		Name = "Range",
+
+		Function = function() end,
+
+		MaximumValue = 19,
+		DefaultValue = 19
 	})
 end)
 
@@ -2478,7 +2527,7 @@ task.spawn(function()
 					local NearestEntity = FindNearestEntity((AlSploitSettings.TargetStrafe.Range.Value + 3))		
 
 					if NearestPlayer or NearestEntity then
-						local NearestEntityPrimaryPart = (AlSploitSettings.TargetStrafe.TargetMobs.Value == true and NearestEntity.PrimaryPart or (NearestPlayer and NearestPlayer.Character or nil))
+						local NearestEntityPrimaryPart = (AlSploitSettings.TargetStrafe.TargetMobs.Value == true and (NearestEntity and NearestEntity.PrimaryPart or nil) or (NearestPlayer and NearestPlayer.Character.PrimaryPart or nil))
 
 						if not NearestEntityPrimaryPart then
 							return
@@ -3142,7 +3191,10 @@ task.spawn(function()
 				AlSploitScreenGui:Destroy()
 
 				shared.UnInjected = true
-				deletefile("AlSploit/AlSploitConfiguration")
+				
+				if DelFolder then
+					DelFolder("AlSploit")
+				end
 			end
 		end,
 
@@ -3232,12 +3284,3 @@ task.spawn(function()
 
 	CreateNotification(3, "AlSploit Has Loaded")
 end)
-
---Things to fix because i have nothing else to do :shrug:
-
---print(string.format("%s", identifyexecutor()))
---knockback op
---support require upvalue constants retarded shitsploits
---saving on poopexes
---fix targetstrafe
---isholdingitem handitem
