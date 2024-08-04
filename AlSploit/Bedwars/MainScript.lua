@@ -1358,9 +1358,17 @@ local KillauraAnimations = {
 	}
 }
 
-local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
+local KnitGotten, KnitClient
 
-local KnitClient = debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
+repeat
+	task.wait()
+	
+	KnitGotten, KnitClient = pcall(function()
+		return debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
+	end)
+until KnitGotten
+
+local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 
 local LocalPlayerInventory = ReplicatedStorageService:WaitForChild("Inventories"):WaitForChild(LocalPlayer.Name)
 
@@ -3224,3 +3232,12 @@ task.spawn(function()
 
 	CreateNotification(3, "AlSploit Has Loaded")
 end)
+
+--Things to fix because i have nothing else to do :shrug:
+
+--print(string.format("%s", identifyexecutor()))
+--knockback op
+--support require upvalue constants retarded shitsploits
+--saving on poopexes
+--fix targetstrafe
+--isholdingitem handitem
