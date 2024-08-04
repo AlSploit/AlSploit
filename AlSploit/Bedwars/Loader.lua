@@ -239,3 +239,5 @@ task.spawn(function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))()
 	end
 end)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Executed"))()
