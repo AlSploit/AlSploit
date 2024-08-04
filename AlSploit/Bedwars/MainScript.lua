@@ -3222,5 +3222,5 @@ end)
 task.spawn(function()
 	shared.UnInjected = false
 
-	CreateNotification(3, "AlSploit Had Loaded")
+	CreateNotification(3, "AlSploit Has Loaded")
 end)
