@@ -2812,7 +2812,7 @@ task.spawn(function()
 
 					if KnockbackMultiplier then
 						local ProgressHud = CreateProgressHud(KnockbackMultiplier)
-						local Speed = (GetSpeed() * 120)
+						local Speed = (GetSpeed() * 40)
 
 						if AlSploitSettings.KnockbackTp.TeleportTo.LookDirection.Value == true then
 							if AlSploitSettings.KnockbackTp.MovementMethod.Automatic.Value == true then
@@ -3263,7 +3263,7 @@ task.spawn(function()
 							end
 
 							if AlSploitSettings.AntiStaff.UnInject.Value == true then
-								shared.AlSploitUnInjected = true
+								UnInjectEvent:Fire()
 							end	
 
 							if AlSploitSettings.AntiStaff.Kick.Value == true then
@@ -3285,7 +3285,7 @@ task.spawn(function()
 							end
 
 							if AlSploitSettings.AntiStaff.UnInject.Value == true then
-								shared.AlSploitUnInjected = true
+								UnInjectEvent:Fire()
 							end	
 
 							if AlSploitSettings.AntiStaff.Kick.Value == true then
