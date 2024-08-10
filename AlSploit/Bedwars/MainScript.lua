@@ -26,6 +26,8 @@ local OpenGui = Instance.new("TextButton")
 local OpenGuiUICorner = Instance.new("UICorner")
 local OpenGuiUITextSizeConstraint = Instance.new("UITextSizeConstraint")
 
+local UnInjectEvent = Instance.new("BindableEvent")
+
 task.spawn(function()
 	AlSploitScreenGui.Parent = LocalPlayer.PlayerGui
 	AlSploitScreenGui.Name = "AlSploit"
@@ -90,6 +92,9 @@ task.spawn(function()
 
 	OpenGuiUITextSizeConstraint.MaxTextSize = 12
 
+	UnInjectEvent.Parent = ReplicatedStorageService
+	UnInjectEvent.Name = "UnInjectEvent"
+
 	task.spawn(function()
 		OpenGui.Activated:Connect(function()
 			ContainerFrame.Visible = not ContainerFrame.Visible
@@ -111,6 +116,21 @@ local IsFile = isfile
 local ReadFile = readfile
 
 local DelFolder = delfolder
+
+local SetThreadIdentity = setthreadidentity
+local SetThreadCaps = setthreadcaps
+
+local SetFpsCap = setfpscap
+
+task.spawn(function()
+	if setthreadidentity then 
+		setthreadidentity(8) 
+	end
+
+	if setthreadcaps then 
+		setthreadcaps(8) 
+	end
+end)
 
 task.spawn(function()
 	task.spawn(function()
@@ -156,7 +176,7 @@ task.spawn(function()
 
 				CreateFile("AlSploit/AlSploitConfiguration", EncodedSettings)
 			end
-		until shared.UnInjected == true
+		until shared.AlSploitUnInjected == true
 	end)
 end)
 
@@ -619,6 +639,8 @@ function AlSploitLibrary:CreateTab(Name)
 						AlSploitSettings[Name].Value = not AlSploitSettings[Name].Value
 
 						Function()
+
+						CreateNotification(3, Name .. " Has Been Toggled " .. (AlSploitSettings[Name].Value == true and "On" or "Off"))
 					end
 
 					if CanInputKeybind == true then
@@ -819,7 +841,7 @@ function AlSploitLibrary:CreateTab(Name)
 
 								Function_2()
 							end
-						until shared.UnInjected == true or Slider.Visible == false
+						until shared.AlSploitUnInjected == true or Slider.Visible == false
 					end)
 				end)
 			end)
@@ -1235,7 +1257,7 @@ function AlSploitLibrary:CreateTab(Name)
 								AlSploitSettings[Parent][Name].Percentage = Percentage
 								AlSploitSettings[Parent][Name].Value = tostring(Color.R .. "," .. Color.G .. "," .. Color.B)
 							end					
-						until shared.UnInjected == true or ColorPicker.Visible == false
+						until shared.AlSploitUnInjected == true or ColorPicker.Visible == false
 					end)
 				end)
 			end)
@@ -1327,6 +1349,114 @@ function CreateNotification(Duration, Message)
 	end)
 end
 
+local function CreateProgressHud(MaximumValue)
+	local Background = Instance.new("Frame")
+	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+
+	local Text = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+
+	local DisplayBackground = Instance.new("Frame")
+	local UICorner_2 = Instance.new("UICorner")
+
+	local Display = Instance.new("Frame")
+
+	local UICorner_3 = Instance.new("UICorner")
+
+	Background.Parent = AlSploitScreenGui
+	Background.Name = "Background"
+
+	Background.BackgroundTransparency = 0.25
+	Background.BackgroundColor3 = Color3.new(0, 0, 0)
+	Background.BorderSizePixel = 0
+	Background.Position = UDim2.new(0.410, 0, 0.698, 0)
+	Background.Size = UDim2.new(0.178, 0, 0.085, 0)
+
+	UICorner.Parent = Background
+	UICorner.Name = "UICorner"
+
+	UICorner.CornerRadius = UDim.new(0.1, 0)
+	
+	UIStroke.Parent = Background
+	UIStroke.Name = "UIStroke"
+
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Thickness = 2
+	UIStroke.Color = Color3.new(0, 0.6, 1)
+
+	Text.Parent = Background
+	Text.Name = "Text"
+
+	Text.BackgroundTransparency = 1
+	Text.BorderSizePixel = 0
+	Text.Position = UDim2.new(0, 0, 0.510, 0)
+	Text.TextColor3 = Color3.new(0, 0.6, 1)
+	Text.TextScaled = true
+	Text.TextSize = 20
+	Text.Size = UDim2.new(1, 0, 0.489, 0)
+	Text.Font = Enum.Font.GothamBold
+	Text.Text = MaximumValue
+
+	UITextSizeConstraint.Parent = Text
+	UITextSizeConstraint.Name = "UITextSizeConstraint"
+
+	UITextSizeConstraint.MaxTextSize = 20
+
+	DisplayBackground.Parent = Background
+	DisplayBackground.Name = "DisplayBackground"
+	
+	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
+	DisplayBackground.BorderSizePixel = 0
+	DisplayBackground.Position = UDim2.new(0.229, 0, 0.267, 0)
+	DisplayBackground.Size = UDim2.new(0.545, 0, 0.150, 0)
+
+	UICorner_2.Parent = DisplayBackground
+	UICorner_2.Name = "UICorner_2"
+
+	UICorner_2.CornerRadius = UDim.new(0.4, 0)
+
+	Display.Parent = DisplayBackground
+	Display.Name = "Display"
+	
+	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
+	Display.BorderSizePixel = 0
+	Display.Position = UDim2.new(-0.006, 0, -0.029, 0)
+	Display.ZIndex = 2
+	Display.Size = UDim2.new(1, 0, 1, 0)
+
+	UICorner_3.Parent = Display
+	UICorner_3.Name = "UICorner_3"
+
+	UICorner_3.CornerRadius = UDim.new(0.4, 0)
+	
+	task.spawn(function()
+		local TweenInformation = TweenInfo.new(MaximumValue, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
+		local SizeTween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(0, 0, 1, 0)})
+		
+		SizeTween:Play()
+		
+		SizeTween.Completed:Connect(function()
+			Background:Destroy()
+		end)
+	end)
+	
+	task.spawn(function()
+		repeat
+			task.wait()
+			
+			local Percentage = math.clamp(Display.Size.X.Scale, 0, 1)
+			local RoundedValue = DecimalRound((Percentage * MaximumValue), 1)
+			
+			Text.Text = RoundedValue
+		until shared.AlSploitUnInjected == true or not Background
+	end)
+	
+	return Background
+end
+
+local AlSploitConnections = {}
+
 local ViewModel = Camera:WaitForChild("Viewmodel")
 
 local C0 = ViewModel:WaitForChild("RightHand"):WaitForChild("RightWrist").C0
@@ -1360,13 +1490,16 @@ local KillauraAnimations = {
 	}
 }
 
-local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
-
 local KnitClient = debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
+
+local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
+local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
 local LocalPlayerInventory = ReplicatedStorageService:WaitForChild("Inventories"):WaitForChild(LocalPlayer.Name)
 
+local KnockbackUtilCalculateKnockbackVelocity = debug.getupvalue(require(ReplicatedStorageService.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
 local KnockbackUtil = require(ReplicatedStorageService.TS.damage["knockback-util"]).KnockbackUtil
+
 local InventoryUtil = require(ReplicatedStorageService.TS.inventory["inventory-util"]).InventoryUtil
 
 local BedwarsControllers = {
@@ -1429,7 +1562,7 @@ local function CloneHumanoidRootPart()
 
 	task.spawn(function()
 		RunService.Heartbeat:Connect(function()
-			if IsAlive(LocalPlayer) and ((tick() - OverrideHumanoidRootPartPosition) > 0.2) and OldLocalPlayerHumanoidRootPart and NewLocalPlayerHumanoidRootPart then
+			if IsAlive(LocalPlayer) == true and ((tick() - OverrideHumanoidRootPartPosition) > 0.2) and OldLocalPlayerHumanoidRootPart and NewLocalPlayerHumanoidRootPart then
 				OldLocalPlayerHumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
 				OldLocalPlayerHumanoidRootPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
 			end
@@ -1437,12 +1570,27 @@ local function CloneHumanoidRootPart()
 	end)
 end
 
-local function FindNearestPlayer(MaxDistance)
+local function TweenToNearestPlayer(Time)
+	local Time = Time or 0.65
+
+	if IsAlive(LocalPlayer) == true then
+		local NearestPlayer = FindNearestPlayer()
+
+		if NearestPlayer then
+			local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
+
+			PlayerTpTween:Play()
+		end
+	end
+end
+
+function FindNearestPlayer(MaxDistance)
 	local NearestPlayerDistance = MaxDistance or math.huge
 	local NearestPlayer
 
 	for i, v in next, PlayerService:GetPlayers() do
-		if IsAlive(v) and v ~= LocalPlayer and IsAlive(LocalPlayer) and v.Team ~= LocalPlayer.Team then
+		if IsAlive(v) and v ~= LocalPlayer and IsAlive(LocalPlayer) == true and v.Team ~= LocalPlayer.Team then
 			local Distance = (v.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 			if Distance < NearestPlayerDistance then
@@ -1546,6 +1694,30 @@ local function FindNearestEntity(MaxDistance)
 	return nil
 end
 
+local function TweenToNearestBed(Time)
+	local Time = Time or 0.65
+
+	if IsAlive(LocalPlayer) == true then
+		local NearestBed = FindNearestBed(false)
+
+		if NearestBed then
+			local RaycastParameters = RaycastParams.new()
+
+			RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+
+			local BlockRaycast = game.Workspace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
+
+			if BlockRaycast and BlockRaycast.Position then
+				local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
+
+				BedTpTween:Play()
+			end
+		end
+	end
+end
+
 local function ShootProjectile(Item, Projectile, NearestPlayer)
 	local Args = {
 		[1] = Item,
@@ -1566,12 +1738,89 @@ local function HasItemEquipped(Item)
 	if LocalPlayer.Character.HandInvItem.Value.Name and LocalPlayer.Character.HandInvItem.Value.Name == Item then
 		return true
 	end
-	
+
 	return false
+end
+
+function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
+	local NearestBedDistance = MaxDistance or math.huge
+	local NearestBed = nil
+
+	local AmountOfBeds = 0
+
+	for i, v in next, CollectionService:GetTagged("bed") do
+		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then
+			AmountOfBeds = (AmountOfBeds + 1)
+		end
+	end
+
+	if IgnoreBedSheildEndTime == false then
+		for i, v in next, CollectionService:GetTagged("bed") do
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
+				if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > game.Workspace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow()) then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+					if Distance < NearestBedDistance then
+						NearestBedDistance = Distance
+						NearestBed = v
+					end
+				end
+
+				if not v:GetAttribute("BedShieldEndTime") then
+					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+					if Distance < NearestBedDistance then
+						NearestBedDistance = Distance
+						NearestBed = v
+					end
+				end
+			end
+		end
+	end
+
+	if IgnoreBedSheildEndTime == true then
+		for i, v in next, CollectionService:GetTagged("bed")do
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then				
+				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+				if Distance < NearestBedDistance then
+					NearestBedDistance = Distance
+					NearestBed = v
+				end
+			end
+		end
+	end
+
+	return NearestBed
+end
+
+local function TweenToCFrame(Time, Position)	
+	Position = CFrame.new(Position)
+
+	local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
+	local CFrameTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = Position})
+
+	CFrameTween:Play()
 end
 
 local function GetMatchState()
 	return ClientStore:getState().Game.matchState
+end
+
+function DecimalRound(Number, DigitsPast0)
+	DigitsPast0 = math.pow(10, DigitsPast0)
+
+	Number = (Number * DigitsPast0)
+
+	if Number >= 0 then 
+		Number = math.floor(Number + 0.5) 
+	end
+
+	if Number < 0 then
+		Number = math.ceil(Number - 0.5) 
+	end
+
+	return (Number / DigitsPast0)
 end
 
 local function GetInventory(Player)
@@ -1583,7 +1832,7 @@ local function GetInventory(Player)
 end
 
 local function Invisibility()
-	repeat task.wait() until IsAlive(LocalPlayer) and GetMatchState() ~= 0
+	repeat task.wait() until IsAlive(LocalPlayer) == true and GetMatchState() ~= 0
 
 	local Animation = Instance.new("Animation")
 	local Id = 11360825341
@@ -1594,14 +1843,14 @@ local function Invisibility()
 
 	LocalPlayer.Character.LowerTorso.CollisionGroup = "Participants"
 	LocalPlayer.Character.UpperTorso.CollisionGroup = "Participants"
-	
+
 	local PartsList = {}
-	
+
 	for i, v in next, LocalPlayer.Character:GetDescendants() do
 		if v:IsA("BasePart") and v ~= LocalPlayer.Character.PrimaryPart and v.CanCollide == true then
 			v.CanCollide = false
 			v.CanTouch = false	
-			
+
 			table.insert(PartsList, v)
 		end
 	end
@@ -1618,18 +1867,12 @@ local function Invisibility()
 		repeat
 			task.wait()
 
-			if AlSploitSettings.AntiHit.Value == true then
-				CreateNotification("Unable To Use AntiHit With Invisible")
-			end
+			LocalPlayer.Character.PrimaryPart.Transparency = 0.5
 
-			if AlSploitSettings.AntiHit.Value == false then
-				LocalPlayer.Character.PrimaryPart.Transparency = 0.5
+			Animation:AdjustSpeed(0 / 10)
+		until shared.AlSploitUnInjected == true or AlSploitSettings.Invisible.Value == false
 
-				Animation:AdjustSpeed(0 / 10)
-			end	
-		until shared.UnInjected == true or AlSploitSettings.Invisible.Value == false
-
-		if IsAlive(LocalPlayer) then
+		if IsAlive(LocalPlayer) == true then
 			LocalPlayer.Character.PrimaryPart.Transparency = 1
 
 			Animation.Looped = false
@@ -1643,12 +1886,12 @@ local function Invisibility()
 
 				LocalPlayer.Character.LowerTorso.CollisionGroup = "Players"
 				LocalPlayer.Character.UpperTorso.CollisionGroup = "Players"
-				
+
 				for i, v in next, PartsList do
 					v.CanCollide = true
 					v.CanTouch = true
 				end
-				
+
 				PartsList = {}
 			end)
 		end
@@ -1675,7 +1918,7 @@ function GetSpeed()
 	local SpeedBoost = LocalPlayer.Character:GetAttribute("SpeedBoost")
 
 	if SpeedBoost and SpeedBoost > 1 then 
-		Speed = (Speed + (SpeedBoost - 1))
+		Speed = (Speed + (8 * (SpeedBoost - 1)))
 	end
 
 	if LocalPlayer.Character:GetAttribute("GrimReaperChannel") then 
@@ -1752,7 +1995,7 @@ task.spawn(function()
 
 				Scythe = GetScythe()
 
-				if Scythe and IsAlive(LocalPlayer) then
+				if Scythe and IsAlive(LocalPlayer) == true then
 					local HasItemEquipped = HasItemEquipped(Scythe.itemType)
 
 					if HasItemEquipped == true then
@@ -1777,10 +2020,10 @@ task.spawn(function()
 					end
 				end
 
-				if not Scythe or not IsAlive(LocalPlayer) then
+				if not Scythe or IsAlive(LocalPlayer) == false then
 					ScytheAnticheatDisabled = false
 				end
-			until shared.UnInjected == true or AlSploitSettings.ScytheDisabler.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.ScytheDisabler.Value == false
 
 			ScytheAnticheatDisabled = false
 		end,
@@ -1809,7 +2052,7 @@ task.spawn(function()
 				OldIsClickingTooFast = BedwarsControllers.SwordController.isClickingTooFast
 
 				BedwarsControllers.SwordController.isClickingTooFast = function(self) 
-					if shared.UnInjected == false then
+					if shared.AlSploitUnInjected == false then
 						self.lastSwing = tick()
 
 						return false
@@ -1835,7 +2078,7 @@ task.spawn(function()
 				task.wait(1 / AlSploitSettings.Autoclicker.Cps.Value)
 
 				BedwarsControllers.SwordController:swingSwordAtMouse()
-			until shared.UnInjected == true or AlSploitSettings.Autoclicker.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.Autoclicker.Value == false
 		end,
 
 		HoverText = "Clicks At The Desired Speed 🖱️"
@@ -1854,41 +2097,41 @@ end)
 task.spawn(function()
 	local AimAssist = CombatTab:CreateToggle({
 		Name = "AimAssist",
-		
+
 		Function = function()
 			repeat
 				task.wait()
-				
-				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local NearestPlayer = FindNearestPlayer(AlSploitSettings.AimAssist.Range.Value)
 					local NearestEntity = FindNearestEntity(AlSploitSettings.AimAssist.Range.Value)		
 
 					if NearestPlayer or NearestEntity then
 						local NearestEntityPrimaryPart = (AlSploitSettings.AimAssist.FaceMobs.Value == true and (NearestEntity and NearestEntity.PrimaryPart or nil) or (NearestPlayer and NearestPlayer.Character.PrimaryPart or nil))
-						
+
 						if not NearestEntityPrimaryPart then
 							return
 						end
-						
+
 						local LookVector = (NearestEntityPrimaryPart.Position - Camera.CFrame.Position).Unit
 
 						Camera.CFrame = CFrame.new(Camera.CFrame.Position, (Camera.CFrame.Position + LookVector))
 					end
 				end				
-			until shared.UnInjected == true or AlSploitSettings.AimAssist.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.AimAssist.Value == false
 		end,
-		
+
 		HoverText = "Makes Your Camera Face The Disered Entity 👁️"
 	})
-	
+
 	AimAssist:CreateToggle({
 		Name = "FaceMobs",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = false
 	})
-	
+
 	AimAssist:CreateSlider({
 		Name = "Range",
 
@@ -1900,32 +2143,19 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local OldApplyKnockback
+	local OldKnockback = KnockbackUtilCalculateKnockbackVelocity
 
 	local Velocity = CombatTab:CreateToggle({
 		Name = "Velocity",
 
-		Function = function()
-			if AlSploitSettings.Velocity.Value == true then		
-				OldApplyKnockback = KnockbackUtil.applyKnockback
-
-				KnockbackUtil.applyKnockback = function(Root, Mass, Direction, Knockback, ...)	
-					if shared.UnInjected == false then
-						local Horizontal = (Knockback.horizontal and Knockback.horizontal or nil)
-						local Vertical = (Knockback.vertical and Knockback.vertical or nil)
-
-						if Horizontal and Vertical then
-							Knockback.horizontal = ((Horizontal or 1) * (AlSploitSettings.Velocity.Horizontal.Value / 100))
-							Knockback.vertical = ((Vertical or 1) * (AlSploitSettings.Velocity.Vertical.Value / 100))
-						end			
-					end
-
-					return OldApplyKnockback(Root, Mass, Direction, Knockback, ...)
-				end
+		Function = function() 			
+			if AlSploitSettings.Velocity.Value == true then
+				KnockbackUtilCalculateKnockbackVelocity.kbDirectionStrength = (KnockbackUtilCalculateKnockbackVelocity.kbDirectionStrength * (AlSploitSettings.Velocity.Horizontal.Value / 100))
+				KnockbackUtilCalculateKnockbackVelocity.kbUpwardStrength =  (KnockbackUtilCalculateKnockbackVelocity.kbUpwardStrength * (AlSploitSettings.Velocity.Vertical.Value / 100))
 			end
 
 			if AlSploitSettings.Velocity.Value == false then
-				KnockbackUtil.applyKnockback = OldApplyKnockback
+				KnockbackUtilCalculateKnockbackVelocity = OldKnockback
 			end
 		end,
 
@@ -1953,13 +2183,13 @@ end)
 
 task.spawn(function()
 	local SelectedAnimation = nil
+	local KillauraBox
 
 	local Killaura = CombatTab:CreateToggle({
 		Name = "Killaura",
 
 		Function = function()
 			local KillAuraAnimationCooldown = false
-			local KillauraBox
 
 			local function PlayAnimation(Animation)
 				if ViewModel and C0 then
@@ -1994,6 +2224,7 @@ task.spawn(function()
 
 						KillauraBox.Transparency = 0.6
 						KillauraBox.CanCollide = false
+						KillauraBox.Anchored = true
 						KillauraBox.Material = Enum.Material.SmoothPlastic
 						KillauraBox.CFrame = Entity.PrimaryPart.CFrame
 
@@ -2021,6 +2252,10 @@ task.spawn(function()
 
 					if AlSploitSettings.Killaura.ShowEnemy.Value == false and KillauraBox then
 						KillauraBox:Destroy()
+					end
+					
+					if KillauraBox then
+						KillauraBox.CFrame = Entity.PrimaryPart.CFrame
 					end
 				end)			
 
@@ -2124,9 +2359,13 @@ task.spawn(function()
 							if Sword and NearestEntity then
 								SwordHit(NearestEntity, Sword, NearestEntityDistance)
 							end
+							
+							if not Sword or not NearestEntity and KillauraBox then
+								KillauraBox:Destroy()
+							end
 						end)						
 					end				
-				until shared.UnInjected == true or AlSploitSettings.Killaura.Value == false
+				until shared.AlSploitUnInjected == true or AlSploitSettings.Killaura.Value == false
 
 				if KillauraBox then
 					KillauraBox:Destroy()
@@ -2256,6 +2495,12 @@ task.spawn(function()
 
 		DefaultValue = Color3.new(1, 0.278431, 0.290196)
 	})
+	
+	UnInjectEvent.Event:Connect(function()
+		if KillauraBox then
+			KillauraBox:Destroy()
+		end
+	end)
 end)
 
 task.spawn(function()
@@ -2266,7 +2511,7 @@ task.spawn(function()
 			repeat
 				task.wait()
 
-				if IsAlive(LocalPlayer) then
+				if IsAlive(LocalPlayer) == true then
 					local NearestPlayer = FindNearestPlayer()
 					local BestArrow, BestBow = GetBow()
 
@@ -2340,7 +2585,7 @@ task.spawn(function()
 						end)
 					end
 				end
-			until shared.UnInjected == true or AlSploitSettings.Aimbot.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.Aimbot.Value == false
 		end,
 
 		HoverText = "Automatically Shoots Players 🏹"
@@ -2377,7 +2622,7 @@ end)
 			repeat
 				task.wait()
 
-				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local NearestEntity = FindNearestEntity(AlSploitSettings.AntiHit.Range.Value)
 
 					task.spawn(function()
@@ -2400,7 +2645,7 @@ end)
 						end
 					end)				
 				end
-			until shared.UnInjected == true or AlSploitSettings.AntiHit.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.AntiHit.Value == false
 			
 			if NewLocalPlayerHumanoidRootPart then
 				DestroyClonedHumanoidRootPart()
@@ -2443,14 +2688,14 @@ task.spawn(function()
 				repeat
 					task.wait()
 
-					if IsAlive(LocalPlayer) then
+					if IsAlive(LocalPlayer) == true then
 						local NearestEntity, NearestEntityDistance = FindNearestEntity(AlSploitSettings.Killaura.Range.Value)
 
 						if NearestEntity then
 							BedwarsConstants.CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = (NearestEntityDistance + 2)
 						end
 					end        
-				until shared.UnInjected == true or AlSploitSettings.Reach.Value == false
+				until shared.AlSploitUnInjected == true or AlSploitSettings.Reach.Value == false
 
 				BedwarsConstants.CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = OldReach
 			end)
@@ -2460,11 +2705,9 @@ task.spawn(function()
 					OldSwingSwordAtMouse = BedwarsControllers.SwordController.swingSwordAtMouse
 
 					BedwarsControllers.SwordController.swingSwordAtMouse = function(Enabled, LastSwing, BufferedMobileAttack, ...)    
-						if shared.UnInjected == false then
-							BufferedMobileAttack = true
+						BufferedMobileAttack = true
 
-							return OldSwingSwordAtMouse(Enabled, LastSwing, BufferedMobileAttack, ...)
-						end            
+						return OldSwingSwordAtMouse(Enabled, LastSwing, BufferedMobileAttack, ...)          
 					end    
 				end    
 
@@ -2476,6 +2719,10 @@ task.spawn(function()
 
 		HoverText = "Increases Reach 👾"
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		BedwarsControllers.SwordController.swingSwordAtMouse = OldSwingSwordAtMouse
+	end)
 end)
 
 task.spawn(function()
@@ -2486,14 +2733,172 @@ task.spawn(function()
 			repeat
 				task.wait(0.5)
 
-				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					BedwarsRemotes.GroundHitRemote:FireServer()
 				end		
-			until shared.UnInjected == true or AlSploitSettings.NoFallDamage.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.NoFallDamage.Value == false
 		end,
 
 		HoverText = "Prevents You From Taking Fall Damage 💪"
 	})
+end)
+
+task.spawn(function()	
+	local KnockbackTp = BlatantTab:CreateToggle({
+		Name = "KnockbackTp",
+
+		Function = function() end,
+
+		HoverText = "Teleports You When Knockback Is Applied 🛸"
+	})
+	
+	local MovementMethod = KnockbackTp:CreateDropdown({
+		Name = "MovementMethod",
+		HoverText = "Decide If You Control The Movement Or The Script"
+	})
+
+	MovementMethod :CreateToggle({
+		Name = "Automatic",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+
+	MovementMethod :CreateToggle({
+		Name = "Manual",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	local TeleportTo = KnockbackTp:CreateDropdown({
+		Name = "TeleportTo",
+		HoverText = "Decide Where You Want To Teleport After The Knockback Is Applied"
+	})
+	
+	TeleportTo:CreateToggle({
+		Name = "LookDirection",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	TeleportTo:CreateToggle({
+		Name = "NearestPlayer",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+
+	TeleportTo:CreateToggle({
+		Name = "NearestBed",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+
+	Client:WaitFor("EntityDamageEvent"):andThen(function(v)
+		v:Connect(function(DamageTable)
+			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.KnockbackTp.Value == true then 
+				local KnockbackMultiplier = DamageTable.knockbackMultiplier
+
+				if KnockbackMultiplier then
+					KnockbackMultiplier = DamageTable.knockbackMultiplier.horizontal
+
+					if KnockbackMultiplier then
+						local ProgressHud = CreateProgressHud(KnockbackMultiplier)
+						local Speed = (GetSpeed() * 120)
+
+						if AlSploitSettings.KnockbackTp.TeleportTo.LookDirection.Value == true then
+							if AlSploitSettings.KnockbackTp.MovementMethod.Automatic.Value == true then
+								local StartTick = tick()
+
+								local Unit = Vector3.new(LocalPlayer.Character.PrimaryPart.CFrame.LookVector.X, 0, LocalPlayer.Character.PrimaryPart.CFrame.LookVector.Z).Unit
+
+								task.spawn(function()
+									repeat
+										task.wait()
+
+										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
+									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+
+									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+								end)
+
+								return
+							end
+
+							if AlSploitSettings.KnockbackTp.MovementMethod.Manual.Value == true then
+								local StartTick = tick()
+
+								task.spawn(function()
+									repeat
+										task.wait()
+										local Unit = Vector3.new(LocalPlayer.Character.PrimaryPart.CFrame.LookVector.X, 0, LocalPlayer.Character.PrimaryPart.CFrame.LookVector.Z).Unit
+
+										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
+									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+
+									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+								end)
+
+								return
+							end
+						end
+
+						if AlSploitSettings.KnockbackTp.TeleportTo.NearestPlayer.Value == true then
+							local NearestPlayer = FindNearestPlayer()
+
+							if NearestPlayer then
+								local StartTick = tick()
+
+								local Unit = (LocalPlayer.Character.PrimaryPart.Position - NearestPlayer.Character.PrimaryPart.Position).Unit
+
+								task.spawn(function()
+									repeat
+										task.wait()
+
+										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
+									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+
+									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+								end)
+
+								return
+							end
+						end
+
+						if AlSploitSettings.KnockbackTp.TeleportTo.NearestBed.Value == true then
+							local NearestBed = FindNearestBed()
+
+							if NearestBed then
+								local StartTick = tick()
+
+								local Unit = (LocalPlayer.Character.PrimaryPart.Position - NearestBed.Character.PrimaryPart.Position).Unit
+
+								task.spawn(function()
+									repeat
+										task.wait()
+
+										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
+									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+
+									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+								end)
+
+								return
+							end
+						end
+					end
+				end
+			end 
+		end)	
+	end) 
 end)
 
 task.spawn(function()
@@ -2506,7 +2911,7 @@ task.spawn(function()
 	})
 
 	UserInputService.JumpRequest:Connect(function()
-		if shared.UnInjected == false and IsAlive(LocalPlayer) and AlSploitSettings.InfiniteJump.Value == true then
+		if shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and AlSploitSettings.InfiniteJump.Value == true then
 			LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 		end
 	end)
@@ -2522,7 +2927,7 @@ task.spawn(function()
 			repeat
 				task.wait()
 
-				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local NearestPlayer = FindNearestPlayer((AlSploitSettings.TargetStrafe.Range.Value + 3))
 					local NearestEntity = FindNearestEntity((AlSploitSettings.TargetStrafe.Range.Value + 3))		
 
@@ -2551,15 +2956,11 @@ task.spawn(function()
 						if Raycast and Raycast.Position and Raycast.Instance and (Raycast.Instance:IsA("BasePart") or Raycast.Instance:IsA("Part")) and Raycast.Instance.CanCollide == true and not Raycast2 and not Raycast3 then
 							local Magnitude = (LocalPlayerPrimaryPart.Position - TargetPosition).Magnitude
 
-							local TweenInformation = TweenInfo.new((Magnitude / 22.5), Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
-
-							local TargetStrafeTween = TweenService:Create(LocalPlayerPrimaryPart, TweenInformation, {CFrame = CFrame.new(TargetPosition)})
-
-							TargetStrafeTween:Play()
+							TweenToCFrame((Magnitude / 22.5), TargetPosition)
 						end
 					end
 				end		
-			until shared.UnInjected == true or AlSploitSettings.TargetStrafe.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.TargetStrafe.Value == false
 		end,
 
 		HoverText = "Automatically Circles Around Desired Entities 💫"
@@ -2605,17 +3006,15 @@ task.spawn(function()
 	end)
 end)
 
-task.spawn(function()
-	local SpeedConnection
-
+task.spawn(function()	
 	local Speed = BlatantTab:CreateToggle({
 		Name = "Speed",
 
 		Function = function()
 			task.spawn(function()
 				if AlSploitSettings.Speed.Value == true then
-					SpeedConnection = RunService.Heartbeat:Connect(function(Delta)
-						if IsAlive(LocalPlayer) and shared.UnInjected == false then
+					AlSploitConnections["SpeedConnection"] = RunService.Heartbeat:Connect(function(Delta)
+						if IsAlive(LocalPlayer) == true then
 							local SpeedRaycastParameters = RaycastParams.new()
 
 							SpeedRaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
@@ -2635,8 +3034,8 @@ task.spawn(function()
 				end
 			end)
 
-			if AlSploitSettings.Speed.Value == false and SpeedConnection then
-				SpeedConnection:Disconnect()
+			if AlSploitSettings.Speed.Value == false and AlSploitConnections["SpeedConnection"] then
+				AlSploitConnections["SpeedConnection"]:Disconnect()
 			end
 		end,
 
@@ -2650,28 +3049,6 @@ task.spawn(function()
 
 		MaximumValue = 23,
 		DefaultValue = 23
-	})
-end)
-
-task.spawn(function()
-	local KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
-
-	local HideKillFeed = UtilityTab:CreateToggle({
-		Name = "HideKillFeedGui",
-
-		Function = function()
-			if AlSploitSettings.HideKillFeedGui.Value == true then
-				KillFeedHudGui.Parent = ReplicatedStorageService
-			end
-
-			if AlSploitSettings.HideKillFeedGui.Value == false and ReplicatedStorageService:FindFirstChild("KillFeedHud") then
-				ReplicatedStorageService.KillFeedHud.Parent = LocalPlayer.PlayerGui
-
-				KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
-			end
-		end,
-
-		HoverText = "Removes The Kill Feed 🖼️"
 	})
 end)
 
@@ -2744,6 +3121,58 @@ task.spawn(function()
 		MaximumValue = 105,
 		DefaultValue = 35
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		BedwarsControllers.ViewModelController:SetAttribute("ConstantManager_HORIZONTAL_OFFSET", OldHorizontalOffset)
+		BedwarsControllers.ViewModelController:SetAttribute("ConstantManager_VERTICAL_OFFSET",  OldVerticalOffset)
+		BedwarsControllers.ViewModelController:SetAttribute("ConstantManager_DEPTH_OFFSET", OldDepthOffset)
+
+		ViewModel:WaitForChild("RightHand"):WaitForChild("RightWrist").C1 = (C1 * CFrame.Angles(math.rad(0), math.rad(0), math.rad((OldHorizontalOffset / 3))))
+	end)
+end)
+
+task.spawn(function()
+	local KillFeedHudGui
+
+	task.spawn(function()
+		repeat
+			task.wait()
+
+			pcall(function()
+				KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
+			end)
+		until KillFeedHudGui
+	end)
+
+	local HideKillFeed = UtilityTab:CreateToggle({
+		Name = "HideKillFeedGui",
+
+		Function = function()
+			if AlSploitSettings.HideKillFeedGui.Value == true and KillFeedHudGui then
+				KillFeedHudGui.Parent = ReplicatedStorageService
+			end	
+
+			if AlSploitSettings.HideKillFeedGui.Value == true and not KillFeedHudGui then
+				CreateNotification(3, "KillFeedGui Not Found")
+			end
+
+			if AlSploitSettings.HideKillFeedGui.Value == false and ReplicatedStorageService:FindFirstChild("KillFeedHud") then
+				ReplicatedStorageService.KillFeedHud.Parent = LocalPlayer.PlayerGui
+
+				KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
+			end	
+		end,
+
+		HoverText = "Removes The Kill Feed 🖼️"
+	})
+
+	UnInjectEvent.Event:Connect(function()
+		if ReplicatedStorageService:FindFirstChild("KillFeedHud") then
+			ReplicatedStorageService.KillFeedHud.Parent = LocalPlayer.PlayerGui
+
+			KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
+		end	
+	end)
 end)
 
 task.spawn(function()
@@ -2774,6 +3203,12 @@ task.spawn(function()
 
 		HoverText = "Makes You Anonymous To Players🕵️"
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		ClientStore:getState().Settings.global_chat_system_messages = OldGlobalChatSystemMessages
+		ClientStore:getState().Settings.friendSpectating = OldFriendSpectating
+		ClientStore:getState().Settings.streamer_mode = OldStreamerMode
+	end)
 end)
 
 task.spawn(function()
@@ -2807,6 +3242,11 @@ task.spawn(function()
 
 		HoverText = "Makes You Sprint Automatically 🐾"
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		BedwarsControllers.SprintController.stopSprinting = OldSprintFunction
+		BedwarsControllers.SprintController:stopSprinting()
+	end)
 end)
 
 task.spawn(function()
@@ -2817,13 +3257,13 @@ task.spawn(function()
 			task.spawn(function()
 				task.spawn(function()
 					PlayerService.PlayerAdded:Connect(function(Player)
-						if AlSploitSettings.AntiStaff.Value == true and Player:IsInGroup(5774246) and Player:GetRankInGroup(5774246) > 1 then
+						if shared.AlSploitUnInjected == false and AlSploitSettings.AntiStaff.Value == true and Player:IsInGroup(5774246) and Player:GetRankInGroup(5774246) > 1 then
 							if AlSploitSettings.AntiStaff.LeaveParty.Value == true then
 								BedwarsControllers.QueueController.leaveParty()
 							end
 
 							if AlSploitSettings.AntiStaff.UnInject.Value == true then
-								shared.UnInjected = true
+								shared.AlSploitUnInjected = true
 							end	
 
 							if AlSploitSettings.AntiStaff.Kick.Value == true then
@@ -2839,13 +3279,13 @@ task.spawn(function()
 					task.wait(2)
 
 					for i, v in next, PlayerService:GetPlayers() do
-						if AlSploitSettings.AntiStaff.Value == true and v:IsInGroup(5774246) and v:GetRankInGroup(5774246) > 1 then
+						if shared.AlSploitUnInjected == false and AlSploitSettings.AntiStaff.Value == true and v:IsInGroup(5774246) and v:GetRankInGroup(5774246) > 1 then
 							if AlSploitSettings.AntiStaff.LeaveParty.Value == true then
 								BedwarsControllers.QueueController.leaveParty()
 							end
 
 							if AlSploitSettings.AntiStaff.UnInject.Value == true then
-								shared.UnInjected = true
+								shared.AlSploitUnInjected = true
 							end	
 
 							if AlSploitSettings.AntiStaff.Kick.Value == true then
@@ -2898,7 +3338,7 @@ task.spawn(function()
 				task.wait()
 
 				BedwarsControllers.FovController:setFOV(AlSploitSettings.Fov.Fov.Value)
-			until shared.UnInjected == true or AlSploitSettings.Fov.Value == false
+			until shared.AlSploitUnInjected == true or AlSploitSettings.Fov.Value == false
 
 			BedwarsControllers.FovController.fov = OldFov
 		end,
@@ -2971,10 +3411,10 @@ task.spawn(function()
 					repeat
 						task.wait()
 
-						if IsAlive(LocalPlayer) then 
+						if IsAlive(LocalPlayer) == true then 
 							SnowPart.CFrame = (LocalPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 100, 0))
 						end
-					until shared.UnInjected == true or AlSploitSettings.WinterSky.Value == false
+					until shared.AlSploitUnInjected == true or AlSploitSettings.WinterSky.Value == false
 
 					SnowPart:Destroy()
 					WindSnow:Destroy()
@@ -3112,6 +3552,14 @@ task.spawn(function()
 
 		HoverText = "Makes Your Sky Look Like Winter ⛄"
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		if ReplicatedStorageService:FindFirstChild("Sky") and LightingService:FindFirstChild("WinterSky") then
+			ReplicatedStorageService:FindFirstChild("Sky").Parent = LightingService 		
+
+			LightingService.WinterSky:Destroy()	
+		end
+	end)
 end)
 
 task.spawn(function()
@@ -3136,7 +3584,7 @@ task.spawn(function()
 					Sky.Parent = LightingService
 					Sky.Name = "GalaxySky"
 				end
-				
+
 				if LightingService:FindFirstChild("WinterSky") then
 					LightingService.WinterSky:Destroy()
 
@@ -3178,6 +3626,14 @@ task.spawn(function()
 
 		HoverText = "Makes Your Sky Look Like A Galaxy 🌌"
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		if ReplicatedStorageService:FindFirstChild("Sky") and LightingService:FindFirstChild("GalaxySky") then
+			ReplicatedStorageService.Sky.Parent = LightingService 
+
+			LightingService.GalaxySky:Destroy()				
+		end
+	end)
 end)
 
 task.spawn(function()
@@ -3190,8 +3646,8 @@ task.spawn(function()
 
 				AlSploitScreenGui:Destroy()
 
-				shared.UnInjected = true
-				
+				shared.AlSploitUnInjected = true
+
 				if DelFolder then
 					DelFolder("AlSploit")
 				end
@@ -3207,15 +3663,15 @@ task.spawn(function()
 		Name = "FpsUnlocker",
 
 		Function = function()
-			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and setfpscap then
-				setfpscap(AlSploitSettings.FpsUnlocker.Fps.Value)
+			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and SetFpsCap then
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
-			if AlSploitSettings.FpsUnlocker.Value == false and setfpscap then
-				setfpscap(AlSploitSettings.FpsUnlocker.Fps.Value)
+			if AlSploitSettings.FpsUnlocker.Value == false and SetFpsCap then
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
-			if not setfpscap then
+			if not SetFpsCap then
 				CreateNotification(3, "Unable To Unlock Fps")
 			end
 		end,
@@ -3228,14 +3684,14 @@ task.spawn(function()
 
 		Function = function()
 			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == true and setfpscap then
-				setfpscap(1000)
+				SetFpsCap(1000)
 			end
 
 			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and setfpscap then
-				setfpscap(AlSploitSettings.FpsUnlocker.Fps.Value)
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
-			if not setfpscap then
+			if not SetFpsCap then
 				CreateNotification(3, "Unable To Unlock Fps")
 			end
 		end,
@@ -3248,10 +3704,10 @@ task.spawn(function()
 
 		Function = function()
 			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and setfpscap then
-				setfpscap(AlSploitSettings.FpsUnlocker.Fps.Value)
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
-			if not setfpscap then
+			if not SetFpsCap then
 				CreateNotification(3, "Unable To Unlock Fps")
 			end
 		end,
@@ -3259,6 +3715,12 @@ task.spawn(function()
 		MaximumValue = 240,
 		DefaultValue = 240
 	})
+
+	UnInjectEvent.Event:Connect(function()
+		if SetFpsCap then
+			setfpscap(AlSploitSettings.FpsUnlocker.Fps.Value)
+		end
+	end)
 end)
 
 task.spawn(function()
@@ -3267,11 +3729,7 @@ task.spawn(function()
 
 		Function = function()            
 			if AlSploitSettings.UnInject.Value == true then
-				AlSploitScreenGui:Destroy()
-
-				shared.UnInjected = true
-
-				AlSploitSettings.UnInject.Value = false
+				UnInjectEvent:Fire()
 			end
 		end,
 
@@ -3280,7 +3738,34 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	shared.UnInjected = false
-
 	CreateNotification(3, "AlSploit Has Loaded")
+	
+	shared.AlSploitUnInjected = false
+	
+	task.spawn(function()
+		UnInjectEvent.Event:Connect(function()
+			AlSploitSettings.UnInject.Value = false
+			shared.AlSploitUnInjected = true
+
+			AlSploitScreenGui:Destroy()
+
+			for i, v in next, AlSploitConnections do
+				v:Disconnect()
+			end
+
+			task.wait(0.5)
+
+			UnInjectEvent:Destroy()
+		end)
+	end)
 end)
+
+--Things to fix because i have nothing else to do :shrug:
+
+--print(string.format("%s", identifyexecutor()))
+--support require upvalue constants retarded shitsploits
+--saving on poopexes
+--fix targetstrafe
+--scythedisabler fix / multiaura
+--channe gui color
+--progresshud
