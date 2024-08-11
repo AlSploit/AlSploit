@@ -1467,6 +1467,7 @@ local NewLocalPlayerHumanoidRootPart
 local OldLocalPlayerHumanoidRootPart
 local ScytheAnticheatDisabledSpeed = 0
 local ScytheAnticheatDisabled = false
+local DamageBoostValue = false
 
 local KillauraAnimations = {
 	AlSploitHeartbeat = {
@@ -1497,11 +1498,6 @@ local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
 local LocalPlayerInventory = ReplicatedStorageService:WaitForChild("Inventories"):WaitForChild(LocalPlayer.Name)
 
-local KnockbackUtilCalculateKnockbackVelocity = debug.getupvalue(require(ReplicatedStorageService.TS.damage["knockback-util"]).KnockbackUtil.calculateKnockbackVelocity, 1)
-local KnockbackUtil = require(ReplicatedStorageService.TS.damage["knockback-util"]).KnockbackUtil
-
-local InventoryUtil = require(ReplicatedStorageService.TS.inventory["inventory-util"]).InventoryUtil
-
 local BedwarsControllers = {
 	ViewModelController = LocalPlayer.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"],
 	SprintController = KnitClient.Controllers.SprintController,
@@ -1515,7 +1511,8 @@ local BedwrasMetaGames = {
 }
 
 local BedwarsConstants = {
-	CombatConstant = require(ReplicatedStorageService.TS.combat["combat-constant"]).CombatConstant
+	CombatConstant = require(ReplicatedStorageService.TS.combat["combat-constant"]).CombatConstant,
+	CPSConstants = require(ReplicatedStorageService.TS["shared-constants"]).CpsConstants
 }
 
 local BedwarsRemotes = {
@@ -1528,6 +1525,11 @@ local BedwarsRemotes = {
 
 local BedwarsTables = {
 	ItemTable = debug.getupvalue(require(ReplicatedStorageService.TS.item["item-meta"]).getItemMeta, 1)
+}
+
+local BedwarsUtils = {
+	InventoryUtil = require(ReplicatedStorageService.TS.inventory["inventory-util"]).InventoryUtil,
+	KnockbackUtil = require(ReplicatedStorageService.TS.damage["knockback-util"]).KnockbackUtil
 }
 
 local function DestroyClonedHumanoidRootPart()
@@ -1826,7 +1828,7 @@ end
 local function GetInventory(Player)
 	local Player = Player or LocalPlayer
 
-	local Inventory = InventoryUtil.getInventory(Player)
+	local Inventory = BedwarsUtils.InventoryUtil.getInventory(Player)
 
 	return Inventory
 end
@@ -1927,6 +1929,10 @@ function GetSpeed()
 
 	if ScytheAnticheatDisabled == true then			
 		Speed = (Speed + ScytheAnticheatDisabledSpeed)
+	end
+	
+	if DamageBoostValue == true then
+		Speed = (Speed + 20)
 	end
 
 	Speed = ((Speed + AlSploitSettings.Speed.Speed.Value) - 20)
@@ -2052,11 +2058,9 @@ task.spawn(function()
 				OldIsClickingTooFast = BedwarsControllers.SwordController.isClickingTooFast
 
 				BedwarsControllers.SwordController.isClickingTooFast = function(self) 
-					if shared.AlSploitUnInjected == false then
-						self.lastSwing = tick()
+					self.lastSwing = tick()
 
-						return false
-					end			
+					return false		
 				end
 			end
 
@@ -2142,20 +2146,32 @@ task.spawn(function()
 	})
 end)
 
+
 task.spawn(function()
-	local OldKnockback = KnockbackUtilCalculateKnockbackVelocity
+	local OldApplyKnockback = BedwarsUtils.KnockbackUtil.applyKnockback
 
 	local Velocity = CombatTab:CreateToggle({
 		Name = "Velocity",
 
-		Function = function() 			
-			if AlSploitSettings.Velocity.Value == true then
-				KnockbackUtilCalculateKnockbackVelocity.kbDirectionStrength = (KnockbackUtilCalculateKnockbackVelocity.kbDirectionStrength * (AlSploitSettings.Velocity.Horizontal.Value / 100))
-				KnockbackUtilCalculateKnockbackVelocity.kbUpwardStrength =  (KnockbackUtilCalculateKnockbackVelocity.kbUpwardStrength * (AlSploitSettings.Velocity.Vertical.Value / 100))
+		Function = function()
+			if AlSploitSettings.Velocity.Value == true then		
+				BedwarsUtils.KnockbackUtil.applyKnockback = function(Root, Mass, Direction, Knockback, ...)	
+					if Knockback then
+						local Horizontal = (Knockback.horizontal and Knockback.horizontal or 1)
+						local Vertical = (Knockback.vertical and Knockback.vertical or 1)
+
+						if Horizontal and Vertical then
+							Knockback.horizontal = (Horizontal * (AlSploitSettings.Velocity.Horizontal.Value / 100))
+							Knockback.vertical = (Vertical * (AlSploitSettings.Velocity.Vertical.Value / 100))
+						end			
+					end
+
+					return OldApplyKnockback(Root, Mass, Direction, Knockback, ...)
+				end
 			end
 
 			if AlSploitSettings.Velocity.Value == false then
-				KnockbackUtilCalculateKnockbackVelocity = OldKnockback
+				BedwarsUtils.KnockbackUtil.applyKnockback = OldApplyKnockback
 			end
 		end,
 
@@ -2179,6 +2195,10 @@ task.spawn(function()
 		MaximumValue = 100,
 		DefaultValue = 0
 	})
+	
+	UnInjectEvent.Event:Connect(function()
+		BedwarsUtils.KnockbackUtil.applyKnockback = OldApplyKnockback
+	end)
 end)
 
 task.spawn(function()
@@ -2248,14 +2268,6 @@ task.spawn(function()
 						local B = ColorSplit[3]
 
 						KillauraBox.Color = Color3.new(R, G, B)
-					end
-
-					if AlSploitSettings.Killaura.ShowEnemy.Value == false and KillauraBox then
-						KillauraBox:Destroy()
-					end
-					
-					if KillauraBox then
-						KillauraBox.CFrame = Entity.PrimaryPart.CFrame
 					end
 				end)			
 
@@ -2361,7 +2373,10 @@ task.spawn(function()
 							end
 							
 							if not Sword or not NearestEntity and KillauraBox then
-								KillauraBox:Destroy()
+								pcall(function()
+									KillauraBox:Destroy()
+									KillauraBox = nil
+								end)
 							end
 						end)						
 					end				
@@ -2369,6 +2384,7 @@ task.spawn(function()
 
 				if KillauraBox then
 					KillauraBox:Destroy()
+					KillauraBox = nil
 				end
 			end)		
 		end,
@@ -2726,6 +2742,30 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local OldBlockPlaceCPS = BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS
+	
+	local NoPlacementCPS = BlatantTab:CreateToggle({
+		Name = "NoPlacementCPS",
+
+		Function = function()
+			if AlSploitSettings.NoPlacementCPS.Value == true then
+				BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS = math.huge
+			end
+			
+			if AlSploitSettings.NoPlacementCPS.Value == false then
+				BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS = OldBlockPlaceCPS
+			end
+		end,
+
+		HoverText = "Removes The Block Placement Cps 🔨"
+	})
+	
+	UnInjectEvent.Event:Connect(function()
+		BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS = OldBlockPlaceCPS
+	end)
+end)
+
+task.spawn(function()
 	local NoFallDamage = BlatantTab:CreateToggle({
 		Name = "NoFallDamage",
 
@@ -2803,16 +2843,17 @@ task.spawn(function()
 	})
 
 	Client:WaitFor("EntityDamageEvent"):andThen(function(v)
-		v:Connect(function(DamageTable)
-			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.KnockbackTp.Value == true then 
+		v:Connect(function(DamageTable)			
+			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.KnockbackTp.Value == true and shared.AlSploitUnInjected == false then 
 				local KnockbackMultiplier = DamageTable.knockbackMultiplier
 
 				if KnockbackMultiplier then
-					KnockbackMultiplier = DamageTable.knockbackMultiplier.horizontal
+					
+					KnockbackMultiplier = (DamageTable.knockbackMultiplier.horizontal / 1.5)
 
 					if KnockbackMultiplier then
 						local ProgressHud = CreateProgressHud(KnockbackMultiplier)
-						local Speed = (GetSpeed() * 40)
+						local Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 						if AlSploitSettings.KnockbackTp.TeleportTo.LookDirection.Value == true then
 							if AlSploitSettings.KnockbackTp.MovementMethod.Automatic.Value == true then
@@ -2823,9 +2864,11 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
+										
+										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
-									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+									until shared.AlSploitUnInjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
 
 									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
 								end)
@@ -2839,10 +2882,13 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
+										
+										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
+										
 										local Unit = Vector3.new(LocalPlayer.Character.PrimaryPart.CFrame.LookVector.X, 0, LocalPlayer.Character.PrimaryPart.CFrame.LookVector.Z).Unit
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
-									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+									until shared.AlSploitUnInjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
 
 									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
 								end)
@@ -2862,9 +2908,11 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
+										
+										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
-									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+									until shared.AlSploitUnInjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
 
 									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
 								end)
@@ -2884,9 +2932,11 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
+										
+										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
-									until shared.AlSploitUninjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
+									until shared.AlSploitUnInjected == true or AlSploitSettings.KnockbackTp.Value == false or IsAlive(LocalPlayer) == false or ((tick() - StartTick) >= KnockbackMultiplier)
 
 									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
 								end)
@@ -2896,6 +2946,28 @@ task.spawn(function()
 						end
 					end
 				end
+			end 
+		end)	
+	end) 
+end)
+
+task.spawn(function()
+	local DamageBoost = BlatantTab:CreateToggle({
+		Name = "DamageBoost",
+
+		Function = function() end,
+
+		HoverText = "Boosts Your Speed While Being Damaged 🎢"
+	})
+
+	Client:WaitFor("EntityDamageEvent"):andThen(function(v)
+		v:Connect(function(DamageTable)
+			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.DamageBoost.Value == true and shared.AlSploitUnInjected == false then 				
+				DamageBoostValue = true
+
+				task.wait(0.6)
+
+				DamageBoostValue = false
 			end 
 		end)	
 	end) 
@@ -3158,8 +3230,6 @@ task.spawn(function()
 
 			if AlSploitSettings.HideKillFeedGui.Value == false and ReplicatedStorageService:FindFirstChild("KillFeedHud") then
 				ReplicatedStorageService.KillFeedHud.Parent = LocalPlayer.PlayerGui
-
-				KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
 			end	
 		end,
 
@@ -3637,16 +3707,14 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local ClickMeIfAlSploitBroke = GuiTab:CreateToggle({
-		Name = "ClickMeIfAlSploitBroke",
+	local RestartAlSploit = GuiTab:CreateToggle({
+		Name = "RestartAlSploit",
 
 		Function = function()            
-			if AlSploitSettings.ClickMeIfAlSploitBroke.Value == true then
-				AlSploitSettings.ClickMeIfAlSploitBroke.Value = false
-
-				AlSploitScreenGui:Destroy()
-
-				shared.AlSploitUnInjected = true
+			if AlSploitSettings.RestartAlSploit.Value == true then
+				AlSploitSettings.RestartAlSploit.Value = false
+				
+				UnInjectEvent:Fire()
 
 				if DelFolder then
 					DelFolder("AlSploit")
@@ -3683,11 +3751,11 @@ task.spawn(function()
 		Name = "NoFpsCap",
 
 		Function = function()
-			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == true and setfpscap then
+			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == true and SetFpsCap then
 				SetFpsCap(1000)
 			end
 
-			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and setfpscap then
+			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and SetFpsCap then
 				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
@@ -3703,7 +3771,7 @@ task.spawn(function()
 		Name = "Fps",
 
 		Function = function()
-			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and setfpscap then
+			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and SetFpsCap then
 				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
@@ -3718,7 +3786,7 @@ task.spawn(function()
 
 	UnInjectEvent.Event:Connect(function()
 		if SetFpsCap then
-			setfpscap(AlSploitSettings.FpsUnlocker.Fps.Value)
+			SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 		end
 	end)
 end)
@@ -3766,6 +3834,5 @@ end)
 --support require upvalue constants retarded shitsploits
 --saving on poopexes
 --fix targetstrafe
---scythedisabler fix / multiaura
---channe gui color
---progresshud
+--multiaura
+--change gui color
