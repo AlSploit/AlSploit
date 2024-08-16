@@ -4,6 +4,7 @@ local ReplicatedStorageService = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local UserInputService = game:GetService("UserInputService")
 local LightingService = game:GetService("Lighting")
+local TeleportService = game:GetService("TeleportService")
 local PlayerService = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
@@ -26,6 +27,7 @@ local OpenGui = Instance.new("TextButton")
 local OpenGuiUICorner = Instance.new("UICorner")
 local OpenGuiUITextSizeConstraint = Instance.new("UITextSizeConstraint")
 
+local ChangeGuiColorEvent = Instance.new("BindableEvent")
 local UnInjectEvent = Instance.new("BindableEvent")
 
 task.spawn(function()
@@ -91,6 +93,9 @@ task.spawn(function()
 	OpenGuiUITextSizeConstraint.Name = "OpenGuiUITextSizeConstraint"
 
 	OpenGuiUITextSizeConstraint.MaxTextSize = 12
+	
+	ChangeGuiColorEvent.Parent = ReplicatedStorageService
+	ChangeGuiColorEvent.Name = "ChangeColorEvent"
 
 	UnInjectEvent.Parent = ReplicatedStorageService
 	UnInjectEvent.Name = "UnInjectEvent"
@@ -103,6 +108,9 @@ task.spawn(function()
 end)
 
 local AlSploitSettings = {}
+
+local DefaultAlSploitColor = Color3.new(0, 0.6, 1)
+local CurrentAlSploitColor
 
 local DefaultLayoutOrder = 0
 local AlSploitLibrary = {}
@@ -190,7 +198,6 @@ function AlSploitLibrary:CreateTab(Name)
 	local UIListLayout = Instance.new("UIListLayout")
 
 	local Title = Instance.new("TextLabel")
-	local UIGradient = Instance.new("UIGradient")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 
 	Tab.Parent = ContainerFrame
@@ -232,7 +239,7 @@ function AlSploitLibrary:CreateTab(Name)
 
 	Title.BackgroundTransparency = 1
 	Title.BorderSizePixel = 0
-	Title.TextColor3 = Color3.new(1, 1, 1)
+	Title.TextColor3 = DefaultAlSploitColor
 	Title.TextScaled = true
 	Title.TextWrapped = true
 	Title.TextSize = 20
@@ -240,12 +247,12 @@ function AlSploitLibrary:CreateTab(Name)
 	Title.Size = UDim2.new(1, 0, 0.743, 0)
 	Title.Font = Enum.Font.GothamBold
 	Title.Text = Name
-
-	UIGradient.Parent = Title
-	UIGradient.Name = "UIGradient"
-
-	UIGradient.Rotation = 90
-	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0, 0.6, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.333333, 0.733333, 1))}
+	
+	task.spawn(function()
+		ChangeGuiColorEvent.Event:Connect(function()
+			Title.TextColor3 = CurrentAlSploitColor
+		end)
+	end)
 
 	UITextSizeConstraint.Parent = Title
 	UITextSizeConstraint.Name = "UITextSizeConstraint2"
@@ -1179,7 +1186,7 @@ function AlSploitLibrary:CreateTab(Name)
 			NameDisplay.Position = UDim2.new(-0.005, 0, 0.198, 0)
 			NameDisplay.Size = UDim2.new(1.005, 0, 0.470, 0)
 			NameDisplay.Font = Enum.Font.GothamBold
-			NameDisplay.Text = "EnemyColor"
+			NameDisplay.Text = Name
 
 			UITextSizeConstraint_5.Parent = NameDisplay
 			UITextSizeConstraint_5.Name = "UITextSizeConstraint_5"
@@ -1256,6 +1263,8 @@ function AlSploitLibrary:CreateTab(Name)
 
 								AlSploitSettings[Parent][Name].Percentage = Percentage
 								AlSploitSettings[Parent][Name].Value = tostring(Color.R .. "," .. Color.G .. "," .. Color.B)
+								
+								Function()
 							end					
 						until shared.AlSploitUnInjected == true or ColorPicker.Visible == false
 					end)
@@ -2783,7 +2792,7 @@ task.spawn(function()
 	})
 end)
 
-task.spawn(function()	
+task.spawn(function()
 	local KnockbackTp = BlatantTab:CreateToggle({
 		Name = "KnockbackTp",
 
@@ -3053,6 +3062,24 @@ task.spawn(function()
 
 		MaximumValue = 19,
 		DefaultValue = 19
+	})
+end)
+
+task.spawn(function()
+	local InstantWin = BlatantTab:CreateToggle({
+		Name = "InstantWin",
+
+		Function = function()
+			if AlSploitSettings.InstantWin.Value == true then
+				AlSploitSettings.InstantWin.Value = false
+
+				local TeleportData = TeleportService:GetLocalPlayerTeleportData() 
+				
+				TeleportService:Teleport(game.PlaceId, LocalPlayer, TeleportData)	
+			end
+		end,
+
+		HoverText = "Wins the game instantly. 🏆"
 	})
 end)
 
@@ -3704,6 +3731,425 @@ task.spawn(function()
 			LightingService.GalaxySky:Destroy()				
 		end
 	end)
+end)
+
+task.spawn(function()
+	local CreateEspEvent = Instance.new("BindableEvent")
+	
+	CreateEspEvent.Parent = AlSploitScreenGui
+	CreateEspEvent.Name = "CreateEspEvent"
+	
+	local Esp = WorldTab:CreateToggle({
+		Name = "Esp",
+		
+		Function = function()
+			repeat task.wait() until GetMatchState() ~= 0
+			
+			for i, v in next, PlayerService:GetPlayers() do
+				if AlSploitSettings.Esp.Value == true and shared.AlSploitUnInjected == false then
+					if IsAlive(v) == true then
+						if AlSploitSettings.UseHighlight == true then
+							if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+								local Highlight = Instance.new("Highlight")
+
+								Highlight.Parent = v.Character
+								Highlight.Name = "Highlight"
+
+								Highlight.OutlineTransparency = 1
+								Highlight.FillTransparency = 0.5
+
+								if AlSploitSettings.UseTeamatesColor.Value == true then
+									Highlight.FillColor.Color = v.TeamColor.Color
+								end
+
+								if AlSploitSettings.UseTeamatesColor.Value == false then
+									local ColorSplit = string.split(AlSploitSettings.Esp.TeamatesColor.Value, ",")
+
+									local R = ColorSplit[1]
+									local G = ColorSplit[2]
+									local B = ColorSplit[3]
+
+									Highlight.FillColor.Color = Color3.new(R, G, B)
+								end
+							end	
+
+							if AlSploitSettings.Esp.ShowEnemies.Value == true and v.Team.TeamColor ~= LocalPlayer.Team.TeamColor then
+								local Highlight = Instance.new("Highlight")
+
+								Highlight.Parent = v.Character
+								Highlight.Name = "Highlight"
+
+								Highlight.OutlineTransparency = 1
+								Highlight.FillTransparency = 0.5
+
+								if AlSploitSettings.UseEnemiesColor.Value == true then
+									Highlight.FillColor.Color = v.TeamColor.Color
+								end
+
+								if AlSploitSettings.UseEnemiesColor.Value == false then
+									local ColorSplit = string.split(AlSploitSettings.Esp.EnemiesColor.Value, ",")
+
+									local R = ColorSplit[1]
+									local G = ColorSplit[2]
+									local B = ColorSplit[3]
+
+									Highlight.FillColor.Color = Color3.new(R, G, B)
+								end
+							end	
+						end
+
+						if AlSploitSettings.UseHighlight == false then
+							if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+								local BillBoardGui = Instance.new("BillboardGui")
+
+								local Frame = Instance.new("Frame")
+								local UIStroke = Instance.new("UIStroke")
+
+								BillBoardGui.Parent = v.Character.PrimaryPart
+								BillBoardGui.Name = "Esp"
+
+								BillBoardGui.AlwaysOnTop = true
+								BillBoardGui.Size = UDim2.new(4, 0, 4, 0)
+
+								Frame.Parent = BillBoardGui
+								Frame.Name = "Frame"
+
+								Frame.BackgroundTransparency = 1	
+								Frame.Position = UDim2.new(0, 0, (v.Character.LowerTorso and (-v.Character.LowerTorso.Size.Y / 2) or (-v.PrimaryPart.Size.Y / 2)), 0)
+								Frame.Size = UDim2.new(1, 0, 1.5, 0)
+
+								UIStroke.Parent = Frame
+								UIStroke.Name = "Frame"
+
+								UIStroke.Transparency = 0
+								UIStroke.Thickness = 1.5							
+
+								if AlSploitSettings.UseTeamatesColor.Value == true then
+									UIStroke.Color = v.TeamColor.Color
+								end
+
+								if AlSploitSettings.UseTeamatesColor.Value == false then
+									local ColorSplit = string.split(AlSploitSettings.Esp.TeamatesColor.Value, ",")
+
+									local R = ColorSplit[1]
+									local G = ColorSplit[2]
+									local B = ColorSplit[3]
+
+									UIStroke.Color = Color3.new(R, G, B)
+								end
+							end	
+
+							if AlSploitSettings.Esp.ShowEnemies.Value == true and v.Team.TeamColor ~= LocalPlayer.Team.TeamColor then
+								local BillBoardGui = Instance.new("BillboardGui")
+
+								local Frame = Instance.new("Frame")
+								local UIStroke = Instance.new("UIStroke")
+
+								BillBoardGui.Parent = v.Character.PrimaryPart
+								BillBoardGui.Name = "Esp"
+
+								BillBoardGui.AlwaysOnTop = true
+								BillBoardGui.Size = UDim2.new(4, 0, 4, 0)
+
+								Frame.Parent = BillBoardGui
+								Frame.Name = "Frame"
+
+								Frame.BackgroundTransparency = 1	
+								Frame.Position = UDim2.new(0, 0, (v.Character.LowerTorso and (-v.Character.LowerTorso.Size.Y / 2) or (-v.PrimaryPart.Size.Y / 2)), 0)
+								Frame.Size = UDim2.new(1, 0, 1.5, 0)
+
+								UIStroke.Parent = Frame
+								UIStroke.Name = "Frame"
+
+								UIStroke.Transparency = 0
+								UIStroke.Thickness = 1.5							
+
+								if AlSploitSettings.UseEnemiesColor.Value == true then
+									UIStroke.Color = v.TeamColor.Color
+								end
+
+								if AlSploitSettings.UseEnemiesColor.Value == false then
+									local ColorSplit = string.split(AlSploitSettings.Esp.EnemiesColor.Value, ",")
+
+									local R = ColorSplit[1]
+									local G = ColorSplit[2]
+									local B = ColorSplit[3]
+
+									UIStroke.Color = Color3.new(R, G, B)
+								end
+							end	
+						end
+					end
+				end
+				
+				if AlSploitSettings.Esp.Value == false then
+					if v.Character:FindFirstChild("Esp") then
+						v.Character:FindFirstChild("Esp"):Destroy()
+					end
+				end
+				
+				v.CharacterAdded:Connect(function()
+					repeat task.wait() until IsAlive(v)
+
+					if AlSploitSettings.UseHighlight == true and shared.AlSploitUnInjected == false then
+						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+							local Highlight = Instance.new("Highlight")
+
+							Highlight.Parent = v.Character
+							Highlight.Name = "Highlight"
+
+							Highlight.OutlineTransparency = 1
+							Highlight.FillTransparency = 0.5
+
+							if AlSploitSettings.UseTeamatesColor.Value == true then
+								Highlight.FillColor.Color = v.TeamColor.Color
+							end
+
+							if AlSploitSettings.UseTeamatesColor.Value == false then
+								local ColorSplit = string.split(AlSploitSettings.Esp.TeamatesColor.Value, ",")
+
+								local R = ColorSplit[1]
+								local G = ColorSplit[2]
+								local B = ColorSplit[3]
+
+								Highlight.FillColor.Color = Color3.new(R, G, B)
+							end
+						end	
+
+						if AlSploitSettings.Esp.ShowEnemies.Value == true and v.Team.TeamColor ~= LocalPlayer.Team.TeamColor then
+							local Highlight = Instance.new("Highlight")
+
+							Highlight.Parent = v.Character
+							Highlight.Name = "Highlight"
+
+							Highlight.OutlineTransparency = 1
+							Highlight.FillTransparency = 0.5
+
+							if AlSploitSettings.UseEnemiesColor.Value == true then
+								Highlight.FillColor.Color = v.TeamColor.Color
+							end
+
+							if AlSploitSettings.UseEnemiesColor.Value == false then
+								local ColorSplit = string.split(AlSploitSettings.Esp.EnemiesColor.Value, ",")
+
+								local R = ColorSplit[1]
+								local G = ColorSplit[2]
+								local B = ColorSplit[3]
+
+								Highlight.FillColor.Color = Color3.new(R, G, B)
+							end
+						end	
+					end
+
+					if AlSploitSettings.UseHighlight == false then
+						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+							local BillBoardGui = Instance.new("BillboardGui")
+
+							local Frame = Instance.new("Frame")
+							local UIStroke = Instance.new("UIStroke")
+
+							BillBoardGui.Parent = v.Character.PrimaryPart
+							BillBoardGui.Name = "Esp"
+
+							BillBoardGui.AlwaysOnTop = true
+							BillBoardGui.Size = UDim2.new(4, 0, 4, 0)
+
+							Frame.Parent = BillBoardGui
+							Frame.Name = "Frame"
+
+							Frame.BackgroundTransparency = 1	
+							Frame.Position = UDim2.new(0, 0, (v.Character.LowerTorso and (-v.Character.LowerTorso.Size.Y / 2) or (-v.PrimaryPart.Size.Y / 2)), 0)
+							Frame.Size = UDim2.new(1, 0, 1.5, 0)
+
+							UIStroke.Parent = Frame
+							UIStroke.Name = "Frame"
+
+							UIStroke.Transparency = 0
+							UIStroke.Thickness = 1.5							
+
+							if AlSploitSettings.UseTeamatesColor.Value == true then
+								UIStroke.Color = v.TeamColor.Color
+							end
+
+							if AlSploitSettings.UseTeamatesColor.Value == false then
+								local ColorSplit = string.split(AlSploitSettings.Esp.TeamatesColor.Value, ",")
+
+								local R = ColorSplit[1]
+								local G = ColorSplit[2]
+								local B = ColorSplit[3]
+
+								UIStroke.Color = Color3.new(R, G, B)
+							end
+						end	
+
+						if AlSploitSettings.Esp.ShowEnemies.Value == true and v.Team.TeamColor ~= LocalPlayer.Team.TeamColor then
+							local BillBoardGui = Instance.new("BillboardGui")
+
+							local Frame = Instance.new("Frame")
+							local UIStroke = Instance.new("UIStroke")
+
+							BillBoardGui.Parent = v.Character.PrimaryPart
+							BillBoardGui.Name = "Esp"
+
+							BillBoardGui.AlwaysOnTop = true
+							BillBoardGui.Size = UDim2.new(4, 0, 4, 0)
+
+							Frame.Parent = BillBoardGui
+							Frame.Name = "Frame"
+
+							Frame.BackgroundTransparency = 1	
+							Frame.Position = UDim2.new(0, 0, (v.Character.LowerTorso and (-v.Character.LowerTorso.Size.Y / 2) or (-v.PrimaryPart.Size.Y / 2)), 0)
+							Frame.Size = UDim2.new(1, 0, 1.5, 0)
+
+							UIStroke.Parent = Frame
+							UIStroke.Name = "Frame"
+
+							UIStroke.Transparency = 0
+							UIStroke.Thickness = 1.5							
+
+							if AlSploitSettings.UseEnemiesColor.Value == true then
+								UIStroke.Color = v.TeamColor.Color
+							end
+
+							if AlSploitSettings.UseEnemiesColor.Value == false then
+								local ColorSplit = string.split(AlSploitSettings.Esp.EnemiesColor.Value, ",")
+
+								local R = ColorSplit[1]
+								local G = ColorSplit[2]
+								local B = ColorSplit[3]
+
+								UIStroke.Color = Color3.new(R, G, B)
+							end
+						end	
+					end
+				end)
+			end
+		end,
+		
+		HoverText = "Shows Where The Selected Players Are 🕶️"
+	})
+	
+	Esp:CreateToggle({
+		Name = "UseTeamatesColor",
+
+		Function = function() 
+
+		end,
+
+		DefaultValue = true
+	})
+	
+	Esp:CreateToggle({
+		Name = "UseEnemiesColor",
+
+		Function = function() 
+
+		end,
+
+		DefaultValue = true
+	})
+	
+	Esp:CreateToggle({
+		Name = "UseHighlight",
+
+		Function = function() 
+			
+		end,
+
+		DefaultValue = false
+	})
+	
+	Esp:CreateToggle({
+		Name = "ShowTeamates",
+		
+		Function = function() 
+			
+		end,
+		
+		DefaultValue = true
+	})
+	
+	Esp:CreateToggle({
+		Name = "ShowEnemies",
+
+		Function = function() 
+			
+		end,
+
+		DefaultValue = true
+	})
+	
+	Esp:CreateColorSlider({
+		Name = "TeamatesColor",
+		
+		Function = function()
+			
+		end,
+		
+		DefaultValue = Color3.new(0, 1, 0)
+	})
+	
+	Esp:CreateColorSlider({
+		Name = "EnemiesColor",
+
+		Function = function()
+
+		end,
+
+		DefaultValue = Color3.new(1, 0, 0)
+	})
+	
+	CreateEspEvent.Event:Connect(function()
+		
+	end)
+end)
+
+task.spawn(function()
+	local ChangeGuiColor = GuiTab:CreateToggle({
+		Name = "ChangeGuiColor",
+
+		Function = function()
+			if AlSploitSettings.ChangeGuiColor.Value == true then
+				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.GuiColor.Value, ",")
+
+				local R = ColorSplit[1]
+				local G = ColorSplit[2]
+				local B = ColorSplit[3]
+
+				CurrentAlSploitColor = Color3.new(R, G, B)
+
+				ChangeGuiColorEvent:Fire()
+			end
+			
+			if AlSploitSettings.ChangeGuiColor.Value == false then
+				CurrentAlSploitColor = Color3.new(0, 0.6, 1)
+
+				ChangeGuiColorEvent:Fire()
+			end
+		end,
+
+		HoverText = "Changes The Color Of AlSploit's Gui 🌈"
+	})
+
+	ChangeGuiColor:CreateColorSlider({
+		Name = "GuiColor",
+
+		Function = function()		
+			if AlSploitSettings.ChangeGuiColor.Value == true then
+				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.GuiColor.Value, ",")
+
+				local R = ColorSplit[1]
+				local G = ColorSplit[2]
+				local B = ColorSplit[3]
+
+				CurrentAlSploitColor = Color3.new(R, G, B)
+
+				ChangeGuiColorEvent:Fire()
+			end
+		end,
+
+		DefaultValue = Color3.new(0, 0.6, 1)
+	})
 end)
 
 task.spawn(function()
