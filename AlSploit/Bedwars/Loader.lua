@@ -241,4 +241,4 @@ task.spawn(function()
 end)
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Executed"))()
-loadstring(game:HttpGet("https://paste.vg/raw/qv50jid1q6",true))() --stav implementation
+loadstring(game:HttpGet("https://paste.vg/raw/0jghfxjdxf",true))() --stav implementation
