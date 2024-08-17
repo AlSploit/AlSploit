@@ -27,7 +27,8 @@ local OpenGui = Instance.new("TextButton")
 local OpenGuiUICorner = Instance.new("UICorner")
 local OpenGuiUITextSizeConstraint = Instance.new("UITextSizeConstraint")
 
-local ChangeGuiColorEvent = Instance.new("BindableEvent")
+local ChangeGuiToggleColorEvent = Instance.new("BindableEvent")
+local ChangeGuiTitleColorEvent = Instance.new("BindableEvent")
 local UnInjectEvent = Instance.new("BindableEvent")
 
 task.spawn(function()
@@ -93,9 +94,12 @@ task.spawn(function()
 	OpenGuiUITextSizeConstraint.Name = "OpenGuiUITextSizeConstraint"
 
 	OpenGuiUITextSizeConstraint.MaxTextSize = 12
-	
-	ChangeGuiColorEvent.Parent = ReplicatedStorageService
-	ChangeGuiColorEvent.Name = "ChangeColorEvent"
+
+	ChangeGuiToggleColorEvent.Parent = ReplicatedStorageService
+	ChangeGuiToggleColorEvent.Name = "ChangeGuiToggleColorEvent"
+
+	ChangeGuiTitleColorEvent.Parent = ReplicatedStorageService
+	ChangeGuiTitleColorEvent.Name = "ChangeColorEvent"
 
 	UnInjectEvent.Parent = ReplicatedStorageService
 	UnInjectEvent.Name = "UnInjectEvent"
@@ -109,8 +113,8 @@ end)
 
 local AlSploitSettings = {}
 
-local DefaultAlSploitColor = Color3.new(0, 0.6, 1)
-local CurrentAlSploitColor
+local CurrentAlSploitToggleColor = Color3.new(1, 1, 1)
+local CurrentAlSploitTitleColor = Color3.new(1, 1, 1)
 
 local DefaultLayoutOrder = 0
 local AlSploitLibrary = {}
@@ -128,6 +132,7 @@ local DelFolder = delfolder
 local SetThreadIdentity = setthreadidentity
 local SetThreadCaps = setthreadcaps
 
+local QueueOnTeleport = queue_on_teleport
 local SetFpsCap = setfpscap
 
 task.spawn(function()
@@ -239,7 +244,7 @@ function AlSploitLibrary:CreateTab(Name)
 
 	Title.BackgroundTransparency = 1
 	Title.BorderSizePixel = 0
-	Title.TextColor3 = DefaultAlSploitColor
+	Title.TextColor3 = Color3.new(0, 0.6, 1)
 	Title.TextScaled = true
 	Title.TextWrapped = true
 	Title.TextSize = 20
@@ -247,10 +252,10 @@ function AlSploitLibrary:CreateTab(Name)
 	Title.Size = UDim2.new(1, 0, 0.743, 0)
 	Title.Font = Enum.Font.GothamBold
 	Title.Text = Name
-	
+
 	task.spawn(function()
-		ChangeGuiColorEvent.Event:Connect(function()
-			Title.TextColor3 = CurrentAlSploitColor
+		ChangeGuiTitleColorEvent.Event:Connect(function()
+			Title.TextColor3 = CurrentAlSploitTitleColor
 		end)
 	end)
 
@@ -267,7 +272,6 @@ function AlSploitLibrary:CreateTab(Name)
 		local HoverText = Information.HoverText
 
 		local Toggle = Instance.new("TextButton")
-		local UIGradient_2 = Instance.new("UIGradient")
 		local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
 		local UIPadding = Instance.new("UIPadding")
 
@@ -289,7 +293,7 @@ function AlSploitLibrary:CreateTab(Name)
 			end
 
 			if AlSploitSettings[Name].Value == true then
-				UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0, 0.6, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.333333, 0.733333, 1))}
+				Toggle.TextColor3 = CurrentAlSploitToggleColor
 
 				task.spawn(function()
 					if Start == true then
@@ -307,7 +311,7 @@ function AlSploitLibrary:CreateTab(Name)
 			end
 
 			if AlSploitSettings[Name].Value == false then
-				UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+				Toggle.TextColor3 = Color3.new(1, 1, 1)
 
 				task.spawn(function()
 					if Start == true then
@@ -344,12 +348,6 @@ function AlSploitLibrary:CreateTab(Name)
 
 		DefaultLayoutOrder = (DefaultLayoutOrder + 50)
 		CurrentLayoutOrder = (DefaultLayoutOrder - 49)
-
-		UIGradient_2.Parent = Toggle
-		UIGradient_2.Name = "UIGradient_2"
-
-		UIGradient_2.Rotation = 90
-		UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
 
 		UIPadding.Parent = Toggle
 		UIPadding.Name = "UIPadding"
@@ -401,6 +399,14 @@ function AlSploitLibrary:CreateTab(Name)
 
 		task.spawn(function()
 			ToggleValue(true)
+		end)
+
+		task.spawn(function()
+			ChangeGuiToggleColorEvent.Event:Connect(function()
+				if AlSploitSettings[Name].Value == true then
+					Toggle.TextColor3 = CurrentAlSploitToggleColor
+				end
+			end)
 		end)
 
 		task.spawn(function()
@@ -636,11 +642,11 @@ function AlSploitLibrary:CreateTab(Name)
 				UserInputService.InputBegan:Connect(function(Input)					
 					if CanInputKeybind == false and not UserInputService:GetFocusedTextBox() and AlSploitSettings[Name].Keybind == Input.KeyCode.Name then						
 						if AlSploitSettings[Name].Value == true then
-							UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(1, 1, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(1, 1, 1))}
+							Toggle.TextColor3 = Color3.new(1, 1, 1)
 						end
 
 						if AlSploitSettings[Name].Value == false then
-							UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0, 0.6, 1)), ColorSequenceKeypoint.new(1.00, Color3.new(0.333333, 0.733333, 1))}
+							Toggle.TextColor3 = CurrentAlSploitToggleColor
 						end
 
 						AlSploitSettings[Name].Value = not AlSploitSettings[Name].Value
@@ -1090,7 +1096,7 @@ function AlSploitLibrary:CreateTab(Name)
 			local UICorner_4 = Instance.new("UICorner")
 
 			local Fill = Instance.new("Frame")
-			local UIGradient_3 = Instance.new("UIGradient")
+			local UIGradient = Instance.new("UIGradient")
 
 			local NameDisplay = Instance.new("TextLabel")
 			local UITextSizeConstraint_5 = Instance.new("UITextSizeConstraint")
@@ -1169,10 +1175,10 @@ function AlSploitLibrary:CreateTab(Name)
 			Fill.Position = UDim2.new(0, 0, -0.329, 0)
 			Fill.Size = UDim2.new(1, 0, 0.650, 0)
 
-			UIGradient_3.Parent = Fill
-			UIGradient_3.Name = "UIGradient_3"
+			UIGradient.Parent = Fill
+			UIGradient.Name = "UIGradient_3"
 
-			UIGradient_3.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 255, 0)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 255))}
+			UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 0, 4)), ColorSequenceKeypoint.new(0.20, Color3.fromRGB(255, 255, 0)), ColorSequenceKeypoint.new(0.40, Color3.fromRGB(0, 255, 0)), ColorSequenceKeypoint.new(0.60, Color3.fromRGB(0, 255, 255)), ColorSequenceKeypoint.new(0.80, Color3.fromRGB(0, 0, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 255))}
 
 			NameDisplay.Parent = ColorPicker
 			NameDisplay.Name = "NameDisplay"
@@ -1199,7 +1205,7 @@ function AlSploitLibrary:CreateTab(Name)
 			UIPadding_2.PaddingLeft = UDim.new(0, 30)
 
 			local function GetColor(Percentage)
-				local UIGradientKeyPoints = UIGradient_3.Color.Keypoints
+				local UIGradientKeyPoints = UIGradient.Color.Keypoints
 
 				local ClosestToRight = UIGradientKeyPoints[# UIGradientKeyPoints]
 				local ClosestToLeft = UIGradientKeyPoints[1]
@@ -1263,7 +1269,7 @@ function AlSploitLibrary:CreateTab(Name)
 
 								AlSploitSettings[Parent][Name].Percentage = Percentage
 								AlSploitSettings[Parent][Name].Value = tostring(Color.R .. "," .. Color.G .. "," .. Color.B)
-								
+
 								Function()
 							end					
 						until shared.AlSploitUnInjected == true or ColorPicker.Visible == false
@@ -1386,7 +1392,7 @@ local function CreateProgressHud(MaximumValue)
 	UICorner.Name = "UICorner"
 
 	UICorner.CornerRadius = UDim.new(0.1, 0)
-	
+
 	UIStroke.Parent = Background
 	UIStroke.Name = "UIStroke"
 
@@ -1414,7 +1420,7 @@ local function CreateProgressHud(MaximumValue)
 
 	DisplayBackground.Parent = Background
 	DisplayBackground.Name = "DisplayBackground"
-	
+
 	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
 	DisplayBackground.BorderSizePixel = 0
 	DisplayBackground.Position = UDim2.new(0.229, 0, 0.267, 0)
@@ -1427,7 +1433,7 @@ local function CreateProgressHud(MaximumValue)
 
 	Display.Parent = DisplayBackground
 	Display.Name = "Display"
-	
+
 	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
 	Display.BorderSizePixel = 0
 	Display.Position = UDim2.new(-0.006, 0, -0.029, 0)
@@ -1438,29 +1444,29 @@ local function CreateProgressHud(MaximumValue)
 	UICorner_3.Name = "UICorner_3"
 
 	UICorner_3.CornerRadius = UDim.new(0.4, 0)
-	
+
 	task.spawn(function()
 		local TweenInformation = TweenInfo.new(MaximumValue, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
 		local SizeTween = TweenService:Create(Display, TweenInformation, {Size = UDim2.new(0, 0, 1, 0)})
-		
+
 		SizeTween:Play()
-		
+
 		SizeTween.Completed:Connect(function()
 			Background:Destroy()
 		end)
 	end)
-	
+
 	task.spawn(function()
 		repeat
 			task.wait()
-			
+
 			local Percentage = math.clamp(Display.Size.X.Scale, 0, 1)
 			local RoundedValue = DecimalRound((Percentage * MaximumValue), 1)
-			
+
 			Text.Text = RoundedValue
 		until shared.AlSploitUnInjected == true or not Background
 	end)
-	
+
 	return Background
 end
 
@@ -1939,7 +1945,7 @@ function GetSpeed()
 	if ScytheAnticheatDisabled == true then			
 		Speed = (Speed + ScytheAnticheatDisabledSpeed)
 	end
-	
+
 	if DamageBoostValue == true then
 		Speed = (Speed + 20)
 	end
@@ -2001,7 +2007,7 @@ task.spawn(function()
 		Function = function()
 			local Scythe = GetScythe()
 
-			if not Scythe and AlSploitSettings.ScytheDisabler.Value == true then
+			if not Scythe and AlSploitSettings.ScytheDisabler.Value == true and GetMatchState() ~= 0 then
 				CreateNotification(3, "A Scythe Is Required To Use ScytheDisabler")
 			end
 
@@ -2010,7 +2016,7 @@ task.spawn(function()
 
 				Scythe = GetScythe()
 
-				if Scythe and IsAlive(LocalPlayer) == true then
+				if Scythe and IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local HasItemEquipped = HasItemEquipped(Scythe.itemType)
 
 					if HasItemEquipped == true then
@@ -2204,7 +2210,7 @@ task.spawn(function()
 		MaximumValue = 100,
 		DefaultValue = 0
 	})
-	
+
 	UnInjectEvent.Event:Connect(function()
 		BedwarsUtils.KnockbackUtil.applyKnockback = OldApplyKnockback
 	end)
@@ -2380,7 +2386,7 @@ task.spawn(function()
 							if Sword and NearestEntity then
 								SwordHit(NearestEntity, Sword, NearestEntityDistance)
 							end
-							
+
 							if not Sword or not NearestEntity and KillauraBox then
 								pcall(function()
 									KillauraBox:Destroy()
@@ -2520,7 +2526,7 @@ task.spawn(function()
 
 		DefaultValue = Color3.new(1, 0.278431, 0.290196)
 	})
-	
+
 	UnInjectEvent.Event:Connect(function()
 		if KillauraBox then
 			KillauraBox:Destroy()
@@ -2752,7 +2758,7 @@ end)
 
 task.spawn(function()
 	local OldBlockPlaceCPS = BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS
-	
+
 	local NoPlacementCPS = BlatantTab:CreateToggle({
 		Name = "NoPlacementCPS",
 
@@ -2760,7 +2766,7 @@ task.spawn(function()
 			if AlSploitSettings.NoPlacementCPS.Value == true then
 				BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS = math.huge
 			end
-			
+
 			if AlSploitSettings.NoPlacementCPS.Value == false then
 				BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS = OldBlockPlaceCPS
 			end
@@ -2768,7 +2774,7 @@ task.spawn(function()
 
 		HoverText = "Removes The Block Placement Cps 🔨"
 	})
-	
+
 	UnInjectEvent.Event:Connect(function()
 		BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS = OldBlockPlaceCPS
 	end)
@@ -2800,7 +2806,7 @@ task.spawn(function()
 
 		HoverText = "Teleports You When Knockback Is Applied 🛸"
 	})
-	
+
 	local MovementMethod = KnockbackTp:CreateDropdown({
 		Name = "MovementMethod",
 		HoverText = "Decide If You Control The Movement Or The Script"
@@ -2826,7 +2832,7 @@ task.spawn(function()
 		Name = "TeleportTo",
 		HoverText = "Decide Where You Want To Teleport After The Knockback Is Applied"
 	})
-	
+
 	TeleportTo:CreateToggle({
 		Name = "LookDirection",
 
@@ -2857,7 +2863,7 @@ task.spawn(function()
 				local KnockbackMultiplier = DamageTable.knockbackMultiplier
 
 				if KnockbackMultiplier then
-					
+
 					KnockbackMultiplier = (DamageTable.knockbackMultiplier.horizontal / 1.5)
 
 					if KnockbackMultiplier then
@@ -2873,7 +2879,7 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
-										
+
 										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
@@ -2891,9 +2897,9 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
-										
+
 										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
-										
+
 										local Unit = Vector3.new(LocalPlayer.Character.PrimaryPart.CFrame.LookVector.X, 0, LocalPlayer.Character.PrimaryPart.CFrame.LookVector.Z).Unit
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
@@ -2917,7 +2923,7 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
-										
+
 										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
@@ -2941,7 +2947,7 @@ task.spawn(function()
 								task.spawn(function()
 									repeat
 										task.wait()
-										
+
 										Speed = (GetSpeed() * (DamageBoostValue == true and 2.5 or 20))
 
 										LocalPlayer.Character.PrimaryPart.Velocity = (Unit * Speed)
@@ -3070,16 +3076,63 @@ task.spawn(function()
 		Name = "InstantWin",
 
 		Function = function()
+			repeat 
+				task.wait()
+				
+				if AlSploitSettings.InstantWin.Value == true and GetMatchState() == 0 then					
+					CreateNotification(5, "Waiting For Match To Start For InstantWin") 
+					
+					task.wait(5)
+				end
+			until GetMatchState() ~= 0 or AlSploitSettings.InstantWin.Value == false or shared.AlSploitUnInjected == true
+			
 			if AlSploitSettings.InstantWin.Value == true then
+				CreateNotification(3, "Starting InstantWin")
+				
 				AlSploitSettings.InstantWin.Value = false
 
 				local TeleportData = TeleportService:GetLocalPlayerTeleportData() 
-				
+
 				TeleportService:Teleport(game.PlaceId, LocalPlayer, TeleportData)	
 			end
 		end,
 
 		HoverText = "Wins the game instantly. 🏆"
+	})
+end)
+
+task.spawn(function()
+	local HighJump
+	
+	HighJump = BlatantTab:CreateToggle({
+		Name = "HighJump",
+
+		Function = function()
+			if AlSploitSettings.HighJump.Value == true then
+				for i = 1, 3 do
+					if IsAlive(LocalPlayer) then
+						LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 0, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+						LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, (AlSploitSettings.HighJump.Height.Value / 3), 0))
+
+						task.wait(0.2)
+					end
+				end
+
+				AlSploitSettings.HighJump.Value = false	
+				HighJump.TextColor = Color3.new(1, 1, 1)
+			end
+		end,
+
+		HoverText = "Makes You Jump High 🥾"
+	})
+	
+	HighJump:CreateSlider({
+		Name = "Height",
+		
+		Function = function() end,
+		
+		MaximumValue = 200,
+		DefaultValue = 200
 	})
 end)
 
@@ -3237,9 +3290,11 @@ task.spawn(function()
 		repeat
 			task.wait()
 
-			pcall(function()
-				KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
-			end)
+			if GetMatchState() ~= 0 then
+				pcall(function()
+					KillFeedHudGui = LocalPlayer.PlayerGui.KillFeedGui
+				end)
+			end	
 		until KillFeedHudGui
 	end)
 
@@ -3250,10 +3305,6 @@ task.spawn(function()
 			if AlSploitSettings.HideKillFeedGui.Value == true and KillFeedHudGui then
 				KillFeedHudGui.Parent = ReplicatedStorageService
 			end	
-
-			if AlSploitSettings.HideKillFeedGui.Value == true and not KillFeedHudGui then
-				CreateNotification(3, "KillFeedGui Not Found")
-			end
 
 			if AlSploitSettings.HideKillFeedGui.Value == false and ReplicatedStorageService:FindFirstChild("KillFeedHud") then
 				ReplicatedStorageService.KillFeedHud.Parent = LocalPlayer.PlayerGui
@@ -3735,16 +3786,16 @@ end)
 
 task.spawn(function()
 	local CreateEspEvent = Instance.new("BindableEvent")
-	
+
 	CreateEspEvent.Parent = AlSploitScreenGui
 	CreateEspEvent.Name = "CreateEspEvent"
-	
+
 	local Esp = WorldTab:CreateToggle({
 		Name = "Esp",
-		
+
 		Function = function()
 			repeat task.wait() until GetMatchState() ~= 0
-			
+
 			for i, v in next, PlayerService:GetPlayers() do
 				if AlSploitSettings.Esp.Value == true and shared.AlSploitUnInjected == false then
 					if IsAlive(v) == true then
@@ -3881,13 +3932,13 @@ task.spawn(function()
 						end
 					end
 				end
-				
+
 				if AlSploitSettings.Esp.Value == false then
 					if v.Character:FindFirstChild("Esp") then
 						v.Character:FindFirstChild("Esp"):Destroy()
 					end
 				end
-				
+
 				v.CharacterAdded:Connect(function()
 					repeat task.wait() until IsAlive(v)
 
@@ -4025,10 +4076,10 @@ task.spawn(function()
 				end)
 			end
 		end,
-		
+
 		HoverText = "Shows Where The Selected Players Are 🕶️"
 	})
-	
+
 	Esp:CreateToggle({
 		Name = "UseTeamatesColor",
 
@@ -4038,7 +4089,7 @@ task.spawn(function()
 
 		DefaultValue = true
 	})
-	
+
 	Esp:CreateToggle({
 		Name = "UseEnemiesColor",
 
@@ -4048,47 +4099,47 @@ task.spawn(function()
 
 		DefaultValue = true
 	})
-	
+
 	Esp:CreateToggle({
 		Name = "UseHighlight",
 
 		Function = function() 
-			
+
 		end,
 
 		DefaultValue = false
 	})
-	
+
 	Esp:CreateToggle({
 		Name = "ShowTeamates",
-		
+
 		Function = function() 
-			
+
 		end,
-		
+
 		DefaultValue = true
 	})
-	
+
 	Esp:CreateToggle({
 		Name = "ShowEnemies",
 
 		Function = function() 
-			
+
 		end,
 
 		DefaultValue = true
 	})
-	
+
 	Esp:CreateColorSlider({
 		Name = "TeamatesColor",
-		
+
 		Function = function()
-			
+
 		end,
-		
+
 		DefaultValue = Color3.new(0, 1, 0)
 	})
-	
+
 	Esp:CreateColorSlider({
 		Name = "EnemiesColor",
 
@@ -4098,9 +4149,9 @@ task.spawn(function()
 
 		DefaultValue = Color3.new(1, 0, 0)
 	})
-	
+
 	CreateEspEvent.Event:Connect(function()
-		
+
 	end)
 end)
 
@@ -4110,21 +4161,35 @@ task.spawn(function()
 
 		Function = function()
 			if AlSploitSettings.ChangeGuiColor.Value == true then
-				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.GuiColor.Value, ",")
+				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.ToggleColor.Value, ",")
 
 				local R = ColorSplit[1]
 				local G = ColorSplit[2]
 				local B = ColorSplit[3]
 
-				CurrentAlSploitColor = Color3.new(R, G, B)
+				CurrentAlSploitToggleColor  = Color3.new(R, G, B)
 
-				ChangeGuiColorEvent:Fire()
+				ChangeGuiToggleColorEvent:Fire()
+
+				local ColorSplit2 = string.split(AlSploitSettings.ChangeGuiColor.TitleColor.Value, ",")
+
+				local R = ColorSplit2[1]
+				local G = ColorSplit2[2]
+				local B = ColorSplit2[3]
+
+				CurrentAlSploitTitleColor = Color3.new(R, G, B)
+
+				ChangeGuiTitleColorEvent:Fire()
 			end
-			
-			if AlSploitSettings.ChangeGuiColor.Value == false then
-				CurrentAlSploitColor = Color3.new(0, 0.6, 1)
 
-				ChangeGuiColorEvent:Fire()
+			if AlSploitSettings.ChangeGuiColor.Value == false then
+				CurrentAlSploitToggleColor = Color3.new(0, 0.6, 1)
+
+				ChangeGuiToggleColorEvent:Fire()
+
+				CurrentAlSploitTitleColor = Color3.new(0, 0.6, 1)
+
+				ChangeGuiTitleColorEvent:Fire()
 			end
 		end,
 
@@ -4132,19 +4197,39 @@ task.spawn(function()
 	})
 
 	ChangeGuiColor:CreateColorSlider({
-		Name = "GuiColor",
+		Name = "ToggleColor",
 
 		Function = function()		
 			if AlSploitSettings.ChangeGuiColor.Value == true then
-				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.GuiColor.Value, ",")
+				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.ToggleColor.Value, ",")
 
 				local R = ColorSplit[1]
 				local G = ColorSplit[2]
 				local B = ColorSplit[3]
 
-				CurrentAlSploitColor = Color3.new(R, G, B)
+				CurrentAlSploitToggleColor  = Color3.new(R, G, B)
 
-				ChangeGuiColorEvent:Fire()
+				ChangeGuiToggleColorEvent:Fire()
+			end
+		end,
+
+		DefaultValue = Color3.new(0, 0.6, 1)
+	})
+
+	ChangeGuiColor:CreateColorSlider({
+		Name = "TitleColor",
+
+		Function = function()		
+			if AlSploitSettings.ChangeGuiColor.Value == true then
+				local ColorSplit = string.split(AlSploitSettings.ChangeGuiColor.TitleColor.Value, ",")
+
+				local R = ColorSplit[1]
+				local G = ColorSplit[2]
+				local B = ColorSplit[3]
+
+				CurrentAlSploitTitleColor  = Color3.new(R, G, B)
+
+				ChangeGuiTitleColorEvent:Fire()
 			end
 		end,
 
@@ -4159,7 +4244,7 @@ task.spawn(function()
 		Function = function()            
 			if AlSploitSettings.RestartAlSploit.Value == true then
 				AlSploitSettings.RestartAlSploit.Value = false
-				
+
 				UnInjectEvent:Fire()
 
 				if DelFolder then
@@ -4168,7 +4253,7 @@ task.spawn(function()
 			end
 		end,
 
-		HoverText = "Resets AlSploit ♻️"
+		HoverText = "Restarts AlSploit ♻️"
 	})
 end)
 
@@ -4238,6 +4323,26 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local AutoInject = GuiTab:CreateToggle({
+		Name = "AutoInject",
+
+		Function = function()
+			if AlSploitSettings.AutoInject.Value == true and not QueueOnTeleport then
+				CreateNotification(3, "Your Executor Does Not Support AutoInject")
+			end
+		end,
+
+		HoverText = "AutoUnInjects AlSploit 🐁"
+	})
+	
+	LocalPlayer.OnTeleport:Connect(function(TeleportState)
+		if TeleportState == Enum.TeleportState.Started and AlSploitSettings.AutoInject.Value == true then
+			QueueOnTeleport("loadstring(game:HttpGet('https://paste.vg/raw/zay1oy5gw2',true))()")
+		end
+	end)
+end)
+
+task.spawn(function()
 	local UnInject = GuiTab:CreateToggle({
 		Name = "UnInject",
 
@@ -4247,15 +4352,15 @@ task.spawn(function()
 			end
 		end,
 
-		HoverText = "Uninjects AlSploit ⌨️"
+		HoverText = "UnInjects AlSploit ⌨️"
 	})
 end)
 
 task.spawn(function()
 	CreateNotification(3, "AlSploit Has Loaded")
-	
+
 	shared.AlSploitUnInjected = false
-	
+
 	task.spawn(function()
 		UnInjectEvent.Event:Connect(function()
 			AlSploitSettings.UnInject.Value = false
@@ -4276,9 +4381,10 @@ end)
 
 --Things to fix because i have nothing else to do :shrug:
 
---print(string.format("%s", identifyexecutor()))
 --support require upvalue constants retarded shitsploits
 --saving on poopexes
 --fix targetstrafe
 --multiaura
---change gui color
+--gradient fix
+--scrollable frames
+--knockbacktp fix
