@@ -4337,7 +4337,8 @@ task.spawn(function()
 	
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started and AlSploitSettings.AutoInject.Value == true then
-			QueueOnTeleport("loadstring(game:HttpGet('https://paste.vg/raw/zay1oy5gw2',true))()")
+			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua',true))()
+")
 		end
 	end)
 end)
