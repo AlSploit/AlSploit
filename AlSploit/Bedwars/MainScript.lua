@@ -182,13 +182,13 @@ task.spawn(function()
 
 	task.spawn(function()
 		repeat
-			task.wait(0.5)
-
 			if IsFolder and IsFolder("AlSploit") and IsFile and IsFile("AlSploit/AlSploitConfiguration") and CreateFile then
 				local EncodedSettings = HttpService:JSONEncode(AlSploitSettings)
 
 				CreateFile("AlSploit/AlSploitConfiguration", EncodedSettings)
 			end
+			
+			task.wait(0.5)
 		until shared.AlSploitUnInjected == true
 	end)
 end)
@@ -639,8 +639,8 @@ function AlSploitLibrary:CreateTab(Name)
 			end)
 
 			task.spawn(function()
-				UserInputService.InputBegan:Connect(function(Input)					
-					if CanInputKeybind == false and not UserInputService:GetFocusedTextBox() and AlSploitSettings[Name].Keybind == Input.KeyCode.Name then						
+				UserInputService.InputBegan:Connect(function(Input)	
+					if CanInputKeybind == false and not UserInputService:GetFocusedTextBox() and AlSploitSettings[Name].Keybind == Input.KeyCode.Name then
 						if AlSploitSettings[Name].Value == true then
 							Toggle.TextColor3 = Color3.new(1, 1, 1)
 						end
@@ -1508,6 +1508,8 @@ local KillauraAnimations = {
 
 local KnitClient = debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
 
+local Flamework = require(ReplicatedStorageService["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
+
 local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
@@ -1515,13 +1517,14 @@ local LocalPlayerInventory = ReplicatedStorageService:WaitForChild("Inventories"
 
 local BedwarsControllers = {
 	ViewModelController = LocalPlayer.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"],
+	AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController"),
 	SprintController = KnitClient.Controllers.SprintController,
 	SwordController = KnitClient.Controllers.SwordController,
 	QueueController = KnitClient.Controllers.QueueController,
 	FovController = KnitClient.Controllers.FovController
 }
 
-local BedwrasMetaGames = {
+local BedwarsMetaGames = {
 	ProjectileMeta = require(ReplicatedStorageService.TS.projectile["projectile-meta"]).ProjectileMeta
 }
 
@@ -1531,7 +1534,9 @@ local BedwarsConstants = {
 }
 
 local BedwarsRemotes = {
+	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
 	ProjectileFireRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire"),
+	DragonBreathRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DragonBreath"),
 	SetInvItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem"),
 	ScytheDashRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash"),
 	GroundHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit"),
@@ -1545,6 +1550,10 @@ local BedwarsTables = {
 local BedwarsUtils = {
 	InventoryUtil = require(ReplicatedStorageService.TS.inventory["inventory-util"]).InventoryUtil,
 	KnockbackUtil = require(ReplicatedStorageService.TS.damage["knockback-util"]).KnockbackUtil
+}
+
+local RobloxRemotes = {
+	SayMessageRequestRemote = ReplicatedStorageService:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
 }
 
 local function DestroyClonedHumanoidRootPart()
@@ -1712,10 +1721,10 @@ local function FindNearestEntity(MaxDistance)
 end
 
 local function TweenToNearestBed(Time)
-	local Time = Time or 0.65
-
+	Time = (Time and Time or 0.65)
+	
 	if IsAlive(LocalPlayer) == true then
-		local NearestBed = FindNearestBed(false)
+		local NearestBed, NearestBedDistance = FindNearestBed(false)
 
 		if NearestBed then
 			local RaycastParameters = RaycastParams.new()
@@ -1726,10 +1735,14 @@ local function TweenToNearestBed(Time)
 			local BlockRaycast = game.Workspace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
 
 			if BlockRaycast and BlockRaycast.Position then
-				local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+				local TweenInformation = TweenInfo.new(Time, (NearestBedDistance <= 170 and Enum.EasingStyle.Circular or Enum.EasingStyle.Linear), Enum.EasingDirection.In, 0, false, 0)	
 				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
 
 				BedTpTween:Play()
+				
+				BedTpTween.Completed:Connect(function()
+					return true
+				end)
 			end
 		end
 	end
@@ -1759,31 +1772,53 @@ local function HasItemEquipped(Item)
 	return false
 end
 
+local function KillLocalPlayer()
+	LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+	LocalPlayer.Character:FindFirstChildOfClass("Humanoid").Health = 0
+
+	BedwarsRemotes.ResetCharacterRemote:FireServer()
+end
+
 function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 	local NearestBedDistance = MaxDistance or math.huge
 	local NearestBed = nil
 
 	local AmountOfBeds = 0
 
-	for i, v in next, CollectionService:GetTagged("bed") do
-		if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then
-			AmountOfBeds = (AmountOfBeds + 1)
-		end
-	end
-
-	if IgnoreBedSheildEndTime == false then
+	if IsAlive(LocalPlayer) then
 		for i, v in next, CollectionService:GetTagged("bed") do
-			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
-				if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > game.Workspace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow()) then
-					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then
+				AmountOfBeds = (AmountOfBeds + 1)
+			end
+		end
 
-					if Distance < NearestBedDistance then
-						NearestBedDistance = Distance
-						NearestBed = v
+		if IgnoreBedSheildEndTime == false then
+			for i, v in next, CollectionService:GetTagged("bed") do
+				if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
+					if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > game.Workspace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow()) then
+						local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+						if Distance < NearestBedDistance then
+							NearestBedDistance = Distance
+							NearestBed = v
+						end
+					end
+
+					if not v:GetAttribute("BedShieldEndTime") then
+						local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+						if Distance < NearestBedDistance then
+							NearestBedDistance = Distance
+							NearestBed = v
+						end
 					end
 				end
+			end
+		end
 
-				if not v:GetAttribute("BedShieldEndTime") then
+		if IgnoreBedSheildEndTime == true then
+			for i, v in next, CollectionService:GetTagged("bed")do
+				if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then				
 					local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 					if Distance < NearestBedDistance then
@@ -1795,20 +1830,7 @@ function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 		end
 	end
 
-	if IgnoreBedSheildEndTime == true then
-		for i, v in next, CollectionService:GetTagged("bed")do
-			if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then				
-				local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
-
-				if Distance < NearestBedDistance then
-					NearestBedDistance = Distance
-					NearestBed = v
-				end
-			end
-		end
-	end
-
-	return NearestBed
+	return NearestBed, NearestBedDistance
 end
 
 local function TweenToCFrame(Time, Position)	
@@ -1981,7 +2003,7 @@ local function GetBow()
 		if v.itemType:find("bow") then 
 			local Item = BedwarsTables.ItemTable[v.itemType].projectileSource
 			local Arrow = Item.projectileType("arrow")	
-			local Damage = BedwrasMetaGames.ProjectileMeta[Arrow].combat.damage
+			local Damage = BedwarsMetaGames.ProjectileMeta[Arrow].combat.damage
 
 			if Damage > BestBowDamage then
 				BestBowDamage = Damage
@@ -2387,7 +2409,7 @@ task.spawn(function()
 								SwordHit(NearestEntity, Sword, NearestEntityDistance)
 							end
 
-							if not Sword or not NearestEntity and KillauraBox then
+							if (not Sword or not NearestEntity or IsAlive(LocalPlayer) == false) and KillauraBox then
 								pcall(function()
 									KillauraBox:Destroy()
 									KillauraBox = nil
@@ -2918,7 +2940,7 @@ task.spawn(function()
 							if NearestPlayer then
 								local StartTick = tick()
 
-								local Unit = (LocalPlayer.Character.PrimaryPart.Position - NearestPlayer.Character.PrimaryPart.Position).Unit
+								local Unit = ((NearestPlayer.Character.PrimaryPart.Position + Vector3.new(0, 5, 0)) - LocalPlayer.Character.PrimaryPart.Position).Unit
 
 								task.spawn(function()
 									repeat
@@ -2937,12 +2959,12 @@ task.spawn(function()
 						end
 
 						if AlSploitSettings.KnockbackTp.TeleportTo.NearestBed.Value == true then
-							local NearestBed = FindNearestBed()
+							local NearestBed = FindNearestBed(false)
 
 							if NearestBed then
 								local StartTick = tick()
 
-								local Unit = (LocalPlayer.Character.PrimaryPart.Position - NearestBed.Character.PrimaryPart.Position).Unit
+								local Unit = ((NearestBed.Position + Vector3.new(0, 5, 0)) - LocalPlayer.Character.PrimaryPart.Position).Unit
 
 								task.spawn(function()
 									repeat
@@ -3324,6 +3346,97 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local EffectSpammer = UtilityTab:CreateToggle({
+		Name = "EffectSpammer",
+
+		Function = function()			
+			repeat
+				task.wait()
+
+				if AlSploitSettings.EffectSpammer.Value == true then
+					if AlSploitSettings.EffectSpammer.DragonBreath.Value == true then
+						BedwarsRemotes.DragonBreathRemote:FireServer({LocalPlayer})
+					end
+
+					if AlSploitSettings.EffectSpammer.Confetti.Value == true then
+						BedwarsControllers.AbilityController:useAbility("PARTY_POPPER")
+					end
+					
+					task.wait(25 /  AlSploitSettings.EffectSpammer.Speed.Value)
+				end
+			until AlSploitSettings.EffectSpammer.Value == false or shared.AlSploitUnInjected == true
+		end,
+
+		HoverText = "Spams The Chat 🗣️"
+	})
+	
+	EffectSpammer:CreateToggle({
+		Name = "DragonBreath",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+	
+	EffectSpammer:CreateToggle({
+		Name = "Confetti",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	EffectSpammer:CreateSlider({
+		Name = "Speed",
+
+		Function = function() end,
+
+		MaximumValue = 100,
+		DefaultValue = 100
+	})
+end)
+
+task.spawn(function()
+	local ChatSpammer = UtilityTab:CreateToggle({
+		Name = "ChatSpammer",
+
+		Function = function()			
+			repeat
+				task.wait()
+				
+				local MessageTable = {
+					Message1 = "3+ Years Now And The Anticheat Is Still The Same | AlSploit On Top",
+					Message2 = "Clowns Are The Only Ones We Eliminate | AlSploit On Top",
+					Message3 = "InstantWin Is So Fun 😂 | AlSploit On Top",
+					Message4 = "Best Anticheat Ever ™️ | AlSploit On Top",
+					Message5 = "Get Back To Scripting, Skids | AlSploit On Top",
+					Message6 = "Voidware Has The Best Logger!!! | AlSploit On Top"
+				}
+				
+				for i, v in next, MessageTable do
+					if AlSploitSettings.ChatSpammer.Value == true then
+						RobloxRemotes.SayMessageRequestRemote:FireServer(v, "All")
+						
+						task.wait(500 /  AlSploitSettings.ChatSpammer.Speed.Value)
+					end
+				end
+			until AlSploitSettings.ChatSpammer.Value == false or shared.AlSploitUnInjected == true
+		end,
+
+		HoverText = "Spams The Chat 🗣️"
+	})
+	
+	ChatSpammer:CreateSlider({
+		Name = "Speed",
+		
+		Function = function() end,
+		
+		MaximumValue = 100,
+		DefaultValue = 50
+	})
+end)
+
+task.spawn(function()
 	local OldGlobalChatSystemMessages = ClientStore:getState().Settings.global_chat_system_messages
 	local OldFriendSpectating = ClientStore:getState().Settings.friendSpectating
 	local OldStreamerMode = ClientStore:getState().Settings.streamer_mode
@@ -3505,6 +3618,60 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
+
+	ColorCorrectionEffect.Parent = LightingService
+	ColorCorrectionEffect.Name = "ColorCorrectionEffect"
+
+	ColorCorrectionEffect.Brightness = 0.1
+	ColorCorrectionEffect.Saturation = 0.5
+	ColorCorrectionEffect.Enabled = true
+
+	local Atmosphere = WorldTab:CreateToggle({
+		Name = "Atmosphere",
+
+		Function = function()
+			if AlSploitSettings.Atmosphere.Value == true then
+				local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
+
+				local R = ColorSplit[1]
+				local G = ColorSplit[2]
+				local B = ColorSplit[3]
+
+				ColorCorrectionEffect.TintColor= Color3.new(R, G, B)				
+				ColorCorrectionEffect.Enabled = true
+			end
+			
+			if AlSploitSettings.Atmosphere.Value == false then
+				ColorCorrectionEffect.Enabled = false
+			end
+		end,
+
+		HoverText = "Gives You A Cool Atmosphere 🌆"
+	})
+	
+	Atmosphere:CreateColorSlider({
+		Name = "Color",
+		
+		Function = function()
+			local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
+
+			local R = ColorSplit[1]
+			local G = ColorSplit[2]
+			local B = ColorSplit[3]
+
+			ColorCorrectionEffect.TintColor= Color3.new(R, G, B)
+		end,
+		
+		DefaultValue = Color3.new(0, 0.133333, 1)
+	})
+	
+	UnInjectEvent.Event:Connect(function()
+		ColorCorrectionEffect:Destroy()
+	end)
+end)
+
+task.spawn(function()
 	local BlurEffect = Instance.new("BlurEffect")
 
 	BlurEffect.Parent = LightingService
@@ -3520,22 +3687,34 @@ task.spawn(function()
 			repeat
 				task.wait()
 
-				if AlSploitSettings.MotionBlur.Value == true then
+				if AlSploitSettings.MotionBlur.Value == true and IsAlive(LocalPlayer) == true then
 					local CameraPosition = Camera.CFrame.Position
 
-					task.wait(0.05)
+					task.wait(0.1)
 
 					local CameraPosition2 = Camera.CFrame.Position
 					local Magnitude = (CameraPosition - CameraPosition2).Magnitude
 
-					BlurEffect.Size = Magnitude
+					local TweenInformation = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
+					local SizeTween = TweenService:Create(BlurEffect, TweenInformation, {Size = Magnitude})
+					
+					SizeTween:Play()
+					
+					SizeTween.Completed:Connect(function()
+						local TweenInformation = TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
+						local SizeTween = TweenService:Create(BlurEffect, TweenInformation, {Size = 0})
+
+						SizeTween:Play()
+						
+						task.wait(1)
+					end)
 				end		
 			until AlSploitSettings.MotionBlur.Value == false or shared.AlSploitUnInjected == true
 
 			BlurEffect.Enabled = false
 		end,
 
-		HoverText = "Blurs Your Screen When There's A Lot Of Motion 🚶"
+		HoverText = "Blurs Your Screen When Based On The Camera Motion 🚶"
 	})
 
 	UnInjectEvent.Event:Connect(function()
@@ -3824,6 +4003,46 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local BedTp = WorldTab:CreateToggle({
+		Name = "BedTp",
+
+		Function = function()
+			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false then
+				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+
+				local NearestBed = FindNearestBed(false)
+
+				if NearestBed then
+					if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
+						KillLocalPlayer()
+
+						repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+
+						TweenToNearestBed()
+					end
+				end
+			end	
+		end,
+
+		HoverText = "Teleports You To The Nearest Bed 🛏️"
+	})
+	
+	LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+
+		local NearestBed = FindNearestBed(false)
+
+		if NearestBed then
+			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
+				repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+
+				TweenToNearestBed()
+			end
+		end
+	end)
+end)
+
+task.spawn(function()
 	local Esp = WorldTab:CreateToggle({
 		Name = "Esp",
 
@@ -3835,7 +4054,7 @@ task.spawn(function()
 					if AlSploitSettings.Esp.Value == true and shared.AlSploitUnInjected == false then					
 						if IsAlive(v) == true then						
 							if AlSploitSettings.Esp.UseHighlight.Value == true then
-								if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+								if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
 									local Highlight = Instance.new("Highlight")
 
 									Highlight.Parent = v.Character
@@ -3885,7 +4104,7 @@ task.spawn(function()
 							end
 
 							if AlSploitSettings.Esp.UseHighlight.Value == false then			
-								if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
+								if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
 									local BillBoardGui = Instance.new("BillboardGui")
 
 									local Frame = Instance.new("Frame")
@@ -4065,7 +4284,7 @@ task.spawn(function()
 
 				if AlSploitSettings.Esp.Value == true and shared.AlSploitUnInjected == false then											
 					if AlSploitSettings.Esp.UseHighlight.Value == true then
-						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
 							local Highlight = Instance.new("Highlight")
 
 							Highlight.Parent = v.Character
@@ -4115,7 +4334,7 @@ task.spawn(function()
 					end
 
 					if AlSploitSettings.Esp.UseHighlight.Value == false then			
-						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
+						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
 							local BillBoardGui = Instance.new("BillboardGui")
 
 							local Frame = Instance.new("Frame")
@@ -4328,7 +4547,7 @@ task.spawn(function()
 				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
 			end
 
-			if not SetFpsCap then
+			if AlSploitSettings.FpsUnlocker.Value == true and not SetFpsCap then
 				CreateNotification(3, "Unable To Unlock Fps")
 			end
 		end,
@@ -4439,9 +4658,10 @@ end)
 
 --Things to fix because i have nothing else to do :shrug:
 
---support require upvalue constants retarded shitsploits
 --saving on poopexes
 --fix targetstrafe
 --multiaura
 --scrollable frames
---knockbacktp fix
+--replace.out. with :WaitForChild("out")
+--velocity fix
+--fix esp
