@@ -10,10 +10,11 @@ local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 local TextService = game:GetService("TextService")
 local RunService = game:GetService("RunService")
+local WorkSpace = game:GetService("Workspace")
 
 local Mouse = LocalPlayer:GetMouse()
 
-local Camera = game.Workspace.CurrentCamera
+local Camera = WorkSpace.CurrentCamera
 
 local AlSploitScreenGui = Instance.new("ScreenGui")
 
@@ -1506,6 +1507,14 @@ local KillauraAnimations = {
 	}
 }
 
+local Sides = {
+	Enum.NormalId.Top, 
+	Enum.NormalId.Left,
+	Enum.NormalId.Right,
+	Enum.NormalId.Back,
+	Enum.NormalId.Front
+}
+
 local KnitClient = debug.getupvalue(require(LocalPlayer.PlayerScripts.TS.knit).setup, 6)
 
 local Flamework = require(ReplicatedStorageService["rbxts_include"]["node_modules"]["@flamework"].core.out).Flamework
@@ -1513,12 +1522,24 @@ local Flamework = require(ReplicatedStorageService["rbxts_include"]["node_module
 local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
-local LocalPlayerInventory = ReplicatedStorageService:WaitForChild("Inventories"):WaitForChild(LocalPlayer.Name)
+local LocalPlayerInventory
+
+task.spawn(function()
+	repeat
+		task.wait()
+		
+		if IsAlive(LocalPlayer) then
+			LocalPlayerInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+		end
+	until IsAlive(LocalPlayer) == false
+end)
 
 local BedwarsControllers = {
+	KnitViewModelController = KnitClient.Controllers.ViewmodelController,
 	ViewModelController = LocalPlayer.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"],
 	AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController"),
 	SprintController = KnitClient.Controllers.SprintController,
+	BlockController = require(ReplicatedStorageService["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine,
 	SwordController = KnitClient.Controllers.SwordController,
 	QueueController = KnitClient.Controllers.QueueController,
 	FovController = KnitClient.Controllers.FovController
@@ -1537,6 +1558,7 @@ local BedwarsRemotes = {
 	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
 	ProjectileFireRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire"),
 	DragonBreathRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DragonBreath"),
+	DamageBlockRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock"),
 	SetInvItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem"),
 	ScytheDashRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash"),
 	GroundHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit"),
@@ -1560,10 +1582,10 @@ local function DestroyClonedHumanoidRootPart()
 	LocalPlayer.Character.Parent = game
 	OldLocalPlayerHumanoidRootPart.Parent = LocalPlayer.Character
 
-	NewLocalPlayerHumanoidRootPart.Parent = game.Workspace
+	NewLocalPlayerHumanoidRootPart.Parent = WorkSpace
 
 	LocalPlayer.Character.PrimaryPart = OldLocalPlayerHumanoidRootPart
-	LocalPlayer.Character.Parent = game.Workspace
+	LocalPlayer.Character.Parent = WorkSpace
 
 	OldLocalPlayerHumanoidRootPart = NewLocalPlayerHumanoidRootPart.CFrame
 
@@ -1581,10 +1603,10 @@ local function CloneHumanoidRootPart()
 
 	OldLocalPlayerHumanoidRootPart.Transparency = 0.4
 
-	OldLocalPlayerHumanoidRootPart.Parent = game.Workspace
+	OldLocalPlayerHumanoidRootPart.Parent = WorkSpace
 
 	LocalPlayer.Character.PrimaryPart = NewLocalPlayerHumanoidRootPart
-	LocalPlayer.Character.Parent = game.Workspace
+	LocalPlayer.Character.Parent = WorkSpace
 
 	task.spawn(function()
 		RunService.Heartbeat:Connect(function()
@@ -1594,6 +1616,24 @@ local function CloneHumanoidRootPart()
 			end
 		end)
 	end)
+end
+
+local function FindNearestLuckyBlock(MaxDistance)
+	local MinDistance = MaxDistance or math.huge
+	local NearestLuckyBlock = nil
+
+	for i, v in next, CollectionService:GetTagged("block") do
+		if v.Name:lower():find("lucky") then
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MinDistance then
+				MinDistance = Distance
+				NearestLuckyBlock= v
+			end
+		end
+	end
+
+	return NearestLuckyBlock
 end
 
 local function TweenToNearestPlayer(Time)
@@ -1609,6 +1649,14 @@ local function TweenToNearestPlayer(Time)
 			PlayerTpTween:Play()
 		end
 	end
+end
+
+local function GetDevidedPosition(Position)
+	local X = math.round(Position.X / 3)
+	local Y = math.round(Position.Y / 3)
+	local Z = math.round(Position.Z / 3)
+
+	return Vector3.new(X, Y, Z)
 end
 
 function FindNearestPlayer(MaxDistance)
@@ -1732,10 +1780,11 @@ local function TweenToNearestBed(Time)
 			RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 
-			local BlockRaycast = game.Workspace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
+			local BlockRaycast = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
 
 			if BlockRaycast and BlockRaycast.Position then
-				local TweenInformation = TweenInfo.new(Time, (NearestBedDistance <= 170 and Enum.EasingStyle.Circular or Enum.EasingStyle.Linear), Enum.EasingDirection.In, 0, false, 0)	
+				local TweenInformation = TweenInfo.new(Time, (NearestBedDistance >= 325 and Enum.EasingStyle.Linear or Enum.EasingStyle.Circular), Enum.EasingDirection.In, 0, false, 0)
+				
 				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
 
 				BedTpTween:Play()
@@ -1748,20 +1797,89 @@ local function TweenToNearestBed(Time)
 	end
 end
 
-local function ShootProjectile(Item, Projectile, NearestPlayer)
+local function FindBestBreakSide(Position)
+	local SoftestBlockStrength, SoftestBlock = math.huge, nil
+	local BlockStrength = 0
+
+	for i, v in next, (Sides) do
+		for i2, v2 in next, FindPlacedBlocks(Position, v) do	
+			local BlockMetaGame = BedwarsTables.ItemTable[v2.Name].block
+
+			if BlockMetaGame then
+				BlockStrength = (BlockMetaGame.health and BlockMetaGame.health or 10)
+			end
+
+			if BlockStrength <= SoftestBlockStrength then			
+				SoftestBlockStrength = BlockStrength
+				SoftestBlock = v2
+			end	
+		end	
+	end
+
+	return SoftestBlockStrength, SoftestBlock
+end
+
+function FindPlacedBlocks(Position, Side)
+	local LastFound, Blocks = nil, {}
+
+	for i = 1, 20 do
+		local BlockPosition = (Position + (Vector3.FromNormalId(Side) * (i * 3)))
+
+		local IsBlockCovered = IsBlockCovered(BlockPosition)
+		local ExtraBlock = FindPlacedBlock(BlockPosition)
+
+		if ExtraBlock then
+			if ExtraBlock.Name ~= "bed" and ExtraBlock.Name ~= "ceramic" and ExtraBlock.Name ~= "iron_ore" and IsBlockBreakable(BlockPosition) == true then
+				table.insert(Blocks, ExtraBlock)
+			end
+
+			LastFound = ExtraBlock
+		end
+
+		if IsBlockCovered == false then
+			break
+		end
+
+		if not ExtraBlock then
+			break
+		end
+	end
+
+	return Blocks
+end
+
+function IsBlockBreakable(BlockPosition)
+	local IsBlockBreakableValue = false
+
+	if BedwarsControllers.BlockController:isBlockBreakable({blockPosition = BlockPosition}, LocalPlayer) then
+		IsBlockBreakableValue = true
+	end
+
+	return IsBlockBreakableValue
+end
+
+local function ShootProjectile(Item, Projectile, NearestPlayer)	
+	local Unit = (LocalPlayer.Character.PrimaryPart.Position - NearestPlayer.Character.PrimaryPart.Position).Unit
+
 	local Args = {
 		[1] = Item,
 		[2] = Projectile,
 		[3] = Projectile,
-		[4] = NearestPlayer.Character.PrimaryPart.Position,
-		[5] = (NearestPlayer.Character.PrimaryPart.Position + Vector3.new(0, 2, 0)),
+		[4] = Unit,
+		[5] = Unit,
 		[6] = Vector3.new(0, -5, 0),
 		[7] = HttpService:GenerateGUID(true),
-		[8] = {["drawDurationSeconds"] = 0.96, ["shotId"] = HttpService:GenerateGUID(false)},
-		[9] = (game.Workspace:GetServerTimeNow() - 0.11)
+		[8] = {drawDurationSeconds = 0.96, shotId = HttpService:GenerateGUID(false)},
+		[9] = (WorkSpace:GetServerTimeNow() - 0.11)
 	}
 
 	BedwarsRemotes.ProjectileFireRemote:InvokeServer(unpack(Args))
+end
+
+function FindPlacedBlock(Position)
+	local BlockPosition = BedwarsControllers.BlockController:getBlockPosition(Position)
+
+	return BedwarsControllers.BlockController:getStore():getBlockAt(BlockPosition), BlockPosition
 end
 
 local function HasItemEquipped(Item)
@@ -1795,7 +1913,7 @@ function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 		if IgnoreBedSheildEndTime == false then
 			for i, v in next, CollectionService:GetTagged("bed") do
 				if v:FindFirstChild("Bed").BrickColor ~= LocalPlayer.Team.TeamColor then			
-					if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > game.Workspace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < game.Workspace:GetServerTimeNow()) then
+					if v:GetAttribute("BedShieldEndTime") and (v:GetAttribute("BedShieldEndTime") > WorkSpace:GetServerTimeNow() and AmountOfBeds == 1 or v:GetAttribute("BedShieldEndTime") < WorkSpace:GetServerTimeNow()) then
 						local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 						if Distance < NearestBedDistance then
@@ -1833,13 +1951,50 @@ function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 	return NearestBed, NearestBedDistance
 end
 
-local function TweenToCFrame(Time, Position)	
-	Position = CFrame.new(Position)
+local function FindNearestOre(MaxDistance)
+	local MinDistance = MaxDistance or math.huge
+	local NearestOre = nil
 
-	local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
-	local CFrameTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = Position})
+	for i, v in next, CollectionService:GetTagged("block") do
+		if v.Name:lower():find("ore") then
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
-	CFrameTween:Play()
+			if Distance < MinDistance then
+				MinDistance = Distance
+				NearestOre = v
+			end
+		end
+	end
+
+	return NearestOre
+end
+
+function IsBlockCovered(Position)
+	local CoveredSides = 0
+
+	for i, v in next, Sides do
+		local BlockPosition = (Position + (Vector3.FromNormalId(v) * 3))
+		local Block = FindPlacedBlock(BlockPosition)
+
+		if Block then
+			CoveredSides = CoveredSides + 1
+		end
+	end
+
+	return CoveredSides == 5
+end
+
+local function PlayAnimation(Animation)
+	if ViewModel and C0 then
+		for i, v in next, Animation do
+			local TweenInformation = TweenInfo.new(v.Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+			local AnimationTween = TweenService:Create(ViewModel.RightHand.RightWrist, TweenInformation, {C0 = (C0 * v.CFrame)})
+
+			AnimationTween:Play()
+
+			task.wait(v.Time)
+		end
+	end				
 end
 
 local function GetMatchState()
@@ -1909,7 +2064,7 @@ local function Invisibility()
 			LocalPlayer.Character.PrimaryPart.Transparency = 0.5
 
 			Animation:AdjustSpeed(0 / 10)
-		until shared.AlSploitUnInjected == true or AlSploitSettings.Invisible.Value == false
+		until shared.AlSploitUnInjected == true or AlSploitSettings.Invisible.Value == false or IsAlive(LocalPlayer) == false
 
 		if IsAlive(LocalPlayer) == true then
 			LocalPlayer.Character.PrimaryPart.Transparency = 1
@@ -1935,6 +2090,17 @@ local function Invisibility()
 			end)
 		end
 	end)
+end
+
+local function DamageBlock(Position)
+	BedwarsRemotes.DamageBlockRemote:InvokeServer({
+		blockRef = {
+			blockPosition = GetDevidedPosition(Position),
+		},
+
+		hitPosition = GetDevidedPosition(Position),
+		hitNormal = GetDevidedPosition(Position)
+	})
 end
 
 local function SwitchItem(Item)	
@@ -2248,19 +2414,6 @@ task.spawn(function()
 		Function = function()
 			local KillAuraAnimationCooldown = false
 
-			local function PlayAnimation(Animation)
-				if ViewModel and C0 then
-					for i, v in next, Animation do
-						local TweenInformation = TweenInfo.new(v.Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-						local AnimationTween = TweenService:Create(ViewModel.RightHand.RightWrist, TweenInformation, {C0 = (C0 * v.CFrame)})
-
-						AnimationTween:Play()
-
-						task.wait(v.Time)
-					end
-				end				
-			end
-
 			local function SwordHit(Entity, Weapon, NearestEntityDistance)				
 				task.spawn(function()
 					if AlSploitSettings.Killaura.CustomAnimation.Value == true and KillAuraAnimationCooldown == false then
@@ -2276,11 +2429,12 @@ task.spawn(function()
 					if AlSploitSettings.Killaura.ShowEnemy.Value == true and not KillauraBox then			
 						KillauraBox = Instance.new("Part")
 
-						KillauraBox.Parent = game.Workspace
+						KillauraBox.Parent = WorkSpace
 						KillauraBox.Name = "KillauraBox"
 
 						KillauraBox.Transparency = 0.6
 						KillauraBox.CanCollide = false
+						KillauraBox.CanQuery = false
 						KillauraBox.Anchored = true
 						KillauraBox.Material = Enum.Material.SmoothPlastic
 						KillauraBox.CFrame = Entity.PrimaryPart.CFrame
@@ -2322,7 +2476,7 @@ task.spawn(function()
 				RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 				RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 
-				local Raycast = game.Workspace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Entity.PrimaryPart.Position, RaycastParameters)
+				local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Entity.PrimaryPart.Position, RaycastParameters)
 
 				if AlSploitSettings.Killaura.WallCheck.Value == true and (Raycast and Raycast.Position or true) then
 					return
@@ -2592,6 +2746,8 @@ task.spawn(function()
 										SwitchItem(BestBow.itemType)
 									end
 								end)
+								
+								print(Bow)
 
 								ShootProjectile(Bow, BestArrow, NearestPlayer)
 							end
@@ -2884,8 +3040,7 @@ task.spawn(function()
 			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.KnockbackTp.Value == true and shared.AlSploitUnInjected == false then 
 				local KnockbackMultiplier = DamageTable.knockbackMultiplier
 
-				if KnockbackMultiplier then
-
+				if KnockbackMultiplier and DamageTable.knockbackMultiplier.horizontal then
 					KnockbackMultiplier = (DamageTable.knockbackMultiplier.horizontal / 1.5)
 
 					if KnockbackMultiplier then
@@ -3027,18 +3182,18 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local Angle = 0
+	
 	local TargetStrafe = BlatantTab:CreateToggle({
 		Name = "TargetStrafe",
 
 		Function = function()
-			local Tetha = 0
-
 			repeat
 				task.wait()
 
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
-					local NearestPlayer = FindNearestPlayer((AlSploitSettings.TargetStrafe.Range.Value + 3))
-					local NearestEntity = FindNearestEntity((AlSploitSettings.TargetStrafe.Range.Value + 3))		
+					local NearestPlayer = FindNearestPlayer((AlSploitSettings.TargetStrafe.Range.Value + 2))
+					local NearestEntity = FindNearestEntity((AlSploitSettings.TargetStrafe.Range.Value + 2))		
 
 					if NearestPlayer or NearestEntity then
 						local NearestEntityPrimaryPart = (AlSploitSettings.TargetStrafe.TargetMobs.Value == true and (NearestEntity and NearestEntity.PrimaryPart or nil) or (NearestPlayer and NearestPlayer.Character.PrimaryPart or nil))
@@ -3049,23 +3204,24 @@ task.spawn(function()
 
 						local LocalPlayerPrimaryPart = LocalPlayer.Character.PrimaryPart
 
-						Tetha = (Tetha + 0.025)
-
-						local TargetPosition = Vector3.new((NearestEntityPrimaryPart.Position.X + ((AlSploitSettings.TargetStrafe.Range.Value - 2) * math.sin(Tetha))), LocalPlayerPrimaryPart.Position.Y, (NearestEntityPrimaryPart.Position.Z + ((AlSploitSettings.TargetStrafe.Range.Value - 2) * math.cos(Tetha))))
-
+						Angle = (Angle + 0.05)
+						
+						local X = (math.cos(Angle) * AlSploitSettings.TargetStrafe.Range.Value)
+						local Z = (math.sin(Angle) * AlSploitSettings.TargetStrafe.Range.Value)
+						
+						local TargetPosition = (NearestEntityPrimaryPart.Position + Vector3.new(X, 0, Z))
+						
 						local RaycastParameters = RaycastParams.new()
-
+						
 						RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 						RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+						
+						local Raycast = WorkSpace:Raycast(TargetPosition, Vector3.new(0, -1000, 0), RaycastParameters)
+						
+						if Raycast and Raycast.Position then
+							local Velocity = ((TargetPosition - LocalPlayerPrimaryPart.Position).Unit * 23)
 
-						local Raycast = game.Workspace:Raycast(TargetPosition, Vector3.new(0, -10000, 0), RaycastParameters)
-						local Raycast2 = game.Workspace:Raycast((TargetPosition - LocalPlayerPrimaryPart.CFrame.LookVector), Vector3.new(0, 3, 0), RaycastParameters)
-						local Raycast3 = game.Workspace:Raycast((TargetPosition + Vector3.new(0, 5, 0)), Vector3.new(0, -4, 0), RaycastParameters)
-
-						if Raycast and Raycast.Position and Raycast.Instance and (Raycast.Instance:IsA("BasePart") or Raycast.Instance:IsA("Part")) and Raycast.Instance.CanCollide == true and not Raycast2 and not Raycast3 then
-							local Magnitude = (LocalPlayerPrimaryPart.Position - TargetPosition).Magnitude
-
-							TweenToCFrame((Magnitude / 22.5), TargetPosition)
+							LocalPlayerPrimaryPart.Velocity = Velocity
 						end
 					end
 				end		
@@ -3088,8 +3244,8 @@ task.spawn(function()
 
 		Function = function() end,
 
-		MaximumValue = 19,
-		DefaultValue = 19
+		MaximumValue = 18,
+		DefaultValue = 18
 	})
 end)
 
@@ -3198,7 +3354,7 @@ task.spawn(function()
 
 							local SpeedPosition = (LocalPlayer.Character.Humanoid.MoveDirection * (SpeedValue * Delta))
 
-							local Raycast = game.Workspace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedPosition, SpeedRaycastParameters)
+							local Raycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, SpeedPosition, SpeedRaycastParameters)
 
 							if not Raycast then
 								LocalPlayer.Character.PrimaryPart.CFrame = (LocalPlayer.Character.PrimaryPart.CFrame + SpeedPosition)
@@ -3353,7 +3509,7 @@ task.spawn(function()
 			repeat
 				task.wait()
 
-				if AlSploitSettings.EffectSpammer.Value == true then
+				if AlSploitSettings.EffectSpammer.Value == true and IsAlive(LocalPlayer) == true then
 					if AlSploitSettings.EffectSpammer.DragonBreath.Value == true then
 						BedwarsRemotes.DragonBreathRemote:FireServer({LocalPlayer})
 					end
@@ -3731,7 +3887,7 @@ task.spawn(function()
 				task.spawn(function()
 					local SnowPart = Instance.new("Part")
 
-					SnowPart.Parent = game.Workspace
+					SnowPart.Parent = WorkSpace
 					SnowPart.Name = "SnowPart"
 
 					SnowPart.Transparency = 1
@@ -3967,16 +4123,16 @@ task.spawn(function()
 					Sky.Parent = LightingService
 					Sky.Name = "GalaxySky"
 
-					if game.Workspace:FindFirstChild("SnowPart") then
-						game.Workspace.SnowPart:Destroy()
+					if WorkSpace:FindFirstChild("SnowPart") then
+						WorkSpace.SnowPart:Destroy()
 					end
 
-					if game.Workspace:FindFirstChild("Snow") then
-						game.Workspace.Snow:Destroy()
+					if WorkSpace:FindFirstChild("Snow") then
+						WorkSpace.Snow:Destroy()
 					end
 
-					if game.Workspace:FindFirstChild("WindSnow") then
-						game.Workspace.WindSnow:Destroy()
+					if WorkSpace:FindFirstChild("WindSnow") then
+						WorkSpace.WindSnow:Destroy()
 					end
 				end	
 			end
@@ -4003,22 +4159,30 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local BedTpOverridden = false
+		
 	local BedTp = WorldTab:CreateToggle({
 		Name = "BedTp",
 
 		Function = function()
-			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false then
+			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false then				
 				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
 				local NearestBed = FindNearestBed(false)
 
 				if NearestBed then
 					if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
-						KillLocalPlayer()
+						BedTpOverridden = true
+
+						KillLocalPlayer()		
 
 						repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
+						task.wait(0.3)
+
 						TweenToNearestBed()
+						
+						BedTpOverridden = false
 					end
 				end
 			end	
@@ -4033,13 +4197,127 @@ task.spawn(function()
 		local NearestBed = FindNearestBed(false)
 
 		if NearestBed then
-			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
+			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" and BedTpOverridden == false then
 				repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
+				task.wait(0.3)
+				
 				TweenToNearestBed()
 			end
 		end
 	end)
+end)
+
+task.spawn(function()
+	local TargetBlockFound = false
+
+	local Nuker = WorldTab:CreateToggle({
+		Name = "Nuker",
+
+		Function = function()
+			task.spawn(function()
+				repeat
+					task.wait()
+
+					if GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true then					
+						local NearestBed = FindNearestBed(true, AlSploitSettings.Nuker.Range.Value)
+
+						local NearestLuckyBlock
+						local NearestOre
+
+						if AlSploitSettings.Nuker.MineLuckyBlocks.Value == true then						
+							NearestLuckyBlock = FindNearestLuckyBlock(AlSploitSettings.Nuker.Range.Value)
+						end
+
+						if AlSploitSettings.Nuker.MineOres.Value == true then
+							NearestOre = FindNearestOre(AlSploitSettings.Nuker.Range.Value)
+						end
+
+						if NearestBed or NearestLuckyBlock or NearestOre and AlSploitSettings.Nuker.MiningAnimation.Value == true and MiningAnimationCooldown == false then
+							TargetBlockFound = (NearestBed or NearestLuckyBlock or NearestOre)	
+						end
+
+						if NearestBed then						
+							local NearestBedCovered = IsBlockCovered(NearestBed.Position)
+
+							local Strength, TargetBlock = FindBestBreakSide(NearestBed.Position)
+							local Strength2, TargetBlock2 = FindBestBreakSide(NearestBed.Position + Vector3.new(0, 0, 3))
+
+							local TargetBlock = (Strength < Strength2 and TargetBlock or TargetBlock2)
+
+							if NearestBedCovered == false then
+								TargetBlock = NearestBed
+							end		
+
+							DamageBlock(TargetBlock.Position)
+						end
+
+						if not NearestBed then						
+							if NearestLuckyBlock then
+								DamageBlock(NearestLuckyBlock.Position)
+							end
+
+							if NearestOre then
+								DamageBlock(NearestOre.Position)
+							end
+						end
+					end
+				until AlSploitSettings.Nuker.Value == false or shared.AlSploitUnInjected == true
+			end)
+			
+			task.spawn(function()
+				repeat
+					task.wait()
+
+					if AlSploitSettings.Nuker.MiningAnimation.Value == true and TargetBlockFound and IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+						local NearestEntity = FindNearestEntity(AlSploitSettings.Killaura.Range.Value)
+						local I, Value = Camera:WorldToScreenPoint(TargetBlockFound.Position)
+
+						if Value == true and not NearestEntity then
+							BedwarsControllers.KnitViewModelController:playAnimation(15)
+
+							task.wait(0.2)
+						end
+					end
+				until AlSploitSettings.Nuker.Value == false or shared.AlSploitUnInjected == true
+			end)
+		end,
+
+		HoverText = "Breaks Beds Around You ⛏️"
+	})
+
+	Nuker:CreateToggle({
+		Name = "MiningAnimation",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	Nuker:CreateToggle({
+		Name = "MineLuckyBlocks",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	Nuker:CreateToggle({
+		Name = "MineOres",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	Nuker:CreateSlider({
+		Name = "Range",
+
+		Function = function() end,
+
+		MaximumValue = 30,
+		DefaultValue = 30
+	})
 end)
 
 task.spawn(function()
@@ -4104,7 +4382,7 @@ task.spawn(function()
 							end
 
 							if AlSploitSettings.Esp.UseHighlight.Value == false then			
-								if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
+								if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
 									local BillBoardGui = Instance.new("BillboardGui")
 
 									local Frame = Instance.new("Frame")
@@ -4284,7 +4562,7 @@ task.spawn(function()
 
 				if AlSploitSettings.Esp.Value == true and shared.AlSploitUnInjected == false then											
 					if AlSploitSettings.Esp.UseHighlight.Value == true then
-						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
+						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team and v.Team.TeamColor == LocalPlayer.Team.TeamColor then
 							local Highlight = Instance.new("Highlight")
 
 							Highlight.Parent = v.Character
@@ -4334,7 +4612,7 @@ task.spawn(function()
 					end
 
 					if AlSploitSettings.Esp.UseHighlight.Value == false then			
-						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team.TeamColor and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
+						if AlSploitSettings.Esp.ShowTeamates.Value == true and v.Team and v.Team.TeamColor == LocalPlayer.Team.TeamColor then								
 							local BillBoardGui = Instance.new("BillboardGui")
 
 							local Frame = Instance.new("Frame")
@@ -4665,3 +4943,5 @@ end)
 --replace.out. with :WaitForChild("out")
 --velocity fix
 --fix esp
+
+--game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
