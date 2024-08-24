@@ -1557,6 +1557,7 @@ local BedwarsConstants = {
 local BedwarsRemotes = {
 	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
 	ProjectileFireRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire"),
+	PickupItemDropRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PickupItemDrop"),
 	DragonBreathRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DragonBreath"),
 	DamageBlockRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock"),
 	SetInvItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem"),
@@ -1856,6 +1857,25 @@ function IsBlockBreakable(BlockPosition)
 	end
 
 	return IsBlockBreakableValue
+end
+
+local function IsTouchingGround()
+	local IsTouchingFloor = false
+
+	local RaycastParameters = RaycastParams.new()
+
+	RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+	RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+
+	local Origin = (LocalPlayer.Character.PrimaryPart.Position + Vector3.new(0, 0, 0))
+
+	local Raycast = WorkSpace:Raycast(Origin, Vector3.new(0, -2.5, 0), RaycastParameters)
+
+	if Raycast and Raycast.Position then
+		IsTouchingFloor = true			
+	end
+
+	return IsTouchingFloor
 end
 
 local function ShootProjectile(Item, Projectile, NearestPlayer)	
@@ -3209,7 +3229,7 @@ task.spawn(function()
 						local X = (math.cos(Angle) * AlSploitSettings.TargetStrafe.Range.Value)
 						local Z = (math.sin(Angle) * AlSploitSettings.TargetStrafe.Range.Value)
 						
-						local TargetPosition = (NearestEntityPrimaryPart.Position + Vector3.new(X, 0, Z))
+						local TargetPosition = (NearestEntityPrimaryPart.Position + Vector3.new(X, LocalPlayerPrimaryPart.Velocity.Y, Z))
 						
 						local RaycastParameters = RaycastParams.new()
 						
@@ -3223,12 +3243,24 @@ task.spawn(function()
 
 							LocalPlayerPrimaryPart.Velocity = Velocity
 						end
+						
+						if AlSploitSettings.TargetStrafe.JumpAutomatically.Value == true and IsTouchingGround() then
+							LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+						end
 					end
 				end		
 			until shared.AlSploitUnInjected == true or AlSploitSettings.TargetStrafe.Value == false
 		end,
 
 		HoverText = "Automatically Circles Around Desired Entities 💫"
+	})
+	
+	TargetStrafe:CreateToggle({
+		Name = "JumpAutomatically",
+
+		Function = function() end,
+
+		DefaultValue = true
 	})
 
 	TargetStrafe:CreateToggle({
@@ -3462,6 +3494,39 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local PickupItemRange = UtilityTab:CreateToggle({
+		Name = "PickupItemRange",
+
+		Function = function()			
+			repeat
+				task.wait()
+				
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
+					for i, v in next, CollectionService:GetTagged("ItemDrop") do
+						local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position).Magnitude
+
+						if Magnitude <= AlSploitSettings.PickupItemRange.Range.Value then
+							BedwarsRemotes.PickupItemDropRemote:InvokeServer({itemDrop = v})
+						end
+					end
+				end
+			until AlSploitSettings.PickupItemRange.Value == false or shared.AlSploitUnInjected == true
+		end,
+
+		HoverText = "Picks Up The Item From The Desired Range 🎖️"
+	})
+
+	PickupItemRange:CreateSlider({
+		Name = "Range",
+
+		Function = function() end,
+
+		MaximumValue = 10,
+		DefaultValue = 10
+	})
+end)
+
+task.spawn(function()
 	local KillFeedHudGui
 
 	task.spawn(function()
@@ -3484,7 +3549,7 @@ task.spawn(function()
 				KillFeedHudGui.Parent = ReplicatedStorageService
 			end	
 
-			if AlSploitSettings.HideKillFeedGui.Value == false and ReplicatedStorageService:FindFirstChild("KillFeedHud") then
+			if AlSploitSettings.HideKillFeedGui.Value == false and ReplicatedStorageService:FindFirstChild("KillFeedGui") then
 				ReplicatedStorageService.KillFeedHud.Parent = LocalPlayer.PlayerGui
 			end	
 		end,
@@ -4233,7 +4298,7 @@ task.spawn(function()
 							NearestOre = FindNearestOre(AlSploitSettings.Nuker.Range.Value)
 						end
 
-						if NearestBed or NearestLuckyBlock or NearestOre and AlSploitSettings.Nuker.MiningAnimation.Value == true and MiningAnimationCooldown == false then
+						if NearestBed or NearestLuckyBlock or NearestOre and AlSploitSettings.Nuker.MiningAnimation.Value == true then
 							TargetBlockFound = (NearestBed or NearestLuckyBlock or NearestOre)	
 						end
 
@@ -4252,7 +4317,9 @@ task.spawn(function()
 							DamageBlock(TargetBlock.Position)
 						end
 
-						if not NearestBed then						
+						if not NearestBed then		
+							TargetBlockFound = nil
+							
 							if NearestLuckyBlock then
 								DamageBlock(NearestLuckyBlock.Position)
 							end
