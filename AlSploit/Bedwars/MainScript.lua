@@ -188,7 +188,7 @@ task.spawn(function()
 
 				CreateFile("AlSploit/AlSploitConfiguration", EncodedSettings)
 			end
-			
+
 			task.wait(0.5)
 		until shared.AlSploitUnInjected == true
 	end)
@@ -1527,7 +1527,7 @@ local LocalPlayerInventory
 task.spawn(function()
 	repeat
 		task.wait()
-		
+
 		if IsAlive(LocalPlayer) then
 			LocalPlayerInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 		end
@@ -1770,8 +1770,8 @@ local function FindNearestEntity(MaxDistance)
 end
 
 local function TweenToNearestBed(Time)
-	Time = (Time and Time or 0.65)
-	
+	Time = (Time and Time or 0)
+
 	if IsAlive(LocalPlayer) == true then
 		local NearestBed, NearestBedDistance = FindNearestBed(false)
 
@@ -1784,15 +1784,10 @@ local function TweenToNearestBed(Time)
 			local BlockRaycast = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
 
 			if BlockRaycast and BlockRaycast.Position then
-				local TweenInformation = TweenInfo.new(Time, (NearestBedDistance >= 325 and Enum.EasingStyle.Linear or Enum.EasingStyle.Circular), Enum.EasingDirection.In, 0, false, 0)
-				
+				local TweenInformation = TweenInfo.new((Time == 0 and (NearestBedDistance / 700)), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
 				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
 
 				BedTpTween:Play()
-				
-				BedTpTween.Completed:Connect(function()
-					return true
-				end)
 			end
 		end
 	end
@@ -2092,10 +2087,8 @@ local function Invisibility()
 			Animation.Looped = false
 			Animation:AdjustSpeed(100000)
 
-			local InvisibilityConenction
-
-			InvisibilityConenction = Animation.Ended:Connect(function()
-				InvisibilityConenction:Disconnect()
+			AlSploitConnections["InvisibleConnection2"] = Animation.Ended:Connect(function()
+				AlSploitConnections["InvisibleConnection2"]:Disconnect()
 				Animation:Destroy()
 
 				LocalPlayer.Character.LowerTorso.CollisionGroup = "Players"
@@ -2189,7 +2182,12 @@ local function GetBow()
 		if v.itemType:find("bow") then 
 			local Item = BedwarsTables.ItemTable[v.itemType].projectileSource
 			local Arrow = Item.projectileType("arrow")	
-			local Damage = BedwarsMetaGames.ProjectileMeta[Arrow].combat.damage
+
+			local Damage = math.huge
+
+			if Item then
+				Damage = BedwarsMetaGames.ProjectileMeta[Arrow].combat.damage
+			end
 
 			if Damage > BestBowDamage then
 				BestBowDamage = Damage
@@ -2378,16 +2376,16 @@ task.spawn(function()
 
 		Function = function()
 			if AlSploitSettings.Velocity.Value == true then		
+				OldApplyKnockback = BedwarsUtils.KnockbackUtil.applyKnockback
+				
 				BedwarsUtils.KnockbackUtil.applyKnockback = function(Root, Mass, Direction, Knockback, ...)	
-					if Knockback then
-						local Horizontal = (Knockback.horizontal and Knockback.horizontal or 1)
-						local Vertical = (Knockback.vertical and Knockback.vertical or 1)
+					Knockback = Knockback or {}
+					
+					local Horizontal = (Knockback.horizontal and Knockback.horizontal or 1)
+					local Vertical = (Knockback.vertical and Knockback.vertical or 1)
 
-						if Horizontal and Vertical then
-							Knockback.horizontal = (Horizontal * (AlSploitSettings.Velocity.Horizontal.Value / 100))
-							Knockback.vertical = (Vertical * (AlSploitSettings.Velocity.Vertical.Value / 100))
-						end			
-					end
+					Knockback.horizontal = (Horizontal * (AlSploitSettings.Velocity.Horizontal.Value / 100))
+					Knockback.vertical = (Vertical * (AlSploitSettings.Velocity.Vertical.Value / 100))	
 
 					return OldApplyKnockback(Root, Mass, Direction, Knockback, ...)
 				end
@@ -2766,7 +2764,7 @@ task.spawn(function()
 										SwitchItem(BestBow.itemType)
 									end
 								end)
-								
+
 								print(Bow)
 
 								ShootProjectile(Bow, BestArrow, NearestPlayer)
@@ -3056,7 +3054,7 @@ task.spawn(function()
 	})
 
 	Client:WaitFor("EntityDamageEvent"):andThen(function(v)
-		v:Connect(function(DamageTable)			
+		AlSploitConnections["KnockbackTpConnection"] = v:Connect(function(DamageTable)			
 			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.KnockbackTp.Value == true and shared.AlSploitUnInjected == false then 
 				local KnockbackMultiplier = DamageTable.knockbackMultiplier
 
@@ -3173,7 +3171,7 @@ task.spawn(function()
 	})
 
 	Client:WaitFor("EntityDamageEvent"):andThen(function(v)
-		v:Connect(function(DamageTable)
+		AlSploitSettings["DamageBoostConnection"] = v:Connect(function(DamageTable)
 			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.DamageBoost.Value == true and shared.AlSploitUnInjected == false then 				
 				DamageBoostValue = true
 
@@ -3194,7 +3192,7 @@ task.spawn(function()
 		HoverText = "Allows You To Jump Without A Cooldown 🦘"
 	})
 
-	UserInputService.JumpRequest:Connect(function()
+	AlSploitConnections["InfiniteJumpConnection"] = UserInputService.JumpRequest:Connect(function()
 		if shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and AlSploitSettings.InfiniteJump.Value == true then
 			LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 		end
@@ -3203,7 +3201,7 @@ end)
 
 task.spawn(function()
 	local Angle = 0
-	
+
 	local TargetStrafe = BlatantTab:CreateToggle({
 		Name = "TargetStrafe",
 
@@ -3225,25 +3223,25 @@ task.spawn(function()
 						local LocalPlayerPrimaryPart = LocalPlayer.Character.PrimaryPart
 
 						Angle = (Angle + 0.05)
-						
+
 						local X = (math.cos(Angle) * AlSploitSettings.TargetStrafe.Range.Value)
 						local Z = (math.sin(Angle) * AlSploitSettings.TargetStrafe.Range.Value)
-						
-						local TargetPosition = (NearestEntityPrimaryPart.Position + Vector3.new(X, LocalPlayerPrimaryPart.Velocity.Y, Z))
-						
+
+						local TargetPosition = (NearestEntityPrimaryPart.Position + Vector3.new(X, 0, Z))
+
 						local RaycastParameters = RaycastParams.new()
-						
+
 						RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 						RaycastParameters.FilterType = Enum.RaycastFilterType.Include
-						
+
 						local Raycast = WorkSpace:Raycast(TargetPosition, Vector3.new(0, -1000, 0), RaycastParameters)
-						
+
 						if Raycast and Raycast.Position then
 							local Velocity = ((TargetPosition - LocalPlayerPrimaryPart.Position).Unit * 23)
 
 							LocalPlayerPrimaryPart.Velocity = Velocity
 						end
-						
+
 						if AlSploitSettings.TargetStrafe.JumpAutomatically.Value == true and IsTouchingGround() then
 							LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 						end
@@ -3254,7 +3252,7 @@ task.spawn(function()
 
 		HoverText = "Automatically Circles Around Desired Entities 💫"
 	})
-	
+
 	TargetStrafe:CreateToggle({
 		Name = "JumpAutomatically",
 
@@ -3359,7 +3357,7 @@ task.spawn(function()
 		HoverText = "Makes You Invisible 👓"
 	})
 
-	LocalPlayer.CharacterAdded:Connect(function()
+	AlSploitConnections["InvisibleConnection"] = LocalPlayer.CharacterAdded:Connect(function()
 		repeat task.wait() until IsAlive(LocalPlayer)
 
 		if AlSploitSettings.Invisible.Value == true then
@@ -3500,7 +3498,7 @@ task.spawn(function()
 		Function = function()			
 			repeat
 				task.wait()
-				
+
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					for i, v in next, CollectionService:GetTagged("ItemDrop") do
 						local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position).Magnitude
@@ -3582,7 +3580,7 @@ task.spawn(function()
 					if AlSploitSettings.EffectSpammer.Confetti.Value == true then
 						BedwarsControllers.AbilityController:useAbility("PARTY_POPPER")
 					end
-					
+
 					task.wait(25 /  AlSploitSettings.EffectSpammer.Speed.Value)
 				end
 			until AlSploitSettings.EffectSpammer.Value == false or shared.AlSploitUnInjected == true
@@ -3590,7 +3588,7 @@ task.spawn(function()
 
 		HoverText = "Spams The Chat 🗣️"
 	})
-	
+
 	EffectSpammer:CreateToggle({
 		Name = "DragonBreath",
 
@@ -3598,7 +3596,7 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
-	
+
 	EffectSpammer:CreateToggle({
 		Name = "Confetti",
 
@@ -3624,7 +3622,7 @@ task.spawn(function()
 		Function = function()			
 			repeat
 				task.wait()
-				
+
 				local MessageTable = {
 					Message1 = "3+ Years Now And The Anticheat Is Still The Same | AlSploit On Top",
 					Message2 = "Clowns Are The Only Ones We Eliminate | AlSploit On Top",
@@ -3633,11 +3631,11 @@ task.spawn(function()
 					Message5 = "Get Back To Scripting, Skids | AlSploit On Top",
 					Message6 = "Voidware Has The Best Logger!!! | AlSploit On Top"
 				}
-				
+
 				for i, v in next, MessageTable do
 					if AlSploitSettings.ChatSpammer.Value == true then
 						RobloxRemotes.SayMessageRequestRemote:FireServer(v, "All")
-						
+
 						task.wait(500 /  AlSploitSettings.ChatSpammer.Speed.Value)
 					end
 				end
@@ -3646,12 +3644,12 @@ task.spawn(function()
 
 		HoverText = "Spams The Chat 🗣️"
 	})
-	
+
 	ChatSpammer:CreateSlider({
 		Name = "Speed",
-		
+
 		Function = function() end,
-		
+
 		MaximumValue = 100,
 		DefaultValue = 50
 	})
@@ -3738,7 +3736,7 @@ task.spawn(function()
 		Function = function()			
 			task.spawn(function()
 				task.spawn(function()
-					PlayerService.PlayerAdded:Connect(function(Player)
+					AlSploitConnections["AntiStaffConnection"] = PlayerService.PlayerAdded:Connect(function(Player)
 						if shared.AlSploitUnInjected == false and AlSploitSettings.AntiStaff.Value == true and Player:IsInGroup(5774246) and Player:GetRankInGroup(5774246) > 1 then
 							if AlSploitSettings.AntiStaff.LeaveParty.Value == true then
 								BedwarsControllers.QueueController.leaveParty()
@@ -3838,6 +3836,261 @@ task.spawn(function()
 	})
 end)
 
+task.spawn(function()	
+	local TexturePack = WorldTab:CreateToggle({
+		Name = "TexturePack",
+
+		Function = function() end,
+
+		HoverText = "Makes Your ViewModel Look Cool 😎"
+	})
+	
+	TexturePack:CreateToggle({
+		Name = "TexturePackForResources",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	TexturePack:CreateToggle({
+		Name = "TexturePackForPickaxes",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	TexturePack:CreateToggle({
+		Name = "TexturePackForScythes",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	TexturePack:CreateToggle({
+		Name = "TexturePackForSwords",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	AlSploitConnections["TexturePackConnection"] = ViewModel.ChildAdded:Connect(function(Tool)
+		if AlSploitSettings.TexturePack.Value == true and shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and Tool:IsA("Accessory") then
+			local TexturePack = game:GetObjects("rbxassetid://14654171957")
+
+			local Import = TexturePack[1]
+
+			Import.Parent = ReplicatedStorageService
+
+			local TexturePackTable = {
+				{
+					Name = "wood_sword",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+					Model = Import:WaitForChild("Wood_Sword"),
+				},	
+
+				{
+					Name = "stone_sword",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+					Model = Import:WaitForChild("Stone_Sword"),
+				},
+
+				{
+					Name = "iron_sword",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+					Model = Import:WaitForChild("Iron_Sword"),
+				},
+
+				{
+					Name = "diamond_sword",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+					Model = Import:WaitForChild("Diamond_Sword"),
+				},	
+
+				{
+					Name = "emerald_sword",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+					Model = Import:WaitForChild("Emerald_Sword"),
+				},
+
+				{
+					Name = "rageblade",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-90)),
+					Model = Import:WaitForChild("Rageblade"),
+				},
+
+				{
+					Name = "wood_scythe",
+					Offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+					Model = Import:WaitForChild("Wood_Scythe"),
+				},
+
+				{
+					Name = "stone_scythe",
+					Offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+					Model = Import:WaitForChild("Stone_Scythe"),
+				},
+
+				{
+					Name = "iron_scythe",
+					Offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+					Model = Import:WaitForChild("Iron_Scythe"),
+				},
+
+				{
+					Name = "diamond_scythe",
+					Offset = CFrame.Angles(math.rad(0),math.rad(89),math.rad(-90)),
+					Model = Import:WaitForChild("Diamond_Scythe"),
+				},
+
+				{
+					Name = "wood_pickaxe",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-10), math.rad(-95)),
+					Model = Import:WaitForChild("Wood_Pickaxe"),
+				},	
+
+				{
+					Name = "stone_pickaxe",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-10), math.rad(-95)),
+					Model = Import:WaitForChild("Stone_Pickaxe"),
+				},	
+
+				{
+					Name = "iron_pickaxe",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-10), math.rad(-95)),
+					Model = Import:WaitForChild("Iron_Pickaxe"),
+				},	
+
+				{
+					Name = "diamond_pickaxe",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-89), math.rad(-95)),
+					Model = Import:WaitForChild("Diamond_Pickaxe"),
+				},
+
+				{
+					Name = "diamond",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-90), math.rad(90)),
+					Model = Import:WaitForChild("Diamond"),
+				},
+
+				{
+					Name = "iron",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-90), math.rad(90)),
+					Model = Import:WaitForChild("Iron"),
+				},
+
+				{
+					Name = "emerald",
+					Offset = CFrame.Angles(math.rad(0), math.rad(-90), math.rad(90)),
+					Model = Import:WaitForChild("Emerald"),
+				},
+			}
+
+			for i, v in next, TexturePackTable do	
+				if v.Name == Tool.Name then		
+					local Model2
+					local Model
+
+					local Tool2
+
+					local function ActivateTexturePack()
+						for i2, v2 in next, Tool:GetDescendants() do
+							if v2:IsA("BasePart") or v2:IsA("MeshPart") or v2:IsA("UnionOperation") then				
+								v2.Transparency = 1
+							end			
+						end		
+
+						Model = v.Model:Clone()
+
+						Model.Parent = Tool		
+						Model.Name = v.Name
+
+						Model.CFrame = ((Tool:WaitForChild("Handle").CFrame * v.Offset) * CFrame.Angles(math.rad(0), math.rad(-50), math.rad(0)))	
+
+						local Weld = Instance.new("WeldConstraint")
+
+						Weld.Parent = Model
+						Weld.Name = "WeldConstraint"
+
+						Weld.Part0 = Model
+						Weld.Part1 = Tool:WaitForChild("Handle")			
+
+						Tool2 = LocalPlayer.Character:WaitForChild(v.Name)			
+
+						for i2, v2 in next, Tool2:GetDescendants() do
+							if v2:IsA("BasePart") or v2:IsA("MeshPart") or v2:IsA("UnionOperation") then				
+								v2.Transparency = 1				
+							end	
+						end		
+
+						Model2 = v.Model:Clone()
+
+						Model2.Parent = Tool2
+						Model2.Name = v.Name
+
+						Model2.Anchored = false
+						Model2.CFrame = ((Tool2:WaitForChild("Handle").CFrame * v.Offset)) * CFrame.Angles(math.rad(0), math.rad(-50), math.rad(0))
+					end
+					
+					if v.Name == "iron" and AlSploitSettings.TexturePack.TexturePackForResources.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = (Model2.CFrame * CFrame.new(0, -0.24, 0))
+					end
+
+					if v.Name == "diamond" and AlSploitSettings.TexturePack.TexturePackForResources.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = (Model2.CFrame * CFrame.new(0, 0.027, 0))
+					end
+
+					if v.Name == "emerald" and AlSploitSettings.TexturePack.TexturePackForResources.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = (Model2.CFrame * CFrame.new(0, 0.001, 0))
+					end
+					
+					if v.Name:find("pickaxe") and AlSploitSettings.TexturePack.TexturePackForPickaxes.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = ((Model2.CFrame * CFrame.new(-.2, 0, -2.4)) + Vector3.new(0, 0, 2.12))
+					end
+					
+					if v.Name:find("scythe") and AlSploitSettings.TexturePack.TexturePackForScythes.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = (Model2.CFrame * CFrame.new(-1.15, 0.2, -2.1)) 
+
+					end
+
+					if v.Name == "rageblade" and AlSploitSettings.TexturePack.TexturePackForSwords.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = (Model2.CFrame * CFrame.new(0.7, 0, -1)) 
+					end
+
+					if v.Name:find("sword") and AlSploitSettings.TexturePack.TexturePackForSwords.Value == true then
+						ActivateTexturePack()
+
+						Model2.CFrame = ((Model2.CFrame * CFrame.new(0.6, 0, -1.1)) + Vector3.new(0, 0, 0.3))
+					end
+
+					local Weld2 = Instance.new("WeldConstraint")
+
+					Weld2.Parent = Model
+					Weld2.Name = "WeldConstraint"
+
+					Weld2.Part0 = Model2
+					Weld2.Part1 = Tool2:WaitForChild("Handle")
+				end
+			end
+		end     
+	end)
+end)
+
 task.spawn(function()
 	local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
 
@@ -3862,7 +4115,7 @@ task.spawn(function()
 				ColorCorrectionEffect.TintColor= Color3.new(R, G, B)				
 				ColorCorrectionEffect.Enabled = true
 			end
-			
+
 			if AlSploitSettings.Atmosphere.Value == false then
 				ColorCorrectionEffect.Enabled = false
 			end
@@ -3870,10 +4123,10 @@ task.spawn(function()
 
 		HoverText = "Gives You A Cool Atmosphere 🌆"
 	})
-	
+
 	Atmosphere:CreateColorSlider({
 		Name = "Color",
-		
+
 		Function = function()
 			local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
 
@@ -3883,10 +4136,10 @@ task.spawn(function()
 
 			ColorCorrectionEffect.TintColor= Color3.new(R, G, B)
 		end,
-		
+
 		DefaultValue = Color3.new(0, 0.133333, 1)
 	})
-	
+
 	UnInjectEvent.Event:Connect(function()
 		ColorCorrectionEffect:Destroy()
 	end)
@@ -3918,15 +4171,15 @@ task.spawn(function()
 
 					local TweenInformation = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
 					local SizeTween = TweenService:Create(BlurEffect, TweenInformation, {Size = Magnitude})
-					
+
 					SizeTween:Play()
-					
+
 					SizeTween.Completed:Connect(function()
 						local TweenInformation = TweenInfo.new(1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
 						local SizeTween = TweenService:Create(BlurEffect, TweenInformation, {Size = 0})
 
 						SizeTween:Play()
-						
+
 						task.wait(1)
 					end)
 				end		
@@ -3940,6 +4193,94 @@ task.spawn(function()
 
 	UnInjectEvent.Event:Connect(function()
 		BlurEffect:Destroy()
+	end)
+end)
+
+task.spawn(function()
+	local OldEnvironmentSpecularScale = LightingService.EnvironmentSpecularScale
+	local OldEnvironmentDiffuseScale = LightingService.EnvironmentDiffuseScale
+	local OldGeographicLatitude = LightingService.GeographicLatitude
+	local OldOutdoorAmbient = LightingService.OutdoorAmbient
+	local OldGlobalShadows = LightingService.GlobalShadows
+	local OLdBrightness = LightingService.Brightness
+	local OldTimeOfDay = LightingService.TimeOfDay
+	local OldClockTime = LightingService.ClockTime
+	local OldAmbient = LightingService.Ambient
+
+	local OldAtmosphereDensity = LightingService.Atmosphere.Density
+	local OldAtmosphereOffset = LightingService.Atmosphere.Offset
+	local OldAtmosphereColor = LightingService.Atmosphere.Color
+	local OldAtmosphereDecay = LightingService.Atmosphere.Decay
+	local OldAtmosphereGlare = LightingService.Atmosphere.Glare
+	local OldAtmosphereHaze = LightingService.Atmosphere.Haze
+
+	local OldTheme = WorldTab:CreateToggle({
+		Name = "OldTheme",
+
+		Function = function()
+			if AlSploitSettings.OldTheme.Value == true then	
+				LightingService.EnvironmentSpecularScale = 1
+				LightingService.EnvironmentDiffuseScale = 1
+				LightingService.GeographicLatitude = 0
+				LightingService.OutdoorAmbient = Color3.new(0.270588, 0.270588, 0.270588)
+				LightingService.GlobalShadows = false
+				LightingService.Brightness = 3
+				LightingService.TimeOfDay = "13:00:00"
+				LightingService.ClockTime = 13
+				LightingService.Ambient = Color3.new(0.270588, 0.270588, 0.270588)
+
+				if AlSploitSettings.Atmosphere.Value == false then
+					LightingService.Atmosphere.Density = 0.1
+					LightingService.Atmosphere.Offset = 0.25
+					LightingService.Atmosphere.Color = Color3.new(0.776471, 0.776471, 0.776471)
+					LightingService.Atmosphere.Decay = Color3.new(0.407843, 0.439216, 0.486275)
+					LightingService.Atmosphere.Glare = 0
+					LightingService.Atmosphere.Haze = 0
+				end
+			end
+
+			if AlSploitSettings.OldTheme.Value == false then	
+				LightingService.EnvironmentSpecularScale = OldEnvironmentSpecularScale
+				LightingService.EnvironmentDiffuseScale = OldEnvironmentDiffuseScale
+				LightingService.GeographicLatitude = OldGeographicLatitude
+				LightingService.OutdoorAmbient = OldOutdoorAmbient
+				LightingService.GlobalShadows = OldGlobalShadows
+				LightingService.Brightness = OLdBrightness
+				LightingService.TimeOfDay = OldTimeOfDay
+				LightingService.ClockTime = OldClockTime
+				LightingService.Ambient = OldAmbient
+
+				if AlSploitSettings.Atmosphere.Value == false then
+					LightingService.Atmosphere.Density = OldAtmosphereDensity
+					LightingService.Atmosphere.Offset = OldAtmosphereOffset
+					LightingService.Atmosphere.Color = OldAtmosphereColor
+					LightingService.Atmosphere.Decay = OldAtmosphereDecay
+					LightingService.Atmosphere.Glare = OldAtmosphereGlare
+					LightingService.Atmosphere.Haze = OldAtmosphereHaze
+				end
+			end
+		end,
+
+		HoverText = "Makes The Game Look Old 👴"
+	})
+	
+	UnInjectEvent.Event:Connect(function()
+		LightingService.EnvironmentSpecularScale = OldEnvironmentSpecularScale
+		LightingService.EnvironmentDiffuseScale = OldEnvironmentDiffuseScale
+		LightingService.GeographicLatitude = OldGeographicLatitude
+		LightingService.OutdoorAmbient = OldOutdoorAmbient
+		LightingService.GlobalShadows = OldGlobalShadows
+		LightingService.Brightness = OLdBrightness
+		LightingService.TimeOfDay = OldTimeOfDay
+		LightingService.ClockTime = OldClockTime
+		LightingService.Ambient = OldAmbient
+		
+		LightingService.Atmosphere.Density = OldAtmosphereDensity
+		LightingService.Atmosphere.Offset = OldAtmosphereOffset
+		LightingService.Atmosphere.Color = OldAtmosphereColor
+		LightingService.Atmosphere.Decay = OldAtmosphereDecay
+		LightingService.Atmosphere.Glare = OldAtmosphereGlare
+		LightingService.Atmosphere.Haze = OldAtmosphereHaze
 	end)
 end)
 
@@ -4225,7 +4566,7 @@ end)
 
 task.spawn(function()
 	local BedTpOverridden = false
-		
+
 	local BedTp = WorldTab:CreateToggle({
 		Name = "BedTp",
 
@@ -4246,7 +4587,7 @@ task.spawn(function()
 						task.wait(0.3)
 
 						TweenToNearestBed()
-						
+
 						BedTpOverridden = false
 					end
 				end
@@ -4255,8 +4596,8 @@ task.spawn(function()
 
 		HoverText = "Teleports You To The Nearest Bed 🛏️"
 	})
-	
-	LocalPlayer.CharacterAdded:Connect(function()
+
+	AlSploitConnections["BedTpConnection"] = LocalPlayer.CharacterAdded:Connect(function()
 		repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
 		local NearestBed = FindNearestBed(false)
@@ -4266,7 +4607,7 @@ task.spawn(function()
 				repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
 				task.wait(0.3)
-				
+
 				TweenToNearestBed()
 			end
 		end
@@ -4319,7 +4660,7 @@ task.spawn(function()
 
 						if not NearestBed then		
 							TargetBlockFound = nil
-							
+
 							if NearestLuckyBlock then
 								DamageBlock(NearestLuckyBlock.Position)
 							end
@@ -4331,7 +4672,7 @@ task.spawn(function()
 					end
 				until AlSploitSettings.Nuker.Value == false or shared.AlSploitUnInjected == true
 			end)
-			
+
 			task.spawn(function()
 				repeat
 					task.wait()
@@ -4624,7 +4965,7 @@ task.spawn(function()
 
 	for i, v in next, PlayerService:GetPlayers() do
 		if v ~= LocalPlayer then
-			v.CharacterAdded:Connect(function()
+			AlSploitConnections["Esp"] = v.CharacterAdded:Connect(function()
 				repeat task.wait() until IsAlive(v)
 
 				if AlSploitSettings.Esp.Value == true and shared.AlSploitUnInjected == false then											
@@ -4957,7 +5298,7 @@ task.spawn(function()
 		HoverText = "AutoUnInjects AlSploit 🐁"
 	})
 
-	LocalPlayer.OnTeleport:Connect(function(TeleportState)
+	AlSploitConnections["AAutoInjectConnection"] = LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started and AlSploitSettings.AutoInject.Value == true and shared.AlSploitUnInjected == false then
 			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua',true))()")
 		end
@@ -5004,11 +5345,8 @@ end)
 --Things to fix because i have nothing else to do :shrug:
 
 --saving on poopexes
---fix targetstrafe
 --multiaura
 --scrollable frames
 --replace.out. with :WaitForChild("out")
 --velocity fix
 --fix esp
-
---game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
