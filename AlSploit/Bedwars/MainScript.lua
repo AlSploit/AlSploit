@@ -200,7 +200,7 @@ function AlSploitLibrary:CreateTab(Name)
 
 	local CornerFix = Instance.new("Frame")
 
-	local ModulesContainer = Instance.new("Frame")
+	local ModuleContainer = Instance.new("ScrollingFrame")
 	local UIListLayout = Instance.new("UIListLayout")
 
 	local Title = Instance.new("TextLabel")
@@ -225,15 +225,18 @@ function AlSploitLibrary:CreateTab(Name)
 	CornerFix.Position = UDim2.new(0, 0, 0.371, 0)
 	CornerFix.Size = UDim2.new(1, 0, 0.629, 0)
 
-	ModulesContainer.Parent = Tab
-	ModulesContainer.Name = "ModulesContainer"
+	ModuleContainer.Parent = Tab
+	ModuleContainer.Name = "ModuleContainer"
 
-	ModulesContainer.BackgroundTransparency = 1
-	ModulesContainer.BorderSizePixel = 0
-	ModulesContainer.Position = UDim2.new(0, 0, 1, 0)
-	ModulesContainer.Size = UDim2.new(1, 0, 21.429, 0)
-
-	UIListLayout.Parent = ModulesContainer
+	ModuleContainer.BackgroundTransparency = 1
+	ModuleContainer.ScrollBarThickness = (UserInputService.KeyboardEnabled and 0 or 3)
+	ModuleContainer.BorderSizePixel = 0
+	ModuleContainer.AutomaticSize = Enum.AutomaticSize.Y
+	ModuleContainer.CanvasSize = UDim2.new(0, 0, 45, 0)
+	ModuleContainer.Position = UDim2.new(0, 0, 1, 0)
+	ModuleContainer.Size = UDim2.new(1, 0, 21.429, 0)
+	
+	UIListLayout.Parent = ModuleContainer
 	UIListLayout.Name = "UIListLayout"
 
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
@@ -330,7 +333,7 @@ function AlSploitLibrary:CreateTab(Name)
 			end		
 		end
 
-		Toggle.Parent = ModulesContainer
+		Toggle.Parent = ModuleContainer
 		Toggle.Name = "Toggle"
 
 		Toggle.BackgroundTransparency = 0.15
@@ -497,7 +500,7 @@ function AlSploitLibrary:CreateTab(Name)
 				end	
 			end
 
-			MiniToggle.Parent = ModulesContainer
+			MiniToggle.Parent = ModuleContainer
 			MiniToggle.Name = "MiniToggle"
 
 			MiniToggle.BackgroundTransparency = 0.15
@@ -590,7 +593,7 @@ function AlSploitLibrary:CreateTab(Name)
 				KeyBind.Text = "KeyBind: " .. Keybind
 			end
 
-			KeyBind.Parent = ModulesContainer
+			KeyBind.Parent = ModuleContainer
 			KeyBind.Name = "KeyBind"
 
 			KeyBind.BackgroundTransparency = 0.15
@@ -703,7 +706,7 @@ function AlSploitLibrary:CreateTab(Name)
 				AlSploitSettings[Parent][Name] = {Value = DefaultValue}
 			end
 
-			Slider.Parent = ModulesContainer
+			Slider.Parent = ModuleContainer
 			Slider.Name = "Slider"
 
 			Slider.BackgroundTransparency = 0.15
@@ -885,7 +888,7 @@ function AlSploitLibrary:CreateTab(Name)
 			local UICorner_3 = Instance.new("UICorner")
 			local UITextSizeConstraint_5 = Instance.new("UITextSizeConstraint")
 
-			Dropdown.Parent = ModulesContainer
+			Dropdown.Parent = ModuleContainer
 			Dropdown.Name = "Dropdown"
 
 			Dropdown.BackgroundTransparency = 0.15
@@ -1103,7 +1106,7 @@ function AlSploitLibrary:CreateTab(Name)
 			local UITextSizeConstraint_5 = Instance.new("UITextSizeConstraint")
 			local UIPadding_2 = Instance.new("UIPadding")
 
-			ColorPicker.Parent = ModulesContainer
+			ColorPicker.Parent = ModuleContainer
 			ColorPicker.Name = "ColorPicker"
 
 			ColorPicker.BackgroundTransparency = 0.15
@@ -1240,6 +1243,10 @@ function AlSploitLibrary:CreateTab(Name)
 						CanUseSlider = false
 					end
 				end)
+			end)
+			
+			task.spawn(function()
+				Function(R, G, B)
 			end)
 
 			task.spawn(function()
@@ -1522,6 +1529,8 @@ local Flamework = require(ReplicatedStorageService["rbxts_include"]["node_module
 local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
+local EquippedKit = ClientStore:getState().Bedwars.kit
+
 local LocalPlayerInventory
 
 task.spawn(function()
@@ -1535,6 +1544,7 @@ task.spawn(function()
 end)
 
 local BedwarsControllers = {
+	DamageIndicatorController = KnitClient.Controllers.DamageIndicatorController.spawnDamageIndicator,
 	KnitViewModelController = KnitClient.Controllers.ViewmodelController,
 	ViewModelController = LocalPlayer.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"],
 	AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController"),
@@ -1555,13 +1565,16 @@ local BedwarsConstants = {
 }
 
 local BedwarsRemotes = {
+	HellBladeReleaseRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HellBladeRelease"),
 	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
 	ProjectileFireRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire"),
 	PickupItemDropRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PickupItemDrop"),
+	SkyScytheSpinRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SkyScytheSpin"),
 	DragonBreathRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DragonBreath"),
 	DamageBlockRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock"),
 	SetInvItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem"),
 	ScytheDashRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash"),
+	PlayGuitarRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar"),
 	GroundHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit"),
 	SwordHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
 }
@@ -1638,13 +1651,13 @@ local function FindNearestLuckyBlock(MaxDistance)
 end
 
 local function TweenToNearestPlayer(Time)
-	local Time = Time or 0.65
+	local Time = (Time and Time or 0)
 
 	if IsAlive(LocalPlayer) == true then
-		local NearestPlayer = FindNearestPlayer()
+		local NearestPlayer, NearestPlayerDistance = FindNearestPlayer()
 
 		if NearestPlayer then
-			local TweenInformation = TweenInfo.new(Time, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
+			local TweenInformation = TweenInfo.new((Time == 0 and (NearestPlayerDistance / 700) or Time), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)	
 			local PlayerTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = NearestPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 2, 0)})
 
 			PlayerTpTween:Play()
@@ -1781,11 +1794,11 @@ local function TweenToNearestBed(Time)
 			RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
 			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 
-			local BlockRaycast = WorkSpace:Raycast(NearestBed.Position + Vector3.new(0, 1000, 0), Vector3.new(0, -1000, 0), RaycastParameters)
-
-			if BlockRaycast and BlockRaycast.Position then
-				local TweenInformation = TweenInfo.new((Time == 0 and (NearestBedDistance / 700)), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
-				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(BlockRaycast.Position)})
+			local Raycast = WorkSpace:Raycast((NearestBed.Position + Vector3.new(0, 20, 0)), Vector3.new(0, -20, 0), RaycastParameters)
+			
+			if Raycast and Raycast.Position then
+				local TweenInformation = TweenInfo.new((Time == 0 and (NearestBedDistance / 700) or Time), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(Raycast.Position)})
 
 				BedTpTween:Play()
 			end
@@ -2124,7 +2137,7 @@ end
 
 local function GetScythe()
 	for i, v in next, GetInventory(LocalPlayer).items do
-		if v.itemType:find("scythe") and not v.itemType:find("sky") then 
+		if v.itemType:find("scythe") then 
 			return v
 		end
 	end
@@ -2211,16 +2224,10 @@ task.spawn(function()
 		Name = "ScytheDisabler",
 
 		Function = function()
-			local Scythe = GetScythe()
-
-			if not Scythe and AlSploitSettings.ScytheDisabler.Value == true and GetMatchState() ~= 0 then
-				CreateNotification(3, "A Scythe Is Required To Use ScytheDisabler")
-			end
-
 			repeat
 				task.wait()
 
-				Scythe = GetScythe()
+				local Scythe = GetScythe()
 
 				if Scythe and IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local HasItemEquipped = HasItemEquipped(Scythe.itemType)
@@ -2240,6 +2247,10 @@ task.spawn(function()
 						ScytheAnticheatDisabled = true
 
 						BedwarsRemotes.ScytheDashRemote:FireServer({direction = Vector})	
+						
+						if Scythe.itemType == "sky_scythe" then
+							BedwarsRemotes.SkyScytheSpinRemote:FireServer()
+						end
 					end
 
 					if HasItemEquipped == false then
@@ -2255,7 +2266,7 @@ task.spawn(function()
 			ScytheAnticheatDisabled = false
 		end,
 
-		HoverText = "Gives The Anticheat Brain Damage 🧠❌"
+		HoverText = "Gives The Anticheat Brain Damage 🧠❌ (Scythe Needed)"
 	})
 
 	ScytheDisabler:CreateSlider({
@@ -2316,6 +2327,73 @@ task.spawn(function()
 
 		MaximumValue = 100,
 		DefaultValue = 20
+	})
+end)
+
+task.spawn(function()
+	local InstantKill = CombatTab:CreateToggle({
+		Name = "InstantKill",
+
+		Function = function()
+			repeat
+				task.wait(1 / AlSploitSettings.InstantKill.Speed.Value)
+
+				local NearestEntity = FindNearestEntity(18)
+
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and EquippedKit == "ember" and NearestEntity then
+					if AlSploitSettings.InstantKill.Method.InfernalSaber.Value == true then
+						local InfernalSaber = HasItem("infernal_saber")
+
+						if InfernalSaber then	
+							BedwarsRemotes.HellBladeReleaseRemote:FireServer({chargeTime = 1.2, player = LocalPlayer, weapon = InfernalSaber})
+						end
+					end
+
+					if AlSploitSettings.InstantKill.Method.SkyScythe.Value == true then
+						local SkyScythe = HasItem("sky_scythe")
+
+						if SkyScythe then	
+							BedwarsRemotes.SkyScytheSpinRemote:FireServer()
+						end
+					end
+				end
+			until AlSploitSettings.InstantKill.Value == false or shared.AlSploitUnInjected == true
+		end,
+
+		HoverText = "Kills The Emenies Instantly 🔥 (Infernal Saber / Sky Scythe Needed)"
+	})
+
+	InstantKill:CreateSlider({
+		Name = "Speed",
+
+		Function = function() end,
+
+		MaximumValue = 10,
+		DefaultValue = 10
+	})
+
+	local Method = InstantKill:CreateDropdown({
+		Name = "Method",
+
+		Function = function() end,
+
+		HoverText = "Pick What Method You Want The InstantKill To Be 🗡"
+	})
+
+	Method:CreateToggle({
+		Name = "InfernalSaber",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	Method:CreateToggle({
+		Name = "SkyScythe",
+
+		Function = function() end,
+
+		DefaultValue = true
 	})
 end)
 
@@ -2564,7 +2642,7 @@ task.spawn(function()
 
 			task.spawn(function()
 				repeat
-					task.wait(0)
+					task.wait(AlSploitSettings.Killaura.Speed.Value == 100 and 0 or (1 / AlSploitSettings.Killaura.Speed.Value))
 
 					if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 						local NearestEntity, NearestEntityDistance = FindNearestEntity(AlSploitSettings.Killaura.Range.Value)
@@ -2631,6 +2709,15 @@ task.spawn(function()
 		Function = function() end,
 
 		DefaultValue = false
+	})
+	
+	local Speed = Killaura:CreateSlider({
+		Name = "Speed",
+
+		Function = function() end,	
+
+		DefaultValue = 100,
+		MaximumValue = 100
 	})
 
 	local Range = Killaura:CreateSlider({
@@ -2953,6 +3040,37 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local MelodyHealExploit = BlatantTab:CreateToggle({
+		Name = "MelodyHealExploit",
+
+		Function = function()
+			repeat
+				task.wait(1 / AlSploitSettings.MelodyHealExploit.Speed.Value)
+				
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and EquippedKit == "melody" then
+					local MelodyGuitar = HasItem("guitar")
+					
+					if MelodyGuitar then
+						BedwarsRemotes.PlayGuitarRemote:FireServer({healTarget = LocalPlayer})
+					end
+				end
+			until AlSploitSettings.MelodyHealExploit.Value == false or shared.AlSploitUnInjected == true
+		end,
+
+		HoverText = "Heals You With The Guitar 🎸 (Guitar Required)"
+	})
+	
+	MelodyHealExploit:CreateSlider({
+		Name = "Speed",
+		
+		Function = function() end,
+		
+		MaximumValue = 100,
+		DefaultValue = 100
+	})
+end)
+
+task.spawn(function()
 	local OldBlockPlaceCPS = BedwarsConstants.CPSConstants.BLOCK_PLACE_CPS
 
 	local NoPlacementCPS = BlatantTab:CreateToggle({
@@ -2986,7 +3104,7 @@ task.spawn(function()
 
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					BedwarsRemotes.GroundHitRemote:FireServer()
-				end		
+				end
 			until shared.AlSploitUnInjected == true or AlSploitSettings.NoFallDamage.Value == false
 		end,
 
@@ -3113,7 +3231,7 @@ task.spawn(function()
 							if NearestPlayer then
 								local StartTick = tick()
 
-								local Unit = ((NearestPlayer.Character.PrimaryPart.Position + Vector3.new(0, 5, 0)) - LocalPlayer.Character.PrimaryPart.Position).Unit
+								local Unit = (NearestPlayer.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Unit
 
 								task.spawn(function()
 									repeat
@@ -3137,7 +3255,7 @@ task.spawn(function()
 							if NearestBed then
 								local StartTick = tick()
 
-								local Unit = ((NearestBed.Position + Vector3.new(0, 5, 0)) - LocalPlayer.Character.PrimaryPart.Position).Unit
+								local Unit = (NearestBed.Position - LocalPlayer.Character.PrimaryPart.Position).Unit
 
 								task.spawn(function()
 									repeat
@@ -3586,7 +3704,7 @@ task.spawn(function()
 			until AlSploitSettings.EffectSpammer.Value == false or shared.AlSploitUnInjected == true
 		end,
 
-		HoverText = "Spams The Chat 🗣️"
+		HoverText = "Spams The The Desired Effects 💥"
 	})
 
 	EffectSpammer:CreateToggle({
@@ -3596,7 +3714,7 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
-
+ 
 	EffectSpammer:CreateToggle({
 		Name = "Confetti",
 
@@ -4263,7 +4381,7 @@ task.spawn(function()
 
 		HoverText = "Makes The Game Look Old 👴"
 	})
-	
+
 	UnInjectEvent.Event:Connect(function()
 		LightingService.EnvironmentSpecularScale = OldEnvironmentSpecularScale
 		LightingService.EnvironmentDiffuseScale = OldEnvironmentDiffuseScale
@@ -4274,7 +4392,7 @@ task.spawn(function()
 		LightingService.TimeOfDay = OldTimeOfDay
 		LightingService.ClockTime = OldClockTime
 		LightingService.Ambient = OldAmbient
-		
+
 		LightingService.Atmosphere.Density = OldAtmosphereDensity
 		LightingService.Atmosphere.Offset = OldAtmosphereOffset
 		LightingService.Atmosphere.Color = OldAtmosphereColor
@@ -4282,6 +4400,57 @@ task.spawn(function()
 		LightingService.Atmosphere.Glare = OldAtmosphereGlare
 		LightingService.Atmosphere.Haze = OldAtmosphereHaze
 	end)
+end)
+
+task.spawn(function()	
+	local OldSpawnDamageIndicator = debug.getupvalue(BedwarsControllers.DamageIndicatorController, 10, {Create})
+	
+	local Messages = {"AlSploit", "Best Script", "Raven & Skidware Suck", "🤑", "💀"}
+	
+	local Indicators = WorldTab:CreateToggle({
+		Name = "Indicators",
+
+		Function = function()
+			if AlSploitSettings.Indicators.Value == true then
+				debug.setupvalue(BedwarsControllers.DamageIndicatorController, 10, {
+					Create = function(self, Indicator, ...)						
+						local ColorSplit = string.split(AlSploitSettings.Indicators.Color.Value, ",")
+
+						local R = ColorSplit[1]
+						local G = ColorSplit[2]
+						local B = ColorSplit[3]
+												
+						Indicator.Parent.TextColor3 = Color3.new(R, G, B)
+						Indicator.Parent.Text = Messages[math.random(1, #Messages)]
+						
+						return game:GetService("TweenService"):Create(Indicator, ...)
+					end
+				})
+			end
+			
+			if AlSploitSettings.Indicators.Value == false then
+				debug.setupvalue(BedwarsControllers.DamageIndicatorController, 10, {
+					OldSpawnDamageIndicator
+				})
+			end
+		end,
+
+		HoverText = "Makes The Damage Indicator Cool 💨"
+	})
+
+	UnInjectEvent.Event:Connect(function()
+		debug.setupvalue(BedwarsControllers.DamageIndicatorController, 10, {
+			OldSpawnDamageIndicator
+		})
+	end)
+	
+	Indicators:CreateColorSlider({
+		Name = "Color",
+		
+		Function = function() end,
+		
+		DefaultValue = Color3.new(0, 0.6, 1)
+	})
 end)
 
 task.spawn(function()
@@ -4446,7 +4615,7 @@ task.spawn(function()
 					end)
 
 					task.spawn(function()
-						if not LightingService:FindFirstChildOfClass("Atmosphere") then
+						if not LightingService:FindFirstChildOfClass("Atmosphere") and AlSploitSettings.Atmosphere.Value == false then
 							local Atmosphere = Instance.new("Atmosphere")
 
 							Atmosphere.Parent = LightingService
@@ -4561,6 +4730,170 @@ task.spawn(function()
 
 			LightingService.GalaxySky:Destroy()				
 		end
+	end)
+end)
+
+task.spawn(function()
+	local PlayerTpOverridden = false
+
+	local PlayerTp = WorldTab:CreateToggle({
+		Name = "PlayerTp",
+
+		Function = function()
+			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false then				
+				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+
+				local NearestPlayer = FindNearestPlayer()
+
+				if NearestPlayer then
+					if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
+						PlayerTpOverridden = true
+
+						KillLocalPlayer()		
+
+						repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+
+						task.wait(0.3)
+
+						TweenToNearestPlayer()
+
+						PlayerTpOverridden = false
+					end
+				end
+			end	
+		end,
+
+		HoverText = "Teleports You To The Nearest Player 👨‍🌾"
+	})
+
+	AlSploitConnections["PlayerTpConnection"] = LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+
+		local NearestPlayer = FindNearestPlayer()
+
+		if NearestPlayer then
+			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" and PlayerTpOverridden == false then
+				repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+
+				task.wait(0.3)
+
+				TweenToNearestPlayer()
+			end
+		end
+	end)
+end)
+
+task.spawn(function()
+	local AntiVoidPart
+
+	local AntiVoid = WorldTab:CreateToggle({
+		Name = "AntiVoid",
+
+		Function = function()
+			if AlSploitSettings.AntiVoid.Value == true then
+				repeat task.wait() until GetMatchState() ~= 0 or shared.AlSploitUnInjected == true or AlSploitSettings.AntiVoid.Value == false
+
+
+				if AlSploitSettings.AntiVoid.Value == true and shared.AlSploitUnInjected == false then
+					local OldLowestPosition = math.huge
+					local LowestPosition = 99999
+
+					local BlockRaycastParameters = RaycastParams.new()
+
+					BlockRaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+					BlockRaycastParameters.FilterType = Enum.RaycastFilterType.Include
+
+					AntiVoidPart = Instance.new("Part")
+
+					AntiVoidPart.Parent = WorkSpace
+					AntiVoidPart.Name = "AntiVoidPart"
+
+					AntiVoidPart.Transparency = (AlSploitSettings.AntiVoid.Transparency.Value / 100)
+					AntiVoidPart.CanCollide = false
+					AntiVoidPart.Anchored = true
+					AntiVoidPart.Material = Enum.Material.Neon
+					AntiVoidPart.Position = Vector3.new(0, 99999, 0)
+
+					local ColorSplit = string.split(AlSploitSettings.AntiVoid.Color.Value, ",")
+
+					local R = ColorSplit[1]
+					local G = ColorSplit[2]
+					local B = ColorSplit[3]  
+
+					AntiVoidPart.Color = Color3.new(R, G, B)
+					AntiVoidPart.Size = Vector3.new(99999, 1, 99999)
+
+					task.spawn(function()
+						for i, v in next, CollectionService:GetTagged("block") do
+							local NewRay = WorkSpace:Raycast((v.Position + Vector3.new(0, 1000, 0)), Vector3.new(0, -1000, 0), BlockRaycastParameters)
+
+							if NewRay and NewRay.Position then
+								LowestPosition = NewRay.Position.Y
+
+								if LowestPosition <= OldLowestPosition then
+									OldLowestPosition = LowestPosition
+
+									AntiVoidPart.Position = Vector3.new(0, (LowestPosition - 4), 0)
+								end
+							end					
+						end
+					end)
+
+					task.spawn(function()
+						AlSploitConnections["AntiVoidConnection"] = AntiVoidPart.Touched:Connect(function()
+							if IsAlive(LocalPlayer) and AntiVoidPart and LocalPlayer.Character.PrimaryPart.Position.Y <= WorkSpace.AntiVoidPart.Position.Y then
+								for i = 1, 3 do
+									if IsAlive(LocalPlayer) then
+										LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, 100, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+									end
+								end
+							end
+						end)
+					end)
+				end
+			end
+
+			if AlSploitSettings.AntiVoid.Value == false and AntiVoidPart then
+				AntiVoidPart:Destroy()
+			end
+		end,
+
+		HoverText = "Makes The Damage Indicator Cool 💨"
+	})
+
+	AntiVoid:CreateSlider({
+		Name = "Transparency",
+
+		Function = function() 
+			if AlSploitSettings.AntiVoid.Value == true and AntiVoidPart then
+				AntiVoidPart.Transparency = (AlSploitSettings.AntiVoid.Transparency.Value / 100)
+			end
+		end,
+
+		MaximumValue = 100,
+		DefaultValue = 60
+	})
+
+	AntiVoid:CreateColorSlider({
+		Name = "Color",
+
+		Function = function() 
+			if AlSploitSettings.AntiVoid.Value == true and AntiVoidPart then
+				local ColorSplit = string.split(AlSploitSettings.AntiVoid.Color.Value, ",")
+
+				local R = ColorSplit[1]
+				local G = ColorSplit[2]
+				local B = ColorSplit[3]  
+
+				AntiVoidPart.Color = Color3.new(R, G, B)
+			end
+		end,
+
+		DefaultValue = Color3.new(0, 0.6, 1)
+	})
+	
+	UnInjectEvent.Event:Connect(function()
+		AntiVoidPart:Destroy()
 	end)
 end)
 
@@ -5320,7 +5653,7 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	CreateNotification(3, "AlSploit Has Loaded")
+	CreateNotification(3, "AlSploit Has Loaded, Tabs Are Now Scrollable")
 
 	shared.AlSploitUnInjected = false
 
@@ -5341,12 +5674,3 @@ task.spawn(function()
 		end)
 	end)
 end)
-
---Things to fix because i have nothing else to do :shrug:
-
---saving on poopexes
---multiaura
---scrollable frames
---replace.out. with :WaitForChild("out")
---velocity fix
---fix esp
