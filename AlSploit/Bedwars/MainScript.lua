@@ -1529,8 +1529,6 @@ local Flamework = require(ReplicatedStorageService["rbxts_include"]["node_module
 local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
-local EquippedKit = ClientStore:getState().Bedwars.kit
-
 local LocalPlayerInventory
 
 task.spawn(function()
@@ -2340,7 +2338,7 @@ task.spawn(function()
 
 				local NearestEntity = FindNearestEntity(18)
 
-				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and EquippedKit == "ember" and NearestEntity then
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and NearestEntity then
 					if AlSploitSettings.InstantKill.Method.InfernalSaber.Value == true then
 						local InfernalSaber = HasItem("infernal_saber")
 
@@ -3047,7 +3045,7 @@ task.spawn(function()
 			repeat
 				task.wait(1 / AlSploitSettings.MelodyHealExploit.Speed.Value)
 				
-				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and EquippedKit == "melody" then
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local MelodyGuitar = HasItem("guitar")
 					
 					if MelodyGuitar then
@@ -3770,6 +3768,42 @@ task.spawn(function()
 
 		MaximumValue = 100,
 		DefaultValue = 50
+	})
+end)
+
+task.spawn(function()
+	local EntityNotifier = UtilityTab:CreateToggle({
+		Name = "EntityNotifier",
+
+		Function = function()
+			if AlSploitSettings.EntityNotifier.Value == true then
+				AlSploitConnections["EntityNotifierConnection"] = CollectionService:GetInstanceAddedSignal("DiamondGuardian"):Connect(function()		
+					CreateNotification(3, "A DiamondGuardian Has Spawned")
+				end)
+				
+				AlSploitConnections["EntityNotifierConnection2"] = CollectionService:GetInstanceAddedSignal("GolemBoss"):Connect(function()		
+					CreateNotification(3, "A GolemBoss Has Spawned")
+				end)
+				
+				AlSploitConnections["EntityNotifierConnection3"] = CollectionService:GetInstanceAddedSignal("skeleton"):Connect(function()		
+					CreateNotification(3, "A Skeleton Has Spawned")
+				end)
+				
+				AlSploitConnections["EntityNotifierConnection4"] = CollectionService:GetInstanceAddedSignal("Drone"):Connect(function()		
+					CreateNotification(3, "A Drone Has Spawned")
+				end)
+			end
+
+			if AlSploitSettings.EntityNotifier.Value == false and AlSploitConnections["EntityNotifierConnection"] then
+				for i, v in next, AlSploitConnections do
+					if string.find(v, "EntityNotifierConnection") then
+						v:Disconnect()
+					end
+				end
+			end
+		end,
+
+		HoverText = "Notifies You When An Entity Is Added ➕"
 	})
 end)
 
