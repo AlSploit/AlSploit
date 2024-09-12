@@ -214,7 +214,7 @@ function AlSploitLibrary:CreateTab(Name)
 	Tab.Position = UDim2.new(0.434, 0, 0, 0)
 	Tab.Size = UDim2.new(0.142, 0, 0.049, 0)
 
-	UICorner.CornerRadius = UDim.new(0, 7)
+	UICorner.CornerRadius = UDim.new(0.2, 0)
 	UICorner.Parent = Tab
 
 	CornerFix.Parent = Tab
@@ -647,17 +647,19 @@ function AlSploitLibrary:CreateTab(Name)
 					if CanInputKeybind == false and not UserInputService:GetFocusedTextBox() and AlSploitSettings[Name].Keybind == Input.KeyCode.Name then
 						if AlSploitSettings[Name].Value == true then
 							Toggle.TextColor3 = Color3.new(1, 1, 1)
+							
+							CreateNotification(3, Name .. " Has Been Toggled Off")
 						end
 
 						if AlSploitSettings[Name].Value == false then
 							Toggle.TextColor3 = CurrentAlSploitToggleColor
+							
+							CreateNotification(3, Name .. " Has Been Toggled On")
 						end
 
 						AlSploitSettings[Name].Value = not AlSploitSettings[Name].Value
 
 						Function()
-
-						CreateNotification(3, Name .. " Has Been Toggled " .. (AlSploitSettings[Name].Value == true and "On" or "Off"))
 					end
 
 					if CanInputKeybind == true then
@@ -1444,7 +1446,7 @@ local function CreateProgressHud(MaximumValue)
 
 	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
 	Display.BorderSizePixel = 0
-	Display.Position = UDim2.new(-0.006, 0, -0.029, 0)
+	Display.Position = UDim2.new(0, 0, 0, 0)
 	Display.ZIndex = 2
 	Display.Size = UDim2.new(1, 0, 1, 0)
 
@@ -1476,6 +1478,88 @@ local function CreateProgressHud(MaximumValue)
 	end)
 
 	return Background
+end
+
+local function CreateFlyHud()
+	local Background = Instance.new("Frame")
+	
+	local UICorner = Instance.new("UICorner")
+	local UIStroke = Instance.new("UIStroke")
+	
+	local Text = Instance.new("TextLabel")
+	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+	
+	local DisplayBackground = Instance.new("Frame")
+	local UICorner_2 = Instance.new("UICorner")
+	
+	local Display = Instance.new("Frame")
+	local UICorner_3 = Instance.new("UICorner")
+
+	Background.Parent = AlSploitScreenGui
+	Background.Name = "Background"
+	
+	Background.BackgroundTransparency = 0.25
+	Background.BackgroundColor3 = Color3.new(0, 0, 0)
+	Background.BorderSizePixel = 0
+	Background.Position = UDim2.new(0.41, 0, 0.7, 0)
+	Background.Visible = false
+	Background.Size = UDim2.new(0.178, 0, 0.085, 0)
+	
+	UICorner.Parent = Background
+	UIStroke.Name = "UICorner"
+	
+	UICorner.CornerRadius = UDim.new(0.1, 0)
+
+	UIStroke.Parent = Background
+	UIStroke.Name = "UIStroke"
+	
+	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	UIStroke.Thickness = 2
+
+	Text.Parent = Background
+	Text.Name = "Text"
+	
+	Text.BackgroundTransparency = 1
+	Text.BackgroundColor3 = Color3.new(1, 1, 1)
+	Text.TextColor3 = Color3.new(0, 0.6, 1)
+	Text.TextScaled = true
+	Text.Position = UDim2.new(0, 0, 0.511, 0)
+	Text.TextSize = 20
+	Text.Size = UDim2.new(1, 0, 0.489, 0)
+	Text.Font = Enum.Font.GothamBold
+
+	UITextSizeConstraint.Parent = Text
+	UITextSizeConstraint.Name = "UITextSizeConstraint"
+	
+	UITextSizeConstraint.MaxTextSize = 20
+
+	DisplayBackground.Parent = Background
+	DisplayBackground.Name = "DisplayBackground"
+	
+	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
+	DisplayBackground.BorderSizePixel = 0
+	DisplayBackground.Position = UDim2.new(0.229, 0, 0.267, 0)
+	DisplayBackground.Size = UDim2.new(0.545, 0, 0.150, 0)
+	
+	UICorner_2.Parent = DisplayBackground
+	UICorner_2.Name = "UICorner_2"
+
+	UICorner_2.CornerRadius = UDim.new(0.1, 6)
+
+	Display.Parent = DisplayBackground
+	Display.Name = "Display"
+	
+	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
+	Display.BorderColor3 = Color3.new(0, 0, 0)
+	Display.Position = UDim2.new(0, 0, 0, 0)
+	Display.Size = UDim2.new(0, 0, 1, 0)
+	
+	UICorner_3.Parent = Display
+	UICorner_3.Name = "UICorner_3"
+
+	UICorner_3.CornerRadius = UDim.new(0.1, 6)
+
+	return Background, Text, Display, UIStroke
 end
 
 local AlSploitConnections = {}
@@ -2278,6 +2362,105 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local ProjectileAura = CombatTab:CreateToggle({
+		Name = "ProjectileAura",
+
+		Function = function()    
+			repeat
+				task.wait()
+
+				if IsAlive(LocalPlayer) == true then
+					local NearestPlayer = FindNearestPlayer()
+					local BestArrow, BestBow = GetBow()
+
+					if NearestPlayer and GetMatchState() ~= 0 and not NearestPlayer:FindFirstChildOfClass("ForceField") then
+						task.spawn(function()
+							if HasItem("vacuum") then
+								local Vacuum = LocalPlayerInventory:FindFirstChild("vacuum")
+
+								task.spawn(function()
+									if AlSploitSettings.ProjectileAura.SwitchToItem.Value == true then	
+										SwitchItem("vacuum")
+									end
+								end)
+
+								ShootProjectile(Vacuum, "ghost", NearestPlayer)
+							end
+						end)
+
+						task.spawn(function()
+							if BestBow and HasItem("arrow") then
+								local Bow = LocalPlayerInventory:FindFirstChild(BestBow.itemType)
+
+								task.spawn(function()
+									if AlSploitSettings.ProjectileAura.SwitchToItem.Value == true then	
+										SwitchItem(BestBow.itemType)
+									end
+								end)
+
+								print(Bow)
+
+								ShootProjectile(Bow, BestArrow, NearestPlayer)
+							end
+						end)					
+
+						task.spawn(function()
+							if HasItem("fireball") then
+								local FireBall = LocalPlayerInventory:FindFirstChild("fireball")
+
+								task.spawn(function()
+									if AlSploitSettings.ProjectileAura.SwitchToItem.Value == true then	
+										SwitchItem("fireball")
+									end
+								end)
+
+								ShootProjectile(FireBall, "fireball", NearestPlayer)
+							end
+
+							if HasItem("Snowball") and not (HasItem("arrow") or BestBow) then
+								local SnowBall = LocalPlayerInventory:FindFirstChild("Snowball")
+
+								task.spawn(function()
+									if AlSploitSettings.ProjectileAura.SwitchToItem.Value == true then	
+										SwitchItem("Snowball")
+									end
+								end)
+
+								ShootProjectile(SnowBall, "Snowball", NearestPlayer)
+							end
+						end)
+
+						task.spawn(function()
+							if HasItem("lasso") then
+								local Lasso = LocalPlayerInventory:FindFirstChild("lasso")
+
+								task.spawn(function()
+									if AlSploitSettings.ProjectileAura.SwitchToItem.Value == true then	
+										SwitchItem("lasso")
+									end
+								end)
+
+								ShootProjectile(Lasso, "lasso", NearestPlayer)
+							end
+						end)
+					end
+				end
+			until shared.AlSploitUnInjected == true or AlSploitSettings.ProjectileAura.Value == false
+		end,
+
+		HoverText = "Automatically Shoots Players 🏹"
+	})
+
+	ProjectileAura:CreateToggle({
+		Name = "SwitchToItem",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+end)
+
+task.spawn(function()
 	local OldIsClickingTooFast
 
 	local NoClickDelay = CombatTab:CreateToggle({
@@ -2336,22 +2519,24 @@ task.spawn(function()
 			repeat
 				task.wait(1 / AlSploitSettings.InstantKill.Speed.Value)
 
-				local NearestEntity = FindNearestEntity(18)
+				if IsAlive(LocalPlayer) == true then
+					local NearestEntity = FindNearestEntity(18)
 
-				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and NearestEntity then
-					if AlSploitSettings.InstantKill.Method.InfernalSaber.Value == true then
-						local InfernalSaber = HasItem("infernal_saber")
+					if GetMatchState() ~= 0 and NearestEntity then
+						if AlSploitSettings.InstantKill.Method.InfernalSaber.Value == true then
+							local InfernalSaber = HasItem("infernal_saber")
 
-						if InfernalSaber then	
-							BedwarsRemotes.HellBladeReleaseRemote:FireServer({chargeTime = 1.2, player = LocalPlayer, weapon = InfernalSaber})
+							if InfernalSaber then	
+								BedwarsRemotes.HellBladeReleaseRemote:FireServer({chargeTime = 1.2, player = LocalPlayer, weapon = InfernalSaber})
+							end
 						end
-					end
 
-					if AlSploitSettings.InstantKill.Method.SkyScythe.Value == true then
-						local SkyScythe = HasItem("sky_scythe")
+						if AlSploitSettings.InstantKill.Method.SkyScythe.Value == true then
+							local SkyScythe = HasItem("sky_scythe")
 
-						if SkyScythe then	
-							BedwarsRemotes.SkyScytheSpinRemote:FireServer()
+							if SkyScythe then	
+								BedwarsRemotes.SkyScytheSpinRemote:FireServer()
+							end
 						end
 					end
 				end
@@ -2813,105 +2998,6 @@ task.spawn(function()
 	end)
 end)
 
-task.spawn(function()
-	local Aimbot = CombatTab:CreateToggle({
-		Name = "Aimbot",
-
-		Function = function()    
-			repeat
-				task.wait()
-
-				if IsAlive(LocalPlayer) == true then
-					local NearestPlayer = FindNearestPlayer()
-					local BestArrow, BestBow = GetBow()
-
-					if NearestPlayer and GetMatchState() ~= 0 and not NearestPlayer:FindFirstChildOfClass("ForceField") then
-						task.spawn(function()
-							if HasItem("vacuum") then
-								local Vacuum = LocalPlayerInventory:FindFirstChild("vacuum")
-
-								task.spawn(function()
-									if AlSploitSettings.Aimbot.SwitchToItem.Value == true then	
-										SwitchItem("vacuum")
-									end
-								end)
-
-								ShootProjectile(Vacuum, "ghost", NearestPlayer)
-							end
-						end)
-
-						task.spawn(function()
-							if BestBow and HasItem("arrow") then
-								local Bow = LocalPlayerInventory:FindFirstChild(BestBow.itemType)
-
-								task.spawn(function()
-									if AlSploitSettings.Aimbot.SwitchToItem.Value == true then	
-										SwitchItem(BestBow.itemType)
-									end
-								end)
-
-								print(Bow)
-
-								ShootProjectile(Bow, BestArrow, NearestPlayer)
-							end
-						end)					
-
-						task.spawn(function()
-							if HasItem("fireball") then
-								local FireBall = LocalPlayerInventory:FindFirstChild("fireball")
-
-								task.spawn(function()
-									if AlSploitSettings.Aimbot.SwitchToItem.Value == true then	
-										SwitchItem("fireball")
-									end
-								end)
-
-								ShootProjectile(FireBall, "fireball", NearestPlayer)
-							end
-
-							if HasItem("Snowball") and not (HasItem("arrow") or BestBow) then
-								local SnowBall = LocalPlayerInventory:FindFirstChild("Snowball")
-
-								task.spawn(function()
-									if AlSploitSettings.Aimbot.SwitchToItem.Value == true then	
-										SwitchItem("Snowball")
-									end
-								end)
-
-								ShootProjectile(SnowBall, "Snowball", NearestPlayer)
-							end
-						end)
-
-						task.spawn(function()
-							if HasItem("lasso") then
-								local Lasso = LocalPlayerInventory:FindFirstChild("lasso")
-
-								task.spawn(function()
-									if AlSploitSettings.Aimbot.SwitchToItem.Value == true then	
-										SwitchItem("lasso")
-									end
-								end)
-
-								ShootProjectile(Lasso, "lasso", NearestPlayer)
-							end
-						end)
-					end
-				end
-			until shared.AlSploitUnInjected == true or AlSploitSettings.Aimbot.Value == false
-		end,
-
-		HoverText = "Automatically Shoots Players 🏹"
-	})
-
-	Aimbot:CreateToggle({
-		Name = "SwitchToItem",
-
-		Function = function() end,
-
-		DefaultValue = true
-	})
-end)
-
 --[[task.spawn(function()
 	local AntiHit = CombatTab:CreateToggle({
 		Name = "AntiHit",
@@ -3309,7 +3395,7 @@ task.spawn(function()
 	})
 
 	AlSploitConnections["InfiniteJumpConnection"] = UserInputService.JumpRequest:Connect(function()
-		if shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and AlSploitSettings.InfiniteJump.Value == true then
+		if shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and AlSploitSettings.InfiniteJump.Value == true and AlSploitSettings.Fly.Value == false then
 			LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 		end
 	end)
@@ -3525,6 +3611,216 @@ task.spawn(function()
 
 		MaximumValue = 23,
 		DefaultValue = 23
+	})
+end)
+
+task.spawn(function()	
+	local MaxFlyTime = 2.3
+	local FlyTime = tick()
+	
+	local FlyDown
+	local FlyUp
+	
+	local FlyHud, NumberDisplay, SliderDisplay, UIStroke = CreateFlyHud()
+	
+	local BodyVelocity
+		
+	local Fly, Self
+	
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+				FlyDown = true
+			end
+			
+			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
+				FlyUp = true
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputEnded:Connect(function(Input)
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+				FlyDown = false
+			end
+			
+			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
+				FlyUp = false
+			end
+		end)
+	end)	
+
+	Fly, Self = BlatantTab:CreateToggle({
+		Name = "Fly",
+
+		Function = function()
+			FlyTime = 0
+			
+			if IsAlive(LocalPlayer) == true and AlSploitSettings.Fly.Value == true then
+				BodyVelocity = Instance.new("BodyVelocity")
+
+				BodyVelocity.Parent = LocalPlayer.Character.PrimaryPart
+				BodyVelocity.Name = "FlyBodyVelocity"
+
+				BodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+			end
+			
+			repeat
+				task.wait()
+
+				task.spawn(function()
+					FlyHud.Visible = AlSploitSettings.Fly.FlyHud.Value
+					
+					if (tick() - FlyTime) <= MaxFlyTime then			
+						local FlyTime = DecimalRound((tick() - FlyTime), 1)
+
+						NumberDisplay.Text = FlyTime		
+
+						local TweenInformation = TweenInfo.new(0.35, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+						local DisplayTween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
+
+						DisplayTween:Play()		
+
+						if (tick() - FlyTime) <= 0.05 then
+							local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)			
+							local DisplayTween = TweenService:Create(SliderDisplay, TweenInformation, {Size = UDim2.new(FlyTime / MaxFlyTime, 0, 1, 0)})
+
+							DisplayTween:Play()	
+						end
+
+						NumberDisplay.Text = FlyTime
+						
+						local ColorSplit = string.split(AlSploitSettings.Fly.FlyHudUIStrokeColor.Value, ",")
+
+						local R = ColorSplit[1]
+						local G = ColorSplit[2]
+						local B = ColorSplit[3]
+
+						UIStroke.Color = Color3.new(R, G, B)
+						
+						local ColorSplit = string.split(AlSploitSettings.Fly.FlyHudSliderColor.Value, ",")
+
+						local R2 = ColorSplit[1]
+						local G2 = ColorSplit[2]
+						local B2 = ColorSplit[3]
+						
+						SliderDisplay.BackgroundColor3 = Color3.new(R2, G2, B2)
+						
+						local ColorSplit3 = string.split(AlSploitSettings.Fly.FlyHudTextColor.Value, ",")
+
+						local R3 = ColorSplit3[1]
+						local G3 = ColorSplit3[2]
+						local B3 = ColorSplit3[3]
+
+						NumberDisplay.TextColor3 = Color3.new(R3, G3, B3)
+					end			
+				end)	
+
+				if IsTouchingGround() == true then
+					FlyTime = tick()
+				end
+				
+				if BodyVelocity then
+					BodyVelocity.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, ((FlyDown and -AlSploitSettings.Fly.FlyDownSpeed.Value or 0) + (FlyUp and AlSploitSettings.Fly.FlyUpSpeed.Value or 0)), LocalPlayer.Character.PrimaryPart.Velocity.Z)
+				end
+
+				if (tick() - FlyTime) >= MaxFlyTime then
+					FlyTime = tick()
+
+					local FlyTeleportPosition = 0
+					local RaycastParameters = RaycastParams.new()
+
+					RaycastParameters.FilterDescendantsInstances = {CollectionService:GetTagged("block")}
+					RaycastParameters.FilterType = Enum.RaycastFilterType.Include
+
+					local FlyRaycast = WorkSpace:Raycast(LocalPlayer.Character.PrimaryPart.Position, Vector3.new(0, -5000, 0), RaycastParameters)
+
+					if FlyRaycast and IsAlive(LocalPlayer) == true then 
+						local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}
+
+						Args[2] = ((FlyRaycast.Position.Y + 1) + LocalPlayer.Character.Humanoid.HipHeight)
+
+						FlyTeleportPosition = LocalPlayer.Character.PrimaryPart.Position.Y
+
+						LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(unpack(Args))
+
+						task.spawn(function()				
+							task.wait(0.15)
+
+							if IsAlive(LocalPlayer) then 									
+								local Args = {LocalPlayer.Character.PrimaryPart.CFrame:GetComponents()}	
+
+								Args[2] = FlyTeleportPosition
+
+								LocalPlayer.Character.PrimaryPart.CFrame = CFrame.new(unpack(Args))																		
+							end	
+						end)
+					end
+				end
+			until AlSploitSettings.Fly.Value == false or IsAlive(LocalPlayer) == false or shared.AlSploitUnInjected == true
+			
+			if BodyVelocity then
+				BodyVelocity:Destroy()
+			end
+
+			FlyHud.Visible = false
+			
+			AlSploitSettings.Fly.Value = false
+			Self.TextColor3 = Color3.new(1, 1, 1)
+		end,		
+
+		HoverText = "Makes Your Fly 🐦"
+	})
+	
+	Fly:CreateToggle({
+		Name = "FlyHud",
+		
+		Function = function() end,
+		
+		DefaultValue = true
+	})
+	
+	Fly:CreateSlider({
+		Name = "FlyDownSpeed",
+
+		Function = function() end,
+
+		MaximumValue = 100,
+		DefaultValue = 40
+	})
+	
+	Fly:CreateSlider({
+		Name = "FlyUpSpeed",
+		
+		Function = function() end,
+	
+		MaximumValue = 100,
+		DefaultValue = 40
+	})
+	
+	Fly:CreateColorSlider({
+		Name = "FlyHudUIStrokeColor",
+		
+		Function = function() end,
+		
+		DefaultValue = Color3.new(0, 0.6, 1)
+	})
+	
+	Fly:CreateColorSlider({
+		Name = "FlyHudSliderColor",
+
+		Function = function() end,
+
+		DefaultValue = Color3.new(0, 0.6, 1)
+	})
+	
+	Fly:CreateColorSlider({
+		Name = "FlyHudTextColor",
+
+		Function = function() end,
+
+		DefaultValue = Color3.new(0, 0.6, 1)
 	})
 end)
 
@@ -3988,6 +4284,60 @@ task.spawn(function()
 	})
 end)
 
+task.spawn(function()
+	local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
+
+	ColorCorrectionEffect.Parent = LightingService
+	ColorCorrectionEffect.Name = "ColorCorrectionEffect"
+
+	ColorCorrectionEffect.Brightness = 0.1
+	ColorCorrectionEffect.Saturation = 0.5
+	ColorCorrectionEffect.Enabled = true
+
+	local Atmosphere = WorldTab:CreateToggle({
+		Name = "Atmosphere",
+
+		Function = function()
+			if AlSploitSettings.Atmosphere.Value == true then
+				local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
+
+				local R = ColorSplit[1]
+				local G = ColorSplit[2]
+				local B = ColorSplit[3]
+
+				ColorCorrectionEffect.TintColor= Color3.new(R, G, B)				
+				ColorCorrectionEffect.Enabled = true
+			end
+
+			if AlSploitSettings.Atmosphere.Value == false then
+				ColorCorrectionEffect.Enabled = false
+			end
+		end,
+
+		HoverText = "Gives You A Cool Atmosphere 🌆"
+	})
+
+	Atmosphere:CreateColorSlider({
+		Name = "Color",
+
+		Function = function()
+			local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
+
+			local R = ColorSplit[1]
+			local G = ColorSplit[2]
+			local B = ColorSplit[3]
+
+			ColorCorrectionEffect.TintColor= Color3.new(R, G, B)
+		end,
+
+		DefaultValue = Color3.new(0, 0.133333, 1)
+	})
+
+	UnInjectEvent.Event:Connect(function()
+		ColorCorrectionEffect:Destroy()
+	end)
+end)
+
 task.spawn(function()	
 	local TexturePack = WorldTab:CreateToggle({
 		Name = "TexturePack",
@@ -4208,7 +4558,7 @@ task.spawn(function()
 					if v.Name:find("pickaxe") and AlSploitSettings.TexturePack.TexturePackForPickaxes.Value == true then
 						ActivateTexturePack()
 
-						Model2.CFrame = ((Model2.CFrame * CFrame.new(-.2, 0, -2.4)) + Vector3.new(0, 0, 2.12))
+						Model2.CFrame = ((Model2.CFrame * CFrame.new(-0.2, 0, -2.4)) + Vector3.new(0, 0, 2.12))
 					end
 					
 					if v.Name:find("scythe") and AlSploitSettings.TexturePack.TexturePackForScythes.Value == true then
@@ -4244,60 +4594,6 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local ColorCorrectionEffect = Instance.new("ColorCorrectionEffect")
-
-	ColorCorrectionEffect.Parent = LightingService
-	ColorCorrectionEffect.Name = "ColorCorrectionEffect"
-
-	ColorCorrectionEffect.Brightness = 0.1
-	ColorCorrectionEffect.Saturation = 0.5
-	ColorCorrectionEffect.Enabled = true
-
-	local Atmosphere = WorldTab:CreateToggle({
-		Name = "Atmosphere",
-
-		Function = function()
-			if AlSploitSettings.Atmosphere.Value == true then
-				local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
-
-				local R = ColorSplit[1]
-				local G = ColorSplit[2]
-				local B = ColorSplit[3]
-
-				ColorCorrectionEffect.TintColor= Color3.new(R, G, B)				
-				ColorCorrectionEffect.Enabled = true
-			end
-
-			if AlSploitSettings.Atmosphere.Value == false then
-				ColorCorrectionEffect.Enabled = false
-			end
-		end,
-
-		HoverText = "Gives You A Cool Atmosphere 🌆"
-	})
-
-	Atmosphere:CreateColorSlider({
-		Name = "Color",
-
-		Function = function()
-			local ColorSplit = string.split(AlSploitSettings.Atmosphere.Color.Value, ",")
-
-			local R = ColorSplit[1]
-			local G = ColorSplit[2]
-			local B = ColorSplit[3]
-
-			ColorCorrectionEffect.TintColor= Color3.new(R, G, B)
-		end,
-
-		DefaultValue = Color3.new(0, 0.133333, 1)
-	})
-
-	UnInjectEvent.Event:Connect(function()
-		ColorCorrectionEffect:Destroy()
-	end)
-end)
-
-task.spawn(function()
 	local BlurEffect = Instance.new("BlurEffect")
 
 	BlurEffect.Parent = LightingService
@@ -4316,7 +4612,7 @@ task.spawn(function()
 				if AlSploitSettings.MotionBlur.Value == true and IsAlive(LocalPlayer) == true then
 					local CameraPosition = Camera.CFrame.Position
 
-					task.wait(0.1)
+					task.wait(0.2)
 
 					local CameraPosition2 = Camera.CFrame.Position
 					local Magnitude = (CameraPosition - CameraPosition2).Magnitude
@@ -4785,7 +5081,7 @@ task.spawn(function()
 
 						KillLocalPlayer()		
 
-						repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+						repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
 
 						task.wait(0.3)
 
@@ -4807,7 +5103,7 @@ task.spawn(function()
 
 		if NearestPlayer then
 			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" and PlayerTpOverridden == false then
-				repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+				repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
 
 				task.wait(0.3)
 
@@ -4927,7 +5223,9 @@ task.spawn(function()
 	})
 	
 	UnInjectEvent.Event:Connect(function()
-		AntiVoidPart:Destroy()
+		if AntiVoidPart then
+			AntiVoidPart:Destroy()
+		end
 	end)
 end)
 
@@ -4949,7 +5247,7 @@ task.spawn(function()
 
 						KillLocalPlayer()		
 
-						repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+						repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
 						task.wait(0.3)
 
@@ -4971,7 +5269,7 @@ task.spawn(function()
 
 		if NearestBed then
 			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" and BedTpOverridden == false then
-				repeat task.wait() until (IsAlive(LocalPlayer) == true and LocalPlayer.Character:FindFirstChildOfClass("ForceField")) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+				repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
 				task.wait(0.3)
 
@@ -5708,3 +6006,10 @@ task.spawn(function()
 		end)
 	end)
 end)
+
+--Things to fix because i have nothing else to do :shrug:
+
+--saving on poopexes
+--multiaura
+--replace.out. with :WaitForChild("out")
+--fix esp
