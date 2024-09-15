@@ -821,7 +821,7 @@ function AlSploitLibrary:CreateTab(Name)
 
 			task.spawn(function()
 				UserInputService.InputEnded:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+					if Input.UserInputType == Enum.UserInputType.MouseButton1 or Enum.UserInputType.Touch then
 						CanUseSlider = false
 					end
 				end)
@@ -1613,6 +1613,8 @@ local Flamework = require(ReplicatedStorageService["rbxts_include"]["node_module
 local ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
 local Client = require(ReplicatedStorageService.TS.remotes).default.Client
 
+local EquippedKit = ClientStore:getState().Bedwars.kit
+
 local LocalPlayerInventory
 
 task.spawn(function()
@@ -1647,6 +1649,7 @@ local BedwarsConstants = {
 }
 
 local BedwarsRemotes = {
+	SummonerClawAttackRequest = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SummonerClawAttackRequest"),
 	HellBladeReleaseRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HellBladeRelease"),
 	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
 	ProjectileFireRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire"),
@@ -1793,6 +1796,19 @@ local function FindNearestEntity(MaxDistance)
 
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("DiamondGuardian") do
+			if v.PrimaryPart then
+				local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+				if Distance < NearestEntityDistance then
+					NearestEntityDistance = Distance
+					NearestEntity = v
+				end
+			end 
+		end
+	end)
+	
+	task.spawn(function()
+		for i, v in next, CollectionService:GetTagged("GuardianOfDream") do
 			if v.PrimaryPart then
 				local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
@@ -1969,7 +1985,7 @@ local function IsTouchingGround()
 end
 
 local function ShootProjectile(Item, Projectile, NearestPlayer)	
-	local Unit = (LocalPlayer.Character.PrimaryPart.Position - NearestPlayer.Character.PrimaryPart.Position).Unit
+	local Unit = ( NearestPlayer.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Unit
 
 	local Args = {
 		[1] = Item,
@@ -2770,7 +2786,7 @@ task.spawn(function()
 				end
 
 				task.spawn(function()
-					if AlSploitSettings.Killaura.SwitchToWeapon.Value == true then
+					if AlSploitSettings.Killaura.SwitchToWeapon.Value == true and Weapon then
 						SwitchItem(Weapon.itemType)
 					end
 				end)
@@ -2783,23 +2799,31 @@ task.spawn(function()
 				local SelfPosition
 
 				task.spawn(function()
-					SelfPosition = (LocalPlayerHumanoidRootPart.Position + (LookVector * (Magnitude - 14)))
+					if Weapon then
+						SelfPosition = (LocalPlayerHumanoidRootPart.Position + (LookVector * (Magnitude - 14)))
 
-					BedwarsRemotes.SwordHitRemote:FireServer({
-						weapon = Weapon.tool,
-						chargedAttack = {chargeRatio = 0},
-						entityInstance = Entity,
+						BedwarsRemotes.SwordHitRemote:FireServer({
+							weapon = Weapon.tool,
+							chargedAttack = {chargeRatio = 0},
+							entityInstance = Entity,
 
-						validate = {
-							raycast = {
-								cameraPosition = ({value = LocalPlayerHumanoidRootPart.Position}), 
-								cursorDirection = ({value = LookVector})
-							},
+							validate = {
+								raycast = {
+									cameraPosition = ({value = LocalPlayerHumanoidRootPart.Position}), 
+									cursorDirection = ({value = LookVector})
+								},
 
-							targetPosition = ({value = EntityPrimaryPart.Position}),
-							selfPosition = ({value = SelfPosition})
-						}
-					})	
+								targetPosition = ({value = EntityPrimaryPart.Position}),
+								selfPosition = ({value = SelfPosition})
+							}
+						})	
+					end
+				end)
+				
+				task.spawn(function()
+					if EquippedKit == "summoner" then						
+						BedwarsRemotes.SummonerClawAttackRequest:FireServer({clientTime = tick(), direction = LocalPlayer.Character.PrimaryPart.CFrame.LookVector, position = LocalPlayer.Character.PrimaryPart.Position})
+					end
 				end)
 			end
 
@@ -2826,8 +2850,10 @@ task.spawn(function()
 			task.spawn(function()
 				repeat
 					task.wait(AlSploitSettings.Killaura.Speed.Value == 100 and 0 or (1 / AlSploitSettings.Killaura.Speed.Value))
+					
+					local HitChance = (AlSploitSettings.Killaura.HitChance.Value == 100 and 1 or math.random(1, (100 / AlSploitSettings.Killaura.HitChance.Value)))
 
-					if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
+					if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and HitChance == 1 then
 						local NearestEntity, NearestEntityDistance = FindNearestEntity(AlSploitSettings.Killaura.Range.Value)
 						local Sword = GetSword()
 
@@ -2838,7 +2864,7 @@ task.spawn(function()
 						end)
 
 						task.spawn(function()
-							if Sword and NearestEntity then
+							if NearestEntity then
 								SwordHit(NearestEntity, Sword, NearestEntityDistance)
 							end
 
@@ -2892,6 +2918,15 @@ task.spawn(function()
 		Function = function() end,
 
 		DefaultValue = false
+	})
+	
+	local HitChance = Killaura:CreateSlider({
+		Name = "HitChance",
+
+		Function = function() end,	
+
+		DefaultValue = 100,
+		MaximumValue = 100
 	})
 	
 	local Speed = Killaura:CreateSlider({
@@ -3373,7 +3408,7 @@ task.spawn(function()
 	})
 
 	Client:WaitFor("EntityDamageEvent"):andThen(function(v)
-		AlSploitSettings["DamageBoostConnection"] = v:Connect(function(DamageTable)
+		AlSploitConnections["DamageBoostConnection"] = v:Connect(function(DamageTable)
 			if IsAlive(LocalPlayer) == true and DamageTable.entityInstance == LocalPlayer.Character and GetMatchState() ~= 0 and AlSploitSettings.DamageBoost.Value == true and shared.AlSploitUnInjected == false then 				
 				DamageBoostValue = true
 
@@ -3913,7 +3948,7 @@ task.spawn(function()
 
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					for i, v in next, CollectionService:GetTagged("ItemDrop") do
-						local Magnitude = (LocalPlayer.Character.PrimaryPart.Position - v.Position).Magnitude
+						local Magnitude = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
 						if Magnitude <= AlSploitSettings.PickupItemRange.Range.Value then
 							BedwarsRemotes.PickupItemDropRemote:InvokeServer({itemDrop = v})
