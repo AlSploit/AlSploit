@@ -1575,6 +1575,7 @@ local OldLocalPlayerHumanoidRootPart
 local ScytheAnticheatDisabledSpeed = 0
 local ScytheAnticheatDisabled = false
 local DamageBoostValue = false
+local JadeHammerTick = 0
 
 local KillauraAnimations = {
 	AlSploitHeartbeat = {
@@ -2256,6 +2257,10 @@ function GetSpeed()
 
 	if ScytheAnticheatDisabled == true then			
 		Speed = (Speed + ScytheAnticheatDisabledSpeed)
+	end
+	
+	if (tick() - JadeHammerTick) <= 1.4 then
+		Speed = (Speed + 30)
 	end
 
 	if DamageBoostValue == true then
@@ -3156,6 +3161,37 @@ task.spawn(function()
 	UnInjectEvent.Event:Connect(function()
 		BedwarsControllers.SwordController.swingSwordAtMouse = OldSwingSwordAtMouse
 	end)
+end)
+
+task.spawn(function()
+	local JadeHammerExploit = BlatantTab:CreateToggle({
+		Name = "JadeHammerExploit",
+
+		Function = function()
+			repeat
+				task.wait(1 / AlSploitSettings.JadeHammerExploit.SpamSpeed.Value)
+
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then				
+					if HasItem("jade_hammer") and (tick() - JadeHammerTick) > 4 then
+						JadeHammerTick = tick()
+
+						BedwarsControllers.AbilityController:useAbility("jade_hammer_jump")
+					end	
+				end
+			until AlSploitSettings.JadeHammerExploit.Value == false or shared.AlSploitUnInjected == true
+		end,
+
+		HoverText = "Auto Uses The Hammer To Reach High Speeds 🏎️"
+	})
+
+	JadeHammerExploit:CreateSlider({
+		Name = "SpamSpeed",
+
+		Function = function() end,
+
+		MaximumValue = 100,
+		DefaultValue = 100
+	})
 end)
 
 task.spawn(function()
@@ -4108,6 +4144,10 @@ task.spawn(function()
 
 		Function = function()
 			if AlSploitSettings.EntityNotifier.Value == true then
+				AlSploitConnections["EntityNotifierConnection"] = CollectionService:GetInstanceAddedSignal("GuardianOfDream"):Connect(function()		
+					CreateNotification(3, "A GuardianOfDream Has Spawned")
+				end)
+				
 				AlSploitConnections["EntityNotifierConnection"] = CollectionService:GetInstanceAddedSignal("DiamondGuardian"):Connect(function()		
 					CreateNotification(3, "A DiamondGuardian Has Spawned")
 				end)
@@ -4769,9 +4809,9 @@ end)
 
 task.spawn(function()	
 	local OldSpawnDamageIndicator = debug.getupvalue(BedwarsControllers.DamageIndicatorController, 10, {Create})
-	
+
 	local Messages = {"AlSploit", "Best Script", "Raven & Skidware Suck", "🤑", "💀"}
-	
+
 	local Indicators = WorldTab:CreateToggle({
 		Name = "Indicators",
 
@@ -4784,15 +4824,15 @@ task.spawn(function()
 						local R = ColorSplit[1]
 						local G = ColorSplit[2]
 						local B = ColorSplit[3]
-												
+
 						Indicator.Parent.TextColor3 = Color3.new(R, G, B)
 						Indicator.Parent.Text = Messages[math.random(1, #Messages)]
-						
+
 						return game:GetService("TweenService"):Create(Indicator, ...)
 					end
 				})
 			end
-			
+
 			if AlSploitSettings.Indicators.Value == false then
 				debug.setupvalue(BedwarsControllers.DamageIndicatorController, 10, {
 					OldSpawnDamageIndicator
@@ -4808,12 +4848,12 @@ task.spawn(function()
 			OldSpawnDamageIndicator
 		})
 	end)
-	
+
 	Indicators:CreateColorSlider({
 		Name = "Color",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = Color3.new(0, 0.6, 1)
 	})
 end)
@@ -5995,10 +6035,10 @@ task.spawn(function()
 			end
 		end,
 
-		HoverText = "AutoUnInjects AlSploit 🐁"
+		HoverText = "Auto Injects AlSploit 🐁"
 	})
 
-	AlSploitConnections["AAutoInjectConnection"] = LocalPlayer.OnTeleport:Connect(function(TeleportState)
+	AlSploitConnections["AutoInjectConnection"] = LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started and AlSploitSettings.AutoInject.Value == true and shared.AlSploitUnInjected == false then
 			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua',true))()")
 		end
@@ -6044,7 +6084,5 @@ end)
 
 --Things to fix because i have nothing else to do :shrug:
 
---saving on poopexes
---multiaura
---replace.out. with :WaitForChild("out")
+--indicator fix
 --fix esp
