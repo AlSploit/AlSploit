@@ -229,8 +229,10 @@ task.spawn(function()
 						
 						Percentage.Text = tostring(math.round(Fill.Size.X.Scale * 100)) .. "%"
 					until Fill.Size.X.Scale == 1
-					
+
+					loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()
 					loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))() 
+									
 					
 					AlSploitScreenGui:Destroy()
 				end)			
@@ -247,5 +249,3 @@ task.spawn(function()
 		end
 	end)
 end)
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()
