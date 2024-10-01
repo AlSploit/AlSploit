@@ -1576,6 +1576,7 @@ local ScytheAnticheatDisabledSpeed = 0
 local ScytheAnticheatDisabled = false
 local DamageBoostValue = false
 local JadeHammerTick = 0
+local ZephyrOrb = 0
 
 local KillauraAnimations = {
 	AlSploitHeartbeat = {
@@ -1633,6 +1634,7 @@ local BedwarsControllers = {
 	KnitViewModelController = KnitClient.Controllers.ViewmodelController,
 	ViewModelController = LocalPlayer.PlayerScripts.TS.controllers.global.viewmodel["viewmodel-controller"],
 	AbilityController = Flamework.resolveDependency("@easy-games/game-core:client/controllers/ability/ability-controller@AbilityController"),
+	ZephyrController = KnitClient.Controllers.WindWalkerController,
 	SprintController = KnitClient.Controllers.SprintController,
 	BlockController = require(ReplicatedStorageService["rbxts_include"]["node_modules"]["@easy-games"]["block-engine"].out).BlockEngine,
 	SwordController = KnitClient.Controllers.SwordController,
@@ -1650,12 +1652,15 @@ local BedwarsConstants = {
 }
 
 local BedwarsRemotes = {
-	SummonerClawAttackRequest = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SummonerClawAttackRequest"),
+	SummonerClawAttackRequestRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SummonerClawAttackRequest"),
+	BedwarsPurchaseItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem"),
+	SetObservedChestRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/SetObservedChest"),
 	HellBladeReleaseRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HellBladeRelease"),
 	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
 	ProjectileFireRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ProjectileFire"),
 	PickupItemDropRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PickupItemDrop"),
 	SkyScytheSpinRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SkyScytheSpin"),
+	ChestGetItemRemote =  ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/ChestGetItem"),
 	DragonBreathRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DragonBreath"),
 	DamageBlockRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@easy-games"):WaitForChild("block-engine"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DamageBlock"),
 	SetInvItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetInvItem"),
@@ -1748,6 +1753,22 @@ local function TweenToNearestPlayer(Time)
 
 			PlayerTpTween:Play()
 		end
+	end
+end
+
+local function StealItemsFromChest(NearestChest)		
+	if NearestChest then
+		local Chestitems = NearestChest:FindFirstChild("ChestFolderValue").Value:GetChildren()
+
+		BedwarsRemotes.SetObservedChestRemote:FireServer("BlockChest")
+
+		for i2, v2 in next, Chestitems do
+			if v2:IsA("Accessory") then
+				BedwarsRemotes.ChestGetItemRemote:InvokeServer(NearestChest:FindFirstChild("ChestFolderValue").Value, v2)
+			end
+		end
+
+		BedwarsRemotes.SetObservedChestRemote:FireServer(nil)
 	end
 end
 
@@ -1927,6 +1948,24 @@ local function FindBestBreakSide(Position)
 	return SoftestBlockStrength, SoftestBlock
 end
 
+local function FindNearestChest(MaxDistance)
+	local NearestChest = nil
+	local MaxDistance = MaxDistance or math.huge
+
+	for i, v in next, CollectionService:GetTagged("chest") do		
+		if v:FindFirstChild("ChestFolderValue") and #v:FindFirstChild("ChestFolderValue").Value:GetChildren() >= 1 then			
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MaxDistance then
+				NearestChest = v
+				MaxDistance = Distance				
+			end
+		end
+	end
+	
+	return NearestChest
+end
+
 function FindPlacedBlocks(Position, Side)
 	local LastFound, Blocks = nil, {}
 
@@ -1986,7 +2025,7 @@ local function IsTouchingGround()
 end
 
 local function ShootProjectile(Item, Projectile, NearestPlayer)	
-	local Unit = ( NearestPlayer.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Unit
+	local Unit = (NearestPlayer.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Unit
 
 	local Args = {
 		[1] = Item,
@@ -2076,6 +2115,57 @@ function FindNearestBed(IgnoreBedSheildEndTime, MaxDistance)
 	end
 
 	return NearestBed, NearestBedDistance
+end
+
+local function FindNearestNpc(MaxDistance)
+	local MaxDistance = MaxDistance or math.huge
+	local NearestNpc = nil
+
+	task.spawn(function()
+		for i,v in next, (CollectionService:GetTagged("broken-enchant-table")) do 
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MaxDistance then
+				MaxDistance = Distance
+				NearestNpc = v		
+			end
+		end
+	end)
+
+	task.spawn(function()
+		for i,v in next, (CollectionService:GetTagged("enchant-table")) do 
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MaxDistance then
+				MaxDistance = Distance
+				NearestNpc = v		
+			end
+		end
+	end)
+
+	task.spawn(function()
+		for i, v in next, CollectionService:GetTagged("BedwarsTeamUpgrader") do
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MaxDistance then
+				MaxDistance = Distance
+				NearestNpc = v
+			end
+		end
+	end)
+
+	task.spawn(function()
+		for i, v in next, CollectionService:GetTagged("BedwarsItemShop") do
+			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MaxDistance then
+				MaxDistance = Distance
+				NearestNpc = v		
+			end
+		end
+	end)
+
+	return NearestNpc
 end
 
 local function FindNearestOre(MaxDistance)
@@ -2242,6 +2332,16 @@ local function GetScythe()
 	end
 end
 
+task.spawn(function()
+	local ZephyrUpdate = BedwarsControllers.ZephyrController.updateJump
+
+	BedwarsControllers.ZephyrController.updateJump = function(self, Orb, ...)
+		ZephyrOrb = (IsAlive(LocalPlayer) and Orb or 0)
+
+		return ZephyrUpdate(self, Orb, ...)
+	end
+end)
+
 function GetSpeed()
 	local Speed = 0
 
@@ -2253,6 +2353,10 @@ function GetSpeed()
 
 	if LocalPlayer.Character:GetAttribute("GrimReaperChannel") then 
 		Speed = (Speed + 20)
+	end
+	
+	if type(ZephyrOrb) == "number" and ZephyrOrb > 0 then
+		Speed = Speed + 19
 	end
 
 	if ScytheAnticheatDisabled == true then			
@@ -2798,13 +2902,15 @@ task.spawn(function()
 
 				local LocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 				local EntityPrimaryPart = Entity.PrimaryPart
-				local LookVector = CFrame.lookAt(LocalPlayerHumanoidRootPart.Position, EntityPrimaryPart.Position).lookVector
+				
 				local Magnitude = (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude
-
+				
 				local SelfPosition
 
 				task.spawn(function()
 					if Weapon then
+						LookVector = LocalPlayer.Character.PrimaryPart.CFrame.LookVector
+						
 						SelfPosition = (LocalPlayerHumanoidRootPart.Position + (LookVector * (Magnitude - 14)))
 
 						BedwarsRemotes.SwordHitRemote:FireServer({
@@ -2814,7 +2920,7 @@ task.spawn(function()
 
 							validate = {
 								raycast = {
-									cameraPosition = ({value = LocalPlayerHumanoidRootPart.Position}), 
+									cameraPosition = ({value = Camera.CFrame.Position}), 
 									cursorDirection = ({value = LookVector})
 								},
 
@@ -2827,7 +2933,7 @@ task.spawn(function()
 				
 				task.spawn(function()
 					if EquippedKit == "summoner" then						
-						BedwarsRemotes.SummonerClawAttackRequest:FireServer({clientTime = tick(), direction = LocalPlayer.Character.PrimaryPart.CFrame.LookVector, position = LocalPlayer.Character.PrimaryPart.Position})
+						BedwarsRemotes.SummonerClawAttackRequestRemote:FireServer({clientTime = tick(), direction = LocalPlayer.Character.PrimaryPart.CFrame.LookVector, position = LocalPlayer.Character.PrimaryPart.Position})
 					end
 				end)
 			end
@@ -3470,6 +3576,35 @@ task.spawn(function()
 			LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 		end
 	end)
+end)
+
+task.spawn(function()
+	local ChestStealer = BlatantTab:CreateToggle({
+		Name = "ChestStealer",
+
+		Function = function()
+			repeat
+				task.wait()
+				
+				local NearestChest = FindNearestChest(AlSploitSettings.ChestStealer.Range.Value)
+				
+				if NearestChest then					
+					StealItemsFromChest(NearestChest)
+				end
+			until shared.AlSploitUnInjected == true or AlSploitSettings.ChestStealer.Value == false
+		end,
+
+		HoverText = "Steals Items From Chests 🪙"
+	})
+	
+	ChestStealer:CreateSlider({
+		Name = "Range",
+		
+		Function = function() end,
+		
+		MaximumValue = 30,
+		DefaultValue = 30
+	})
 end)
 
 task.spawn(function()
@@ -4250,6 +4385,454 @@ task.spawn(function()
 		BedwarsControllers.SprintController.stopSprinting = OldSprintFunction
 		BedwarsControllers.SprintController:stopSprinting()
 	end)
+end)
+
+task.spawn(function()
+	local function PurchaseItem(Arguments)
+		BedwarsRemotes.BedwarsPurchaseItemRemote:InvokeServer(unpack(Arguments))
+	end
+
+	local AutoBuy = UtilityTab:CreateToggle({
+		Name = "AutoBuy",
+
+		Function = function()
+			repeat
+				task.wait()
+
+				local NearestNpc = FindNearestNpc(AlSploitSettings.AutoBuy.Range.Value) 
+
+				if NearestNpc then
+					local JadeHammer = {
+						[1] = {
+							["shopItem"] = {
+								["amount"] = 1,
+								["lockAfterPurchase"] = true,
+								["itemType"] = "jade_hammer",
+								["category"] = "Combat",
+								["price"] = 40,
+								["requiresKit"] = {
+									[1] = "jade"
+								},
+								["spawnWithItems"] = {
+									[1] = "jade_hammer"
+								},
+								["currency"] = "iron"
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local GompyVacuum = {
+						[1] = {
+							["shopItem"] = {
+								["amount"] = 1,
+								["lockAfterPurchase"] = true,
+								["itemType"] = "vacuum",
+								["category"] = "Combat",
+								["price"] = 50,
+								["requiresKit"] = {
+									[1] = "ghost_catcher"
+								},
+								["spawnWithItems"] = {
+									[1] = "vacuum"
+								},
+								["currency"] = "iron"
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local Guitar = {
+						[1] = {
+							["shopItem"] = {
+								["amount"] = 1,
+								["lockAfterPurchase"] = true,
+								["itemType"] = "guitar",
+								["category"] = "Combat",
+								["price"] = 16,
+								["requiresKit"] = {
+									[1] = "melody"
+								},
+								["spawnWithItems"] = {
+									[1] = "guitar"
+								},
+								["currency"] = "iron"
+							},
+							["shopId"] = "1_item_shop"
+						}
+					}
+
+					local Lasso = {
+						[1] = {
+							["shopItem"] = {
+								["amount"] = 1,
+								["lockAfterPurchase"] = true,
+								["itemType"] = "lasso",
+								["category"] = "Combat",
+								["price"] = 30,
+								["requiresKit"] = {
+									[1] = "cowgirl"
+								},
+								["spawnWithItems"] = {
+									[1] = "lasso"
+								},
+								["currency"] = "iron"
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local Arrow = {
+						[1] = {
+							["shopItem"] = {
+								["currency"] = "iron",
+								["itemType"] = "arrow",
+								["amount"] = 8,
+								["price"] = 16,
+								["category"] = "Combat"
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local Wool = {
+						[1] = {
+							["shopItem"] = {
+								["currency"] = "iron",
+								["itemType"] = "wool_white",
+								["amount"] = 16,
+								["price"] = 8,
+								["category"] = "Blocks"
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}		
+
+					local Bow = {
+						[1] = {
+							["shopItem"] = {
+								["ignoredByKit"] = {
+									[1] = "flower_bee"
+								},
+								["itemType"] = "wood_bow",
+								["price"] = 24,
+								["superiorItems"] = {
+									[1] = "wood_crossbow",
+									[2] = "tactical_crossbow"
+								},
+								["currency"] = "iron",
+								["category"] = "Combat",
+								["lockAfterPurchase"] = true,
+								["spawnWithItems"] = {
+									[1] = "wood_bow"
+								},
+								["amount"] = 1
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local EmeraldArmor ={
+						[1] = {
+							["shopItem"] = {
+								["lockAfterPurchase"] = true,
+								["itemType"] = "emerald_chestplate",
+								["price"] = 40,
+								["customDisplayName"] = "Emerald Armor",
+								["currency"] = "emerald",
+								["category"] = "Combat",
+								["nextTier"] = "",
+								["ignoredByKit"] = {
+									[1] = "bigman"
+								},
+								["spawnWithItems"] = {
+									[1] = "emerald_helmet",
+									[2] = "emerald_chestplate",
+									[3] = "emerald_boots"
+								},
+								["amount"] = 1
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local DiamondArmor ={
+						[1] = {
+							["shopItem"] = {
+								["lockAfterPurchase"] = true,
+								["itemType"] = "Diamond_chestplate",
+								["price"] = 8,
+								["customDisplayName"] = "Diamond Armor",
+								["currency"] = "emerald",
+								["category"] = "Combat",
+								["nextTier"] = "diamond_chestplate",
+								["ignoredByKit"] = {
+									[1] = "bigman"
+								},
+								["spawnWithItems"] = {
+									[1] = "diamond_helmet",
+									[2] = "diamond_chestplate",
+									[3] = "diamond_boots"
+								},
+								["amount"] = 1
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+					local IronArmor ={
+						[1] = {
+							["shopItem"] = {
+								["lockAfterPurchase"] = true,
+								["itemType"] = "iron_chestplate",
+								["price"] = 120,
+								["customDisplayName"] = "Iron Armor",
+								["currency"] = "iron",
+								["category"] = "Combat",
+								["nextTier"] = "diamond_chestplate",
+								["ignoredByKit"] = {
+									[1] = "bigman"
+								},
+								["spawnWithItems"] = {
+									[1] = "iron_helmet",
+									[2] = "iron_chestplate",
+									[3] = "iron_boots"
+								},
+								["amount"] = 1
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local LeatherArmor ={
+						[1] = {
+							["shopItem"] = {
+								["lockAfterPurchase"] = true,
+								["itemType"] = "leather_chestplate",
+								["price"] = 50,
+								["customDisplayName"] = "Leather Armor",
+								["currency"] = "iron",
+								["category"] = "Combat",
+								["nextTier"] = "iron_chestplate",
+								["ignoredByKit"] = {
+									[1] = "bigman"
+								},
+								["spawnWithItems"] = {
+									[1] = "leather_helmet",
+									[2] = "leather_chestplate",
+									[3] = "leather_boots"
+								},
+								["amount"] = 1
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local EmeraldSword = {
+						[1] = {
+							["shopItem"] = {
+								["disabledInQueue"] = {
+									[1] = "tnt_wars"
+								},
+								["itemType"] = "emerald_sword",
+								["price"] = 20,
+								["superiorItems"] = {
+									[1] = ""
+								},
+								["currency"] = "iron",
+								["amount"] = 1,
+								["ignoredByKit"] = {
+									[1] = "barbarian",
+									[2] = "dasher",
+									[3] = "frost_hammer_kit"
+								},
+								["category"] = "Combat",
+								["lockAfterPurchase"] = true
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local VoidSword = {
+						[1] = {
+							["shopItem"] = {
+								["currency"] = "void_crystal",
+								["itemType"] = "void_sword",
+								["amount"] = 1,
+								["price"] = 10,
+								["category"] = "Void",
+								["ignoredByKit"] = {
+									[1] = "barbarian",
+									[2] = "dasher"
+								},
+								["lockAfterPurchase"] = true
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local DiamondSword = {
+						[1] = {
+							["shopItem"] = {
+								["disabledInQueue"] = {
+									[1] = "tnt_wars"
+								},
+								["itemType"] = "diamond_sword",
+								["price"] = 4,
+								["superiorItems"] = {
+									[1] = "emerald_sword"
+								},
+								["currency"] = "emerald",
+								["amount"] = 1,
+								["ignoredByKit"] = {
+									[1] = "barbarian",
+									[2] = "dasher",
+									[3] = "frost_hammer_kit"
+								},
+								["category"] = "Combat",
+								["lockAfterPurchase"] = true
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local IronSword = {
+						[1] = {
+							["shopItem"] = {
+								["disabledInQueue"] = {
+									[1] = "tnt_wars"
+								},
+								["itemType"] = "iron_sword",
+								["price"] = 70,
+								["superiorItems"] = {
+									[1] = "diamond_sword"
+								},
+								["currency"] = "iron",
+								["amount"] = 1,
+								["ignoredByKit"] = {
+									[1] = "barbarian",
+									[2] = "dasher",
+									[3] = "frost_hammer_kit"
+								},
+								["category"] = "Combat",
+								["lockAfterPurchase"] = true
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					local StoneSword = {
+						[1] = {
+							["shopItem"] = {
+								["disabledInQueue"] = {
+									[1] = "tnt_wars"
+								},
+								["itemType"] = "stone_sword",
+								["price"] = 20,
+								["superiorItems"] = {
+									[1] = "iron_sword"
+								},
+								["currency"] = "iron",
+								["amount"] = 1,
+								["ignoredByKit"] = {
+									[1] = "barbarian",
+									[2] = "dasher",
+									[3] = "frost_hammer_kit"
+								},
+								["category"] = "Combat",
+								["lockAfterPurchase"] = true
+							},
+							["shopId"] = NearestNpc.Name
+						}
+					}
+
+					task.spawn(function()	
+						if not HasItem("lasso") and AlSploitSettings.ProjectileAura.Value == true then
+							PurchaseItem(Lasso)
+						end
+
+						if not HasItem("jade_hammer") and AlSploitSettings.AutoKit.Value == true then
+							PurchaseItem(JadeHammer)
+						end
+
+						if not HasItem("vacuum") and AlSploitSettings.Aimbot.Value == true then
+							PurchaseItem(GompyVacuum)
+						end
+
+						if not HasItem("guitar") and AlSploitSettings.AutoKit.Value == true then
+							PurchaseItem(Guitar)
+						end
+					end)
+
+					task.spawn(function()
+						if HasItem("diamond_sword") then
+							PurchaseItem(EmeraldSword)
+						end
+
+						if HasItem("iron_sword") or HasItem("stone_sword") or HasItem("wood_sword") then
+							PurchaseItem(DiamondSword)
+						end
+
+						if HasItem("stone_sword") and HasItem("iron_chestplate") then
+							PurchaseItem(IronSword)
+						end
+
+						if HasItem("wood_sword") then
+							PurchaseItem(StoneSword)
+						end
+
+						PurchaseItem(VoidSword)
+					end)
+
+					task.spawn(function()
+						if HasItem("diamond_chestplate") then
+							PurchaseItem(EmeraldArmor)
+						end	
+
+						if HasItem("iron_chestplate") then
+							PurchaseItem(DiamondArmor)
+						end	
+
+						if HasItem("stone_sword") and not HasItem("iron_chestplate") and not HasItem("diamond_chestplate") and not HasItem("emerald_chestplate") then
+							PurchaseItem(LeatherArmor)
+						end	
+
+						if HasItem("leather_chestplate") then
+							PurchaseItem(IronArmor)
+						end					
+					end)
+
+					task.spawn(function()
+						if HasItem("iron_chestplate") and HasItem("iron_sword") and not HasItem("wood_bow") then
+							PurchaseItem(Bow)
+						end
+					end)
+
+					task.spawn(function()
+						if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") then
+							PurchaseItem(Arrow)
+						end
+					end)
+
+					task.spawn(function()
+						if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") and HasItem("arrow") and AlSploitSettings.Scaffold.Value == true then
+							PurchaseItem(Wool)
+						end
+					end)
+				end
+			until shared.AlSploitUnInjected == true or AlSploitSettings.AutoBuy.Value == false
+		end,
+
+		HoverText = "Autobuys Items For You 💰"
+	})
+
+	AutoBuy:CreateSlider({
+		Name = "Range",
+
+		Function = function() end,
+
+		MaximumValue = 30,
+		DefaultValue = 30
+	})
 end)
 
 task.spawn(function()
