@@ -36,6 +36,7 @@ task.spawn(function()
 	AlSploitScreenGui.Parent = LocalPlayer.PlayerGui
 	AlSploitScreenGui.Name = "AlSploit"
 
+	AlSploitScreenGui.OnTopOfCoreBlur = true
 	AlSploitScreenGui.IgnoreGuiInset = true
 	AlSploitScreenGui.ResetOnSpawn = false
 
@@ -235,7 +236,7 @@ function AlSploitLibrary:CreateTab(Name)
 	ModuleContainer.CanvasSize = UDim2.new(0, 0, 45, 0)
 	ModuleContainer.Position = UDim2.new(0, 0, 1, 0)
 	ModuleContainer.Size = UDim2.new(1, 0, 21.429, 0)
-	
+
 	UIListLayout.Parent = ModuleContainer
 	UIListLayout.Name = "UIListLayout"
 
@@ -647,13 +648,13 @@ function AlSploitLibrary:CreateTab(Name)
 					if CanInputKeybind == false and not UserInputService:GetFocusedTextBox() and AlSploitSettings[Name].Keybind == Input.KeyCode.Name then
 						if AlSploitSettings[Name].Value == true then
 							Toggle.TextColor3 = Color3.new(1, 1, 1)
-							
+
 							CreateNotification(3, Name .. " Has Been Toggled Off")
 						end
 
 						if AlSploitSettings[Name].Value == false then
 							Toggle.TextColor3 = CurrentAlSploitToggleColor
-							
+
 							CreateNotification(3, Name .. " Has Been Toggled On")
 						end
 
@@ -1246,7 +1247,7 @@ function AlSploitLibrary:CreateTab(Name)
 					end
 				end)
 			end)
-			
+
 			task.spawn(function()
 				Function(R, G, B)
 			end)
@@ -1482,43 +1483,43 @@ end
 
 local function CreateFlyHud()
 	local Background = Instance.new("Frame")
-	
+
 	local UICorner = Instance.new("UICorner")
 	local UIStroke = Instance.new("UIStroke")
-	
+
 	local Text = Instance.new("TextLabel")
 	local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
-	
+
 	local DisplayBackground = Instance.new("Frame")
 	local UICorner_2 = Instance.new("UICorner")
-	
+
 	local Display = Instance.new("Frame")
 	local UICorner_3 = Instance.new("UICorner")
 
 	Background.Parent = AlSploitScreenGui
 	Background.Name = "Background"
-	
+
 	Background.BackgroundTransparency = 0.25
 	Background.BackgroundColor3 = Color3.new(0, 0, 0)
 	Background.BorderSizePixel = 0
 	Background.Position = UDim2.new(0.41, 0, 0.7, 0)
 	Background.Visible = false
 	Background.Size = UDim2.new(0.178, 0, 0.085, 0)
-	
+
 	UICorner.Parent = Background
 	UIStroke.Name = "UICorner"
-	
+
 	UICorner.CornerRadius = UDim.new(0.1, 0)
 
 	UIStroke.Parent = Background
 	UIStroke.Name = "UIStroke"
-	
+
 	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	UIStroke.Thickness = 2
 
 	Text.Parent = Background
 	Text.Name = "Text"
-	
+
 	Text.BackgroundTransparency = 1
 	Text.BackgroundColor3 = Color3.new(1, 1, 1)
 	Text.TextColor3 = Color3.new(0, 0.6, 1)
@@ -1530,17 +1531,17 @@ local function CreateFlyHud()
 
 	UITextSizeConstraint.Parent = Text
 	UITextSizeConstraint.Name = "UITextSizeConstraint"
-	
+
 	UITextSizeConstraint.MaxTextSize = 20
 
 	DisplayBackground.Parent = Background
 	DisplayBackground.Name = "DisplayBackground"
-	
+
 	DisplayBackground.BackgroundColor3 = Color3.new(0, 0, 0)
 	DisplayBackground.BorderSizePixel = 0
 	DisplayBackground.Position = UDim2.new(0.229, 0, 0.267, 0)
 	DisplayBackground.Size = UDim2.new(0.545, 0, 0.150, 0)
-	
+
 	UICorner_2.Parent = DisplayBackground
 	UICorner_2.Name = "UICorner_2"
 
@@ -1548,12 +1549,12 @@ local function CreateFlyHud()
 
 	Display.Parent = DisplayBackground
 	Display.Name = "Display"
-	
+
 	Display.BackgroundColor3 = Color3.new(0, 0.6, 1)
 	Display.BorderColor3 = Color3.new(0, 0, 0)
 	Display.Position = UDim2.new(0, 0, 0, 0)
 	Display.Size = UDim2.new(0, 0, 1, 0)
-	
+
 	UICorner_3.Parent = Display
 	UICorner_3.Name = "UICorner_3"
 
@@ -1623,7 +1624,7 @@ task.spawn(function()
 	repeat
 		task.wait()
 
-		if IsAlive(LocalPlayer) then
+		if IsAlive(LocalPlayer) == true then
 			LocalPlayerInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
 		end
 	until IsAlive(LocalPlayer) == false
@@ -1653,7 +1654,11 @@ local BedwarsConstants = {
 
 local BedwarsRemotes = {
 	SummonerClawAttackRequestRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SummonerClawAttackRequest"),
+	CollectCollectableEntityRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("CollectCollectableEntity"),
+	DestroyPetrifiedPlayerRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("DestroyPetrifiedPlayer"),
 	BedwarsPurchaseItemRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("BedwarsPurchaseItem"),
+	HannahPromptTriggerRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HannahPromptTrigger"),
+	TrinitySetAngelTypeRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SetAngelType"),
 	SetObservedChestRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("Inventory/SetObservedChest"),
 	HellBladeReleaseRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("HellBladeRelease"),
 	ResetCharacterRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ResetCharacter"),
@@ -1667,7 +1672,8 @@ local BedwarsRemotes = {
 	ScytheDashRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("ScytheDash"),
 	PlayGuitarRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("PlayGuitar"),
 	GroundHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("GroundHit"),
-	SwordHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit")
+	SwordHitRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("SwordHit"),
+	AfkInfoRemote = ReplicatedStorageService:WaitForChild("rbxts_include"):WaitForChild("node_modules"):WaitForChild("@rbxts"):WaitForChild("net"):WaitForChild("out"):WaitForChild("_NetManaged"):WaitForChild("AfkInfo")
 }
 
 local BedwarsTables = {
@@ -1682,46 +1688,6 @@ local BedwarsUtils = {
 local RobloxRemotes = {
 	SayMessageRequestRemote = ReplicatedStorageService:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
 }
-
-local function DestroyClonedHumanoidRootPart()
-	LocalPlayer.Character.Parent = game
-	OldLocalPlayerHumanoidRootPart.Parent = LocalPlayer.Character
-
-	NewLocalPlayerHumanoidRootPart.Parent = WorkSpace
-
-	LocalPlayer.Character.PrimaryPart = OldLocalPlayerHumanoidRootPart
-	LocalPlayer.Character.Parent = WorkSpace
-
-	OldLocalPlayerHumanoidRootPart = NewLocalPlayerHumanoidRootPart.CFrame
-
-	NewLocalPlayerHumanoidRootPart:Destroy()
-end
-
-local function CloneHumanoidRootPart()
-	LocalPlayer.Character.Parent = game
-	LocalPlayer.Character.HumanoidRootPart.Archivable = true
-
-	OldLocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart 
-
-	NewLocalPlayerHumanoidRootPart = OldLocalPlayerHumanoidRootPart:Clone()
-	NewLocalPlayerHumanoidRootPart.Parent = LocalPlayer.Character
-
-	OldLocalPlayerHumanoidRootPart.Transparency = 0.4
-
-	OldLocalPlayerHumanoidRootPart.Parent = WorkSpace
-
-	LocalPlayer.Character.PrimaryPart = NewLocalPlayerHumanoidRootPart
-	LocalPlayer.Character.Parent = WorkSpace
-
-	task.spawn(function()
-		RunService.Heartbeat:Connect(function()
-			if IsAlive(LocalPlayer) == true and ((tick() - OverrideHumanoidRootPartPosition) > 0.2) and OldLocalPlayerHumanoidRootPart and NewLocalPlayerHumanoidRootPart then
-				OldLocalPlayerHumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-				OldLocalPlayerHumanoidRootPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
-			end
-		end)
-	end)
-end
 
 local function FindNearestLuckyBlock(MaxDistance)
 	local MinDistance = MaxDistance or math.huge
@@ -1828,7 +1794,7 @@ local function FindNearestEntity(MaxDistance)
 			end 
 		end
 	end)
-	
+
 	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("GuardianOfDream") do
 			if v.PrimaryPart then
@@ -1915,7 +1881,7 @@ local function TweenToNearestBed(Time)
 			RaycastParameters.FilterType = Enum.RaycastFilterType.Include
 
 			local Raycast = WorkSpace:Raycast((NearestBed.Position + Vector3.new(0, 20, 0)), Vector3.new(0, -20, 0), RaycastParameters)
-			
+
 			if Raycast and Raycast.Position then
 				local TweenInformation = TweenInfo.new((Time == 0 and (NearestBedDistance / 700) or Time), Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
 				local BedTpTween = TweenService:Create(LocalPlayer.Character.PrimaryPart, TweenInformation, {CFrame = CFrame.new(Raycast.Position)})
@@ -1962,8 +1928,26 @@ local function FindNearestChest(MaxDistance)
 			end
 		end
 	end
-	
+
 	return NearestChest
+end
+
+local function FindNearestGhost(MaxDistance)
+	local NearestGhost = nil
+	local MaxDistance = MaxDistance or math.huge
+
+	for i, v in next, CollectionService:GetTagged("ghost") do
+		if v:GetAttribute("Id") then
+			local Distance = (v.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
+
+			if Distance < MaxDistance then
+				NearestGhost = v:GetAttribute("Id")
+				MaxDistance = Distance
+			end
+		end		
+	end
+
+	return NearestGhost
 end
 
 function FindPlacedBlocks(Position, Side)
@@ -2025,17 +2009,20 @@ local function IsTouchingGround()
 end
 
 local function ShootProjectile(Item, Projectile, NearestPlayer)	
-	local Unit = (NearestPlayer.Character.PrimaryPart.Position - LocalPlayer.Character.PrimaryPart.Position).Unit
+	local Unit = CFrame.lookAt(LocalPlayer.Character.PrimaryPart.CFrame.LookVector, NearestPlayer.Character.PrimaryPart.CFrame.LookVector).Position
 
 	local Args = {
 		[1] = Item,
 		[2] = Projectile,
 		[3] = Projectile,
-		[4] = Unit,
-		[5] = Unit,
-		[6] = Vector3.new(0, -5, 0),
+		[4] = (NearestPlayer.Character.PrimaryPart.Position + Vector3.new(0, 2, 0)),
+		[5] = LocalPlayer.Character.PrimaryPart.Position,
+		[6] = NearestPlayer.Character.PrimaryPart.Position,
 		[7] = HttpService:GenerateGUID(true),
-		[8] = {drawDurationSeconds = 0.96, shotId = HttpService:GenerateGUID(false)},
+		[8] = {
+			drawDurationSeconds = 0.96,
+			shotId = HttpService:GenerateGUID(false)
+		},
 		[9] = (WorkSpace:GetServerTimeNow() - 0.11)
 	}
 
@@ -2122,28 +2109,6 @@ local function FindNearestNpc(MaxDistance)
 	local NearestNpc = nil
 
 	task.spawn(function()
-		for i,v in next, (CollectionService:GetTagged("broken-enchant-table")) do 
-			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
-
-			if Distance < MaxDistance then
-				MaxDistance = Distance
-				NearestNpc = v		
-			end
-		end
-	end)
-
-	task.spawn(function()
-		for i,v in next, (CollectionService:GetTagged("enchant-table")) do 
-			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
-
-			if Distance < MaxDistance then
-				MaxDistance = Distance
-				NearestNpc = v		
-			end
-		end
-	end)
-
-	task.spawn(function()
 		for i, v in next, CollectionService:GetTagged("BedwarsTeamUpgrader") do
 			local Distance = (v.Position - LocalPlayer.Character.PrimaryPart.Position).Magnitude
 
@@ -2216,6 +2181,10 @@ end
 
 local function GetMatchState()
 	return ClientStore:getState().Game.matchState
+end
+
+local function PurchaseItem(Arguments)
+	BedwarsRemotes.BedwarsPurchaseItemRemote:InvokeServer(unpack(Arguments))
 end
 
 function DecimalRound(Number, DigitsPast0)
@@ -2307,6 +2276,45 @@ local function Invisibility()
 	end)
 end
 
+local function CreateClone(KeepCape)
+	LocalPlayer.Character.Archivable = true
+
+	local Clone = LocalPlayer.Character:Clone()
+
+	Clone.Parent = WorkSpace
+	Clone.Name = "Clone"
+
+	Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
+
+	Camera.CameraSubject = Clone.Humanoid	
+
+	task.spawn(function()
+		for i, v in next, Clone:FindFirstChild("Head"):GetDescendants() do
+			v:Destroy()
+		end
+
+		for i, v in next, Clone:GetChildren() do
+			if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+				v.Transparency = 1
+			end
+
+			if v:IsA("Accessory") then
+				v:FindFirstChild("Handle").Transparency = 1
+			end
+		end
+		
+		if KeepCape == false then
+			for i, v in next, Clone:GetDescendants() do
+				if v:IsA("BasePart") and v.Name == "Cape" then
+					v:Destroy()
+				end
+			end
+		end	
+	end)
+
+	return Clone
+end
+
 local function DamageBlock(Position)
 	BedwarsRemotes.DamageBlockRemote:InvokeServer({
 		blockRef = {
@@ -2333,10 +2341,12 @@ local function GetScythe()
 end
 
 task.spawn(function()
+	repeat task.wait() until GetMatchState() ~= 0
+
 	local ZephyrUpdate = BedwarsControllers.ZephyrController.updateJump
 
 	BedwarsControllers.ZephyrController.updateJump = function(self, Orb, ...)
-		ZephyrOrb = (IsAlive(LocalPlayer) and Orb or 0)
+		ZephyrOrb = (IsAlive(LocalPlayer) == true and Orb or 0)
 
 		return ZephyrUpdate(self, Orb, ...)
 	end
@@ -2354,7 +2364,7 @@ function GetSpeed()
 	if LocalPlayer.Character:GetAttribute("GrimReaperChannel") then 
 		Speed = (Speed + 20)
 	end
-	
+
 	if type(ZephyrOrb) == "number" and ZephyrOrb > 0 then
 		Speed = Speed + 19
 	end
@@ -2362,7 +2372,7 @@ function GetSpeed()
 	if ScytheAnticheatDisabled == true then			
 		Speed = (Speed + ScytheAnticheatDisabledSpeed)
 	end
-	
+
 	if (tick() - JadeHammerTick) <= 1.4 then
 		Speed = (Speed + 30)
 	end
@@ -2427,6 +2437,25 @@ local WorldTab = AlSploitLibrary:CreateTab("World")
 local GuiTab = AlSploitLibrary:CreateTab("Gui")
 
 task.spawn(function()
+	local KnockbackExploit = CombatTab:CreateToggle({
+		Name = "KnockbackExploit",
+		
+		Function = function() end,
+		
+		HoverText = "Makes The Emenies Get Extra Knockback (Killaura Required) 😵"
+	})
+	
+	KnockbackExploit:CreateSlider({
+		Name = "Range",
+		
+		Function = function() end,
+		
+		MaximumValue = 19,
+		DefaultValue = 19
+	})
+end)
+
+task.spawn(function()
 	local ScytheDisabler = CombatTab:CreateToggle({
 		Name = "ScytheDisabler",
 
@@ -2454,7 +2483,7 @@ task.spawn(function()
 						ScytheAnticheatDisabled = true
 
 						BedwarsRemotes.ScytheDashRemote:FireServer({direction = Vector})	
-						
+
 						if Scythe.itemType == "sky_scythe" then
 							BedwarsRemotes.SkyScytheSpinRemote:FireServer()
 						end
@@ -2522,8 +2551,6 @@ task.spawn(function()
 										SwitchItem(BestBow.itemType)
 									end
 								end)
-
-								print(Bow)
 
 								ShootProjectile(Bow, BestArrow, NearestPlayer)
 							end
@@ -2763,10 +2790,10 @@ task.spawn(function()
 		Function = function()
 			if AlSploitSettings.Velocity.Value == true then		
 				OldApplyKnockback = BedwarsUtils.KnockbackUtil.applyKnockback
-				
+
 				BedwarsUtils.KnockbackUtil.applyKnockback = function(Root, Mass, Direction, Knockback, ...)	
 					Knockback = Knockback or {}
-					
+
 					local Horizontal = (Knockback.horizontal and Knockback.horizontal or 1)
 					local Vertical = (Knockback.vertical and Knockback.vertical or 1)
 
@@ -2902,17 +2929,14 @@ task.spawn(function()
 
 				local LocalPlayerHumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 				local EntityPrimaryPart = Entity.PrimaryPart
-				
+
 				local Magnitude = (LocalPlayerHumanoidRootPart.Position - EntityPrimaryPart.Position).Magnitude
-				
-				local SelfPosition
+
+				local SelfPosition = (LocalPlayerHumanoidRootPart.Position + (LookVector * (Magnitude - 14)))
+				local MouseRay = Ray.new(Camera.CFrame.Position, Entity.PrimaryPart.Position).Unit.Direction
 
 				task.spawn(function()
 					if Weapon then
-						LookVector = LocalPlayer.Character.PrimaryPart.CFrame.LookVector
-						
-						SelfPosition = (LocalPlayerHumanoidRootPart.Position + (LookVector * (Magnitude - 14)))
-
 						BedwarsRemotes.SwordHitRemote:FireServer({
 							weapon = Weapon.tool,
 							chargedAttack = {chargeRatio = 0},
@@ -2921,7 +2945,7 @@ task.spawn(function()
 							validate = {
 								raycast = {
 									cameraPosition = ({value = Camera.CFrame.Position}), 
-									cursorDirection = ({value = LookVector})
+									cursorDirection = ({value = (AlSploitSettings.KnockbackExploit.Value == true and (NearestEntityDistance <= AlSploitSettings.KnockbackExploit.Range.Value and MouseRay or LookVector) or LookVector)})
 								},
 
 								targetPosition = ({value = EntityPrimaryPart.Position}),
@@ -2930,7 +2954,7 @@ task.spawn(function()
 						})	
 					end
 				end)
-				
+
 				task.spawn(function()
 					if EquippedKit == "summoner" then						
 						BedwarsRemotes.SummonerClawAttackRequestRemote:FireServer({clientTime = tick(), direction = LocalPlayer.Character.PrimaryPart.CFrame.LookVector, position = LocalPlayer.Character.PrimaryPart.Position})
@@ -2961,7 +2985,7 @@ task.spawn(function()
 			task.spawn(function()
 				repeat
 					task.wait(AlSploitSettings.Killaura.Speed.Value == 100 and 0 or (1 / AlSploitSettings.Killaura.Speed.Value))
-					
+
 					local HitChance = (AlSploitSettings.Killaura.HitChance.Value == 100 and 1 or math.random(1, (100 / AlSploitSettings.Killaura.HitChance.Value)))
 
 					if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and HitChance == 1 then
@@ -3030,7 +3054,7 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
-	
+
 	local HitChance = Killaura:CreateSlider({
 		Name = "HitChance",
 
@@ -3039,7 +3063,7 @@ task.spawn(function()
 		DefaultValue = 100,
 		MaximumValue = 100
 	})
-	
+
 	local Speed = Killaura:CreateSlider({
 		Name = "Speed",
 
@@ -3144,61 +3168,87 @@ task.spawn(function()
 	end)
 end)
 
---[[task.spawn(function()
+task.spawn(function()
 	local AntiHit = CombatTab:CreateToggle({
 		Name = "AntiHit",
 
 		Function = function()   		
-			task.spawn(function()
-				if AlSploitSettings.AntiHit.Value == true and GetMatchState() ~= 0 then
-					CloneHumanoidRootPart()
-
-					LocalPlayer.CharacterAdded:Connect(function()
-						repeat task.wait() until IsAlive(LocalPlayer)
-						
-						if not NewLocalPlayerHumanoidRootPart then
-							CloneHumanoidRootPart()
-						end
-					end)
-				end		
-			end)
-			
 			repeat
 				task.wait()
-
-				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
+				
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and AlSploitSettings.AntiHit.Value == true and AlSploitSettings.InfiniteFly.Value == false then
+					local NearestPlayer = FindNearestPlayer(AlSploitSettings.AntiHit.Range.Value)
 					local NearestEntity = FindNearestEntity(AlSploitSettings.AntiHit.Range.Value)
+					
+					if NearestPlayer then
+						local Clone = CreateClone(true)
+												
+						LocalPlayer.Character.PrimaryPart.CFrame = (LocalPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 10000, 0))
 
-					task.spawn(function()
-						if NearestEntity then		
-							task.spawn(function()
-								if OldLocalPlayerHumanoidRootPart and NewLocalPlayerHumanoidRootPart then							
-									OverrideHumanoidRootPartPosition = tick()
-									
-									OldLocalPlayerHumanoidRootPart.CFrame = (NewLocalPlayerHumanoidRootPart.CFrame + Vector3.new(0, 1000, 0))
-									
-									OverrideHumanoidRootPartPosition = tick()
-									
-									task.wait(5 / AlSploitSettings.AntiHit.Speed.Value)
-									
-									OldLocalPlayerHumanoidRootPart.CFrame = NewLocalPlayerHumanoidRootPart.CFrame
-									
-									task.wait(5 / AlSploitSettings.AntiHit.Speed.Value)
+						task.spawn(function()
+							repeat
+								task.wait()
+
+								if IsAlive(LocalPlayer) == true and Clone then
+									Clone.PrimaryPart.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, Clone.PrimaryPart.Position.Y, LocalPlayer.Character.PrimaryPart.Position.Z)
 								end
-							end)	
+							until AlSploitSettings.AlSploitUnInjected == true or AlSploitSettings.AntiHit.Value == false or AlSploitSettings.InfiniteFly.Value == true
+							
+						end)			
+
+						task.wait(1.5 / AlSploitSettings.AntiHit.Speed.Value)
+
+						if IsAlive(LocalPlayer) == true then
+							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, -1, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+							LocalPlayer.Character.PrimaryPart.CFrame = Clone.PrimaryPart.CFrame
+
+							Camera.CameraSubject = LocalPlayer.Character
+							Clone:Destroy()
 						end
-					end)				
+
+						task.wait(0.15)
+					end
+					
+					if NearestEntity and not NearestPlayer and AlSploitSettings.AntiHitEntities == true then
+						local Clone = CreateClone()
+
+						LocalPlayer.Character.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 10000, 0)
+
+						task.spawn(function()
+							repeat
+								task.wait()
+
+								if IsAlive(LocalPlayer) == true and Clone then
+									Clone.PrimaryPart.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, Clone.PrimaryPart.Position.Y, LocalPlayer.Character.PrimaryPart.Position.Z)
+								end
+							until AlSploitSettings.AlSploitUnInjected == true or AlSploitSettings.AntiHit.Value == false or AlSploitSettings.InfiniteFly.Value == true
+						end)			
+
+						task.wait(1.5 / AlSploitSettings.AntiHit.Speed.Value)
+						
+						if IsAlive(LocalPlayer) == true then
+							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, -1, LocalPlayer.Character.PrimaryPart.Velocity.Z)
+							LocalPlayer.Character.PrimaryPart.CFrame = Clone.PrimaryPart.CFrame
+
+							Camera.CameraSubject = LocalPlayer.Character
+							Clone:Destroy()
+						end
+
+						task.wait(0.15)
+					end	
 				end
 			until shared.AlSploitUnInjected == true or AlSploitSettings.AntiHit.Value == false
-			
-			if NewLocalPlayerHumanoidRootPart then
-				DestroyClonedHumanoidRootPart()
-				
-				OverrideHumanoidRootPartPosition = (tick() + math.huge)
-			end
 		end,
 
 		HoverText = "Makes You Dodge The Attacks 🏃‍ (Works Better With NoFall)"
+	})
+	
+	AntiHit:CreateToggle({
+		Name = "AntiHitEntities",
+		
+		Function = function() end,
+		
+		DefaultValue = false
 	})
 
 	AntiHit:CreateSlider({
@@ -3218,7 +3268,7 @@ end)
 		MaximumValue = 19,
 		DefaultValue = 19
 	})
-end)--]]
+end)
 
 task.spawn(function()
 	local OldSwingSwordAtMouse
@@ -3307,10 +3357,10 @@ task.spawn(function()
 		Function = function()
 			repeat
 				task.wait(1 / AlSploitSettings.MelodyHealExploit.Speed.Value)
-				
+
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local MelodyGuitar = HasItem("guitar")
-					
+
 					if MelodyGuitar then
 						BedwarsRemotes.PlayGuitarRemote:FireServer({healTarget = LocalPlayer})
 					end
@@ -3320,12 +3370,12 @@ task.spawn(function()
 
 		HoverText = "Heals You With The Guitar 🎸 (Guitar Required)"
 	})
-	
+
 	MelodyHealExploit:CreateSlider({
 		Name = "Speed",
-		
+
 		Function = function() end,
-		
+
 		MaximumValue = 100,
 		DefaultValue = 100
 	})
@@ -3387,7 +3437,7 @@ task.spawn(function()
 		HoverText = "Decide If You Control The Movement Or The Script"
 	})
 
-	MovementMethod :CreateToggle({
+	MovementMethod:CreateToggle({
 		Name = "Automatic",
 
 		Function = function() end,
@@ -3395,7 +3445,7 @@ task.spawn(function()
 		DefaultValue = false
 	})
 
-	MovementMethod :CreateToggle({
+	MovementMethod:CreateToggle({
 		Name = "Manual",
 
 		Function = function() end,
@@ -3572,7 +3622,7 @@ task.spawn(function()
 	})
 
 	AlSploitConnections["InfiniteJumpConnection"] = UserInputService.JumpRequest:Connect(function()
-		if shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and AlSploitSettings.InfiniteJump.Value == true and AlSploitSettings.Fly.Value == false then
+		if shared.AlSploitUnInjected == false and IsAlive(LocalPlayer) == true and AlSploitSettings.InfiniteJump.Value == true and AlSploitSettings.InfiniteFly.Value == false and AlSploitSettings.Fly.Value == false then
 			LocalPlayer.Character.Humanoid:ChangeState("Jumping")
 		end
 	end)
@@ -3584,24 +3634,26 @@ task.spawn(function()
 
 		Function = function()
 			repeat
-				task.wait()
+				task.wait(0.1)
 				
-				local NearestChest = FindNearestChest(AlSploitSettings.ChestStealer.Range.Value)
-				
-				if NearestChest then					
-					StealItemsFromChest(NearestChest)
-				end
+				if IsAlive(LocalPlayer) == true then
+					local NearestChest = FindNearestChest(AlSploitSettings.ChestStealer.Range.Value)
+
+					if NearestChest then					
+						StealItemsFromChest(NearestChest)
+					end
+				end		
 			until shared.AlSploitUnInjected == true or AlSploitSettings.ChestStealer.Value == false
 		end,
 
-		HoverText = "Steals Items From Chests 🪙"
+		HoverText = "Steals Items From Chests 💀"
 	})
-	
+
 	ChestStealer:CreateSlider({
 		Name = "Range",
-		
+
 		Function = function() end,
-		
+
 		MaximumValue = 30,
 		DefaultValue = 30
 	})
@@ -3713,7 +3765,7 @@ task.spawn(function()
 			end
 		end,
 
-		HoverText = "Wins the game instantly. 🏆"
+		HoverText = "Wins the game instantly 🏆"
 	})
 end)
 
@@ -3753,6 +3805,96 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local InfiniteFlyDown
+	local InfiniteFlyUp
+	
+	local Clone
+
+	task.spawn(function()
+		UserInputService.InputBegan:Connect(function(Input)
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+				InfiniteFlyDown = true
+			end
+
+			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
+				InfiniteFlyUp = true
+			end
+		end)
+	end)
+
+	task.spawn(function()
+		UserInputService.InputEnded:Connect(function(Input)
+			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
+				InfiniteFlyDown = false
+			end
+
+			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
+				InfiniteFlyUp = false
+			end
+		end)
+	end)	
+	
+	local InfiniteFly = BlatantTab:CreateToggle({
+		Name = "InfiniteFly",
+		
+		Function = function()	
+			if AlSploitSettings.InfiniteFly.Value == true and IsAlive(LocalPlayer) == true then	
+				if not Clone then
+					Clone = CreateClone(false)
+				end
+
+				Clone.PrimaryPart.Anchored = true
+				Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
+				
+				LocalPlayer.Character.PrimaryPart.CFrame += Vector3.new(0, 1000000, 0)
+			end
+			
+			repeat
+				task.wait()
+				
+				if Clone then
+					Clone.PrimaryPart.CFrame = CFrame.new(Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, (Clone.PrimaryPart.Position.Y + (InfiniteFlyUp and (AlSploitSettings.InfiniteFly.FlyUpSpeed.Value / 10) or 0) + (InfiniteFlyDown and -(AlSploitSettings.InfiniteFly.FlyDownSpeed.Value / 10) or 0)), LocalPlayer.Character.PrimaryPart.Position.Z))		
+				end
+			until shared.AlSploitUnInjected == true or AlSploitSettings.InfiniteFly.Value == false
+			
+			if IsAlive(LocalPlayer) and Clone then
+				LocalPlayer.Character.PrimaryPart.CFrame = Clone.PrimaryPart.CFrame
+				LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
+				
+				LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
+			end
+			
+			if Clone then
+				Clone:Destroy()
+				Clone = nil
+				
+				Camera.CameraSubject = LocalPlayer.Character.Humanoid
+			end
+		end,
+		
+		HoverText = "Lets You Fly Indefinitely 🦋"
+	})
+	
+	InfiniteFly:CreateSlider({
+
+		Function = function() end,
+
+		Name = "FlyDownSpeed",
+		MaximumValue = 25,
+		DefaultValue = 5
+	})
+	
+	InfiniteFly:CreateSlider({
+		Name = "FlyUpSpeed",
+
+		Function = function() end,
+
+		MaximumValue = 25,
+		DefaultValue = 5
+	})
+end)
+
+task.spawn(function()
 	local Invisible = BlatantTab:CreateToggle({
 		Name = "Invisible",
 
@@ -3772,6 +3914,45 @@ task.spawn(function()
 			Invisibility()
 		end
 	end)
+end)
+
+task.spawn(function()	
+	local Spider = BlatantTab:CreateToggle({
+		Name = "Spider",
+
+		Function = function()
+			task.spawn(function()
+				if AlSploitSettings.Spider.Value == true then
+					AlSploitConnections["SpiderConnection"] = RunService.Heartbeat:Connect(function(Delta)
+						if IsAlive(LocalPlayer) == true then
+							local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
+
+							local BlockRay = FindPlacedBlock(LocalPlayer.Character.PrimaryPart.Position + ((MoveDirection * 2) - Vector3.new(0, LocalPlayer.Character.Humanoid.HipHeight, 0)))				
+
+							if BlockRay then
+								LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, AlSploitSettings.Spider.Speed.Value, LocalPlayer.Character.PrimaryPart.Velocity.Z)							
+							end
+						end				
+					end)
+				end
+			end)
+
+			if AlSploitSettings.Speed.Value == false and AlSploitConnections["SpiderConnection"] then
+				AlSploitConnections["SpiderConnection"]:Disconnect()
+			end
+		end,
+
+		HoverText = "Gives You The Ability To Climb Like A Spider 🕷️"
+	})
+
+	Spider:CreateSlider({
+		Name = "Speed",
+
+		Function = function() end,
+
+		MaximumValue = 100,
+		DefaultValue = 60
+	})
 end)
 
 task.spawn(function()	
@@ -3823,22 +4004,22 @@ end)
 task.spawn(function()	
 	local MaxFlyTime = 2.3
 	local FlyTime = tick()
-	
+
 	local FlyDown
 	local FlyUp
-	
+
 	local FlyHud, NumberDisplay, SliderDisplay, UIStroke = CreateFlyHud()
-	
+
 	local BodyVelocity
-		
+
 	local Fly, Self
-	
+
 	task.spawn(function()
 		UserInputService.InputBegan:Connect(function(Input)
 			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
 				FlyDown = true
 			end
-			
+
 			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
 				FlyUp = true
 			end
@@ -3850,7 +4031,7 @@ task.spawn(function()
 			if Input.KeyCode == Enum.KeyCode.LeftShift and not UserInputService:GetFocusedTextBox() then
 				FlyDown = false
 			end
-			
+
 			if Input.KeyCode == Enum.KeyCode.Space and not UserInputService:GetFocusedTextBox() then
 				FlyUp = false
 			end
@@ -3862,7 +4043,7 @@ task.spawn(function()
 
 		Function = function()
 			FlyTime = 0
-			
+
 			if IsAlive(LocalPlayer) == true and AlSploitSettings.Fly.Value == true then
 				BodyVelocity = Instance.new("BodyVelocity")
 
@@ -3871,13 +4052,13 @@ task.spawn(function()
 
 				BodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
 			end
-			
+
 			repeat
 				task.wait()
 
 				task.spawn(function()
 					FlyHud.Visible = AlSploitSettings.Fly.FlyHud.Value
-					
+
 					if (tick() - FlyTime) <= MaxFlyTime then			
 						local FlyTime = DecimalRound((tick() - FlyTime), 1)
 
@@ -3896,7 +4077,7 @@ task.spawn(function()
 						end
 
 						NumberDisplay.Text = FlyTime
-						
+
 						local ColorSplit = string.split(AlSploitSettings.Fly.FlyHudUIStrokeColor.Value, ",")
 
 						local R = ColorSplit[1]
@@ -3904,15 +4085,15 @@ task.spawn(function()
 						local B = ColorSplit[3]
 
 						UIStroke.Color = Color3.new(R, G, B)
-						
+
 						local ColorSplit = string.split(AlSploitSettings.Fly.FlyHudSliderColor.Value, ",")
 
 						local R2 = ColorSplit[1]
 						local G2 = ColorSplit[2]
 						local B2 = ColorSplit[3]
-						
+
 						SliderDisplay.BackgroundColor3 = Color3.new(R2, G2, B2)
-						
+
 						local ColorSplit3 = string.split(AlSploitSettings.Fly.FlyHudTextColor.Value, ",")
 
 						local R3 = ColorSplit3[1]
@@ -3926,7 +4107,7 @@ task.spawn(function()
 				if IsTouchingGround() == true then
 					FlyTime = tick()
 				end
-				
+
 				if BodyVelocity then
 					BodyVelocity.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, ((FlyDown and -AlSploitSettings.Fly.FlyDownSpeed.Value or 0) + (FlyUp and AlSploitSettings.Fly.FlyUpSpeed.Value or 0)), LocalPlayer.Character.PrimaryPart.Velocity.Z)
 				end
@@ -3965,28 +4146,28 @@ task.spawn(function()
 					end
 				end
 			until AlSploitSettings.Fly.Value == false or IsAlive(LocalPlayer) == false or shared.AlSploitUnInjected == true
-			
+
 			if BodyVelocity then
 				BodyVelocity:Destroy()
 			end
 
 			FlyHud.Visible = false
-			
+
 			AlSploitSettings.Fly.Value = false
 			Self.TextColor3 = Color3.new(1, 1, 1)
 		end,		
 
-		HoverText = "Makes Your Fly 🐦"
+		HoverText = "Makes You Fly 🐦"
 	})
-	
+
 	Fly:CreateToggle({
 		Name = "FlyHud",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = true
 	})
-	
+
 	Fly:CreateSlider({
 		Name = "FlyDownSpeed",
 
@@ -3995,24 +4176,24 @@ task.spawn(function()
 		MaximumValue = 100,
 		DefaultValue = 40
 	})
-	
+
 	Fly:CreateSlider({
 		Name = "FlyUpSpeed",
-		
+
 		Function = function() end,
-	
+
 		MaximumValue = 100,
 		DefaultValue = 40
 	})
-	
+
 	Fly:CreateColorSlider({
 		Name = "FlyHudUIStrokeColor",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = Color3.new(0, 0.6, 1)
 	})
-	
+
 	Fly:CreateColorSlider({
 		Name = "FlyHudSliderColor",
 
@@ -4020,7 +4201,7 @@ task.spawn(function()
 
 		DefaultValue = Color3.new(0, 0.6, 1)
 	})
-	
+
 	Fly:CreateColorSlider({
 		Name = "FlyHudTextColor",
 
@@ -4214,7 +4395,7 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
- 
+
 	EffectSpammer:CreateToggle({
 		Name = "Confetti",
 
@@ -4282,19 +4463,19 @@ task.spawn(function()
 				AlSploitConnections["EntityNotifierConnection"] = CollectionService:GetInstanceAddedSignal("GuardianOfDream"):Connect(function()		
 					CreateNotification(3, "A GuardianOfDream Has Spawned")
 				end)
-				
+
 				AlSploitConnections["EntityNotifierConnection"] = CollectionService:GetInstanceAddedSignal("DiamondGuardian"):Connect(function()		
 					CreateNotification(3, "A DiamondGuardian Has Spawned")
 				end)
-				
+
 				AlSploitConnections["EntityNotifierConnection2"] = CollectionService:GetInstanceAddedSignal("GolemBoss"):Connect(function()		
 					CreateNotification(3, "A GolemBoss Has Spawned")
 				end)
-				
+
 				AlSploitConnections["EntityNotifierConnection3"] = CollectionService:GetInstanceAddedSignal("skeleton"):Connect(function()		
 					CreateNotification(3, "A Skeleton Has Spawned")
 				end)
-				
+
 				AlSploitConnections["EntityNotifierConnection4"] = CollectionService:GetInstanceAddedSignal("Drone"):Connect(function()		
 					CreateNotification(3, "A Drone Has Spawned")
 				end)
@@ -4339,7 +4520,7 @@ task.spawn(function()
 			end
 		end,
 
-		HoverText = "Makes You Anonymous To Players🕵️"
+		HoverText = "Makes You Anonymous To Players 🕵️"
 	})
 
 	UnInjectEvent.Event:Connect(function()
@@ -4388,436 +4569,652 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local function PurchaseItem(Arguments)
-		BedwarsRemotes.BedwarsPurchaseItemRemote:InvokeServer(unpack(Arguments))
-	end
+	local AutoForge = UtilityTab:CreateToggle({
+		Name = "AutoForge",
+		
+		Function = function()
+			repeat
+				task.wait(0.5)
+				
+				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
+					local NearestNpc = FindNearestNpc(AlSploitSettings.AutoForge.Range.Value)
 
+					if NearestNpc then
+						local GreatHammer = {
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "wood_great_hammer",
+									["price"] = 20,
+									["requireInInventoryToTierUp"] = true,
+									["nextTier"] = "iron_great_hammer",
+									["superiorItems"] = {
+										[1] = "iron_great_hammer"
+									},
+									["currency"] = "iron",
+									["amount"] = 1,
+									["category"] = "Combat",
+									["disabledInQueue"] = {
+										[1] = "tnt_wars",
+										[2] = "bedwars_og_to4"
+									},
+									["spawnWithItems"] = {
+										[1] = "wood_great_hammer"
+									},
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit",
+										[4] = "tinker",
+										[5] = "summoner",
+										[6] = "ice_queen",
+										[7] = "ember",
+										[8] = "lumen",
+										[9] = "summoner"
+									}
+								},
+								["shopId"] = NearestNpc.Name
+							},	
+						}
+							
+						local Gauntlets = {
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "wood_gauntlets",
+									["price"] = 0,
+									["requireInInventoryToTierUp"] = true,
+									["nextTier"] = "stone_gauntlets",
+									["superiorItems"] = {
+										[1] = "stone_scythe"
+									},
+									["currency"] = "iron",
+									["amount"] = 20,
+									["category"] = "Combat",
+									["spawnWithItems"] = {
+										[1] = "wood_scythe"
+									},
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit",
+										[4] = "tinker",
+										[5] = "summoner",
+										[6] = "ice_queen",
+										[7] = "ember",
+										[8] = "lumen",
+										[9] = "summoner"
+									}
+								},
+								["shopId"] = NearestNpc.Name
+							}
+						}
+						
+						local Dagger = {
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "wood_dagger",
+									["price"] = 0,
+									["requireInInventoryToTierUp"] = true,
+									["nextTier"] = "stone_dagger",
+									["superiorItems"] = {
+										[1] = "stone_scythe"
+									},
+									["currency"] = "iron",
+									["amount"] = 20,
+									["category"] = "Combat",
+									["spawnWithItems"] = {
+										[1] = "wood_scythe"
+									},
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit",
+										[4] = "tinker",
+										[5] = "summoner",
+										[6] = "ice_queen",
+										[7] = "ember",
+										[8] = "lumen",
+										[9] = "summoner"
+									}
+								},
+								["shopId"] = NearestNpc.Name
+							}
+						}	
+						
+						local Scythe = {
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "wood_scythe",
+									["price"] = 0,
+									["requireInInventoryToTierUp"] = true,
+									["nextTier"] = "stone_scythe",
+									["superiorItems"] = {
+										[1] = "stone_scythe"
+									},
+									["currency"] = "iron",
+									["amount"] = 20,
+									["category"] = "Combat",
+									["spawnWithItems"] = {
+										[1] = "wood_scythe"
+									},
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit",
+										[4] = "tinker",
+										[5] = "summoner",
+										[6] = "ice_queen",
+										[7] = "ember",
+										[8] = "lumen",
+										[9] = "summoner"
+									}
+								},
+								["shopId"] = NearestNpc.Name
+							}
+						}		
+						
+						if AlSploitSettings.AutoForge.ForgeItems.GreatHammer.Value == true then
+							PurchaseItem(GreatHammer)
+						end
+						
+						if AlSploitSettings.AutoForge.ForgeItems.Gauntlets.Value == true then
+							PurchaseItem(Gauntlets)
+						end
+						
+						if AlSploitSettings.AutoForge.ForgeItems.Dagger.Value == true then
+							PurchaseItem(Dagger)
+						end
+						
+						if AlSploitSettings.AutoForge.ForgeItems.Scythe.Value == true then
+							PurchaseItem(Scythe)
+						end
+					end
+				end			
+			until shared.AlSploitUnInjected == true or AlSploitSettings.AutoForge.Value == false
+		end,
+		
+		HoverText = "Automatically Forges Items For You 🐢"
+	})
+	
+	AutoForge:CreateSlider({
+		Name = "Range",
+		
+		Function = function() end,
+		
+		MaximumValue = 30,
+		DefaultValue = 30
+	})
+	
+	local ForgeItems = AutoForge:CreateDropdown({
+		Name = "ForgeItems",
+		HoverText = "Pick Which Items Will Forge"
+	})
+	
+	ForgeItems:CreateToggle({
+		Name = "GreatHammer",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+	
+	ForgeItems:CreateToggle({
+		Name = "Gauntlets",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+	
+	ForgeItems:CreateToggle({
+		Name = "Dagger",
+
+		Function = function() end,
+
+		DefaultValue = false
+	})
+	
+	ForgeItems:CreateToggle({
+		Name = "Scythe",
+		
+		Function = function() end,
+		
+		DefaultValue = true
+	})
+end)
+
+task.spawn(function()
 	local AutoBuy = UtilityTab:CreateToggle({
 		Name = "AutoBuy",
 
 		Function = function()
 			repeat
-				task.wait()
+				task.wait(0.3)
+				
+				if IsAlive(LocalPlayer) then
+					local NearestNpc = FindNearestNpc(AlSploitSettings.AutoBuy.Range.Value) 
 
-				local NearestNpc = FindNearestNpc(AlSploitSettings.AutoBuy.Range.Value) 
-
-				if NearestNpc then
-					local JadeHammer = {
-						[1] = {
-							["shopItem"] = {
-								["amount"] = 1,
-								["lockAfterPurchase"] = true,
-								["itemType"] = "jade_hammer",
-								["category"] = "Combat",
-								["price"] = 40,
-								["requiresKit"] = {
-									[1] = "jade"
+					if NearestNpc then
+						local JadeHammer = {
+							[1] = {
+								["shopItem"] = {
+									["amount"] = 1,
+									["lockAfterPurchase"] = true,
+									["itemType"] = "jade_hammer",
+									["category"] = "Combat",
+									["price"] = 40,
+									["requiresKit"] = {
+										[1] = "jade"
+									},
+									["spawnWithItems"] = {
+										[1] = "jade_hammer"
+									},
+									["currency"] = "iron"
 								},
-								["spawnWithItems"] = {
-									[1] = "jade_hammer"
-								},
-								["currency"] = "iron"
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local GompyVacuum = {
-						[1] = {
-							["shopItem"] = {
-								["amount"] = 1,
-								["lockAfterPurchase"] = true,
-								["itemType"] = "vacuum",
-								["category"] = "Combat",
-								["price"] = 50,
-								["requiresKit"] = {
-									[1] = "ghost_catcher"
+						local GompyVacuum = {
+							[1] = {
+								["shopItem"] = {
+									["amount"] = 1,
+									["lockAfterPurchase"] = true,
+									["itemType"] = "vacuum",
+									["category"] = "Combat",
+									["price"] = 50,
+									["requiresKit"] = {
+										[1] = "ghost_catcher"
+									},
+									["spawnWithItems"] = {
+										[1] = "vacuum"
+									},
+									["currency"] = "iron"
 								},
-								["spawnWithItems"] = {
-									[1] = "vacuum"
-								},
-								["currency"] = "iron"
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local Guitar = {
-						[1] = {
-							["shopItem"] = {
-								["amount"] = 1,
-								["lockAfterPurchase"] = true,
-								["itemType"] = "guitar",
-								["category"] = "Combat",
-								["price"] = 16,
-								["requiresKit"] = {
-									[1] = "melody"
+						local Guitar = {
+							[1] = {
+								["shopItem"] = {
+									["amount"] = 1,
+									["lockAfterPurchase"] = true,
+									["itemType"] = "guitar",
+									["category"] = "Combat",
+									["price"] = 16,
+									["requiresKit"] = {
+										[1] = "melody"
+									},
+									["spawnWithItems"] = {
+										[1] = "guitar"
+									},
+									["currency"] = "iron"
 								},
-								["spawnWithItems"] = {
-									[1] = "guitar"
-								},
-								["currency"] = "iron"
-							},
-							["shopId"] = "1_item_shop"
+								["shopId"] = "1_item_shop"
+							}
 						}
-					}
 
-					local Lasso = {
-						[1] = {
-							["shopItem"] = {
-								["amount"] = 1,
-								["lockAfterPurchase"] = true,
-								["itemType"] = "lasso",
-								["category"] = "Combat",
-								["price"] = 30,
-								["requiresKit"] = {
-									[1] = "cowgirl"
+						local Lasso = {
+							[1] = {
+								["shopItem"] = {
+									["amount"] = 1,
+									["lockAfterPurchase"] = true,
+									["itemType"] = "lasso",
+									["category"] = "Combat",
+									["price"] = 30,
+									["requiresKit"] = {
+										[1] = "cowgirl"
+									},
+									["spawnWithItems"] = {
+										[1] = "lasso"
+									},
+									["currency"] = "iron"
 								},
-								["spawnWithItems"] = {
-									[1] = "lasso"
-								},
-								["currency"] = "iron"
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local Arrow = {
-						[1] = {
-							["shopItem"] = {
-								["currency"] = "iron",
-								["itemType"] = "arrow",
-								["amount"] = 8,
-								["price"] = 16,
-								["category"] = "Combat"
-							},
-							["shopId"] = NearestNpc.Name
+						local Arrow = {
+							[1] = {
+								["shopItem"] = {
+									["currency"] = "iron",
+									["itemType"] = "arrow",
+									["amount"] = 8,
+									["price"] = 16,
+									["category"] = "Combat"
+								},
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local Wool = {
-						[1] = {
-							["shopItem"] = {
-								["currency"] = "iron",
-								["itemType"] = "wool_white",
-								["amount"] = 16,
-								["price"] = 8,
-								["category"] = "Blocks"
-							},
-							["shopId"] = NearestNpc.Name
+						local Wool = {
+							[1] = {
+								["shopItem"] = {
+									["currency"] = "iron",
+									["itemType"] = "wool_white",
+									["amount"] = 16,
+									["price"] = 8,
+									["category"] = "Blocks"
+								},
+								["shopId"] = NearestNpc.Name
+							}
+						}		
+
+						local Bow = {
+							[1] = {
+								["shopItem"] = {
+									["ignoredByKit"] = {
+										[1] = "flower_bee"
+									},
+									["itemType"] = "wood_bow",
+									["price"] = 24,
+									["superiorItems"] = {
+										[1] = "wood_crossbow",
+										[2] = "tactical_crossbow"
+									},
+									["currency"] = "iron",
+									["category"] = "Combat",
+									["lockAfterPurchase"] = true,
+									["spawnWithItems"] = {
+										[1] = "wood_bow"
+									},
+									["amount"] = 1
+								},
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}		
 
-					local Bow = {
-						[1] = {
-							["shopItem"] = {
-								["ignoredByKit"] = {
-									[1] = "flower_bee"
+						local EmeraldArmor ={
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "emerald_chestplate",
+									["price"] = 40,
+									["customDisplayName"] = "Emerald Armor",
+									["currency"] = "emerald",
+									["category"] = "Combat",
+									["nextTier"] = "",
+									["ignoredByKit"] = {
+										[1] = "bigman"
+									},
+									["spawnWithItems"] = {
+										[1] = "emerald_helmet",
+										[2] = "emerald_chestplate",
+										[3] = "emerald_boots"
+									},
+									["amount"] = 1
 								},
-								["itemType"] = "wood_bow",
-								["price"] = 24,
-								["superiorItems"] = {
-									[1] = "wood_crossbow",
-									[2] = "tactical_crossbow"
-								},
-								["currency"] = "iron",
-								["category"] = "Combat",
-								["lockAfterPurchase"] = true,
-								["spawnWithItems"] = {
-									[1] = "wood_bow"
-								},
-								["amount"] = 1
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local EmeraldArmor ={
-						[1] = {
-							["shopItem"] = {
-								["lockAfterPurchase"] = true,
-								["itemType"] = "emerald_chestplate",
-								["price"] = 40,
-								["customDisplayName"] = "Emerald Armor",
-								["currency"] = "emerald",
-								["category"] = "Combat",
-								["nextTier"] = "",
-								["ignoredByKit"] = {
-									[1] = "bigman"
+						local DiamondArmor ={
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "Diamond_chestplate",
+									["price"] = 8,
+									["customDisplayName"] = "Diamond Armor",
+									["currency"] = "emerald",
+									["category"] = "Combat",
+									["nextTier"] = "diamond_chestplate",
+									["ignoredByKit"] = {
+										[1] = "bigman"
+									},
+									["spawnWithItems"] = {
+										[1] = "diamond_helmet",
+										[2] = "diamond_chestplate",
+										[3] = "diamond_boots"
+									},
+									["amount"] = 1
 								},
-								["spawnWithItems"] = {
-									[1] = "emerald_helmet",
-									[2] = "emerald_chestplate",
-									[3] = "emerald_boots"
-								},
-								["amount"] = 1
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
-
-					local DiamondArmor ={
-						[1] = {
-							["shopItem"] = {
-								["lockAfterPurchase"] = true,
-								["itemType"] = "Diamond_chestplate",
-								["price"] = 8,
-								["customDisplayName"] = "Diamond Armor",
-								["currency"] = "emerald",
-								["category"] = "Combat",
-								["nextTier"] = "diamond_chestplate",
-								["ignoredByKit"] = {
-									[1] = "bigman"
+						local IronArmor ={
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "iron_chestplate",
+									["price"] = 120,
+									["customDisplayName"] = "Iron Armor",
+									["currency"] = "iron",
+									["category"] = "Combat",
+									["nextTier"] = "diamond_chestplate",
+									["ignoredByKit"] = {
+										[1] = "bigman"
+									},
+									["spawnWithItems"] = {
+										[1] = "iron_helmet",
+										[2] = "iron_chestplate",
+										[3] = "iron_boots"
+									},
+									["amount"] = 1
 								},
-								["spawnWithItems"] = {
-									[1] = "diamond_helmet",
-									[2] = "diamond_chestplate",
-									[3] = "diamond_boots"
-								},
-								["amount"] = 1
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
-					local IronArmor ={
-						[1] = {
-							["shopItem"] = {
-								["lockAfterPurchase"] = true,
-								["itemType"] = "iron_chestplate",
-								["price"] = 120,
-								["customDisplayName"] = "Iron Armor",
-								["currency"] = "iron",
-								["category"] = "Combat",
-								["nextTier"] = "diamond_chestplate",
-								["ignoredByKit"] = {
-									[1] = "bigman"
+
+						local LeatherArmor ={
+							[1] = {
+								["shopItem"] = {
+									["lockAfterPurchase"] = true,
+									["itemType"] = "leather_chestplate",
+									["price"] = 50,
+									["customDisplayName"] = "Leather Armor",
+									["currency"] = "iron",
+									["category"] = "Combat",
+									["nextTier"] = "iron_chestplate",
+									["ignoredByKit"] = {
+										[1] = "bigman"
+									},
+									["spawnWithItems"] = {
+										[1] = "leather_helmet",
+										[2] = "leather_chestplate",
+										[3] = "leather_boots"
+									},
+									["amount"] = 1
 								},
-								["spawnWithItems"] = {
-									[1] = "iron_helmet",
-									[2] = "iron_chestplate",
-									[3] = "iron_boots"
-								},
-								["amount"] = 1
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local LeatherArmor ={
-						[1] = {
-							["shopItem"] = {
-								["lockAfterPurchase"] = true,
-								["itemType"] = "leather_chestplate",
-								["price"] = 50,
-								["customDisplayName"] = "Leather Armor",
-								["currency"] = "iron",
-								["category"] = "Combat",
-								["nextTier"] = "iron_chestplate",
-								["ignoredByKit"] = {
-									[1] = "bigman"
+						local EmeraldSword = {
+							[1] = {
+								["shopItem"] = {
+									["disabledInQueue"] = {
+										[1] = "tnt_wars"
+									},
+									["itemType"] = "emerald_sword",
+									["price"] = 20,
+									["superiorItems"] = {
+										[1] = ""
+									},
+									["currency"] = "iron",
+									["amount"] = 1,
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit"
+									},
+									["category"] = "Combat",
+									["lockAfterPurchase"] = true
 								},
-								["spawnWithItems"] = {
-									[1] = "leather_helmet",
-									[2] = "leather_chestplate",
-									[3] = "leather_boots"
-								},
-								["amount"] = 1
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local EmeraldSword = {
-						[1] = {
-							["shopItem"] = {
-								["disabledInQueue"] = {
-									[1] = "tnt_wars"
+						local VoidSword = {
+							[1] = {
+								["shopItem"] = {
+									["currency"] = "void_crystal",
+									["itemType"] = "void_sword",
+									["amount"] = 1,
+									["price"] = 10,
+									["category"] = "Void",
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher"
+									},
+									["lockAfterPurchase"] = true
 								},
-								["itemType"] = "emerald_sword",
-								["price"] = 20,
-								["superiorItems"] = {
-									[1] = ""
-								},
-								["currency"] = "iron",
-								["amount"] = 1,
-								["ignoredByKit"] = {
-									[1] = "barbarian",
-									[2] = "dasher",
-									[3] = "frost_hammer_kit"
-								},
-								["category"] = "Combat",
-								["lockAfterPurchase"] = true
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local VoidSword = {
-						[1] = {
-							["shopItem"] = {
-								["currency"] = "void_crystal",
-								["itemType"] = "void_sword",
-								["amount"] = 1,
-								["price"] = 10,
-								["category"] = "Void",
-								["ignoredByKit"] = {
-									[1] = "barbarian",
-									[2] = "dasher"
+						local DiamondSword = {
+							[1] = {
+								["shopItem"] = {
+									["disabledInQueue"] = {
+										[1] = "tnt_wars"
+									},
+									["itemType"] = "diamond_sword",
+									["price"] = 4,
+									["superiorItems"] = {
+										[1] = "emerald_sword"
+									},
+									["currency"] = "emerald",
+									["amount"] = 1,
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit"
+									},
+									["category"] = "Combat",
+									["lockAfterPurchase"] = true
 								},
-								["lockAfterPurchase"] = true
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local DiamondSword = {
-						[1] = {
-							["shopItem"] = {
-								["disabledInQueue"] = {
-									[1] = "tnt_wars"
+						local IronSword = {
+							[1] = {
+								["shopItem"] = {
+									["disabledInQueue"] = {
+										[1] = "tnt_wars"
+									},
+									["itemType"] = "iron_sword",
+									["price"] = 70,
+									["superiorItems"] = {
+										[1] = "diamond_sword"
+									},
+									["currency"] = "iron",
+									["amount"] = 1,
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit"
+									},
+									["category"] = "Combat",
+									["lockAfterPurchase"] = true
 								},
-								["itemType"] = "diamond_sword",
-								["price"] = 4,
-								["superiorItems"] = {
-									[1] = "emerald_sword"
-								},
-								["currency"] = "emerald",
-								["amount"] = 1,
-								["ignoredByKit"] = {
-									[1] = "barbarian",
-									[2] = "dasher",
-									[3] = "frost_hammer_kit"
-								},
-								["category"] = "Combat",
-								["lockAfterPurchase"] = true
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local IronSword = {
-						[1] = {
-							["shopItem"] = {
-								["disabledInQueue"] = {
-									[1] = "tnt_wars"
+						local StoneSword = {
+							[1] = {
+								["shopItem"] = {
+									["disabledInQueue"] = {
+										[1] = "tnt_wars"
+									},
+									["itemType"] = "stone_sword",
+									["price"] = 20,
+									["superiorItems"] = {
+										[1] = "iron_sword"
+									},
+									["currency"] = "iron",
+									["amount"] = 1,
+									["ignoredByKit"] = {
+										[1] = "barbarian",
+										[2] = "dasher",
+										[3] = "frost_hammer_kit"
+									},
+									["category"] = "Combat",
+									["lockAfterPurchase"] = true
 								},
-								["itemType"] = "iron_sword",
-								["price"] = 70,
-								["superiorItems"] = {
-									[1] = "diamond_sword"
-								},
-								["currency"] = "iron",
-								["amount"] = 1,
-								["ignoredByKit"] = {
-									[1] = "barbarian",
-									[2] = "dasher",
-									[3] = "frost_hammer_kit"
-								},
-								["category"] = "Combat",
-								["lockAfterPurchase"] = true
-							},
-							["shopId"] = NearestNpc.Name
+								["shopId"] = NearestNpc.Name
+							}
 						}
-					}
 
-					local StoneSword = {
-						[1] = {
-							["shopItem"] = {
-								["disabledInQueue"] = {
-									[1] = "tnt_wars"
-								},
-								["itemType"] = "stone_sword",
-								["price"] = 20,
-								["superiorItems"] = {
-									[1] = "iron_sword"
-								},
-								["currency"] = "iron",
-								["amount"] = 1,
-								["ignoredByKit"] = {
-									[1] = "barbarian",
-									[2] = "dasher",
-									[3] = "frost_hammer_kit"
-								},
-								["category"] = "Combat",
-								["lockAfterPurchase"] = true
-							},
-							["shopId"] = NearestNpc.Name
-						}
-					}
+						task.spawn(function()	
+							if not HasItem("lasso") and AlSploitSettings.ProjectileAura.Value == true then
+								PurchaseItem(Lasso)
+							end
 
-					task.spawn(function()	
-						if not HasItem("lasso") and AlSploitSettings.ProjectileAura.Value == true then
-							PurchaseItem(Lasso)
-						end
+							if not HasItem("jade_hammer") and AlSploitSettings.AutoKit.Value == true then
+								PurchaseItem(JadeHammer)
+							end
 
-						if not HasItem("jade_hammer") and AlSploitSettings.AutoKit.Value == true then
-							PurchaseItem(JadeHammer)
-						end
+							if not HasItem("vacuum") and AlSploitSettings.ProjectileAura.Value == true then
+								PurchaseItem(GompyVacuum)
+							end
 
-						if not HasItem("vacuum") and AlSploitSettings.Aimbot.Value == true then
-							PurchaseItem(GompyVacuum)
-						end
+							if not HasItem("guitar") and AlSploitSettings.AutoKit.Value == true then
+								PurchaseItem(Guitar)
+							end
+						end)
 
-						if not HasItem("guitar") and AlSploitSettings.AutoKit.Value == true then
-							PurchaseItem(Guitar)
-						end
-					end)
+						task.spawn(function()
+							if HasItem("diamond_sword") then
+								PurchaseItem(EmeraldSword)
+							end
 
-					task.spawn(function()
-						if HasItem("diamond_sword") then
-							PurchaseItem(EmeraldSword)
-						end
+							if HasItem("iron_sword") or HasItem("stone_sword") or HasItem("wood_sword") then
+								PurchaseItem(DiamondSword)
+							end
 
-						if HasItem("iron_sword") or HasItem("stone_sword") or HasItem("wood_sword") then
-							PurchaseItem(DiamondSword)
-						end
+							if HasItem("stone_sword") and HasItem("iron_chestplate") then
+								PurchaseItem(IronSword)
+							end
 
-						if HasItem("stone_sword") and HasItem("iron_chestplate") then
-							PurchaseItem(IronSword)
-						end
+							if HasItem("wood_sword") then
+								PurchaseItem(StoneSword)
+							end
 
-						if HasItem("wood_sword") then
-							PurchaseItem(StoneSword)
-						end
+							PurchaseItem(VoidSword)
+						end)
 
-						PurchaseItem(VoidSword)
-					end)
+						task.spawn(function()
+							if HasItem("diamond_chestplate") then
+								PurchaseItem(EmeraldArmor)
+							end	
 
-					task.spawn(function()
-						if HasItem("diamond_chestplate") then
-							PurchaseItem(EmeraldArmor)
-						end	
+							if HasItem("iron_chestplate") then
+								PurchaseItem(DiamondArmor)
+							end	
 
-						if HasItem("iron_chestplate") then
-							PurchaseItem(DiamondArmor)
-						end	
+							if HasItem("stone_sword") and not HasItem("iron_chestplate") and not HasItem("diamond_chestplate") and not HasItem("emerald_chestplate") then
+								PurchaseItem(LeatherArmor)
+							end	
 
-						if HasItem("stone_sword") and not HasItem("iron_chestplate") and not HasItem("diamond_chestplate") and not HasItem("emerald_chestplate") then
-							PurchaseItem(LeatherArmor)
-						end	
+							if HasItem("leather_chestplate") then
+								PurchaseItem(IronArmor)
+							end					
+						end)
 
-						if HasItem("leather_chestplate") then
-							PurchaseItem(IronArmor)
-						end					
-					end)
+						task.spawn(function()
+							if HasItem("iron_chestplate") and HasItem("iron_sword") and not HasItem("wood_bow") then
+								PurchaseItem(Bow)
+							end
+						end)
 
-					task.spawn(function()
-						if HasItem("iron_chestplate") and HasItem("iron_sword") and not HasItem("wood_bow") then
-							PurchaseItem(Bow)
-						end
-					end)
+						task.spawn(function()
+							if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") then
+								PurchaseItem(Arrow)
+							end
+						end)
 
-					task.spawn(function()
-						if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") then
-							PurchaseItem(Arrow)
-						end
-					end)
-
-					task.spawn(function()
-						if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") and HasItem("arrow") and AlSploitSettings.Scaffold.Value == true then
-							PurchaseItem(Wool)
-						end
-					end)
+						task.spawn(function()
+							if HasItem("iron_chestplate") and HasItem("iron_sword") and HasItem("wood_bow") and HasItem("arrow") and AlSploitSettings.Scaffold.Value == true then
+								PurchaseItem(Wool)
+							end
+						end)
+					end
 				end
 			until shared.AlSploitUnInjected == true or AlSploitSettings.AutoBuy.Value == false
 		end,
@@ -4914,6 +5311,145 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+	local AntiAfk = UtilityTab:CreateToggle({
+		Name = "AntiAfk",
+		
+		Function = function()
+			repeat
+				BedwarsRemotes.AfkInfoRemote:FireServer({afk = false})
+				
+				task.wait(60)
+			until AlSploitSettings.AlSploitUnInjected.Value == true or AlSploitSettings.AntiAfk.Value == false
+		end,
+		
+		HoverText = "Prevents From Making You Afk ⌛"
+	})
+end)
+
+task.spawn(function()
+	local AutoKit = UtilityTab:CreateToggle({
+		Name = "AutoKit",
+
+		Function = function()
+			repeat
+				task.wait()
+				
+				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
+					print(EquippedKit)
+					
+					task.spawn(function()
+						if AlSploitSettings.AutoKit.Kits.Warden.Value == true then
+							task.wait(0.5)
+							
+							if EquippedKit == "jailor" then
+								for i, v in next, CollectionService:GetTagged("jailor_soul_ProximityPrompt") do
+									BedwarsRemotes.CollectCollectableEntityRemote:FireServer({id = v:GetAttribute("Id"), collectableName = "JailorSoul"})
+								end
+							end
+						end
+					end)
+					
+					task.spawn(function()
+						if AlSploitSettings.AutoKit.Kits.Hannah.Value == true then
+							task.wait(0.1)
+
+							if EquippedKit == "hannah" then
+								for i, v in next, (CollectionService:GetTagged("HannahExecuteInteraction")) do
+									BedwarsRemotes.HannahPromptTriggerRemote:CallServer({user = LocalPlayer, victimEntity = v})
+								end
+							end
+						end
+					end)
+					
+					task.spawn(function()
+						if AlSploitSettings.AutoKit.Kits.Trinity.Value == true then
+							task.wait(0.5)
+							
+							if EquippedKit == "angel" and ClientStore:getState().Kit.angelProgress >= 1 and LocalPlayer.Character:GetAttribute("AngelType") == nil then
+								BedwarsRemotes.TrinitySetAngelTypeRemote:FireServer({angel = "Void"})
+							end
+						end
+					end)
+					
+					task.spawn(function()
+						if AlSploitSettings.AutoKit.Kits.Gompy.Value == true then
+							task.wait(0.25)
+
+							local NearestGhost = FindNearestGhost(30)
+
+							if NearestGhost then
+								if EquippedKit == "ghost_catcher" then
+									BedwarsRemotes.CollectCollectableEntityRemote:FireServer({id = NearestGhost})
+								end
+							end
+						end
+					end)
+
+					task.spawn(function()
+						if AlSploitSettings.AutoKit.Kits.Miner.Value == true then
+							task.wait(0.25)
+							
+							if EquippedKit == "miner" then
+								for i, v in next, CollectionService:GetTagged("petrified-player") do 
+									BedwarsRemotes.DestroyPetrifiedPlayerRemote:FireServer({petrifyId = v})
+								end
+							end
+						end						
+					end)					
+				end
+			until AlSploitSettings.AlSploitUnInjected == true or AlSploitSettings.AutoKit.Value == false
+		end,
+
+		HoverText = "Automatically Uses The Ability Of Kits 😺"
+	})
+	
+	local Kits = AutoKit:CreateDropdown({
+		Name = "Kits",				
+		HoverText = "Pick The Kits That Will Be Used Automatically"
+	})
+	
+	Kits:CreateToggle({
+		Name = "Warden",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+	
+	Kits:CreateToggle({
+		Name = "Hannah",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+	
+	Kits:CreateToggle({
+		Name = "Trinity",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+
+	Kits:CreateToggle({
+		Name = "Gompy",
+		
+		Function = function() end,
+		
+		DefaultValue = true
+	})
+	
+	Kits:CreateToggle({
+		Name = "Miner",
+
+		Function = function() end,
+
+		DefaultValue = true
+	})
+end)
+
+task.spawn(function()
 	local OldFov = BedwarsControllers.FovController.fov
 
 	local Fov = UtilityTab:CreateToggle({
@@ -5004,7 +5540,7 @@ task.spawn(function()
 
 		HoverText = "Makes Your ViewModel Look Cool 😎"
 	})
-	
+
 	TexturePack:CreateToggle({
 		Name = "TexturePackForResources",
 
@@ -5194,7 +5730,7 @@ task.spawn(function()
 						Model2.Anchored = false
 						Model2.CFrame = ((Tool2:WaitForChild("Handle").CFrame * v.Offset)) * CFrame.Angles(math.rad(0), math.rad(-50), math.rad(0))
 					end
-					
+
 					if v.Name == "iron" and AlSploitSettings.TexturePack.TexturePackForResources.Value == true then
 						ActivateTexturePack()
 
@@ -5212,13 +5748,13 @@ task.spawn(function()
 
 						Model2.CFrame = (Model2.CFrame * CFrame.new(0, 0.001, 0))
 					end
-					
+
 					if v.Name:find("pickaxe") and AlSploitSettings.TexturePack.TexturePackForPickaxes.Value == true then
 						ActivateTexturePack()
 
 						Model2.CFrame = ((Model2.CFrame * CFrame.new(-0.2, 0, -2.4)) + Vector3.new(0, 0, 2.12))
 					end
-					
+
 					if v.Name:find("scythe") and AlSploitSettings.TexturePack.TexturePackForScythes.Value == true then
 						ActivateTexturePack()
 
@@ -5728,7 +6264,9 @@ task.spawn(function()
 		Name = "PlayerTp",
 
 		Function = function()
-			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false then				
+			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false then		
+				PlayerTpOverridden = false
+ 
 				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
 
 				local NearestPlayer = FindNearestPlayer()
@@ -5879,7 +6417,7 @@ task.spawn(function()
 
 		DefaultValue = Color3.new(0, 0.6, 1)
 	})
-	
+
 	UnInjectEvent.Event:Connect(function()
 		if AntiVoidPart then
 			AntiVoidPart:Destroy()
@@ -5894,7 +6432,9 @@ task.spawn(function()
 		Name = "BedTp",
 
 		Function = function()
-			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false then				
+			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false then
+				BedTpOverridden = false
+				
 				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
 				local NearestBed = FindNearestBed(false)
@@ -6014,7 +6554,7 @@ task.spawn(function()
 			end)
 		end,
 
-		HoverText = "Breaks Beds Around You ⛏️"
+		HoverText = "Breaks Blocks Around You ⛏️"
 	})
 
 	Nuker:CreateToggle({
@@ -6049,6 +6589,117 @@ task.spawn(function()
 		MaximumValue = 30,
 		DefaultValue = 30
 	})
+end)
+
+task.spawn(function()
+	local HalloweenCapeId = "rbxassetid://74330263398056"
+	local HalloweenCape
+
+	local function CreateCape(DecalId)
+		local Cape = Instance.new("Part")
+
+		Cape.Parent = LocalPlayer.Character
+		Cape.Name = "Cape"
+	
+		Cape.CanCollide = false
+		Cape.Material = Enum.Material.SmoothPlastic
+		Cape.Color = Color3.new(0.105882, 0.105882, 0.105882)
+		Cape.Size = Vector3.new(0.2, 0.2, 0.08)
+
+		local BlockMesh = Instance.new("BlockMesh")
+
+		BlockMesh.Parent = Cape
+		BlockMesh.Name = "Mesh"
+		
+		BlockMesh.VertexColor = Vector3.new(1, 1, 1)
+		BlockMesh.Scale = Vector3.new(9, 17.5, 0.5)
+
+		local Motor = Instance.new("Motor")
+
+		Motor.Parent = Cape
+		Motor.Name = "Motor"
+		
+		Motor.CurrentAngle = -0.16208772361278534
+		Motor.DesiredAngle = -0.1002269834280014
+		Motor.Part1 = LocalPlayer.Character.UpperTorso
+		Motor.Part0 = Cape
+		Motor.C0 = CFrame.new(0, 2, 0, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08)
+		Motor.C1 = CFrame.new(0, 1, 0.449999988, -4.37113883e-08, 0, 1, 0, 1, 0, -1, 0, -4.37113883e-08)
+		local Decal = Instance.new("Decal")
+
+		Decal.Parent = Cape
+		Decal.Name = "Decal"
+		
+		Decal.Texture = DecalId
+		Decal.Face = Enum.NormalId.Back
+
+		return Motor
+	end
+
+	local function IsMoving()	
+		local Position = LocalPlayer.Character.PrimaryPart.Position
+
+		task.wait(0.001)
+
+		if IsAlive(LocalPlayer) and LocalPlayer.Character.PrimaryPart.Position ~= Position then
+			Position = LocalPlayer.Character.PrimaryPart.Position
+
+			return true
+		end
+
+		if IsAlive(LocalPlayer) and LocalPlayer.Character.PrimaryPart.Position == Position then
+			Position = LocalPlayer.Character.PrimaryPart.Position
+
+			return false
+		end
+	end
+
+	local Cape = WorldTab:CreateToggle({
+		Name = "Cape",
+
+		Function = function()
+			if AlSploitSettings.Cape.Value == true and IsAlive(LocalPlayer) then
+				HalloweenCape = CreateCape(HalloweenCapeId)
+			end
+
+			if AlSploitSettings.Cape.Value == false then
+				if HalloweenCape then
+					HalloweenCape.Parent:Destroy()
+					HalloweenCape = nil
+				end
+			end
+		end,
+
+		HoverText = "Spooky Cape 👻"
+	})
+	
+	task.spawn(function()
+		repeat
+			task.wait()
+
+			if HalloweenCape and IsAlive(LocalPlayer) == true then
+				local TweenInformation = TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In, 0, false, 0)
+				local CapeTween = TweenService:Create(HalloweenCape, TweenInformation, {CurrentAngle = (IsMoving() == true and -(GetSpeed() / (GetSpeed() * 1.7)) or -0.2)})
+
+				CapeTween:Play()
+			end
+		until shared.AlSploitUnInjected == true or AlSploitSettings.Cape.Value == false
+
+		if HalloweenCape then
+			HalloweenCape.Parent:Destroy()
+			HalloweenCape = nil
+		end
+	end)
+	
+	AlSploitConnections["CapeConnection"] = LocalPlayer.CharacterAdded:Connect(function()
+		repeat task.wait() until IsAlive(LocalPlayer) == true
+		
+		task.wait(0.3)
+		
+		if AlSploitSettings.Cape.Value == true then
+			HalloweenCape = CreateCape(HalloweenCapeId)
+		end
+	end)
 end)
 
 task.spawn(function()
@@ -6469,11 +7120,11 @@ task.spawn(function()
 			end
 
 			if AlSploitSettings.ChangeGuiColor.Value == false then
-				CurrentAlSploitToggleColor = Color3.new(0, 0.6, 1)
+				CurrentAlSploitToggleColor = Color3.new(1, 0.701961, 0)
 
 				ChangeGuiToggleColorEvent:Fire()
 
-				CurrentAlSploitTitleColor = Color3.new(0, 0.6, 1)
+				CurrentAlSploitTitleColor = Color3.new(1, 0.701961, 0)
 
 				ChangeGuiTitleColorEvent:Fire()
 			end
@@ -6493,13 +7144,13 @@ task.spawn(function()
 				local G = ColorSplit[2]
 				local B = ColorSplit[3]
 
-				CurrentAlSploitToggleColor  = Color3.new(R, G, B)
+				CurrentAlSploitToggleColor = Color3.new(R, G, B)
 
 				ChangeGuiToggleColorEvent:Fire()
 			end
 		end,
 
-		DefaultValue = Color3.new(0, 0.6, 1)
+		DefaultValue = Color3.new(1, 0.701961, 0)
 	})
 
 	ChangeGuiColor:CreateColorSlider({
@@ -6519,7 +7170,7 @@ task.spawn(function()
 			end
 		end,
 
-		DefaultValue = Color3.new(0, 0.6, 1)
+		DefaultValue = Color3.new(1, 0.701961, 0)
 	})
 end)
 
@@ -6549,11 +7200,11 @@ task.spawn(function()
 
 		Function = function()
 			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and SetFpsCap then
-				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value >= 0 and AlSploitSettings.FpsUnlocker.Fps.Value or 1)
 			end
 
 			if AlSploitSettings.FpsUnlocker.Value == false and SetFpsCap then
-				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value >= 0 and AlSploitSettings.FpsUnlocker.Fps.Value or 1)
 			end
 
 			if AlSploitSettings.FpsUnlocker.Value == true and not SetFpsCap then
@@ -6573,7 +7224,7 @@ task.spawn(function()
 			end
 
 			if AlSploitSettings.FpsUnlocker.Value == true and AlSploitSettings.FpsUnlocker.NoFpsCap.Value == false and SetFpsCap then
-				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value)
+				SetFpsCap(AlSploitSettings.FpsUnlocker.Fps.Value >= 0 and AlSploitSettings.FpsUnlocker.Fps.Value or 1)
 			end
 
 			if not SetFpsCap then
@@ -6597,8 +7248,8 @@ task.spawn(function()
 			end
 		end,
 
-		MaximumValue = 240,
-		DefaultValue = 240
+		MaximumValue = 360,
+		DefaultValue = 360
 	})
 
 	UnInjectEvent.Event:Connect(function()
@@ -6664,8 +7315,3 @@ task.spawn(function()
 		end)
 	end)
 end)
-
---Things to fix because i have nothing else to do :shrug:
-
---indicator fix
---fix esp
