@@ -10,18 +10,18 @@ AlSploitScreenGui.Name = "AlSploit"
 
 task.spawn(function()
 	local LoadingFrame = Instance.new("ImageLabel")
-	
+
 	local UICorner = Instance.new("UICorner")
 	local UIStroke = Instance.new("UIStroke")
-	
+
 	local Title = Instance.new("ImageLabel")
-	
+
 	local LoadingBar = Instance.new("Frame")
-	
+
 	local UICorner_2 = Instance.new("UICorner")
 	local UIGradient = Instance.new("UIGradient")
 	local UIStroke_2 = Instance.new("UIStroke")
-	
+
 	local Fill = Instance.new("Frame")
 
 	local UICorner_3 = Instance.new("UICorner")
@@ -54,10 +54,10 @@ task.spawn(function()
 	UICorner.Name = "UICorner"
 
 	UICorner.CornerRadius = UDim.new(0.03, 0)
-	
+
 	UIStroke.Parent = LoadingFrame
 	UIStroke.Name = "UIStroke"
-	
+
 	UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	UIStroke.Thickness = 1
 	UIStroke.Color = Color3.new(1, 1, 1)
@@ -74,7 +74,7 @@ task.spawn(function()
 
 	LoadingBar.Parent = LoadingFrame
 	LoadingBar.Name = "LoadingBar"
-	
+
 	LoadingBar.BackgroundColor3 = Color3.new(1, 1, 1)
 	LoadingBar.BorderSizePixel = 0
 	LoadingBar.Position = UDim2.new(0.067, 0, 0.465, 0)
@@ -84,12 +84,12 @@ task.spawn(function()
 	UICorner_2.Name = "UICorner_2"
 
 	UICorner_2.CornerRadius = UDim.new(0.7, 0)
-	
+
 	UIGradient.Parent = LoadingBar
 	UIGradient.Name = "UIGradient"
-	
+
 	UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.290196, 0.196078, 0.596078)), ColorSequenceKeypoint.new(1.00, Color3.new(0.180392, 0.121569, 0.368627))}
-	
+
 	UIStroke_2.Parent = LoadingBar
 	UIStroke_2.Name = "UIStroke"
 
@@ -99,24 +99,24 @@ task.spawn(function()
 
 	Fill.Parent = LoadingBar
 	Fill.Name = "Fill"
-	
+
 	Fill.BackgroundColor3 = Color3.new(1, 1, 1)
 	Fill.BorderSizePixel = 0
 	Fill.Size = UDim2.new(0, 0, 1, 0)
 
 	UICorner_3.Parent = Fill
 	UICorner_3.Name = "UICorner_3"
-	
+
 	UICorner_3.CornerRadius = UDim.new(0.7, 0)
 
 	UIGradient_2.Parent = Fill
 	UIGradient_2.Name = "UIGradient"
 
 	UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.new(0.45098, 0.356863, 0.792157)), ColorSequenceKeypoint.new(1.00, Color3.new(0.576471, 0.470588, 1))}
-	
+
 	Percentage.Parent = LoadingFrame
 	Percentage.Name = "Percentage"
-	
+
 	Percentage.BackgroundTransparency = 1
 	Percentage.BorderSizePixel = 0
 	Percentage.TextColor3 = Color3.new(1, 1, 1)
@@ -126,15 +126,15 @@ task.spawn(function()
 	Percentage.Size = UDim2.new(0.294, 0, 0.139, 0)
 	Percentage.Font = Enum.Font.Gotham
 	Percentage.Text = "0%"
-	
+
 	UITextSizeConstraint.Parent = Percentage
 	UITextSizeConstraint.Name = "UITextSizeConstraint"
-	
+
 	UITextSizeConstraint.MaxTextSize = 20
 
 	DiscordUsername.Parent = LoadingFrame
 	DiscordUsername.Name = "DiscordUsername"
-	
+
 	DiscordUsername.BackgroundTransparency = 1
 	DiscordUsername.BorderSizePixel = 0
 	DiscordUsername.TextColor3 = Color3.new(1, 1, 1)
@@ -165,7 +165,7 @@ task.spawn(function()
 
 	UITextSizeConstraint_3.Parent = DiscordServer
 	UITextSizeConstraint_3.Name = "UITextSizeConstraint_3"
-	
+
 	UITextSizeConstraint_3.MaxTextSize = 16
 
 	RequestImage.Parent = LoadingFrame
@@ -180,7 +180,7 @@ task.spawn(function()
 
 	RequestText.Parent = LoadingFrame
 	RequestText.Name = "RequestImage"
-	
+
 	RequestText.BackgroundTransparency = 1
 	RequestText.BorderSizePixel = 0
 	RequestText.TextColor3 = Color3.new(1, 1, 1)
@@ -190,62 +190,75 @@ task.spawn(function()
 	RequestText.Size = UDim2.new(0.825, 0, 0.139, 0)
 	RequestText.Font = Enum.Font.Gotham
 	RequestText.Text = "https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua"
-	
+
 	UITextSizeConstraint_4.Parent = RequestText
 	UITextSizeConstraint_4.Name = "UITextSizeConstraint_4"
-	
-	UITextSizeConstraint_4.MaxTextSize = 16
-	
-	task.spawn(function()
-		task.wait(1)
-		
-		local StartTick = tick()
-		local TimeTaken = 0
-		
-		local Success, Response = pcall(function()
-			game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua")
-		end)
 
+	UITextSizeConstraint_4.MaxTextSize = 16
+
+	task.spawn(function()
+		local TweenInformation = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.In, 0, false, 0)
+		local FillTween = TweenService:Create(Fill, TweenInformation, {Size = UDim2.new(0.5, 0, 1, 0)})
+
+		FillTween:Play()
 		
-		if Success then
-			TimeTaken = (tick() - StartTick)
+		task.spawn(function()
+			repeat
+				task.wait()
+
+				Percentage.Text = tostring(math.round(Fill.Size.X.Scale * 100)) .. "%"
+			until Fill.Size.X.Scale == 1
+		end)
+		
+		local SuccessExecuted, ResponseExecuted = pcall(function()
+			game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed")
 			
-			task.spawn(function()				
-				task.wait(TimeTaken * 50)
+			RequestText.Text = "https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"
+		end)
+		
+		if SuccessExecuted == true then
+			task.wait(0.8)
+
+			RequestImage.ImageTransparency = 1
+			RequestText.Text = "Success!"
+			
+			task.wait(1)
+			
+			local TweenInformation = TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.In, 0, false, 0)
+			local FillTween = TweenService:Create(Fill, TweenInformation, {Size = UDim2.new(1, 0, 1, 0)})
+
+			FillTween:Play()
+			
+			local SuccessMainScript, ResponseMainScript = pcall(function()
+				game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua")
 				
+				RequestImage.ImageTransparency = 0
+				RequestText.Text = "https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"
+			end)
+			
+			if SuccessMainScript == true then
+				task.wait(0.8)
+
 				RequestImage:Destroy()
 				RequestText.Text = "Success!"
-			end)
+				
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))() 
+				
+				task.wait(0.8)
+				
+				AlSploitScreenGui:Destroy()
+			end
 			
-			task.spawn(function()				
-				local TweenInformation = TweenInfo.new((TimeTaken * 50), Enum.EasingStyle.Sine, Enum.EasingDirection.In, 0, false, 0)
-				local FillTween = TweenService:Create(Fill, TweenInformation, {Size = UDim2.new(1, 0, 1, 0)})
-				
-				FillTween:Play()
-				
-				task.spawn(function()
-					repeat
-						task.wait()
-						
-						Percentage.Text = tostring(math.round(Fill.Size.X.Scale * 100)) .. "%"
-					until Fill.Size.X.Scale == 1
-
-					loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()
-					loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))() 
-									
-					
-					AlSploitScreenGui:Destroy()
-				end)			
-			end)
+			if SuccessMainScript == false then
+				RequestImage:Destroy()
+				RequestText.Text = "An UnexpectedError Has Occured: " .. ResponseMainScript
+			end
 		end
-				
-		if Success == false or Response then
-			RequestText.Text = "Error: " .. Response
+		
+		if SuccessExecuted == false then
 			RequestImage:Destroy()
-			
-			task.wait(TimeTaken * 50)
-			
-			AlSploitScreenGui:Destroy()
+			RequestText.Text = "An Unexpected Error Has Occured: " .. ResponseExecuted
 		end
 	end)
 end)
