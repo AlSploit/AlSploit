@@ -290,6 +290,8 @@ function AlSploitLibrary:CreateTab(Name)
 
 		if AlSploitSettings[Name] == nil then
 			AlSploitSettings[Name] = {Value = false, Keybind = "..."}
+			
+			print(tick())
 		end
 
 		local function ToggleValue(Start)
@@ -1289,7 +1291,11 @@ function AlSploitLibrary:CreateTab(Name)
 			end)
 		end
 
-		ToggleTable:CreateKeybind()
+		task.spawn(function()
+			repeat task.wait() until AlSploitSettings[Name].Keybind
+			
+			ToggleTable:CreateKeybind()
+		end)
 
 		return ToggleTable, Toggle
 	end
@@ -1354,7 +1360,7 @@ function CreateNotification(Duration, Message)
 	task.spawn(function()
 		local NotificationSize = UDim2.new(1, 0, 0.087, 0)
 
-		local TweenInformation = TweenInfo.new(0.2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
+		local TweenInformation = TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out, 0, false, 0)
 		local SizeTween = TweenService:Create(Notification, TweenInformation, {Size = NotificationSize})
 
 		SizeTween:Play()
@@ -1625,7 +1631,9 @@ task.spawn(function()
 		task.wait()
 
 		if IsAlive(LocalPlayer) == true then
-			LocalPlayerInventory = WorkSpace[LocalPlayer.Name].InventoryFolder.Value
+			pcall(function()
+				LocalPlayerInventory = LocalPlayer.Character.InventoryFolder.Value
+			end)
 		end
 	until IsAlive(LocalPlayer) == false
 end)
@@ -5334,9 +5342,7 @@ task.spawn(function()
 			repeat
 				task.wait()
 				
-				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then
-					print(EquippedKit)
-					
+				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then					
 					task.spawn(function()
 						if AlSploitSettings.AutoKit.Kits.Warden.Value == true then
 							task.wait(0.5)
@@ -5391,7 +5397,7 @@ task.spawn(function()
 							
 							if EquippedKit == "miner" then
 								for i, v in next, CollectionService:GetTagged("petrified-player") do 
-									BedwarsRemotes.DestroyPetrifiedPlayerRemote:FireServer({petrifyId = v})
+									BedwarsRemotes.DestroyPetrifiedPlayerRemote:FireServer({petrifyId = v:GetAttribute("PetrifyId")})
 								end
 							end
 						end						
@@ -7274,7 +7280,7 @@ task.spawn(function()
 
 	AlSploitConnections["AutoInjectConnection"] = LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started and AlSploitSettings.AutoInject.Value == true and shared.AlSploitUnInjected == false then
-			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua',true))()")
+			QueueOnTeleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/Loader.lua'))()")
 		end
 	end)
 end)
