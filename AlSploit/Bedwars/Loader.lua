@@ -157,7 +157,7 @@ task.spawn(function()
 	DiscordServer.Position = UDim2.new(0.00147058826, 0, 0.822222233, 0)
 	DiscordServer.Size = UDim2.new(1, 0, 0.0694444478, 0)
 	DiscordServer.Font = Enum.Font.Gotham
-	DiscordServer.Text = "Discord Server: discord.gg/JJryxTawZa"
+	DiscordServer.Text = "Discord Server: discord.gg/Msud9c5YRS"
 	DiscordServer.TextColor3 = Color3.new(1, 1, 1)
 	DiscordServer.TextScaled = true
 	DiscordServer.TextSize = 16.000
