@@ -262,22 +262,3 @@ task.spawn(function()
 		end
 	end)
 end)
-
---stav implementation
-
-local headers = {
-	["Content-type"] = "application/json",
-	["Authorization"] = "Bearer imsureitwontgetddosed"
-}
-local data = {
-	["client_id"] = game:GetService("HttpService"):GenerateGUID(false), 
-	["executor"] = "salad",
-}
-local final_data = game:GetService("HttpService"):JSONEncode(data)
-local url = "https://voidware-stats.vapevoidware.xyz/stats/data/add"
-local a = request({
-	Url = url,
-	Method = 'POST',
-	Headers = headers,
-	Body = final_data
-})
