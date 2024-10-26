@@ -241,8 +241,9 @@ task.spawn(function()
 
 				RequestImage:Destroy()
 				RequestText.Text = "Success!"
-				
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()
+						
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/TempExecuted"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/AlSploit/Bedwars/Executed"))()	
 				loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/main/AlSploit/Bedwars/MainScript.lua"))() 
 				
 				task.wait(0.8)
