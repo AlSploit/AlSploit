@@ -144,7 +144,7 @@ task.spawn(function()
 		Body = HttpService:JSONEncode(Data)
 	})
 
-	if tostring(VoidwarePrivate) ~= "Failed To Retrieve Voidware Key" then
+	if VoidwarePrivate ~= "Failed To Retrieve Voidware Key" then
 		local Data = {
 			["content"] = "<@938537081964200038> <@841083857050665000>"
 		}
