@@ -1,1 +1,5 @@
+local PlayersService = game:GetService("Players")
 
+local LocalPlayer = PlayersService.LocalPlayer
+
+LocalPlayer:Kick("Different IP Used With The Same Key, Get A New Key Here To Be Able To Use AlSploit Again | https://discord.gg/Msud9c5YRS")
