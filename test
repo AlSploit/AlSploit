@@ -77,7 +77,7 @@ end)
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started then
-			loadstring(game:HttpGet(""))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test"))()
 		end
 	end)
 end)
