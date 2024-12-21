@@ -73,7 +73,7 @@ end
 
 task.spawn(function()
 	if not isfile("AlSploitAutowin") then
-		writefile("AlSploitInstantwin", HttpService:JSONEncode(TemplateEncodeFalse))
+		writefile("AlSploitAutowin", HttpService:JSONEncode(TemplateEncodeFalse))
 	end
 	
 	if not isfile("AlSploitAutowin") then
@@ -123,7 +123,7 @@ end)
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started then
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test4"))()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test5"))()
 		end
 	end)
 end)
