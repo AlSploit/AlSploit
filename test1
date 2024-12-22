@@ -50,13 +50,23 @@ local function GetMatchState()
 end
 
 task.spawn(function()
-		StartServerTeleportation()
+	local MatchState = GetMatchState()
+	
+	repeat
+		task.wait()
+		
+		MatchState = GetMatchState()
+		
+		if MatchState == 2 then
+			StartServerTeleportation()
+		end
+	until not game
 end)
 
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
 		if TeleportState == Enum.TeleportState.Started then
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test6"))()
+			queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test6"))()')
 		end
 	end)
 end)
