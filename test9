@@ -65,10 +65,10 @@ end)
 
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
-		if TeleportState == Enum.TeleportState.Started then
-			queue_on_teleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test8"))()')
-		end
+		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/test9"))()'
+
+		queue_on_teleport(Script)
 	end)
 end)
 
-print("8")
+print("9")
