@@ -52,15 +52,7 @@ end
 task.spawn(function()
 	local MatchState = GetMatchState()
 	
-	repeat
-		task.wait()
-		
-		MatchState = GetMatchState()
-		
-		if MatchState == 2 then
-			StartServerTeleportation()
-		end
-	until not game
+	StartServerTeleportation()
 end)
 
 task.spawn(function()
