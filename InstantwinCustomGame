@@ -24,7 +24,7 @@ local function StartServerTeleportation()
 		[2] = "All"
 	}
 
-	RobloxRemotes.SayMessageRequest:FireServer({unpack(Arguments)})
+	RobloxRemotes.SayMessageRequest:FireServer(unpack(Arguments))
 
 	print("yes")
 end
