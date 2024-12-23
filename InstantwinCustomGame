@@ -53,6 +53,8 @@ task.spawn(function()
 
 		MatchState = GetMatchState()
 
+		print(MatchState)
+
 		if MatchState == 2 then
 			StartServerTeleportation()
 		end
