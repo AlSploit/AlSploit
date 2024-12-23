@@ -1,0 +1,68 @@
+local LocalPlayer = game.Players.LocalPlayer
+
+local ReplicatedStorageService = game:GetService("ReplicatedStorage")
+
+local RobloxRemotes = {
+	SayMessageRequest = ReplicatedStorageService:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+}
+
+local ClientStore
+
+task.spawn(function()
+	local ClientStoreValue, Response = pcall(function()
+		return require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
+	end)
+
+	if ClientStoreValue == true and Response then
+		ClientStore = require(LocalPlayer.PlayerScripts.TS.ui.store).ClientStore
+	end
+end)
+
+local function StartServerTeleportation()
+	local Arguments = {
+		[1] = "/lobby",
+		[2] = "All"
+	}
+
+	RobloxRemotes.SayMessageRequest:FireServer({unpack(Arguments)})
+end
+
+local function GetMatchState()
+	local Success, Response = pcall(function()
+		return ClientStore:getState().Game.matchState
+	end)
+
+	if not ClientStore then
+		return "UnSupported"
+	end
+
+	if Success == true and Response then
+		return Response
+	end
+
+	if Success == false or not Response then
+		return "Nil"
+	end
+end
+
+task.spawn(function()
+	local MatchState = GetMatchState()
+
+	repeat
+		task.wait()
+
+		MatchState = GetMatchState()
+
+		if MatchState == 2 then
+			StartServerTeleportation()
+		end
+	until not game
+end)
+
+task.spawn(function()
+	LocalPlayer.OnTeleport:Connect(function(TeleportState)
+		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/Lobby"))()'
+
+		queue_on_teleport(Script)
+	end)
+end)
