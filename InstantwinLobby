@@ -13,7 +13,10 @@ local function JoinQueueWithDesiredType(QueueType)
 end
 
 task.spawn(function()
-	JoinQueueWithDesiredType(DesiredQueueTypeSquads)
+	repeat
+		task.wait(10)
+		
+	until JoinQueueWithDesiredType(DesiredQueueTypeSquads)
 end)
 
 task.spawn(function()
