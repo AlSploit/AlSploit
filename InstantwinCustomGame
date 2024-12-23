@@ -25,6 +25,8 @@ local function StartServerTeleportation()
 	}
 
 	RobloxRemotes.SayMessageRequest:FireServer({unpack(Arguments)})
+
+	print("yes")
 end
 
 local function GetMatchState()
@@ -53,8 +55,6 @@ task.spawn(function()
 
 		MatchState = GetMatchState()
 
-		print(MatchState)
-
 		if MatchState == 2 then
 			StartServerTeleportation()
 		end
@@ -63,7 +63,7 @@ end)
 
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
-		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/Lobby"))()'
+		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/InstantwinLobby"))()'
 
 		queue_on_teleport(Script)
 	end)
