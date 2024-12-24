@@ -21,7 +21,7 @@ end)
 
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
-		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/LobbyIntermediateStep"))()'
+		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/InstantwinLobbyIntermediateStep"))()'
 
 		queue_on_teleport(Script)
 	end)
