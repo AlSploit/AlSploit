@@ -2,29 +2,26 @@ local LocalPlayer = game.Players.LocalPlayer
 
 local ReplicatedStorageService = game:GetService("ReplicatedStorage")
 
-local BedwarsRemotes = {
-	JoinQueueRemote = ReplicatedStorageService:WaitForChild("events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"):WaitForChild("joinQueue")
+local RobloxRemotes = {
+	SayMessageRequest = ReplicatedStorageService:WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
 }
 
-local DesiredQueueTypeSquads = "bedwars_to4"
+local function StartServerTeleportation()
+	local Arguments = {
+		[1] = "/lobby",
+		[2] = "All"
+	}
 
-local function JoinQueueWithDesiredType(QueueType)
-	BedwarsRemotes.JoinQueueRemote:FireServer({queueType = QueueType})
+	RobloxRemotes.SayMessageRequest:FireServer(unpack(Arguments))
 end
 
 task.spawn(function()
-	for i = 1, 10 do
-		JoinQueueWithDesiredType(DesiredQueueTypeSquads)
-		
-		task.wait(1 * 5)
-		
-		print(i * 5, i)
-	end
+	StartServerTeleportation()
 end)
 
 task.spawn(function()
 	LocalPlayer.OnTeleport:Connect(function(TeleportState)
-		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/InstantwinGame"))()'
+		local Script = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/AlSploit/AlSploit/refs/heads/main/LobbyIntermediateStep"))()'
 
 		queue_on_teleport(Script)
 	end)
