@@ -58,7 +58,7 @@ function Base64:Decode(EncodedData)
 	end))
 end
 
-function XorWithKey(Data, EncryptionKey)
+function Base64:XorWithKey(Data, EncryptionKey)
 	local Result = ""
 	
 	for i = 1, #Data do
