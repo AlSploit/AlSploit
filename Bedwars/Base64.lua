@@ -1,6 +1,6 @@
 local Base64 = {}
 
-function Base64:Encode(InputData)
+function Base64.Encode(InputData)
 	local Base64Characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 	
 	return ((InputData:gsub('.', function(Character) 
@@ -25,7 +25,7 @@ function Base64:Encode(InputData)
 	end)..({ '', '==', '=' })[#InputData % 3 + 1])
 end
 
-function Base64:Decode(EncodedData)
+function Base64.Decode(EncodedData)
 	local Base64Characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 
 	EncodedData = string.gsub(EncodedData, '[^' .. Base64Characters .. '=]', '')
@@ -58,7 +58,7 @@ function Base64:Decode(EncodedData)
 	end))
 end
 
-function Base64:XorWithKey(Data, EncryptionKey)
+function Base64.XorWithKey(Data, EncryptionKey)
 	local Result = ""
 	
 	for i = 1, #Data do
