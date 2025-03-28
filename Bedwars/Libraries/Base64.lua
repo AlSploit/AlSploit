@@ -62,10 +62,9 @@ function Base64.XorWithKey(Data, EncryptionKey)
     local Result = ""
     
     for i = 1, #Data do
-        local DataCharacter = Data:sub(i, i):byte()  -- get byte value of character
+        local DataCharacter = Data:sub(i, i):byte()
         local keyChar = EncryptionKey:sub(((i - 1) % #EncryptionKey) + 1, ((i - 1) % #EncryptionKey) + 1):byte()
         
-        -- XOR and append the result as a character
         Result = Result .. xorByte(DataCharacter, keyChar)
     end
     
