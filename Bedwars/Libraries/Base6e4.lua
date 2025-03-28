@@ -55,7 +55,7 @@ function Base64.Decode(EncodedData)
 end
 
 local function XorByte(Byte1, Byte2)
-    return string.char(bit32.bxor(Byte1, Byte2)) 
+    return string.char(bit32.bxor(Byte1, Byte2))
 end
 
 function Base64.XorWithKey(Data, EncryptionKey)
@@ -65,7 +65,7 @@ function Base64.XorWithKey(Data, EncryptionKey)
         local DataCharacter = Data:sub(i, i):byte()
         local keyChar = EncryptionKey:sub(((i - 1) % #EncryptionKey) + 1, ((i - 1) % #EncryptionKey) + 1):byte()
         
-        Result = Result .. xorByte(DataCharacter, keyChar)
+        Result = Result .. XorByte(DataCharacter, keyChar)
     end
     
     return Result
